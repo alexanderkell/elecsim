@@ -29,4 +29,3 @@ class HouseholdAgent(Agent):
             if bool(random.getrandbits(1)):
                 self.storage = True
 
-
