@@ -8,6 +8,7 @@ setup(
     author_email='alexander@kell.es',
     url='https://github.com/alexanderkell/elecsim',
     packages=['elecsim'],
+    license='MIT',
     install_requires=['mesa'], # external packages as dependencies
     long_description="A package to aid in the designing of an energy market of a country to see impacts of different regulatory and technological changes",
 )
