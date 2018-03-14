@@ -19,15 +19,23 @@ class HouseholdAgent(Agent):
     """
 
     def __init__(self, model,unique_id, pos, storage, electricity_cons):
+
+        self.count = 0
         super().__init__(unique_id, model)
         self.pos = pos
         self.storage = storage
         self.electricity_cons = electricity_cons
 
     def step(self):
-        if self.storage == False:
+
+        # while(self.count<len(self.electricity_cons)):
+        if self.storage is False:
             if bool(getrandbits(1)):
                 self.storage = True
+        else:
+            self.electricity_cons[self.count] = self.electricity_cons[self.count]-self.electricity_cons[self.count]
 
         print(self.storage)
+        print(self.electricity_cons[self.count])
+        self.count += 1
 
