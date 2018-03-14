@@ -9,6 +9,8 @@ from mesa import Model
 from mesa.space import Grid
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
+from elecsim.src.Agents.HouseholdAgent import HouseholdAgent
+
 
 class World(Model):
     """
@@ -28,11 +30,19 @@ class World(Model):
         self.width = width
 
         # Set up model objects
-        self.grid = Grid(height, width, torus=False)
         self.schedule = RandomActivation(self)
+        self.grid = Grid(height, width, torus=False)
+
+
+        # Place household in world for visualisation purposes
+        household = HouseholdAgent(self, '0134T', (1,1), False, (1,2,3,2,1))
+        self.grid[1][1]
+        self.schedule.add(household)
+        self.running=True
 
 
     def step(self):
         '''Advance model by one step.'''
+        print("Model step")
         self.schedule.step()
 

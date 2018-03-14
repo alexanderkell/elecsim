@@ -6,7 +6,7 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 from mesa import Agent
-from random import *
+from random import getrandbits
 
 class HouseholdAgent(Agent):
     """
@@ -18,14 +18,16 @@ class HouseholdAgent(Agent):
         electricty_cons: Electricity consumption variable
     """
 
-    def __init__(self, unique_id, pos, storage, electricity_cons):
-        super().__init__(unique_id, pos)
+    def __init__(self, model,unique_id, pos, storage, electricity_cons):
+        super().__init__(unique_id, model)
         self.pos = pos
         self.storage = storage
         self.electricity_cons = electricity_cons
 
     def step(self):
         if self.storage == False:
-            if bool(random.getrandbits(1)):
+            if bool(getrandbits(1)):
                 self.storage = True
+
+        print(self.storage)
 
