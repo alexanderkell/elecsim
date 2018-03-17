@@ -32,19 +32,36 @@ class World(Model):
         self.schedule = RandomActivation(self)
         self.grid = Grid(height, width, torus=False)
 
+        self.datacollector = DataCollector(
+            model_reporters = {"AggregatedElectricity": lambda m: self.aggregated_elec_cons(m)}
+        )
+
         # Place household in world for visualisation purposes
-        household = HouseholdAgent(self, '0134T', (1, 1), False, [1, 2, 3, 2, 1])
-        self.grid.place_agent(household, (1, 1))
-        self.schedule.add(household)
+        for i in range(1,5):
+            household = HouseholdAgent(self, '0134T', (1, 1), False, [1, 2, 3, 2, 1])
+            self.grid.place_agent(household, (1, i))
+            self.schedule.add(household)
+
         self.running=True
 
-        self.datacollector = DataCollector(
-            agent_reporters={"electricity_cons": lambda household: household.electricity_cons}
-        )
+        self.datacollector.collect(self)
+
 
 
     def step(self):
         '''Advance model by one step.'''
-        self.datacollector.collect(self)
         self.schedule.step()
+        self.datacollector.collect(self)
 
+    @staticmethod
+    def aggregated_elec_cons(model):
+        """
+        Helper method to aggregate electricity consumption of all agents
+        :param model: Model containing agents
+        :return: Aggregated electricity consumption at timestep
+        """
+
+        agg_electricity_cons = 0
+        for agent in model.schedule.agents:
+            agg_electricity_cons += agent.current_elec
+        return agg_electricity_cons
