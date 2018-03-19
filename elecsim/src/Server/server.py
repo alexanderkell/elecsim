@@ -28,4 +28,4 @@ chart = ChartModule([{"Label": "AggregatedElectricity",
 server = ModularServer(World,
                        [grid, chart],
                        "House Model",
-                       {"width":10,"height":10})
+                       {"width":10,"height":10,"num_of_agents":20})

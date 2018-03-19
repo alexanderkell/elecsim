@@ -10,13 +10,14 @@ from mesa.space import Grid
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 from elecsim.src.Agents.HouseholdAgent import HouseholdAgent
+import random
 
 class World(Model):
     """
     Model for a world containing electricity consuming households
     """
 
-    def __init__(self, height, width, ):
+    def __init__(self, height, width, num_of_agents):
         """
         Create a new world of electricity consuming households.
 
@@ -37,9 +38,10 @@ class World(Model):
         )
 
         # Place household in world for visualisation purposes
-        for i in range(1,5):
+        for i in range(1,num_of_agents):
             household = HouseholdAgent(self, '0134T', (1, 1), False, [1, 2, 3, 4, 5])
-            self.grid.place_agent(household, (1, i))
+            # self.grid.place_agent(household, (random.randint(1,width), random.randint(1,height)))
+            self.grid.place_agent(household, (random.randint(0,width-1), random.randint(0,height-1)))
             self.schedule.add(household)
 
         self.running=True
