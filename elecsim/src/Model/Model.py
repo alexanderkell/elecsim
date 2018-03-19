@@ -16,7 +16,7 @@ class World(Model):
     Model for a world containing electricity consuming households
     """
 
-    def __init__(self, height, width):
+    def __init__(self, height, width, ):
         """
         Create a new world of electricity consuming households.
 
@@ -38,7 +38,7 @@ class World(Model):
 
         # Place household in world for visualisation purposes
         for i in range(1,5):
-            household = HouseholdAgent(self, '0134T', (1, 1), False, [1, 2, 3, 2, 1])
+            household = HouseholdAgent(self, '0134T', (1, 1), False, [1, 2, 3, 4, 5])
             self.grid.place_agent(household, (1, i))
             self.schedule.add(household)
 
