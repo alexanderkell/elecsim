@@ -168,3 +168,5 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/python,pycharm
+
+elecsim/Data/smart_meter.csv
