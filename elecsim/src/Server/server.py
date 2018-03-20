@@ -4,6 +4,7 @@ from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from elecsim.src.Model.Model import World
 from mesa.visualization.modules import ChartModule
+from elecsim.src.Data.data_import import read_smart_meter_data
 
 COLOURS = {True: "#00AA00",
            False: "#880000"}
@@ -25,7 +26,11 @@ chart = ChartModule([{"Label": "AggregatedElectricity",
                       "Color": "Black"}],
                     data_collector_name="datacollector")
 
+
+data = read_smart_meter_data('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/one_hour_30.csv')
+
+
 server = ModularServer(World,
                        [grid, chart],
                        "House Model",
-                       {"width":10,"height":10,"num_of_agents":20})
+                       {"width":10,"height":10})

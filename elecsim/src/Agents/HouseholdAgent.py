@@ -26,6 +26,7 @@ class HouseholdAgent(Agent):
         self.storage = storage
         self.electricity_cons = electricity_cons
         self.current_elec = self.electricity_cons[0]
+        
 
     def step(self):
 
@@ -38,9 +39,8 @@ class HouseholdAgent(Agent):
 
         else:
             # self.electricity_cons[self.count] = self.electricity_cons[self.count]-self.electricity_cons[self.count]
-            self.current_elec = 0
+            # self.current_elec = 0
+            self.current_elec = self.electricity_cons[self.count]
 
-        print(self.storage)
-        print(self.current_elec)
         self.count += 1
 
