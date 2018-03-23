@@ -9,8 +9,8 @@ from mesa import Model
 from mesa.space import Grid
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
-from elecsim.src.Agents.HouseholdAgent import HouseholdAgent
-from elecsim.src.Data.data_import import read_smart_meter_data
+from elecsim.src.demandagents.HouseholdAgent import HouseholdAgent
+from elecsim.src.data.data_import import read_smart_meter_data
 import random
 
 class World(Model):
@@ -35,7 +35,7 @@ class World(Model):
         self.grid = Grid(height, width, torus=False)
 
         # Set up data
-        self.data = read_smart_meter_data('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/one_hour_30.csv')
+        self.data = read_smart_meter_data('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/data/one_hour_30.csv')
 
 
         self.datacollector = DataCollector(
