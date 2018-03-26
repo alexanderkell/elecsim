@@ -1,13 +1,12 @@
-"""gas.py: Agent which represents a gas power plant"""
+"""gas.py: Class which represents a gas power plant"""
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-from mesa import Agent
 
-class gas(Agent):
+class gas:
 
     def __init__(self, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, max_load, construction_time):
         self.min_running = min_running
@@ -19,5 +18,4 @@ class gas(Agent):
         self.max_load = max_load
         self.construction_time = construction_time
 
-        def step(self):
 

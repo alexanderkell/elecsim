@@ -1,4 +1,4 @@
-"""coal_plant.py: Agent which represents a coal powered power plant"""
+"""coal_plant.py: Class which represents a coal powered power plant"""
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -19,5 +19,4 @@ class coal(Agent):
         self.max_load = max_load
         self.construction_time = construction_time
 
-        def step(self):
 

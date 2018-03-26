@@ -1,13 +1,11 @@
-"""photovoltaic.py: Agent which represents a photovoltaic farm"""
+"""photovoltaic.py: Class which represents a photovoltaic farm"""
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-from mesa import Agent
-
-class coal(Agent):
+class Coal:
 
     def __init__(self, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, max_load, construction_time):
         self.min_running = min_running
@@ -19,5 +17,4 @@ class coal(Agent):
         self.max_load = max_load
         self.construction_time = construction_time
 
-        def step(self):
 

@@ -17,5 +17,4 @@ class uk_demand(Agent):
         self.load_duration_curve = load_duration_curve
         self.count = 0
 
-    def step(self):
 
