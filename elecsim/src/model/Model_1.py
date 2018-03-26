@@ -5,13 +5,16 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
+import random
+
 from mesa import Model
+from mesa.datacollection import DataCollector
 from mesa.space import Grid
 from mesa.time import RandomActivation
-from mesa.datacollection import DataCollector
-from elecsim.src.demandagents.HouseholdAgent import HouseholdAgent
-from elecsim.src.data.data_import import read_smart_meter_data
-import random
+
+from elecsim.src import HouseholdAgent
+from elecsim.src import read_smart_meter_data
+
 
 class World(Model):
     """

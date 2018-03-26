@@ -2,7 +2,7 @@
 
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
-from elecsim.src.model.Model import World
+from elecsim.src.model.Model_1 import World
 from mesa.visualization.modules import ChartModule
 from elecsim.src.data.data_import import read_smart_meter_data
 
