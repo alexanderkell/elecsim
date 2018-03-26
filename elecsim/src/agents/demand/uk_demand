@@ -1,0 +1,21 @@
+"""uk_demand.py: Agent which simulates the demand of the UK"""
+
+__author__ = "Alexander Kell"
+__copyright__ = "Copyright 2018, Alexander Kell"
+__license__ = "MIT"
+__email__ = "Alexander@Kell.es"
+
+from mesa import Agent
+
+class uk_demand(Agent):
+
+    def __init__(self, load_duration_curve):
+        """
+        An agent representing UK electricity demand
+        :param demand_series: A time series of electricity demand
+        """
+        self.load_duration_curve = load_duration_curve
+        self.count = 0
+
+    def step(self):
+
