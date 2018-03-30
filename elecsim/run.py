@@ -1,7 +1,9 @@
-"""run.py: Module to run the world of electricity consuming households"""
+"""run.py: Module to run the model"""
 
-from elecsim.src import server
+from elecsim.src.model.model import Model
 
+model = Model()
 
-server.port = 8521  # The default
-server.launch()
+for i in range(10):
+    model.step()
+
