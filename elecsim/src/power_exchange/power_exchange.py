@@ -7,20 +7,27 @@ __email__ = "Alexander@Kell.es"
 
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
+from random import random
 
+from mesa import Agent
 
-def tender_bids(agents, ldc):
-    generator_companies = [x for x in agents if isinstance(x, GenCo)]
-    for i in range(len(generator_companies)):
-        print("Generator company number: "+str(i))
-        bids = generator_companies[i].make_bid()
-        for j in range(len(bids)):
-            print(bids[j])
-    # print(generator_companies)
+class PowerEx(Agent):
 
-    def sort_bid_price(obj):
-        return obj.bid_price
+    def __init__(self, model):
+        super().__init__(model=model, unique_id=random)
 
-    # print(generator_companies.sort(key=sort_bid_price))
+    def tender_bids(self, agents, ldc):
+        generator_companies = [x for x in agents if isinstance(x, GenCo)]  # Select on generation company agents
+        for i in range(len(generator_companies)):
+            print("Generator company number: "+str(i)+", Generator company: "+generator_companies[i].__repr__())
+            bids = generator_companies[i].calculate_bids(ldc)
+            for j in range(len(bids)):
+                print(bids[j])
+        # print(generator_companies)
+
+        def sort_bid_price(obj):
+            return obj.bid_price
+
+        # print(generator_companies.sort(key=sort_bid_price))
 
 

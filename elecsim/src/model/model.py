@@ -10,7 +10,7 @@ from mesa.time import RandomActivation
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
-from elecsim.src.power_exchange.power_exchange import tender_bids
+from elecsim.src.power_exchange.power_exchange import PowerEx
 
 import pandas as pd
 
@@ -23,17 +23,21 @@ class Model(Model):
         # Set up model objects
         self.schedule = RandomActivation(self)
 
-        # Create and add generation company
+        # Create and add generation companies
         for i in range(3):
-            gen_co = GenCo()
+            gen_co = GenCo(i,self)
             self.schedule.add(gen_co)
 
         # Create demand agent
-
         self.ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/load_dur_sample.csv')
         # print(ldc.demand)
-        demand = Demand(self.ldc.demand)
-        self.schedule.add(demand)
+        self.demand = Demand(self.ldc.demand)
+        self.schedule.add(self.demand)
+
+        # Create PowerExchange
+        self.PowerExchange = PowerEx(self, )
+        self.schedule.add(self.PowerExchange)
+
 
         # Set running to true
         self.running = True
@@ -42,4 +46,4 @@ class Model(Model):
         '''Advance model by one step'''
         self.schedule.step()
 
-        tender_bids(self.schedule.agents, self.ldc)
+        PowerEx.tender_bids(self, self.schedule.agents, self.demand.load_duration_curve)
