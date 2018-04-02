@@ -24,33 +24,33 @@ class GenCo(Agent):
         # self.make_bid()
 
     def calculate_bids(self, ldc):
-        bids = []
+        ldc_func = ldc.values.tolist()
+        bid = []
 
         for i in range(len(self.plants)):
             plant = self.plants[i]
-            yearly_max_cost = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*plant.min_running))*1.1
-            yearly_min_cost = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*8760))*1.1
-            # print(yearly_cost)
-            print("Sending bid")
-            bids.append(Bid(plant, yearly_max_cost, yearly_min_cost))
-        return bids
+            bid_per_segment = ldc.values.tolist()
+            # print(bid_per_segment)
+            for j in range(len(bid_per_segment)):
+                if bid_per_segment[j][0] > plant.min_running:
+                    bid_per_segment[j] += [((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*ldc_func[j][0]))*1.1]
+                    # bid_per_segment[j] += [i]
+            bid.append(Bid(plant,bid_per_segment))
+        return bid
 
     # def purchase_fuel(self):
 
     def invest(self):
-        print("Purchasing nuclear power plant. " + str(self))
         plant_to_invest = Nuclear()
         self.plants.append(plant_to_invest)
-        print("Built plant: "+str(plant_to_invest.__repr__())+" for company "+str(self))
-
 
 
 class Bid:
 
-    def __init__(self, plant, max_price, min_price):
+    def __init__(self, plant, ldc_bids):
         self.plant = plant
-        self.max_price = max_price
-        self.min_price = min_price
+        self.ldc_bids = ldc_bids
+
 
     def __str__(self):
-        return "Plant type: " + self.plant.type + ", Capacity: " +str(self.plant.capacity)+ ", Min running time: " +str(self.plant.min_running)+", Max Price: " +str(self.max_price)+", Min Price: "+str(self.min_price)
+        return "Plant type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Bids: "+str(self.ldc_bids)
