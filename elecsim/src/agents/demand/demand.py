@@ -18,6 +18,7 @@ class Demand(Agent):
         self.load_duration_curve = load_duration_curve
 
     def step(self):
+        print("Stepping demand")
         pass
         # load to change each year due to certain scenario
 

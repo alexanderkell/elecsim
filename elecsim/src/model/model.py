@@ -7,6 +7,7 @@ __email__ = "Alexander@Kell.es"
 
 from mesa import Model
 from mesa.time import RandomActivation
+from elecsim.src.mesaaddons.scheduler_addon import OrderedActivation
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
@@ -21,7 +22,8 @@ class Model(Model):
 
     def __init__(self):
         # Set up model objects
-        self.schedule = RandomActivation(self)
+        # self.schedule = RandomActivation(self)
+        self.schedule = OrderedActivation(self)
 
         # Create and add generation companies
         for i in range(3):
@@ -29,13 +31,14 @@ class Model(Model):
             self.schedule.add(gen_co)
 
         # Create demand agent
-        self.ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/load_dur_sample.csv')
-        # print(ldc.demand)
-        self.demand = Demand(self.ldc.demand)
+        ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/ldc_diff.csv')
+        print(ldc.head())
+
+        self.demand = Demand(ldc)
         self.schedule.add(self.demand)
 
         # Create PowerExchange
-        self.PowerExchange = PowerEx(self, )
+        self.PowerExchange = PowerEx(self)
         self.schedule.add(self.PowerExchange)
 
 

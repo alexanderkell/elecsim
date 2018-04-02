@@ -25,9 +25,11 @@ class PowerEx(Agent):
                 print(bids[j])
         # print(generator_companies)
 
-        def sort_bid_price(obj):
+        def sort_bid_price(self, obj):
             return obj.bid_price
 
         # print(generator_companies.sort(key=sort_bid_price))
 
+        def step(self):
+            print("Stepping power exchange")
 

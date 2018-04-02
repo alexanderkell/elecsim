@@ -17,17 +17,15 @@ class GenCo(Agent):
         super().__init__(unique_id, model)
         if plants is None: plants = []
         self.plants = plants
-        print("Initialising GenCo with ID: "+str(self.unique_id)+", and plants: "+str(self.plants))
 
     def step(self):
-        print("Stepping")
+        print("Stepping generation company "+str(self.unique_id))
         self.invest()
         # self.make_bid()
 
     def calculate_bids(self, ldc):
-        print("Number of plants = "+str(len(self.plants))+"")
-
         bids = []
+
         for i in range(len(self.plants)):
             plant = self.plants[i]
             yearly_max_cost = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*plant.min_running))*1.1
