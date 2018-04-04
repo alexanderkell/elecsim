@@ -48,4 +48,4 @@ class Model(Model):
         '''Advance model by one step'''
         self.schedule.step()
 
-        PowerEx.tender_bids(self, self.schedule.agents, self.demand.load_duration_curve)
+        self.PowerExchange.tender_bids(self.schedule.agents, self.demand.load_duration_curve)

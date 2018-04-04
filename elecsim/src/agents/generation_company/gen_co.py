@@ -1,4 +1,5 @@
 from mesa import Agent
+from random import randint
 
 from elecsim.src.plants.nuclear import Nuclear
 
@@ -30,18 +31,17 @@ class GenCo(Agent):
         for i in range(len(self.plants)):
             plant = self.plants[i]
             bid_per_segment = ldc.values.tolist()
-            # print(bid_per_segment)
+            final_bid = []
             for j in range(len(bid_per_segment)):
                 if bid_per_segment[j][0] > plant.min_running:
-                    bid_per_segment[j] += [((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*ldc_func[j][0]))*1.1]
-                    # bid_per_segment[j] += [i]
-            bid.append(Bid(plant,bid_per_segment))
+                    final_bid.append(bid_per_segment[j] + [((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*ldc_func[j][0]))*1.1])
+            bid.append(Bid(plant,final_bid))
         return bid
 
     # def purchase_fuel(self):
 
     def invest(self):
-        plant_to_invest = Nuclear()
+        plant_to_invest = Nuclear(ann_cost=randint(100000000,300000000))
         self.plants.append(plant_to_invest)
 
 
