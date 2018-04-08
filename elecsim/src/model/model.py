@@ -15,6 +15,7 @@ from elecsim.src.power_exchange.power_exchange import PowerEx
 
 import pandas as pd
 
+
 class Model(Model):
     """
     Model for the electricity landscape world
