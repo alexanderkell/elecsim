@@ -2,7 +2,7 @@ from mesa import Agent
 from random import randint
 
 from elecsim.src.plants.nuclear import Nuclear
-
+from elecsim.src.power_exchange.bid import Bid
 
 """gen_co.py: Agent which represents a generation company"""
 
@@ -35,22 +35,13 @@ class GenCo(Agent):
             for j in range(len(bid_per_segment)):
                 if bid_per_segment[j][0] > plant.min_running:
                     final_bid.append(bid_per_segment[j] + [((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*ldc_func[j][0]))*1.1])
-            bid.append(Bid(plant,final_bid))
+            bid.append(Bid(plant,final_bid, self))
         return bid
 
     # def purchase_fuel(self):
 
     def invest(self):
-        plant_to_invest = Nuclear(ann_cost=randint(100000000,300000000))
+        plant_to_invest = Nuclear(ann_cost=randint(100000000, 300000000))
         self.plants.append(plant_to_invest)
 
 
-class Bid:
-
-    def __init__(self, plant, ldc_bids):
-        self.plant = plant
-        self.ldc_bids = ldc_bids
-
-
-    def __str__(self):
-        return "Plant type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Bids: "+str(self.ldc_bids)
