@@ -14,10 +14,11 @@ __email__ = "Alexander@Kell.es"
 
 class GenCo(Agent):
 
-    def __init__(self, unique_id, model, plants=None):
+    def __init__(self, unique_id, model, plants=None, money=5000000):
         super().__init__(unique_id, model)
         if plants is None: plants = []
         self.plants = plants
+        self.money = money
 
     def step(self):
         print("Stepping generation company "+str(self.unique_id))

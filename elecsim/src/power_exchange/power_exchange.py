@@ -7,7 +7,6 @@ __email__ = "Alexander@Kell.es"
 
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
-from elecsim.src.power_exchange.bid import Bid
 from random import random
 
 from mesa import Agent
@@ -66,7 +65,6 @@ class PowerEx(Agent):
                         capacity_required = 0
                     else:
                         print("Error")
-
 
     def step(self):
         print("Stepping power exchange")
