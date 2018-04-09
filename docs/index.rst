@@ -1,15 +1,10 @@
-Mesa: Agent-based modeling in Python 3+
+ElecSim: Agent-based modelling for the electricity sector
 =========================================
 
-.. image:: https://api.travis-ci.org/projectmesa/mesa.svg
-        :target: https://travis-ci.org/projectmesa/mesa
+`ElecSim`_ is an MIT licensed agent-based modelling toolkit for assessing the impacts of policy and technology advancements in the electricity sector.
 
-.. image:: https://coveralls.io/repos/projectmesa/mesa/badge.svg
-    :target: https://coveralls.io/r/projectmesa/mesa
+It allows users to quickly create an electricity infrastructure with electricity generators, generating companies, electricity markets and demand. 
 
-`Mesa`_ is an Apache2 licensed agent-based modeling (or ABM) framework in Python.
-
-It allows users to quickly create agent-based models using built-in core components (such as spatial grids and agent schedulers) or customized implementations; visualize them using a browser-based interface; and analyze their results using Python's data analysis tools. Its goal is to be the Python 3-based counterpart to NetLogo, Repast, or MASON.
 
 
 .. image:: https://cloud.githubusercontent.com/assets/166734/8611697/ce61ad08-268a-11e5-880b-4776dd738e0e.png
