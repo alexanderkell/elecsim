@@ -9,6 +9,7 @@ __email__ = "Alexander@Kell.es"
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from random import random
 
+
 from mesa import Agent
 from itertools import chain
 
@@ -17,54 +18,36 @@ class PowerEx(Agent):
     def __init__(self, model):
         super().__init__(model=model, unique_id=random)
 
-    def tender_bids(self, agents, ldc):
-        bids = []
-
+    def tender_bids(self, agents, segment_hours, segment_values):
         generator_companies = [x for x in agents if isinstance(x, GenCo)]  # Select on generation company agents
-        for i in range(len(generator_companies)):
-            print("Generator company number: "+str(i))
-            # bids = generator_companies[i].calculate_bids(ldc)
-            bids.append(generator_companies[i].calculate_bids(ldc))
-        bids = list(chain.from_iterable(bids))
-        sorted_bids = self.sort_bid_price(bids)
-        self.accept_bids(sorted_bids)
+        for j in range(len(segment_hours)):
+            bids = []
+            for i in range(len(generator_companies)):
+                bids.append(generator_companies[i].calculate_bids(segment_hours[j], segment_values[j]))
+            bids = list(chain.from_iterable(bids))
+            sorted_bids = self.sort_bids(bids)
+            self.bids_response(sorted_bids, segment_values[j])
+        # self.accept_bids(sorted_bids)
 
-    def sort_bid_price(self, bids):
-        all_bids = []
-        print("bids: "+str(bids))
-        for k in range(len(bids[0].ldc_bids)):
-            ordered_bids = []
-            for l in range(len(bids)):
-                # if len(bids[l].ldc_bids[k]) > 2:
-                ordered_bids.append([bids[l].gen_co, bids[l].plant, bids[l].ldc_bids[k]])
-                print(ordered_bids[l][2][2])
-            ordered_bids = sorted(ordered_bids, key=lambda x: x[2][2])
-            # print("Capacity + all bids etc: "+str([ordered_bids[1][2][0], ordered_bids]))
-            all_bids.append([ordered_bids[1][2][0],ordered_bids])
-        print("all_bids: " +str(all_bids))
-        return all_bids
+    def sort_bids(self, bids):
+        sorted_bids = sorted(bids, key=lambda x: x.price_per_mw)
+        return(sorted_bids)
 
-    def accept_bids(self, bids):
+    def bids_response(self, bids, capacity_required):
+        print("Segement electricity demand: "+str(capacity_required))
         for i in range(len(bids)):
-            print("Capacity required: "+str(bids[i][0]))
-            print("First bid: "+str(bids[i][1][0][2][2]))
-            print("First bid capacity: "+str(bids[i][1][0][1].capacity))
+            # print("Bid #"+str(i)+": "+str(bids[i])+" repr: "+bids[i].plant.__repr__())
+            if capacity_required > bids[i].capacity_bid:
+                bids[i].accept_bid()
+                capacity_required -= bids[i].capacity_bid
+            elif bids[i].capacity_bid > capacity_required > 0:
+                bids[i].partly_accept_bid(capacity_required)
+                capacity_required = 0
+            else:
+                bids[i].reject_bid()
+            print("Capacity required: "+str(capacity_required))
 
-            capacity_required = bids[i][0]
-            while capacity_required > 0:
-                capacity_required = bids[i][0]
-                for j in range(len(bids[i][1])):
-                    station_capacity = bids[i][1][j][1].capacity
-                    if capacity_required > station_capacity:
-                        capacity_required = capacity_required - station_capacity
-                        bids[i][1][j][1].capacity_fulfilled = station_capacity
-                        print(bids[i][1][j][1].capacity_fulfilled)
-                        print(capacity_required)
-                    elif capacity_required < station_capacity and capacity_required > 0:
-                        bids[i][1][j][1].capacity_fulfilled = capacity_required
-                        capacity_required = 0
-                    else:
-                        print("Error")
+
 
     def step(self):
         print("Stepping power exchange")

@@ -10,12 +10,13 @@ from mesa import Agent
 
 class Demand(Agent):
 
-    def __init__(self, load_duration_curve):
+    def __init__(self, segment_hours, segment_consumption):
         """
         An agent representing UK electricity demand
-        :param load_duration_curve: A series representing the load duration curve
+        :param segment_hours: A series representing the load duration curve
         """
-        self.load_duration_curve = load_duration_curve
+        self.segment_hours = segment_hours
+        self.segment_consumption = segment_consumption
 
     def step(self):
         print("Stepping demand")

@@ -5,8 +5,10 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
+from elecsim.src.plants.power_plant import PowerPlant
 
-class Wind:
+
+class Wind(PowerPlant):
 
     def __init__(self, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, max_load, construction_time):
         self.min_running = min_running

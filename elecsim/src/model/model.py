@@ -13,6 +13,8 @@ from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
 
+import elecsim.src.scenario.scenario as Scen
+
 import pandas as pd
 
 
@@ -27,10 +29,10 @@ class Model(Model):
         self.schedule = OrderedActivation(self)
 
         # Create demand agent
-        ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/ldc_diff.csv')
-        print(ldc.head())
+        # ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/ldc_diff.csv')
+        # print(ldc.head())
 
-        self.demand = Demand(ldc)
+        self.demand = Demand(Scen.segment_time, Scen.segment)
         self.schedule.add(self.demand)
 
         # Create PowerExchange
@@ -49,4 +51,4 @@ class Model(Model):
         '''Advance model by one step'''
         self.schedule.step()
 
-        self.PowerExchange.tender_bids(self.schedule.agents, self.demand.load_duration_curve)
+        self.PowerExchange.tender_bids(self.schedule.agents, self.demand.segment_hours, self.demand.segment_consumption)

@@ -6,8 +6,10 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 from mesa import Agent
+from elecsim.src.plants.power_plant import PowerPlant
 
-class coal(Agent):
+
+class Coal(PowerPlant):
 
     def __init__(self, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, max_load, construction_time):
         self.min_running = min_running
