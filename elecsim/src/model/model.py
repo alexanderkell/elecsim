@@ -32,7 +32,7 @@ class Model(Model):
         # ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/ldc_diff.csv')
         # print(ldc.head())
 
-        self.demand = Demand(Scen.segment_time, Scen.segment)
+        self.demand = Demand(Scen.segment_time, Scen.segment, Scen.yearly_demand_change)
         self.schedule.add(self.demand)
 
         # Create PowerExchange
