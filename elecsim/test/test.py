@@ -2,7 +2,9 @@
 
 from elecsim.src.model.model import Model
 
-model = Model()
+import elecsim.src.scenario.scenario_data as Scenario
+
+model = Model(Scenario)
 
 for i in range(2):
     model.step()

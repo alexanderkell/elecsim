@@ -12,7 +12,6 @@ from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
 
-import elecsim.src.scenario.scenario_data as Scen
 
 import pandas as pd
 
@@ -22,11 +21,11 @@ class Model(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, demand):
+    def __init__(self, Scenario):
         # Set up model objects
         self.schedule = OrderedActivation(self)
 
-        self.demand = Demand(Scen.segment_time, Scen.segment, Scen.yearly_demand_change)
+        self.demand = Demand(Scenario.segment_time, Scenario.segment, Scenario.yearly_demand_change)
         self.schedule.add(self.demand)
 
         # Create PowerExchange
@@ -34,8 +33,8 @@ class Model(Model):
         self.schedule.add(self.PowerExchange)
 
         # Create and add generation companies
-        for i in range(Scen.number_of_gencos):
-            gen_co = GenCo(i, self, Scen.generators_owned[i], Scen.starting_money_of_gencos[i],)
+        for i in range(Scenario.number_of_gencos):
+            gen_co = GenCo(i, self, Scenario.generators_owned[i], Scenario.starting_money_of_gencos[i], )
             self.schedule.add(gen_co)
 
         # Set running to true
