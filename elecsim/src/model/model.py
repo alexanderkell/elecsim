@@ -6,14 +6,13 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 from mesa import Model
-# from mesa.time import RandomActivation
 from elecsim.src.mesaaddons.scheduler_addon import OrderedActivation
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
 
-import elecsim.src.scenario.scenario as Scen
+import elecsim.src.scenario.scenario_data as Scen
 
 import pandas as pd
 
@@ -25,12 +24,7 @@ class Model(Model):
 
     def __init__(self):
         # Set up model objects
-        # self.schedule = RandomActivation(self)
         self.schedule = OrderedActivation(self)
-
-        # Create demand agent
-        # ldc = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/ldc_diff.csv')
-        # print(ldc.head())
 
         self.demand = Demand(Scen.segment_time, Scen.segment, Scen.yearly_demand_change)
         self.schedule.add(self.demand)
@@ -40,8 +34,8 @@ class Model(Model):
         self.schedule.add(self.PowerExchange)
 
         # Create and add generation companies
-        for i in range(3):
-            gen_co = GenCo(i,self)
+        for i in range(Scen.number_of_gencos):
+            gen_co = GenCo(i, self, Scen.generators_owned[i], Scen.starting_money_of_gencos[i],)
             self.schedule.add(gen_co)
 
         # Set running to true

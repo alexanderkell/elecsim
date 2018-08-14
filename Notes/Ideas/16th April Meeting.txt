@@ -1,0 +1,17 @@
+Monday 16th April meeting
+
+Ideas
+
+- Use of machine learning parameter tuning to find optimal policy decisions for a transition to a low carbon energy grid
+
+- Effect of introduction of low cost batteries (grid and home) on grid peaker power plants
+
+- Effect of ramp rates
+
+- Effect of implementing a carbon tax in the EU
+
+- Effect on increasing and decreasing carbon price floor
+
+- Mixture of long term and short term simulations to take into account variable renewable energy sources
+
+- Effect of short transmission distances

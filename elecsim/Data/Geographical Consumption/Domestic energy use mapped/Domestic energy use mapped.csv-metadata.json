@@ -1,0 +1,106 @@
+{
+  "licenseType": "Unknown",
+  "exportable": true,
+  "dc:title": "Domestic energy use mapped",
+  "dc:modified": "2012-03-31T22:14:28Z",
+  "dc:identifier": "1ysOzZbVKdolLPAlYvLBbqiy50YZtDcG35JZ9Ids",
+  "tableSchema": {"columns": [
+    {
+      "datatype": "string",
+      "name": "col2>>0",
+      "validateData": false,
+      "title": "mlsoa"
+    },
+    {
+      "datatype": "string",
+      "name": "col0>>0",
+      "validateData": false,
+      "title": "la_name"
+    },
+    {
+      "datatype": "string",
+      "name": "col1>>0",
+      "validateData": false,
+      "title": "la"
+    },
+    {
+      "datatype": "double",
+      "name": "col3>>0",
+      "validateData": false,
+      "title": "Average domestic gas consumption, per meter kwh"
+    },
+    {
+      "datatype": "double",
+      "name": "col4>>0",
+      "validateData": false,
+      "title": "Total domestic gas consumption, kwh"
+    },
+    {
+      "datatype": "double",
+      "name": "col5>>0",
+      "validateData": false,
+      "title": "Total domestic electricity consumption, kwh"
+    },
+    {
+      "datatype": "double",
+      "name": "col6>>0",
+      "validateData": false,
+      "title": "Average domestic electricity consumption per meter kwh"
+    },
+    {
+      "datatype": "double",
+      "name": "col7>>0",
+      "validateData": false,
+      "title": "consumption_dom"
+    },
+    {
+      "datatype": "double",
+      "name": "col8>>0",
+      "validateData": false,
+      "title": "consumption_e7"
+    },
+    {
+      "datatype": "double",
+      "name": "col9>>0",
+      "validateData": false,
+      "title": "no_mpan_dom"
+    },
+    {
+      "datatype": "double",
+      "name": "col10>>0",
+      "validateData": false,
+      "title": "no_mpan_e7"
+    },
+    {
+      "datatype": "double",
+      "name": "col11>>0",
+      "validateData": false,
+      "title": "av_consumption_dom"
+    },
+    {
+      "datatype": "double",
+      "name": "col12>>0",
+      "validateData": false,
+      "title": "av_consumption_e7"
+    },
+    {
+      "datatype": "string",
+      "name": "col1>>1",
+      "validateData": false,
+      "title": "MSOA_code"
+    },
+    {
+      "datatype": "string",
+      "name": "col2>>1",
+      "validateData": false,
+      "title": "MSOA_name"
+    },
+    {
+      "datatype": "location",
+      "name": "col0>>1",
+      "validateData": false,
+      "title": "geometry"
+    }
+  ]},
+  "sql": "SELECT T1.'mlsoa', T1.'la_name', T1.'la', T1.'Average domestic gas consumption, per meter kwh', T1.'Total domestic gas consumption, kwh', T1.'Total domestic electricity consumption, kwh', T1.'Average domestic electricity consumption per meter kwh', T1.'consumption_dom', T1.'consumption_e7', T1.'no_mpan_dom', T1.'no_mpan_e7', T1.'av_consumption_dom', T1.'av_consumption_e7', T2.'MSOA_name', T2.'geometry' FROM 1R5350QrAmFKD-O-jRrdSrNmGDWmaGc0GP8F7nDM AS T1 LEFT OUTER JOIN 1Cxny3LJUDjrfN7VCgPEzPK-fGbI8mfYAXviUGCM AS T2 ON T1.'mlsoa' = T2.'MSOA_code'"
+}

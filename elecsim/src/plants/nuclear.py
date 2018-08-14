@@ -25,8 +25,6 @@ class Nuclear(PowerPlant):
         # Variable definitions
         self.capacity_fulfilled = 0
 
-    def reset_plant_contract(self):
-        self.capacity_fulfilled = 0
 
     def __str__(self):
         ret = 'Capacity Fulfilled: '+str(self.capacity_fulfilled) + '. Minimum running time: ' + str(self.min_running) + ', Lifetime: ' + str(self.lifetime) + ', Down payment: ' + str(self.down_payment) + ', Annualized investment cost: ' + str(self.ann_cost) + ', Depreciation time: ' + str(self.depreciation) + ', Operating Cost: ' + str(self.operating_cost) + ', Capacity: ' + str(self.capacity) + ', Construction Time: ' + str(self.construction_time) + ", Plant object: "+self.__repr__()+"."

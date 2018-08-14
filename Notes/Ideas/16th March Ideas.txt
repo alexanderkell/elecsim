@@ -1,0 +1,10 @@
+Agent based model ideas
+
+- diffusion of electric cars uptake
+- diffusion of electricity storage (problem - depends on finance)
+- Stimulate the uptake of electric vehicles to be used in vehicle to grid technology with policy
+- Effect of short transmission distances
+- Forecasting electricity consumption under different scenarios - efficiency improvements
+- Effect of cheap battery devices, in-home devices and electric cars on investment in peaker power plants
+
+

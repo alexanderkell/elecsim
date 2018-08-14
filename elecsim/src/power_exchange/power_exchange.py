@@ -13,12 +13,29 @@ from random import random
 from mesa import Agent
 from itertools import chain
 
+
 class PowerEx(Agent):
 
     def __init__(self, model):
+        """
+        Power exchange agent which contains functionality to tender and respond to bids
+        :param model: Model in which the agent is contained in
+        """
+
         super().__init__(model=model, unique_id=random)
 
+
+
+
     def tender_bids(self, agents, segment_hours, segment_values):
+        """
+        Function which iterates through the generator companies, requests their bids, orders them in order of price,
+        and accepts bids
+        :param agents: All agents from simulation model
+        :param segment_hours: Value for number of hours particular electricity generation is required
+        :param segment_values: Size of electricity consumption required
+        :return: None
+        """
         generator_companies = [x for x in agents if isinstance(x, GenCo)]  # Select on generation company agents
         for j in range(len(segment_hours)):
             bids = []
@@ -30,18 +47,29 @@ class PowerEx(Agent):
         # self.accept_bids(sorted_bids)
 
     def sort_bids(self, bids):
-        sorted_bids = sorted(bids, key=lambda x: x.price_per_mw)
+        """
+        Sorts bids in order of price
+        :param bids: Bid objects
+        :return: Return bids in order of price
+        """
+        sorted_bids = sorted(bids, key=lambda x: x.price_per_mwh)
         return(sorted_bids)
 
     def bids_response(self, bids, capacity_required):
+        """
+        Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
+        Continues to accept bids until capacity is met for those hours.
+        :param bids: Bid objects
+        :param capacity_required: Capacity required for this segment
+        :return:
+        """
         print("Segement electricity demand: "+str(capacity_required))
         for i in range(len(bids)):
-            # print("Bid #"+str(i)+": "+str(bids[i])+" repr: "+bids[i].plant.__repr__())
             if capacity_required > bids[i].capacity_bid:
                 bids[i].accept_bid()
                 capacity_required -= bids[i].capacity_bid
             elif bids[i].capacity_bid > capacity_required > 0:
-                bids[i].partly_accept_bid(capacity_required)
+                bids[i].partially_accept_bid(capacity_required)
                 capacity_required = 0
             else:
                 bids[i].reject_bid()
