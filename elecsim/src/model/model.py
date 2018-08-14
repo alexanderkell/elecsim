@@ -22,7 +22,7 @@ class Model(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self):
+    def __init__(self, demand):
         # Set up model objects
         self.schedule = OrderedActivation(self)
 
