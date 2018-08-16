@@ -12,21 +12,27 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
+def create_gencos(psd):
+    print(psd)
+
+
 class GenCo(Agent):
 
-    def __init__(self, unique_id, model, plants=None, money=5000000, carbon_tax=0):
+    def __init__(self, unique_id, model, name="Empty", plants=None, money=5000000, carbon_tax=0):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
         :param model:  Model which defines the world that the agent lives in
+        :param name
         :param plants: Plants which the generating company is initialised with
         :param money: Money which the agent is initialised with
         """
         super().__init__(unique_id, model)
         if plants is None: plants = []
+
         self.plants = plants
         self.money = money
-
+        self.name = name
         self.carbon_tax = carbon_tax
 
     def step(self):

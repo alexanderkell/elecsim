@@ -1,19 +1,28 @@
 import pandas as pd
 
-def read_smart_meter_data(dir):
-    data = pd.read_csv(dir,index_col=[0,1])
-    groupby = data.groupby(['house_id']).aggregate(lambda x: tuple(x))
 
-    return groupby
+def power_plant_import(data):
+    """
 
-# data = read_smart_meter_data('/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/elecsim/elecsim/Data/one_hour_30.csv')
-# groupby = data.groupby(['house_id'])['value'].apply(list)
-
-# groupby = data.groupby(['house_id']).aggregate(lambda x: tuple(x))
+    :param data: Power Plant data - Dataframe should be of the form: Company (String), Name of power station (String), Fuel type (String), Capacity (float), Build date (int))
+    :return: Null
+    """
+    print(data['Company'].unique())
 
 
-# print(groupby)
-# print(groupby.size)
+def company_names(data):
+    """
+    Function that takes a dataframe of power plants and returns company name. Used for
+    :param data: Power Plant data - Dataframe should be of the form: Company (String), Name of power station (String), Fuel type (String), Capacity (float), Build date (int))
+    :return: unique names
+    """
+    names = data['Company'].unique()
+    return names
 
-# g = list(groupby.iloc[1].tolist()[0][0])
-# print(g)
+pp = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/1. elecsim/elecsim/data/Power Plants/No Location/power_plants_2018.csv")
+
+print(pp.groupby('Fuel').count())
+print("---------")
+print(pp.groupby('Fuel').sum().sort_values(['Capacity'], ascending=0))
+
+

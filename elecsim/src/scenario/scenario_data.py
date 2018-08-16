@@ -1,5 +1,8 @@
+import pandas as pd
+
 from elecsim.src.plants.power_plant import PowerPlant
 from elecsim.src.plants.nuclear import Nuclear
+from elecsim.src.data.data_import import power_plant_import
 
 """scenario_data.py: Scenario file containing data for a single simulation run."""
 
@@ -19,10 +22,15 @@ segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.91666
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
 
 # Number of generator companies
-number_of_gencos = 3
+# number_of_gencos = 3
 
 # Generator Company initial power generators owned
-generators_owned = [[Nuclear(), Nuclear(), Nuclear()],[Nuclear(),Nuclear()],[Nuclear()]]
+# generators_owned = [[Nuclear(), Nuclear(), Nuclear()],[Nuclear(),Nuclear()],[Nuclear()]]
+
+# Generator Companies imported from Government database
+
+power_plants = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/6. Agent Based Models/1. elecsim/elecsim/data/Power Plants/power_plants_2018.csv")
+
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]
