@@ -42,10 +42,17 @@ class Model(Model):
 
         for i in range(len(names)):
             gen_co = GenCo(i, self, name=names[i])
-            for j in range(plant_data.loc[plant_data['Company'] == names[i]]):
-
+            rows = plant_data.loc[plant_data['Company'] == names[i]]
+            plants = []
+            for j in range(len(rows)):
+                # plants.append()
+                print(rows.iloc[j])
+                print(rows.iloc[j].Name)
+                print(rows.iloc[j].Fuel)
+                print(rows.iloc[j].Capacity)
+                print(rows.iloc[j].Start_date)
             self.schedule.add(gen_co)
-
+            print('-------------- NEW COMPANY --------------')
         # Set running to true
         self.running = True
 

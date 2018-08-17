@@ -1,9 +1,5 @@
 import pandas as pd
 
-from elecsim.src.plants.power_plant import PowerPlant
-from elecsim.src.plants.nuclear import Nuclear
-from elecsim.src.data.data_import import power_plant_import
-
 """scenario_data.py: Scenario file containing data for a single simulation run."""
 
 __author__ = "Alexander Kell"

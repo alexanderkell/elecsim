@@ -1,7 +1,8 @@
-from mesa import Agent
 from random import randint
 
-from elecsim.src.plants.nuclear import Nuclear
+from mesa import Agent
+
+from elecsim.src.plants.plant_types.nuclear import Nuclear
 from elecsim.src.power_exchange.bid import Bid
 
 """gen_co.py: Agent which represents a generation company"""
