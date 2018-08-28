@@ -9,7 +9,6 @@ __email__ = "Alexander@Kell.es"
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from random import random
 
-
 from mesa import Agent
 from itertools import chain
 

@@ -2,7 +2,6 @@
 
 from elecsim.src.model.model import Model
 
-import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
 
 

@@ -7,8 +7,7 @@ class OrderedActivation(BaseScheduler):
 
     """
     def step(self):
-        """ Executes the step of all agents, one at a time, in
-        cetain order.
+        """ Executes the step of all agents, one at a time.
 
         """
         for agent in self.agents[:]:

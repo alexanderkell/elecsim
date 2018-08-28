@@ -6,7 +6,7 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 from mesa import Model
-from elecsim.src.mesaaddons.scheduler_addon import OrderedActivation
+from elecsim.src.mesa_addons.scheduler_addon import OrderedActivation
 
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
@@ -25,7 +25,7 @@ class Model(Model):
         # Set up model objects
         self.schedule = OrderedActivation(self)
 
-        self.demand = Demand(scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
+        self.demand = Demand(1 ,scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
         self.schedule.add(self.demand)
 
         # Create PowerExchange

@@ -1,0 +1,26 @@
+﻿,,Dedicated Biomass ,,,Conversions ,,,Biomass CHP ,,,Onshore UK>5MW ,,
+Reference plant size ,MW ,23,,,349,,,14,,,20,,
+Average load factor (net of availability) ,% ,84%,,,79%,,,80%,,,32%,,
+Efficiency (LHV) ,% ,29%,,,40%,,,23%,,,0%,,
+Pre-development period ,Duration and % spend per years 1 & 2 ,3 years ,33.30%,33.30%,2 years ,50%,50%,3 years ,33.30%,33.30%,4 years ,25%,25%
+,"% spend per years 3, 4, & 5 ",33.30%,,,,,,33.30%,,,25%,25%,
+,"% spend per years 6, 7, & 8 ",,,,,,,,,,,,
+Construction period ,Duration and % spend per years 1 & 2 ,2 years ,50%,50%,2 years ,43.50%,43.50%,2 years ,50%,50%,2 years ,50%,50%
+,"% spend per years 3, 4, & 5 ",,,,13%,,,,,,,,
+,"% spend per years 6, 7, & 8 ",,,,,,,,,,,,
+Operating period ,Duration ,25 years ,,,15 years ,,,24 years ,,,24 years ,,
+,,Commissioning year ,,,Commissioning year ,,,Commissioning year ,,,Commissioning year ,,
+,,2018,2020,2025,2018,2020,2025,2018,2020,2025,2018,2020,2025
+Pre-development £/kW ,High ,160,160,160,120,120,- ,580,580,580,190,190,190
+,Medium ,110,110,110,80,80,- ,270,270,270,110,110,110
+,Low ,80,80,80,50,50,- ,40,40,40,40,40,40
+Construction £/kW ,High ,"3,400","3,300","3,300",300,300,- ,"5,400","5,600","5,900","1,500","1,500","1,400"
+,Medium ,"2,900","2,900","2,800",200,200,- ,"4,500","4,700","4,900","1,200","1,200","1,200"
+,Low ,"2,400","2,300","2,300",200,200,- ,"3,400","3,500","3,700",900,800,800
+Infrastructure £'000s ,High ,500,500,500,- ,- ,- ,"1,100","1,100","1,100","4,100","4,100","4,100"
+,Medium ,400,400,400,- ,- ,- ,900,900,900,"3,300","3,300","3,300"
+,Low ,200,200,200,- ,- ,- ,700,700,700,"2,300","2,300","2,300"
+Fixed O&M £/MW/year ,Medium ,"65,500","65,500","65,500","22,800","22,800",- ,"223,500","230,000","240,600","23,200","23,000","22,400"
+Variable O&M £/MWh ,Medium ,8,8,8,1,1,- ,11,11,11,5,5,5
+Insurance £/MWh/year ,Medium ,"11,500","11,500","11,500","11,500","11,500",- ,"44,000","45,300","47,400","1,400","1,400","1,400"
+Connection and Use of System charges £/MW/year ,Medium ,"12,900","12,900","12,900","10,500","10,500",- ,"15,500","16,000","16,700","3,100","3,100","3,000"

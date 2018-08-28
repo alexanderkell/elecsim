@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/elecsim.iml" filepath="$PROJECT_DIR$/.idea/elecsim.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Electricity/.idea/untitled.iml" filepath="$PROJECT_DIR$/../Electricity/.idea/untitled.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/10. ELECSIM.iml" filepath="$PROJECT_DIR$/.idea/10. ELECSIM.iml" />
     </modules>
   </component>
 </project>
