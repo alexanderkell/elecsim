@@ -17,6 +17,9 @@ segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.91666
 # Change in load duration function by year
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
 
+
+
+
 # Number of generator companies
 # number_of_gencos = 3
 

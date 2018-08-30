@@ -5,6 +5,8 @@ from mesa import Agent
 from elecsim.src.plants.power_plant import PowerPlant
 from elecsim.src.power_exchange.bid import Bid
 
+from elecsim.src.agents.generation_company
+
 """gen_co.py: Agent which represents a generation company"""
 
 __author__ = "Alexander Kell"
@@ -61,9 +63,10 @@ class GenCo(Agent):
     # def purchase_fuel(self):
 
     def invest(self):
-        plant_to_invest = PowerPlant(name = "Hinkley Point B", constructionStartTime=3, min_running=5000, lifetime=20, down_payment=100000, ann_cost=randint(100000000, 300000000), depreciation=15, operating_cost=50000000, capacity=758, construction_time=3, carbon_emissions=50, efficiency=50)
+        # plant_to_invest = PowerPlant(name = "Hinkley Point B", constructionStartTime=3, min_running=5000, lifetime=20, down_payment=100000, ann_cost=randint(100000000, 300000000), depreciation=15, operating_cost=50000000, capacity=758, construction_time=3, carbon_emissions=50, efficiency=50)
 
-        self.plants.append(plant_to_invest)
+        # self.plants.append(plant_to_invest)
+
 
     def reset_contracts(self):
         """
@@ -72,3 +75,4 @@ class GenCo(Agent):
         """
         for i in range(len(self.plants)):
             self.plants[i].reset_plant_contract()
+

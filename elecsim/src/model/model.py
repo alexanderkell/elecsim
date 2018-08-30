@@ -11,7 +11,7 @@ from elecsim.src.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
-from elecsim.src.data.data_import import company_names
+from elecsim.src.data.uk_gencos_and_plants import company_names
 
 import pandas as pd
 
