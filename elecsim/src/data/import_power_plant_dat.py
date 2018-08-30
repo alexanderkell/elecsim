@@ -7,7 +7,6 @@ pd.set_option('display.max_columns', 70)
 pd.set_option('display.max_rows', 200)
 
 
-
 def plant_data(dat):
     """
     Takes the first part of the dataframe from the CSV file from the tables included in BEIS_Electricity_Generation_Cost_Report, and returns a dataframe with powerplants as columns and each data as columns
