@@ -20,7 +20,7 @@ def company_names(data):
     return names
 
 def plants_owned(gen_co):
-    query = pp.loc[pp['Company']== gen_co]
+    query = pp.loc[pp['Company'] == gen_co]
     return query
 
 

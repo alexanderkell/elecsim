@@ -140,13 +140,13 @@ Cubico Sustainable Investments Limited,Overton Solar Park (England),Solar,3.80,2
 Cubico Sustainable Investments Limited,Owl's Hatch Solar Park (England),Solar,51.90,2015.00
 Cubico Sustainable Investments Limited,Southfield Solar Park (England),Solar,9.80,2016.00
 Cubico Sustainable Investments Limited,Wisbech Solar Park (England),Solar,3.40,2015.00
-Drax Power Ltd,Drax - biomass units,Biomass,1980.00,1974.00
+Drax Power Ltd,Drax - biomass units,Biomass_wood,1980.00,1974.00
 Drax Power Ltd,Drax - coal units,Coal,1980.00,1974.00
 Drax Power Ltd,Drax GT,Gas oil,75.00,1971.00
-E.On UK,Blackburn meadows *,Biomass,33.00,2015.00
+E.On UK,Blackburn meadows *,Biomass_wood,33.00,2015.00
 E.On UK,Castleford,CCGT,56.00,2002.00
 E.On UK,Sandbach,CCGT,56.00,1999.00
-E.On UK,Steven's Croft *,Biomass,50.00,2007.00
+E.On UK,Steven's Croft *,Biomass_wood,50.00,2007.00
 E.On UK,Thornhill,CCGT,50.00,1998.00
 E.On UK,Blyth T1,Wind (offshore),2.00,2001.00
 E.On UK,Blyth T2,Wind (offshore),2.30,2001.00
@@ -263,10 +263,10 @@ Eneco,Oaklands,Solar,5.00,2016.00
 Engie,Deeside,CCGT,515.00,1994.00
 ENGIE,Dinorwig,Pumped storage,1800.00,1983.00
 ENGIE,Ffestiniog,Pumped storage,360.00,1961.00
-EPR,Eye Suffolk,Biomass,14.30,1992.00
-EPR,Glanford,Meat & bone meal,14.00,1993.00
-EPR,Thetford,Biomass,41.50,1998.00
-EPR,Westfield,Biomass,12.50,2000.00
+EPR,Eye Suffolk,Biomass_poultry_litter,14.30,1992.00
+EPR,Glanford,Meat,14.00,1993.00
+EPR,Thetford,Biomass_poultry_litter,41.50,1998.00
+EPR,Westfield,Biomass_poultry_litter,12.50,2000.00
 EPR,EPR Ely Ltd,Straw,38.00,2001.00
 EPUKi,South Humber Bank,CCGT,1365.00,1996.00
 EPUKi,Langage,CCGT,905.00,2010.00
@@ -811,7 +811,7 @@ RWE Generation SE,Didcot GT,Gas oil,100.00,1972.00
 RWE Generation SE,Great Yarmouth,CCGT,420.00,2001.00
 RWE Generation SE,Little Barford,CCGT,740.00,1995.00
 RWE Generation SE,Little Barford GT,Gas oil,17.00,2006.00
-RWE Generation SE,Markinch CHP *,Biomass,65.00,2014.00
+RWE Generation SE,Markinch CHP *,Biomass_wood,65.00,2014.00
 RWE Generation SE,Pembroke,CCGT,2199.00,2012.00
 RWE Generation SE,Staythorpe C,CCGT,1772.00,2010.00
 Saltend Cogeneration Company Ltd,Saltend *,CCGT,1200.00,2000.00
@@ -883,7 +883,7 @@ Scottish Power,Cruachan,Pumped storage,440.00,1966.00
 Seabank Power Limited,Seabank,CCGT,1234.00,1998.00
 Sellafield Ltd,Fellside CHP *,CCGT,180.00,1995.00
 Sembcorp Utilities (UK) Ltd,Wilton GT *,Gas,120.00,1952.00
-Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass,38.00,2007.00
+Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass_wood,38.00,2007.00
 SIMEC,Uskmouth power,Coal,363.00,1966.00
 South East London Combined Heat & Power Ltd,SELCHP ERF *,Waste,35.00,1994.00
 SSE,Aigas,Hydro,20.00,1962.00
@@ -987,7 +987,7 @@ SSE,Keadby,CCGT,735.00,1994.00
 SSE,Medway,CCGT,755.00,1995.00
 SSE,Fiddler’s Ferry GT,Gas oil,35.00,1969.00
 SSE,Fiddler’s Ferry,Coal,1961.00,1971.00
-SSE,Slough *,Biomass,35.00,1918.00
+SSE,Slough *,Biomass_wood,35.00,1918.00
 SSE,Chippenham,Gas,10.00,2002.00
 SSE,Keadby GT,Gas oil,25.00,1994.00
 SSE,Pilkington - Greengate *,Gas,10.00,1998.00

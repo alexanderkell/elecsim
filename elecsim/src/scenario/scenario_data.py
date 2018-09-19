@@ -18,7 +18,10 @@ segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.91666
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
 
 # Gas prices (£/kWh)
-gas_prices = [0.018977] * 42
+gas_prices = [0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers table_321.xls
+coal_price = [0.00906] * 42 # Source: Average prices of fuels purchased by the major UK power producers table_321.xls
+oil_price = [0.02748] * 42 # Source: Average prices of fuels purchased by the major UK power producers table_321.xls
+woodchip_price = [0.0252] * 42 # Source: BiomassCost.pdf Biomass for Power Generation IRENA
 
 
 # Number of generator companies

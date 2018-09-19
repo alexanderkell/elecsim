@@ -7,13 +7,16 @@ __email__ = "Alexander@Kell.es"
 
 from elecsim.src.plants.power_plant import PowerPlant
 
-class renewable_plant(PowerPlant):
+class RenewablePlant(PowerPlant):
 
 
-    def __init__(self, efficiency):
+    def __init__(self, name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, efficiency):
         """
         Power plant of type that does not use fuel.
         """
+        super().__init__(name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
+
+        self.efficiency = efficiency
 
 
     def calculate_lcoe(self, carbon_price):
@@ -32,15 +35,3 @@ class renewable_plant(PowerPlant):
         print(opex)
 
 
-    def fuel_costs(self, fuel_price, electricity_generated):
-        """
-        Calculates the fuel costs per year based on plant efficiency, electricity generated, endogenous gas prices, and a conversion rate of
-        :param fuel_price: Price of fuel for the operation
-        :param electricity_generated:
-        :return: Returns estimated cost of fuel per year
-        """
-
-        fuel_costs = (fuel_price * electricity_generated)/(self.efficiency*0.029)
-
-
-        return fuel_costs

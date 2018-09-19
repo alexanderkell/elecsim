@@ -140,13 +140,13 @@ Cubico Sustainable Investments Limited,Overton Solar Park (England),Solar,3.8,20
 Cubico Sustainable Investments Limited,Owl's Hatch Solar Park (England),Solar,51.9,2015,South East
 Cubico Sustainable Investments Limited,Southfield Solar Park (England),Solar,9.8,2016,South West
 Cubico Sustainable Investments Limited,Wisbech Solar Park (England),Solar,3.4,2015,Eastern
-Drax Power Ltd,Drax - biomass units,Biomass,"1,980.0",1974,Yorkshire & Humber
+Drax Power Ltd,Drax - biomass units,Biomass_wood,"1,980.0",1974,Yorkshire & Humber
 Drax Power Ltd,Drax - coal units,Coal,"1,980.0",1974,Yorkshire & Humber
 Drax Power Ltd,Drax GT,Gas oil,75.0,1971,Yorkshire and the Humber
-E.On UK,Blackburn meadows *,Biomass,33.0,2015,Yorkshire & Humber
+E.On UK,Blackburn meadows *,Biomass_wood,33.0,2015,Yorkshire & Humber
 E.On UK,Castleford,CCGT,56.0,2002,Yorkshire & Humber
 E.On UK,Sandbach,CCGT,56.0,1999,North West
-E.On UK,Steven's Croft *,Biomass,50.0,2007,Scotland
+E.On UK,Steven's Croft *,Biomass_wood,50.0,2007,Scotland
 E.On UK,Thornhill,CCGT,50.0,1998,Yorkshire & Humber
 E.On UK,Blyth T1,Wind (offshore),2.0,2001,North East
 E.On UK,Blyth T2,Wind (offshore),2.3,2001,North East
@@ -263,10 +263,10 @@ Eneco,Oaklands,Solar,5.0,2016,South West
 Engie,Deeside,CCGT,515.0,1994,Wales
 ENGIE,Dinorwig,Pumped storage,"1,800.0",1983,Wales
 ENGIE,Ffestiniog,Pumped storage,360.0,1961,Wales
-EPR,Eye Suffolk,Biomass,14.3,1992,East England
-EPR,Glanford,Meat & bone meal,14.0,1993,Yorkshire & Humber
-EPR,Thetford,Biomass,41.5,1998,East England
-EPR,Westfield,Biomass,12.5,2000,Scotland
+EPR,Eye Suffolk,Biomass_poultry_litter,14.3,1992,East England
+EPR,Glanford,Meat,14.0,1993,Yorkshire & Humber
+EPR,Thetford,Biomass_poultry_litter,41.5,1998,East England
+EPR,Westfield,Biomass_poultry_litter,12.5,2000,Scotland
 EPR,EPR Ely Ltd,Straw,38.0,2001,East England
 EPUKi,South Humber Bank,CCGT,"1,365.0",1996,Yorkshire & Humber
 EPUKi,Langage,CCGT,905.0,2010,South West
@@ -351,7 +351,7 @@ Greencoat,Wrangle Farm,Solar,10.8,2014,East Midlands
 Greencoat,Wraysbury,Solar,3.0,2017,South East
 Greencoat,Common Farm,Solar,3.4,2017,South West
 Greencoat,Manor Farm,Solar,4.9,2016,South East
-Indian Queens Power Ltd,Indian Queens,Gas oil / kerosene,140.0,1996,South West
+Indian Queens Power Ltd,Indian Queens,Gas oil,140.0,1996,South West
 Infinis,Ardrossan,Wind,30.0,2004,Scotland
 Infinis,A'Chruach,Wind,42.6,2016,Scotland
 Infinis,Blackstone Edge,Wind,6.0,2013,Yorkshire and Humber
@@ -811,7 +811,7 @@ RWE Generation SE,Didcot GT,Gas oil,100.0,1972,South East
 RWE Generation SE,Great Yarmouth,CCGT,420.0,2001,East England
 RWE Generation SE,Little Barford,CCGT,740.0,1995,East England
 RWE Generation SE,Little Barford GT,Gas oil,17.0,2006,East England
-RWE Generation SE,Markinch CHP *,Biomass,65.0,2014,Scotland
+RWE Generation SE,Markinch CHP *,Biomass_wood,65.0,2014,Scotland
 RWE Generation SE,Pembroke,CCGT,"2,199.0",2012,Wales
 RWE Generation SE,Staythorpe C,CCGT,"1,772.0",2010,East Midlands
 Saltend Cogeneration Company Ltd,Saltend *,CCGT,"1,200.0",2000,Yorkshire & Humber
@@ -883,7 +883,7 @@ Scottish Power,Cruachan,Pumped storage,440.0,1966,Scotland
 Seabank Power Limited,Seabank,CCGT,"1,234.0",1998,South West
 Sellafield Ltd,Fellside CHP *,CCGT,180.0,1995,North West
 Sembcorp Utilities (UK) Ltd,Wilton GT *,Gas,120.0,1952,North East
-Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass,38.0,2007,North East
+Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass_wood,38.0,2007,North East
 SIMEC,Uskmouth power,Coal,363.0,1966,Wales
 South East London Combined Heat & Power Ltd,SELCHP ERF *,Waste,35.0,1994,London
 SSE,Aigas,Hydro,20.0,1962,Scotland
@@ -987,7 +987,7 @@ SSE,Keadby,CCGT,735.0,1994,Yorkshire & Humber
 SSE,Medway,CCGT,755.0,1995,South East
 SSE,Fiddler’s Ferry GT,Gas oil,35.0,1969,North West
 SSE,Fiddler’s Ferry,Coal,"1,961.0",1971,North West
-SSE,Slough *,Biomass,35.0,1918,South East
+SSE,Slough *,Biomass_wood,35.0,1918,South East
 SSE,Chippenham,Gas,10.0,2002,South West
 SSE,Keadby GT,Gas oil,25.0,1994,Yorkshire and the Humber
 SSE,Pilkington - Greengate *,Gas,10.0,1998,North West
