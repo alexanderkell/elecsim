@@ -15,14 +15,14 @@ class Demand(Agent):
         An agent representing UK electricity demand
         :param segment_hours: A series representing the load duration curve
         """
+        self.unique_id = unique_id
 
         self.segment_hours = segment_hours
         self.segment_consumption = segment_consumption
         self.yearly_demand_change = yearly_demand_change
 
-        self.unique_id = unique_id
-
         self.count = 0
+
     def step(self):
         print("Stepping demand")
         self.segment_consumption = [i * self.yearly_demand_change[self.count] for i in self.segment_consumption]
