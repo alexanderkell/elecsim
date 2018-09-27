@@ -9,18 +9,30 @@ from elecsim.src.plants.power_plant import PowerPlant
 from elecsim.src.plants.plant_type.fuel import fuel_registry
 
 class FuelPlant(PowerPlant):
+    #
+    # def __init__(self, name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, efficiency, fuel_type, fuel_price=None, energy_density=None, co2_density=None):
+    #     """
+    #     Power plant which is of type which uses fuel.
+    #     :param efficiency: Efficiency of fuel plant at converting fuel to electrical energy
+    #     :param fuel: Type of fuel used by plant
+    #     """
+    #
+    #     super().__init__(self,  name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
+    #
+    #     self.efficiency = efficiency
+    #     self.fuel = fuel_registry(fuel_type, fuel_price, energy_density, co2_density)
 
-    def __init__(self, name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, efficiency, fuel_type, fuel_price=None, energy_density=None, co2_density=None):
+    def __init__(self, name, fuel, capacity_mw):
         """
-        Power plant which is of type which uses fuel.
-        :param efficiency: Efficiency of fuel plant at converting fuel to electrical energy
-        :param fuel: Type of fuel used by plant
+        Initialisation of power plant object
+        :param name: Name of power plant
+        :param fuel: Fuel type
+        :param capacity_mw: Capacity of power plant in MW
         """
 
-        super().__init__(self,  name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
-
-        self.efficiency = efficiency
-        self.fuel = fuel_registry(fuel_type, fuel_price, energy_density, co2_density)
+        self.name = name
+        self.fuel = fuel
+        self.capacity_mw = capacity_mw
 
     def calculate_lcoe(self):
         """

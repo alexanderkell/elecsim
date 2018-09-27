@@ -3,9 +3,9 @@ AES,Ballylumford B,Gas,540.00,1968.00
 AES,Ballylumford B OCGT,Gas oil,116.00,1968.00
 AES,Ballylumford C,CCGT,616.00,2003.00
 AES,Kilroot OCGT,Gas oil,142.00,1981.00
-AES,Kilroot,Coal/oil,560.00,1981.00
+AES,Kilroot,Coal,560.00,1981.00
 Anesco,Abergelli,Solar,7.70,2015.00
-Anesco,Anglesey ,Solar,14.90,2014.00
+Anesco,Anglesey,Solar,14.90,2014.00
 Anesco,Ashton,Solar,4.80,2017.00
 Anesco,Askern,Solar,5.00,2015.00
 Anesco,Beeches,Solar,5.00,2016.00
@@ -261,8 +261,8 @@ Eneco,Twinshiels,Wind,25.00,2015.00
 Eneco,Oaklands,Solar,5.00,2016.00
 Eneco,Oaklands,Solar,5.00,2016.00
 Engie,Deeside,CCGT,515.00,1994.00
-ENGIE,Dinorwig,Pumped storage,1800.00,1983.00
-ENGIE,Ffestiniog,Pumped storage,360.00,1961.00
+Engie,Dinorwig,Pumped storage,1800.00,1983.00
+Engie,Ffestiniog,Pumped storage,360.00,1961.00
 EPR,Eye Suffolk,Biomass_poultry_litter,14.30,1992.00
 EPR,Glanford,Meat,14.00,1993.00
 EPR,Thetford,Biomass_poultry_litter,41.50,1998.00
@@ -351,7 +351,7 @@ Greencoat,Wrangle Farm,Solar,10.80,2014.00
 Greencoat,Wraysbury,Solar,3.00,2017.00
 Greencoat,Common Farm,Solar,3.40,2017.00
 Greencoat,Manor Farm,Solar,4.90,2016.00
-Indian Queens Power Ltd,Indian Queens,Gas oil / kerosene,140.00,1996.00
+Indian Queens Power Ltd,Indian Queens,Gas,140.00,1996.00
 Infinis,Ardrossan,Wind,30.00,2004.00
 Infinis,A'Chruach,Wind,42.60,2016.00
 Infinis,Blackstone Edge,Wind,6.00,2013.00
@@ -879,7 +879,7 @@ Scottish power,Kendoon,Hydro,24.00,1936.00
 Scottish power,Tongland,Hydro,33.00,1935.00
 Scottish power,Bonnington,Hydro,11.00,1927.00
 Scottish power,Stonebyres,Hydro,6.00,1927.00
-Scottish Power,Cruachan,Pumped storage,440.00,1966.00
+Scottish power,Cruachan,Pumped storage,440.00,1966.00
 Seabank Power Limited,Seabank,CCGT,1234.00,1998.00
 Sellafield Ltd,Fellside CHP *,CCGT,180.00,1995.00
 Sembcorp Utilities (UK) Ltd,Wilton GT *,Gas,120.00,1952.00
@@ -913,7 +913,7 @@ SSE,Mossford,Hydro,18.70,1957.00
 SSE,Orrin,Hydro,18.00,1959.00
 SSE,Orrin Dam,Hydro,0.30,1959.00
 SSE,Torr Achilty,Hydro,15.00,1954.00
-SSE,Foyers,Hydro / pumped storage,300.00,1974.00
+SSE,Foyers,Pumped storage,300.00,1974.00
 SSE,Ceannacroc,Hydro,20.00,1956.00
 SSE,Foyers Falls,Hydro,5.00,1968.00
 SSE,Glendoe,Hydro,100.00,2008.00

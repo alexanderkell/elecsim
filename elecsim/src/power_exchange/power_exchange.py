@@ -23,9 +23,6 @@ class PowerEx(Agent):
 
         super().__init__(model=model, unique_id=random)
 
-
-
-
     def tender_bids(self, agents, segment_hours, segment_values):
         """
         Function which iterates through the generator companies, requests their bids, orders them in order of price,
@@ -35,7 +32,7 @@ class PowerEx(Agent):
         :param segment_values: Size of electricity consumption required
         :return: None
         """
-        generator_companies = [x for x in agents if isinstance(x, GenCo)]  # Select on generation company agents
+        generator_companies = [x for x in agents if isinstance(x, GenCo)]  # Select of generation company agents
         for j in range(len(segment_hours)):
             bids = []
             for i in range(len(generator_companies)):

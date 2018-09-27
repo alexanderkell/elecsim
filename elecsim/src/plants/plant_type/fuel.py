@@ -43,13 +43,21 @@ def fuel_registry(fuel_type, fuel_price, energy_density=None, co2_density=None):
             return Fuel(fuel_type, scenario.gas_prices, 35.8, 2.03)
         if fuel_type == "Coal":
             return Fuel(fuel_type, scenario.coal_price, 24.1, 2.23)
+        if fuel_type == "Uranium" or "Nuclear":
+            return Fuel(fuel_type, scenario.uranium_price, 1296000, 0)
+        if fuel_type == "Wind" or "Wind (offshore)":
+            return Fuel(fuel_type, 0, 0, 0)
+        if fuel_type == "Solar":
+            return Fuel(fuel_type, 0, 0, 0)
+        if fuel_type == "Hydro":
+            return Fuel(fuel_type, 0, 0, 0)
         if fuel_type == "Biomass_wood":
             return Fuel(fuel_type, scenario.woodchip_price, 19.0, 0)
         if fuel_type == "Biomass_poultry_litter":
             return Fuel(fuel_type, scenario.poultry_litter_price, 7.9, 0)
         if fuel_type == "Oil":
             return Fuel(fuel_type, scenario.oil_price, 40.7, 3.2)
-        if fuel_type == "Diesel":
+        if fuel_type == "Diesel" or "Gas oil":
             return Fuel(fuel_type, scenario.diesel_price, 42.6, 3.19)
         if fuel_type == "Straw":
             return Fuel(fuel_type, scenario.straw_price, 13.1, 0)
