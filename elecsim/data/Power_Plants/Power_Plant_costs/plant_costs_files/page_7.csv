@@ -1,0 +1,26 @@
+﻿,,Gas - CCS OCGT post FOAK ,,,Coal - CCS ASC Partial FOAK ,,,Coal - CCS ASC FOAK ,,,Coal - CCS ASC retrofit FOAK ,,
+Reference plant size ,MW ,290,,,734,,,624,,,390,,
+Average load factor (net of availability) ,% ,85%,,,91%,,,91%,,,91%,,
+Efficiency (HHV) ,% ,24%,,,38%,,,32%,,,31%,,
+Pre-development period ,Duration and % spend per years 1 & 2 ,5 years ,20%,20%,5 years ,20%,20%,5 years ,20%,20%,5 years ,20%,20%
+,"% spend per years 3, 4, & 5 ",20%,20%,20%,20%,20%,20%,20%,20%,20%,20%,20%,20%
+,"% spend per years 6, 7, & 8 ",,,,,,,,,,,,
+Construction period ,Duration and % spend per years 1 & 2 ,5 years ,20%,20%,5 years ,20%,20%,5 years ,20%,20%,4 years ,25%,25%
+,"% spend per years 3, 4, & 5 ",20%,20%,20%,20%,20%,20%,20%,20%,20%,25%,25%,
+,"% spend per years 6, 7, & 8 ",,,,,,,,,,,,
+Operating period ,Duration ,25 years ,,,25 years ,,,25 years ,,,15 years ,,
+,,Commissioning year ,,,Commissioning year ,,,Commissioning year ,,,Commissioning year ,,
+,,2018,2020,2025,2018,2020,2025,2018,2020,2025,2018,2020,2025
+Pre-development £/kW ,High ,- ,- ,120,- ,- ,80,- ,- ,110,- ,- ,50
+,Medium ,- ,- ,80,- ,- ,60,- ,- ,70,- ,- ,30
+,Low ,- ,- ,60,- ,- ,40,- ,- ,60,- ,- ,20
+Construction £/kW ,High ,- ,- ,"3,000",- ,- ,"3,400",- ,- ,"5,500",- ,- ,"3,000"
+,Medium ,- ,- ,"2,300",- ,- ,"2,600",- ,- ,"4,200",- ,- ,"2,400"
+,Low ,- ,- ,"1,900",- ,- ,"2,100",- ,- ,"3,400",- ,- ,"1,900"
+Infrastructure £'000s ,High ,- ,- ,"30,200",- ,- ,"15,000",- ,- ,"15,000",- ,- ,- 
+,Medium ,- ,- ,"15,100",- ,- ,"10,000",- ,- ,"10,000",- ,- ,- 
+,Low ,- ,- ,"7,600",- ,- ,"5,000",- ,- ,"5,000",- ,- ,- 
+Fixed O&M £/MW/year ,Medium ,- ,- ,"31,800",- ,- ,"56,400",- ,- ,"78,500",- ,- ,"80,700"
+Variable O&M £/MWh ,Medium ,- ,- ,3,- ,- ,3,- ,- ,3,- ,- ,3
+Insurance £/MWh/year ,Medium ,- ,- ,"8,500",- ,- ,"9,600",- ,- ,"15,800",- ,- ,"8,200"
+Connection and Use of System charges £/MW/year ,Medium ,- ,- ,"2,500",- ,- ,"3,800",- ,- ,"3,800",- ,- ,"3,800"

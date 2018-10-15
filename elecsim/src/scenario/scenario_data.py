@@ -39,8 +39,8 @@ waste_price_pre_2000 = [-0.01551] * 42 # Source: Gate fees report 2017 Comparing
 
 # Generator Companies imported from Government database
 
-power_plants = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power Plants/No Location/power_plants_2018.csv")
-
+# power_plants = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power Plants/No Location/power_plants_2018.csv")
+power_plants = pd.read_csv("../data/Power_Plants/No_Location/power_plants_2018.csv")
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]

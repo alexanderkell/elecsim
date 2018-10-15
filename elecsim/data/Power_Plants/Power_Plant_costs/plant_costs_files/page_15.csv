@@ -1,0 +1,26 @@
+﻿,,Hydro 5-16MW ,,,Wave ,,,Tidal stream ,,
+Reference plant size ,MW ,11,,,9,,,18,,
+Average load factor (net of availability) ,% ,35%,,,30%,,,31%,,
+Efficiency (LHV) ,% ,100%,,,100%,,,100%,,
+Pre-development period ,Duration and % spend per years 1 & 2 ,2 years ,77%,23%,3 years ,33.30%,33.30%,4 years ,23.30%,23.30%
+,"% spend per years 3, 4, & 5 ",,,,33.30%,,,23.30%,23.30%,7%
+,"% spend per years 6, 7, & 8 ",,,,,,,,,
+Construction period ,Duration and % spend per years 1 & 2 ,2 years ,70%,30%,2 years ,50%,50%,2 years ,55.50%,44.50%
+,"% spend per years 3, 4, & 5 ",,,,,,,,,
+,"% spend per years 6, 7, & 8 ",,,,,,,,,
+Operating period ,Duration ,41 years ,,,20 years ,,,22 years ,,
+,,Commissioning year ,,,Commissioning year ,,,Commissioning year ,,
+,,2018,2020,2025,2018,2020,2025,2018,2020,2025
+Pre-development £/kW ,High ,300,300,300,- ,- ,270,- ,- ,270
+,Medium ,60,60,60,- ,- ,130,- ,- ,130
+,Low ,40,40,40,- ,- ,40,- ,- ,40
+Construction £/kW ,High ,"3,100","3,100","3,100",- ,- ,"6,200",- ,- ,"6,000"
+,Medium ,"3,000","3,000","3,000",- ,- ,"4,500",- ,- ,"4,200"
+,Low ,"1,600","1,600","1,600",- ,- ,"2,600",- ,- ,"2,400"
+Infrastructure £'000s ,High ,- ,- ,- ,- ,- ,"7,000",- ,- ,"10,500"
+,Medium ,- ,- ,- ,- ,- ,"5,100",- ,- ,"7,400"
+,Low ,- ,- ,- ,- ,- ,"2,900",- ,- ,"4,200"
+Fixed O&M £/MW/year ,Medium ,"45,100","45,100","45,100",- ,- ,"40,600",- ,- ,"91,400"
+Variable O&M £/MWh ,Medium ,6,6,6,- ,- ,24,- ,- ,7
+Insurance £/MWh/year ,Medium ,- ,- ,- ,- ,- ,"11,900",- ,- ,"2,500"
+Connection and Use of System charges £/MW/year ,Medium ,- ,- ,- ,- ,- ,"32,300",- ,- ,"60,400"

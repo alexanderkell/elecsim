@@ -4,7 +4,7 @@ from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from elecsim.src.model.Model_1 import World
 from mesa.visualization.modules import ChartModule
-from elecsim.src.data.uk_gencos_and_plants import read_smart_meter_data
+from elecsim.src.data_manipulation.uk_gencos_and_plants import read_smart_meter_data
 
 COLOURS = {True: "#00AA00",
            False: "#880000"}

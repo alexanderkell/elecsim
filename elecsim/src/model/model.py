@@ -4,8 +4,8 @@ from elecsim.src.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
-from elecsim.src.data.uk_gencos_and_plants import company_names
-from elecsim.src.plants.plant_type import fuel_plant
+from elecsim.src.data_manipulation.uk_gencos_and_plants import company_names
+from elecsim.src.plants.power_plant import PowerPlant
 
 """Model.py: Model for the electricity landscape world"""
 
@@ -26,7 +26,7 @@ class Model(Model):
 
         self.schedule = OrderedActivation(self)
 
-        self.demand = Demand(1 ,scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
+        self.demand = Demand(1, scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
         self.schedule.add(self.demand)
 
         # Create PowerExchange
@@ -41,21 +41,18 @@ class Model(Model):
         plant_data=scenario.power_plants
         names = company_names(plant_data)
 
-
         # Initialize generation companies
         for gen_id, name in enumerate(names,0):
             gen_co = GenCo(gen_id, self, name=name)
 
             # Add power plants to generation company portfolio
-            genco_plant_db = plant_data.loc[plant_data['Company'] == name]
+            genco_plant_db = plant_data[plant_data['Company'] == name]
             for plant in genco_plant_db.itertuples():
-                print(plant)
-                # power_plant = FuelPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
+                power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
 
-                # def __init__(self, name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, efficiency, fuel_type, fuel_price=None, energy_density=None, co2_density=None):
+                gen_co.plants.append(power_plant)
 
-                # gen_co.plants.append()
-                # gen_co.plants.append()
+
 
 
         self.schedule.add(gen_co)

@@ -8,7 +8,7 @@ __email__ = "Alexander@Kell.es"
 
 class PowerPlant:
 
-    def __init__(self, name, plant_type, fuel, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running):
+    def __init__(self, name, plant_type, fuel, capacity_mw, construction_date, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running):
         """
         PowerPlant class which are built and operated by generation companies
         :param name: Name of power plant
