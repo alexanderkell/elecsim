@@ -109,7 +109,7 @@ def merge_plant_cost_tables(df):
     return df_final
 
 
-def beis_multiple_tables(dir):
+def beis_human_to_machine_format(dir):
 
     final_df = []
     for file in os.listdir(dir):
@@ -126,7 +126,7 @@ def beis_multiple_tables(dir):
     return final_df
 
 
-p_dat = beis_multiple_tables("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/Power_Plant_costs/plant_costs_files")
+p_dat = beis_human_to_machine_format("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/Power_Plant_costs/plant_costs_files")
 
 
 p_dat.to_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/Power_Plant_costs/plant_cost_data_nan.csv")

@@ -5,8 +5,8 @@ from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.power_exchange.power_exchange import PowerEx
 from elecsim.src.data_manipulation.uk_gencos_and_plants import company_names
-from elecsim.src.plants.power_plant import PowerPlant
-
+# from elecsim.src.plants.power_plant import PowerPlant
+from elecsim.src.plants.plant_costs.plant_to_cost_conversion import CostConversion
 """Model.py: Model for the electricity landscape world"""
 
 __author__ = "Alexander Kell"
@@ -48,9 +48,9 @@ class Model(Model):
             # Add power plants to generation company portfolio
             genco_plant_db = plant_data[plant_data['Company'] == name]
             for plant in genco_plant_db.itertuples():
-                power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
+                # power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
 
-                gen_co.plants.append(power_plant)
+                # gen_co.plants.append(power_plant)
 
 
 

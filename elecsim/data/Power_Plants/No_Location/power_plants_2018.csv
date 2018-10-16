@@ -1,4 +1,4 @@
-﻿Company,Name,Fuel,Capacity,Start_date
+Company,Name,Fuel,Capacity,Start_date
 AES,Ballylumford B,Gas,540.00,1968.00
 AES,Ballylumford B OCGT,Gas oil,116.00,1968.00
 AES,Ballylumford C,CCGT,616.00,2003.00
@@ -975,13 +975,11 @@ SSE,Barra,Diesel,3.00,1990.00
 SSE,Bowmore,Diesel,6.20,1946.00
 SSE,Burghfield,Gas,50.00,1998.00
 SSE,Chickerell,Gas,50.00,1998.00
-SSE,Five Oaks,Light oil ,9.00,1995.00
 SSE,Kirkwall,Diesel,16.00,1953.00
 SSE,Lerwick,Diesel,67.00,1953.00
 SSE,"Loch Carnan, South Uist",Diesel,11.50,1971.00
 SSE,Peterhead,CCGT,1180.00,1980.00
 SSE,Stornoway,Diesel,24.00,1950.00
-SSE,Thatcham,Light oil ,9.00,1994.00
 SSE,Tiree,Diesel,3.00,1945.00
 SSE,Keadby,CCGT,735.00,1994.00
 SSE,Medway,CCGT,755.00,1995.00
