@@ -48,6 +48,7 @@ class Model(Model):
             # Add power plants to generation company portfolio
             genco_plant_db = plant_data[plant_data['Company'] == name]
             for plant in genco_plant_db.itertuples():
+                pass
                 # power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
 
                 # gen_co.plants.append(power_plant)

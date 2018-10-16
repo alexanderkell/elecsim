@@ -28,6 +28,4 @@ class UKPlants():
 
 plant_db = UKPlants("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_2018.csv")
 plant_db = plant_db.plant_type_synchronisation()
-# print(plant_db)
 plant_db.to_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plant_db_with_simplified_type.csv')
-# print(plant_db.head())
