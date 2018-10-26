@@ -8,14 +8,14 @@ __email__ = "Alexander@Kell.es"
 
 class PowerPlant:
 
-    def __init__(self, name, plant_type, fuel, capacity_mw, construction_date, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running):
+    def __init__(self, name, plant_type, fuel, capacity_mw, construction_date, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running):
         """
         PowerPlant class which are built and operated by generation companies
         :param name: Name of power plant
         :param plant_type: Type of power plant
         :param fuel: Fuel used by power plant
         :param capacity_mw: Capacity of power plant (MW)
-        :param load_factor: Average amount of time that power plant is used
+        :param average_load_factor: Average amount of time that power plant is used
         :param pre_dev_period: Amount of time construction spends in pre-development
         :param construction_period: Amount of time construction spends in construction
         :param operating_period: How long the power plant remains operational
@@ -39,7 +39,7 @@ class PowerPlant:
 
         self.capacity_mw = capacity_mw
 
-        self.load_factor = load_factor
+        self.average_load_factor = average_load_factor
 
         self.pre_dev_period = pre_dev_period
         self.pre_dev_spend_years = pre_dev_spend_years
@@ -126,7 +126,7 @@ class PowerPlant:
         """
         # Opex
         insurance_cost_total = self.insurance_cost_per_kw * self.capacity_mw  # Calculation of insurance cost for this instance of a power plant
-        variable_o_and_m_cost_per_year = self.variable_o_and_m_per_mwh * self.capacity_mw * 365 * 24 * self.load_factor  # Variable cost is calculated as a function of time plant is utilised in a year
+        variable_o_and_m_cost_per_year = self.variable_o_and_m_per_mwh * self.capacity_mw * 365 * 24 * self.average_load_factor  # Variable cost is calculated as a function of time plant is utilised in a year
         fixed_o_and_m_per_mw_cost_total = self.fixed_o_and_m_per_mw * self.capacity_mw  # Fixed cost calculated for this instance of power plant
 
         opex_year = insurance_cost_total + variable_o_and_m_cost_per_year + fixed_o_and_m_per_mw_cost_total  # Total opex is calculated
@@ -138,7 +138,7 @@ class PowerPlant:
         Estimates the amount of electricity generated over the lifetime of the project based on the average load factor
         :return: Returns a list containing the electricity generated per year
         """
-        elec_gen = [self.capacity_mw * self.load_factor * 24 * 365] * self.operating_period
+        elec_gen = [self.capacity_mw * self.average_load_factor * 24 * 365] * self.operating_period
         return elec_gen
 
 

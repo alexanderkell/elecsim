@@ -11,7 +11,7 @@ from elecsim.src.plants.plant_type.fuel import fuel_registry
 
 class FuelPlant(PowerPlant):
     #
-    #     super().__init__(self,  name, plant_type, capacity_mw, load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
+    #     super().__init__(self,  name, plant_type, capacity_mw, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
     #
     #     self.efficiency = efficiency
     #     self.fuel = fuel_registry(fuel_type, fuel_price, energy_density, co2_density)

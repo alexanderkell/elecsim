@@ -42,7 +42,7 @@ waste_price_pre_2000 = [-0.01551] * 42 # Source: Gate fees report 2017 Comparing
 # power_plants = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power Plants/No Location/power_plants_2018.csv")
 power_plants = pd.read_csv("../data/Power_Plants/No_Location/power_plants_2018.csv")
 
-power_plant_costs = p
+# power_plant_costs = p
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]
@@ -50,6 +50,6 @@ starting_money_of_gencos = [100000,2000000,300000]
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 carbon_price = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
 
-# Lost load price
-lost_load = 100
+# Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
+lost_load = 6000
 

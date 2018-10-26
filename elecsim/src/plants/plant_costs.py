@@ -11,7 +11,7 @@ def plant_costing(fuel, capacity, start_date):
     :return: Returns array of plant characteristics including time periods and construction costs
     """
 
-    costs = pd.read_csv("../../data/Power_Plants/Power_Plant_costs/plant_costs_data.csv")
+    costs = pd.read_csv("../../../data/Power_Plants/Power_Plant_costs/plant_costs_data.csv")
 
     print(costs.head())
 
