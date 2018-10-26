@@ -1,5 +1,6 @@
 from scipy.interpolate import interp1d
 import pandas as pd
+import elecsim.src.scenario.scenario_data as scenario
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
 
@@ -14,11 +15,11 @@ class PredictPlantStatistics:
         :param start_year (int): Year that power plant begun construction
         """
         self.fuel = fuel
-        self.capacity = capacity
-        self.start_year = start_year
+        self.capacity = float(capacity)
+        self.start_year = float(start_year)
 
         # Import UK power plant cost data
-        self.cost_data = pd.read_csv("../../../data/Power_Plants/Power_Plant_costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv")
+        self.cost_data = scenario.power_plant_costs
         self.cost_data = self.cost_data[self.cost_data.Type == self.fuel].sort_values('Plant_Size')
 
     def __call__(self):
@@ -68,6 +69,9 @@ class PredictPlantStatistics:
         :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
         :return (int): Returns extrapolated/interpolated cost of cost variable
         """
+        print(self.capacity)
+        print(self.fuel)
+
         var_req = self.cost_data[['Plant_Size',cost_var_wanted]].dropna()
         if not var_req.empty:
             if self.capacity <= min(self.cost_data.Plant_Size):
@@ -79,7 +83,7 @@ class PredictPlantStatistics:
                 interp = interp1d(var_req.Plant_Size, var_req[cost_var_wanted])
                 return interp(self.capacity)
         else:
-            raise ValueError("No plants found")
+            raise ValueError("No cost data for this type of plant found")
 
     def _estimate_duration_parameters(self, var_wanted):
         """
@@ -140,3 +144,5 @@ class PredictPlantStatistics:
         else:
             raise ValueError('Plant cost data not found')
 
+pps = PredictPlantStatistics("Gas", 540, 1980)
+pps()
