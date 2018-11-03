@@ -68,6 +68,26 @@ class PredictPlantStatistics:
 
         return parameters
 
+    def _extrap_interp_parameters(self, cost_var_wanted):
+        """
+        Function which extrapolates and interpolates from known data. Use of linear interpolation between knwon
+        points, and last known data point for extrapolation.
+        :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
+        :return (int): Returns extrapolated/interpolated cost of cost variable
+        """
+        var_req = self.cost_data[['Plant_Size', cost_var_wanted]].dropna()
+
+        if not var_req.empty:
+            if self.capacity <= min(var_req.Plant_Size):
+                return var_req[cost_var_wanted].iloc[0]
+            elif self.capacity >= max(var_req.Plant_Size):
+                return var_req[cost_var_wanted].iloc[-1]
+
+            else:
+                interp = interp1d(var_req.Plant_Size, var_req[cost_var_wanted])
+                return interp(self.capacity)
+        else:
+            raise ValueError("No cost data for power plant of type:", self.fuel," or cost type: ",cost_var_wanted)
 
     def _estimate_duration_parameters(self, var_wanted):
         """
