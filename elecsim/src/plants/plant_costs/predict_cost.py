@@ -22,6 +22,8 @@ class PredictPlantStatistics:
         self.cost_data = scenario.power_plant_costs
         self.cost_data = self.cost_data[self.cost_data.Type == self.fuel].sort_values('Plant_Size')
 
+        # print(self.cost_data)
+
     def __call__(self):
         """
         Function which estimates costs of power plant based on capacity, fuel and start year. Use of linear interpolation
@@ -40,15 +42,19 @@ class PredictPlantStatistics:
         # If power plant is built in year 2018, 2020 or 2025 then use provided data. If plant is not built on these dates
         # then use last known data point.
         if self.start_year in (2018, 2020, 2025):
-            plant_costs = [cost_variable+str(self.start_year) for cost_variable in plant_costs]
+            plant_costs = [cost_variable+str(int(self.start_year)) for cost_variable in plant_costs]
         elif self.start_year < 2018:
-            plant_costs = [cost_variable+str(2018) for cost_variable in plant_costs]
+            plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
         elif self.start_year > 2025:
-            plant_costs = [cost_variable+str(2025) for cost_variable in plant_costs]
+            plant_costs = [cost_variable+str(int(2025)) for cost_variable in plant_costs]
         elif self.start_year == 2019:
-            plant_costs = [cost_variable+str(2018) for cost_variable in plant_costs]
+            plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
         elif 2020 < self.start_year < 2025:
-            plant_costs = [cost_variable+str(2020) for cost_variable in plant_costs]
+            plant_costs = [cost_variable+str(int(2020)) for cost_variable in plant_costs]
+
+        # print("start year: ", self.start_year)
+        # print("fuel: ", self.fuel)
+        # print("plant costs: ", plant_costs)
 
         parameters_of_plant = {self._change_columns(cost_var): self._extrap_interp_parameters(cost_var) for cost_var in plant_costs}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur']
@@ -62,28 +68,6 @@ class PredictPlantStatistics:
 
         return parameters
 
-    def _extrap_interp_parameters(self, cost_var_wanted):
-        """
-        Function which extrapolates and interpolates from known data. Use of linear interpolation between knwon
-        points, and last known data point for extrapolation.
-        :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
-        :return (int): Returns extrapolated/interpolated cost of cost variable
-        """
-        print(self.capacity)
-        print(self.fuel)
-
-        var_req = self.cost_data[['Plant_Size',cost_var_wanted]].dropna()
-        if not var_req.empty:
-            if self.capacity <= min(self.cost_data.Plant_Size):
-                return var_req[cost_var_wanted].iloc[0]
-            elif self.capacity >= max(self.cost_data.Plant_Size):
-                return var_req[cost_var_wanted].iloc[-1]
-
-            else:
-                interp = interp1d(var_req.Plant_Size, var_req[cost_var_wanted])
-                return interp(self.capacity)
-        else:
-            raise ValueError("No cost data for this type of plant found")
 
     def _estimate_duration_parameters(self, var_wanted):
         """
@@ -94,9 +78,14 @@ class PredictPlantStatistics:
         :return (int): Returns estimated duration parameter in years.
         """
         var_req = self.cost_data[['Plant_Size',var_wanted]].dropna()
-        interp = interp1d(var_req.Plant_Size, var_req[var_wanted], kind='nearest')
+        if min(var_req.Plant_Size) < self.capacity < max(var_req.Plant_Size):
+            interp = interp1d(var_req.Plant_Size, var_req[var_wanted], kind='nearest')
+            return interp(self.capacity)
+        elif self.capacity > max(var_req.Plant_Size):
+            var_req = var_req.reset_index()
 
-        return interp(self.capacity)
+        elif self.capacity < min(var_req.Plant_Size):
+            var_req = var_req.reset_index()
 
     def _closest_year_spread(self, var_wanted):
         """
@@ -144,5 +133,5 @@ class PredictPlantStatistics:
         else:
             raise ValueError('Plant cost data not found')
 
-pps = PredictPlantStatistics("Gas", 540, 1980)
+pps = PredictPlantStatistics("CCGT", 10, 2018)
 pps()

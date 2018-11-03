@@ -1,6 +1,9 @@
 import pandas as pd
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.max_rows', 500)
 
-class UKPlants():
+
+class UKPlants:
 
     def __init__(self, uk_plant_db_dir):
         self.plant_db = pd.read_csv(uk_plant_db_dir)
@@ -16,7 +19,7 @@ class UKPlants():
                                                              else "Biomass" if "Biomass_wood" == x
                                                              else "Recip_gas" if "Gas" == x
                                                              else "PV" if "Solar" == x
-                                                             else "Diesel" if "Gas oil" == x
+                                                             else "Recip_diesel" if "Gas oil" == x
                                                              else "EfW" if "Waste" == x
                                                              else "Hydro_Store" if "Pumped storage" == x
                                                              else "Onshore" if "Wind" == x
@@ -28,4 +31,5 @@ class UKPlants():
 
 plant_db = UKPlants("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_2018.csv")
 plant_db = plant_db.plant_type_synchronisation()
+# print(plant_db[['Fuel','Simplified_Type']])
 plant_db.to_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plant_db_with_simplified_type.csv')

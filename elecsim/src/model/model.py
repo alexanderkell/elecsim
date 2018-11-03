@@ -44,13 +44,13 @@ class Model(Model):
         # Initialize generation companies
         for gen_id, name in enumerate(names,0):
             gen_co = GenCo(gen_id, self, name=name)
-
+            print(gen_id)
             # Add power plants to generation company portfolio
             genco_plant_db = plant_data[plant_data['Company'] == name]
             for plant in genco_plant_db.itertuples():
-                # print(plant.Fuel," ",plant.Capacity,' ',plant.Start_date)
-                estimated_statistics = PredictPlantStatistics(plant.Fuel, plant.Capacity, plant.Start_date)()
-                print(estimated_statistics)
+                # print(plant.Simplified_Type)
+                estimated_statistics = PredictPlantStatistics(plant.Simplified_Type, plant.Capacity, plant.Start_date)()
+                # print(estimated_statistics)
                 # power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
 
                 # gen_co.plants.append(power_plant)
