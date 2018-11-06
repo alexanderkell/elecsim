@@ -46,7 +46,7 @@ waste_price_pre_2000 = [-0.01551] * 42 # Source: Gate fees report 2017 Comparing
 power_plants = pd.read_csv(ROOT_DIR+'/data/Power_Plants/No_Location/power_plant_db_with_simplified_type.csv')
 print(power_plants)
 
-power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/test/power_plant_costs_with_simplified_type.csv')
+power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
 print(power_plant_costs)
 
 # power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
