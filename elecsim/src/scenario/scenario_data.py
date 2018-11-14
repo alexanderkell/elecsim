@@ -19,39 +19,28 @@ segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.91666
 # Change in load duration function by year
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
 
-# Gas prices (£/kWh)
-gas_prices = [0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-coal_price = [0.00906] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-uranium_price = [0.0039] * 42 # Source: The Economics of Nuclear Power: EconomicsNP.pdf
-oil_price = [0.02748] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-diesel_price = [0.1] * 42 # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
-woodchip_price = [0.0252] * 42 # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
-poultry_litter_price = [0.01139] * 42 # Source: How much is poultry litter worth?: sp06ca08.pdf
-straw_price = [0.016488] * 42 # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
-meat_price = [0.01] * 42 # Assumption: Low price due to fuel being a waste product
-waste_price_post_2000 = [-0.0252] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
-waste_price_pre_2000 = [-0.01551] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+# Gas prices (£/MWh)
+
+KW_TO_MW_CONV = 1000
+
+gas_prices = [KW_TO_MW_CONV*0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+coal_price = [KW_TO_MW_CONV*0.00906] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+uranium_price = [KW_TO_MW_CONV*0.0039] * 42 # Source: The Economics of Nuclear Power: EconomicsNP.pdf
+oil_price = [KW_TO_MW_CONV*0.02748] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+diesel_price = [KW_TO_MW_CONV*0.1] * 42 # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
+woodchip_price = [KW_TO_MW_CONV*0.0252] * 42 # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
+poultry_litter_price = [KW_TO_MW_CONV*0.01139] * 42 # Source: How much is poultry litter worth?: sp06ca08.pdf
+straw_price = [KW_TO_MW_CONV*0.016488] * 42 # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
+meat_price = [KW_TO_MW_CONV*0.01] * 42 # Assumption: Low price due to fuel being a waste product
+waste_price_post_2000 = [KW_TO_MW_CONV*-0.0252] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+waste_price_pre_2000 = [KW_TO_MW_CONV*-0.01551] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 
 
-# Number of generator companies
-# number_of_gencos = 3
-
-# Generator Company initial power generators owned
-# generators_owned = [[Nuclear(), Nuclear(), Nuclear()],[Nuclear(),Nuclear()],[Nuclear()]]
 
 # Generator Companies imported from Government database
-
-# power_plants = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power Plants/No Location/power_plants_2018.csv")
-# power_plants = pd.read_csv("../data/Power_Plants/No_Location/power_plants_2018.csv")
 power_plants = pd.read_csv(ROOT_DIR+'/data/Power_Plants/No_Location/power_plant_db_with_simplified_type.csv')
-print(power_plants)
 
 power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
-print(power_plant_costs)
-
-# power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
-# print(power_plant_costs)
-
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]

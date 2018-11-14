@@ -3,7 +3,6 @@
 import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
 
-pd.melt
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -28,12 +27,13 @@ class Fuel():
         self.co2_density = co2_density
 
 
-def fuel_registry(fuel_type, fuel_price, energy_density=None, co2_density=None):
+def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=None):
     """
     Method which creates a Fuel object. Presets are defined for different fuels, and new fuels can be added
     based upon their name, carbon density and energy density
     :param fuel_type: Name of fuel. Preset fuels are "Gas", "Coal", "Biomass_wood",
         "Biomass_poultry_litter", "Oil", "Diesel", "Straw", "Meat"
+    :param fuel_price: Price of fuel per year ()
     :param energy_density: Energy density of fuel (GJ per tonne)
     :param co2_density: Carbon density of fuel (tonnes of CO2 per tonne of gas burnt)
     :return: Returns a Fuel object with characteristics of the fuel in question
