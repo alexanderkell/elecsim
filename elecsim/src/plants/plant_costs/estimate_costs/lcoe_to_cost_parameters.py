@@ -1,6 +1,4 @@
-"""
 
-"""
 import pandas as pd
 from elecsim.constants import ROOT_DIR
 
@@ -15,6 +13,5 @@ class LcoeToParameters:
         technology = self.hist_costs[self.hist_costs['Technology']==fuel]
         print(technology.head())
 
-    # def
 
 LcoeToParameters(2011).breakdown_lcoe('CCGT')

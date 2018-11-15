@@ -56,7 +56,7 @@ class PredictPlantStatistics:
         # print("fuel: ", self.fuel)
         # print("plant costs: ", plant_costs)
 
-        parameters_of_plant = {self._change_columns(cost_var): self._extrap_interp_parameters(cost_var) for cost_var in plant_costs}
+        parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
 
@@ -68,9 +68,9 @@ class PredictPlantStatistics:
 
         return parameters
 
-    def _extrap_interp_parameters(self, cost_var_wanted):
+    def extrap_interp_parameters(self, cost_var_wanted):
         """
-        Function which extrapolates and interpolates from known data. Use of linear interpolation between knwon
+        Function which extrapolates and interpolates from known data. Use of linear interpolation between known
         points, and last known data point for extrapolation.
         :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
         :return (int): Returns extrapolated/interpolated cost of cost variable
