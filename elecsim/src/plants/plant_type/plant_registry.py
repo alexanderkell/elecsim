@@ -4,9 +4,10 @@ from elecsim.src.plants.plant_type.zero_fuel_plant import ZeroFuelPlant
 
 def plant_registry(requires_fuel):
     """
-    Power Plant Registry which takes a fuel type and returns object of type either FuelPlant or RenewablePlant
-    :param requires_fuel:
-    :return: Object of fuel plant
+    Power Plant Registry which takes a boolean variable on whether a plant requires fuel and returns object of type
+    either FuelPlant or RenewablePlant
+    :param requires_fuel: Boolean on whether the power plant requires fuel or not
+    :return: Object of type of power plant
     """
 
     if not requires_fuel:
