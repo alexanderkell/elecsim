@@ -1,6 +1,8 @@
 import pandas as pd
 from elecsim.src.plants.plant_costs.estimate_costs.cost_estimations import ExtrapolateInterpolate
 import elecsim.src.scenario.scenario_data as scenario
+from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
+
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
@@ -17,7 +19,7 @@ class LcoeToParameters:
         self.year = year
 
         hist_costs = self.hist_costs[self.hist_costs.Technology == technology].dropna()
-        print(hist_costs)
+        # print(hist_costs)
 
         # Uses linear interpolation and extrapolation of historical dataset to predict unknown LCOE costs of a power plant
         self.lcoe = ExtrapolateInterpolate(hist_costs.Year, hist_costs.lcoe)(year)
@@ -25,7 +27,10 @@ class LcoeToParameters:
     def lcoe_to_parameters(self, plant_size):
         pp_cost = scenario.power_plant_costs
         pp_cost = pp_cost[pp_cost['Type'] == self.technology]
-        print(pp_cost.head())
+        closest_plant = closest_row(pp_cost, "Plant_Size", plant_size)
+        print(closest_plant)
 
 
-print(LcoeToParameters('Coal', 2017).lcoe_to_parameters())
+
+
+LcoeToParameters('CCGT', 2017).lcoe_to_parameters(1900)

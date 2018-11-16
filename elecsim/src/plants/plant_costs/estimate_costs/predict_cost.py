@@ -2,6 +2,7 @@ from scipy.interpolate import interp1d
 import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
 from elecsim.src.plants.plant_costs.estimate_costs.lcoe_to_cost_parameters import LcoeToParameters
+from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
@@ -24,7 +25,7 @@ class PredictPlantStatistics:
         self.cost_data = scenario.power_plant_costs
         self.cost_data = self.cost_data[self.cost_data.Type == self.fuel].sort_values('Plant_Size')
 
-        # print(self.cost_data)
+        print(self.cost_data[self.cost_data.Plant_Size == 168])
 
     def __call__(self):
         """
@@ -101,10 +102,10 @@ class PredictPlantStatistics:
             return interp(self.capacity)
         elif self.capacity > max(var_req.Plant_Size):
             var_req = var_req.reset_index()
-
+            return var_req.iloc[-1][var_wanted]
         elif self.capacity < min(var_req.Plant_Size):
             var_req = var_req.reset_index()
-
+            return var_req.iloc[0][var_wanted]
     def _closest_year_spread(self, var_wanted):
         """
         Function which selects the spread of payments required for construction and pre-development. This is achieved
@@ -112,7 +113,8 @@ class PredictPlantStatistics:
         :param var_wanted (str): Variable to estimate spread of payments.
         :return (:obj:`list` of :obj:`str`): Returns list of percentage of cost per year
         """
-        df_sort = self.cost_data.iloc[(self.cost_data['Plant_Size']-self.capacity).abs().argsort()[:1]]
+        # df_sort = self.cost_data.iloc[(self.cost_data['Plant_Size']-self.capacity).abs().argsort()[:1]]
+        df_sort = closest_row(self.cost_data, "Plant_Size", self.capacity)
         df_sort = df_sort.filter(regex=var_wanted).filter(regex='^((?!Dur).)*$').filter(regex='^((?!-).)*$').dropna(axis=1).values.tolist()[0]
 
         return df_sort
@@ -152,4 +154,4 @@ class PredictPlantStatistics:
             raise ValueError('Plant cost data not found')
 
 pps = PredictPlantStatistics("CCGT", 10, 2018)
-print(pps(1997))
+print(pps())
