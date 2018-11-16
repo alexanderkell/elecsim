@@ -42,6 +42,8 @@ power_plants = pd.read_csv(ROOT_DIR+'/data/Power_Plants/No_Location/power_plant_
 
 power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
 
+power_plant_historical_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/historical_costs/historical_power_plant_costs_long.csv')
+
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]
 

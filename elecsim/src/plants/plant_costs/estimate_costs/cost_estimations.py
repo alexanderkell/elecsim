@@ -35,10 +35,3 @@ class ExtrapolateInterpolate:
         else:
             interp = interp1d(self.x, self.y)
             return interp(point)
-
-
-df = pd.DataFrame({'Year':[1981, 1984, 1989, 1992],
-                   'lcoe':[177.19296, 102.93248, 80.01536, 89.86624]})
-
-print(ExtrapolateInterpolate(df.Year, df.lcoe)(1987))
-

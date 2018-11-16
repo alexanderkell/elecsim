@@ -1,6 +1,8 @@
 from scipy.interpolate import interp1d
 import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
+from elecsim.src.plants.plant_costs.estimate_costs.lcoe_to_cost_parameters import LcoeToParameters
+
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
 
@@ -37,7 +39,6 @@ class PredictPlantStatistics:
                        'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
                        'Var_cost-Medium _']
 
-
         # Functionality that selects data from UK plant costing data based on year of plant construction.
         # If power plant is built in year 2018, 2020 or 2025 then use provided data. If plant is not built on these dates
         # then use last known data point.
@@ -52,9 +53,6 @@ class PredictPlantStatistics:
         elif 2020 < self.start_year < 2025:
             plant_costs = [cost_variable+str(int(2020)) for cost_variable in plant_costs]
 
-        # print("start year: ", self.start_year)
-        # print("fuel: ", self.fuel)
-        # print("plant costs: ", plant_costs)
 
         parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur']
@@ -154,4 +152,4 @@ class PredictPlantStatistics:
             raise ValueError('Plant cost data not found')
 
 pps = PredictPlantStatistics("CCGT", 10, 2018)
-pps()
+print(pps(1997))
