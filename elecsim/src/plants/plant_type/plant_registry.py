@@ -1,5 +1,5 @@
 from elecsim.src.plants.plant_type.fuel_plant import FuelPlant
-from elecsim.src.plants.plant_type.zero_fuel_plant import ZeroFuelPlant
+from elecsim.src.plants.plant_type.no_fuel_plant import NoFuelPlant
 
 
 def plant_registry(requires_fuel):
@@ -11,7 +11,7 @@ def plant_registry(requires_fuel):
     """
 
     if not requires_fuel:
-        return ZeroFuelPlant
+        return NoFuelPlant
     elif requires_fuel:
         return FuelPlant
 
