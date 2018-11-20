@@ -1,5 +1,4 @@
 import pandas as pd
-import elecsim.src.scenario.scenario_data as scenario
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
@@ -15,4 +14,3 @@ def closest_row(dataframe, column, value):
     sort = dataframe.iloc[(dataframe[column]-value).abs().argsort()[:1]]
     return(sort)
 
-# print(closest_row(scenario.power_plant_costs, "Plant_Size", 650))

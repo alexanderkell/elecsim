@@ -1,7 +1,6 @@
 from scipy.interpolate import interp1d
 import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
-from elecsim.src.plants.plant_costs.estimate_costs.lcoe_to_cost_parameters import LcoeToParameters
 from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
 
 pd.set_option('display.max_columns', 500)
@@ -24,8 +23,6 @@ class PredictPlantStatistics:
         # Import UK power plant cost data
         self.cost_data = scenario.power_plant_costs
         self.cost_data = self.cost_data[self.cost_data.Type == self.fuel].sort_values('Plant_Size')
-
-        print(self.cost_data[self.cost_data.Plant_Size == 168])
 
     def __call__(self):
         """
@@ -56,12 +53,14 @@ class PredictPlantStatistics:
 
 
         parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
-        durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur']
+        durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
 
         yearly_cost_spread = ['Constr', 'Pre']
 
         yearly_cost_perc = {self._change_columns(spread): self._closest_year_spread(spread) for spread in yearly_cost_spread}
+
+
 
         parameters={**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
@@ -150,6 +149,10 @@ class PredictPlantStatistics:
             return 'construction_spend_years'
         elif 'Pre' in column:
             return 'pre_dev_spend_years'
+        elif 'Efficiency' in column:
+            return 'efficiency'
+        elif 'Average_Load_Factor' in column:
+            return 'average_load_factor'
         else:
             raise ValueError('Plant cost data not found')
 

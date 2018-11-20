@@ -13,13 +13,13 @@ from elecsim.src.plants.plant_type.fuel import fuel_registry
 
 class FuelPlant(PowerPlant):
 
-    def __init__(self, name, plant_type, capacity_mw, construction_year, average_load_factor, efficiency, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, fuel):
+    def __init__(self, name, type, capacity_mw, construction_year, average_load_factor, efficiency, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, fuel):
         """
         Initialisation of fuel power plant object.
         :param efficiency: Efficiency of power plant at converting fuel energy into electrical energy.
         :param fuel: Type of fuel that the power plant consumes.
         """
-        super().__init__(self, plant_type=plant_type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_kw=pre_dev_cost_per_kw, construction_cost_per_kw=construction_cost_per_kw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_kw=insurance_cost_per_kw, connection_cost_per_kw=connection_cost_per_kw, min_running=min_running, construction_year=construction_year)
+        super().__init__(name=name, type=type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_kw=pre_dev_cost_per_kw, construction_cost_per_kw=construction_cost_per_kw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_kw=insurance_cost_per_kw, connection_cost_per_kw=connection_cost_per_kw, construction_year=construction_year)
         self.efficiency = efficiency
         self.fuel = fuel_registry(fuel)
 
@@ -27,6 +27,7 @@ class FuelPlant(PowerPlant):
         """
         Function which calculates the levelised cost of electricity for this power plant instance at a
         specified discount rate.
+
         :param discount_rate: The discount rate that is used for the calculation of the levelised cost of electricity.
         :return: Returns LCOE value for power plant
         """
@@ -56,6 +57,7 @@ class FuelPlant(PowerPlant):
         """
         Function which uses addition to calculate total costs from capital expenditure, operating expenditure and
         fuel costs over the lifetime of the power plant.
+
         :param capex: Capital expenditure per year
         :param opex: Operating expenditure per year
         :param fuel_costs: Fuel costs per year
@@ -76,7 +78,7 @@ class FuelPlant(PowerPlant):
         :return: Returns estimated cost of fuel per year
         """
 
-        fuel_costs = [0]*(self.pre_dev_period+self.construction_period)+[(self.fuel.fuel_price[i] * electricity_generated[i])/self.efficiency for i in range(self.operating_period)]
+        fuel_costs = [0]*int(self.pre_dev_period+self.construction_period)+[(self.fuel.fuel_price[i] * electricity_generated[i])/self.efficiency for i in range(int(self.operating_period))]
         return fuel_costs
 
 

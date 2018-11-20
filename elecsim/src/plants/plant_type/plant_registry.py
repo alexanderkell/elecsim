@@ -6,9 +6,14 @@ def plant_registry(requires_fuel):
     """
     Power Plant Registry which takes a boolean variable on whether a plant requires fuel and returns object of type
     either FuelPlant or RenewablePlant
+
     :param requires_fuel: Boolean on whether the power plant requires fuel or not
     :return: Object of type of power plant
     """
+
+    if not isinstance(requires_fuel, bool):
+        # print("is not bool")
+        raise ValueError("Must enter a boolean for plant_registry function.")
 
     if not requires_fuel:
         return NoFuelPlant
@@ -16,7 +21,7 @@ def plant_registry(requires_fuel):
         return FuelPlant
 
 
-def plant_type_to_fuel_required(plant_type):
+def plant_type_to_fuel(plant_type):
     """
     Takes a fuel type and returns a boolean specifying whether the power plant requires fuel or not
     :param plant_type: Type of plant
@@ -67,20 +72,6 @@ def plant_type_to_fuel_required(plant_type):
         return False
     elif plant_type == "recip_diesel":
         return False
+    else:
+        raise ValueError("Plant Type not Found: "+plant_type)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-print(plant_registry(plant_type_to_fuel_required("Gas")))
