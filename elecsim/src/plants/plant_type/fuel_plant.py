@@ -81,4 +81,7 @@ class FuelPlant(PowerPlant):
         fuel_costs = [0]*int(self.pre_dev_period+self.construction_period)+[(self.fuel.fuel_price[i] * electricity_generated[i])/self.efficiency for i in range(int(self.operating_period))]
         return fuel_costs
 
+    def __repr__(self):
+        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_kw, self.construction_cost_per_kw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_kw, self.connection_cost_per_kw)
+
 

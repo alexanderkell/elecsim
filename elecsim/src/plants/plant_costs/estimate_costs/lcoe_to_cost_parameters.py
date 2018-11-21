@@ -3,7 +3,7 @@ import pandas as pd
 import elecsim.src.scenario.scenario_data as scenario
 from elecsim.src.data_manipulation.data_modifications.cost_estimations import ExtrapolateInterpolate
 # from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
-from elecsim.src.plants.plant_costs.estimate_costs.predict_cost import PredictPlantStatistics
+from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_costs import PredictPlantStatistics
 
 from elecsim.src.plants.plant_type.plant_registry import plant_type_to_fuel, plant_registry
 
@@ -33,9 +33,10 @@ class LcoeToParameters:
         pp_cost = scenario.power_plant_costs
         pp_cost = pp_cost[pp_cost['Type'] == self.technology]
 
-        plant_stats = PredictPlantStatistics(self.technology, plant_size, CLOSEST_YEAR_TO_HISTORICAL_DATA)()
-        # print(plant_stats)
-        plant = plant_registry(plant_type_to_fuel(self.technology))(**plant_stats, name="Test", plant_type=self.technology, capacity_mw=plant_size, construction_year = self.year, fuel=self.technology )
+        if(self.year>2017)
+            plant_stats = PredictPlantStatistics(self.technology, plant_size, CLOSEST_YEAR_TO_HISTORICAL_DATA)()
+
+        plant = plant_registry(plant_type_to_fuel(self.technology))(**plant_stats, name="Test", type=self.technology, capacity_mw=plant_size, construction_year = self.year, fuel=self.technology)
 
 
         # print(plant.construction_yearly_spend())
@@ -64,4 +65,7 @@ class LcoeToParameters:
         print("Lcoe")
         print(self.lcoe)
 
-LcoeToParameters('CCGT', 2018).lcoe_to_parameters(1200)
+        print("Plant Object")
+        print(plant.__repr__())
+
+LcoeToParameters('CCGT', 2000).lcoe_to_parameters(1200)

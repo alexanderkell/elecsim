@@ -4,7 +4,7 @@ from elecsim.src.agents.demand.demand import Demand
 from elecsim.src.agents.generation_company.gen_co import GenCo
 from elecsim.src.data_manipulation.uk_gencos_and_plants import company_names
 from elecsim.src.mesa_addons.scheduler_addon import OrderedActivation
-from elecsim.src.plants.plant_costs.estimate_costs.predict_cost import PredictPlantStatistics
+from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_costs import PredictPlantStatistics
 from elecsim.src.power_exchange.power_exchange import PowerEx
 
 """Model.py: Model for the electricity landscape world"""
