@@ -1,7 +1,7 @@
 import pandas as pd
 
 import elecsim.src.scenario.scenario_data as scenario
-from elecsim.src.data_manipulation.data_modifications.cost_estimations import ExtrapolateInterpolate
+from elecsim.src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 # from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
 from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
 

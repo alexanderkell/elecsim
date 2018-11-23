@@ -2,7 +2,7 @@ import pandas as pd
 from elecsim.src.scenario.scenario_data import power_plant_costs
 from elecsim.src.plants.plant_type.plant_registry import plant_type_to_fuel, plant_registry
 from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
-from elecsim.src.data_manipulation.data_modifications.cost_estimations import ExtrapolateInterpolate
+from elecsim.src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 import elecsim.src.scenario.scenario_data as scenario
 import numpy as np
 

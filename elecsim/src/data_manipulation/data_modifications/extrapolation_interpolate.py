@@ -26,7 +26,6 @@ class ExtrapolateInterpolate:
         :param point (int): Cost variable to be extrapolated/interpolated.
         :return (int): Returns extrapolated/interpolated cost of cost variable
         """
-
         if point <= min(self.x):
             return self.y.iloc[0]
             # return var_req[cost_var_wanted].iloc[0]
