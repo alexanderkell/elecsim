@@ -23,7 +23,7 @@ class UKPlants:
 
     def _plant_type_synchronisation(self):
         """
-        Function to match the power plant fuel type of the UK power plant database with the UK power plant cost database
+        Function to match the power plant plant_type type of the UK power plant database with the UK power plant cost database
         :return: Returns modified power plant database
         """
         self.plant_db['Simplified_Type'] = self.plant_db['Fuel'].map(lambda x:

@@ -35,7 +35,7 @@ class LcoeToParameters:
 
         plant_stats = PredictPlantStatistics(self.technology, plant_size, CLOSEST_YEAR_TO_HISTORICAL_DATA)()
 
-        plant = plant_registry(plant_type_to_fuel(self.technology))(**plant_stats, name="Test", type=self.technology, capacity_mw=plant_size, construction_year = self.year, fuel=self.technology)
+        plant = plant_registry(plant_type_to_fuel(self.technology))(**plant_stats, name="Test", plant_type=self.technology, capacity_mw=plant_size, construction_year=self.year)
 
 
         # print(plant.construction_yearly_spend())
@@ -55,7 +55,7 @@ class LcoeToParameters:
         print("elec gen")
         print(electricity_gen)
         print(sum(electricity_gen))
-        print("fuel costs")
+        print("plant_type costs")
         print(plant.fuel_costs(electricity_gen))
 
 

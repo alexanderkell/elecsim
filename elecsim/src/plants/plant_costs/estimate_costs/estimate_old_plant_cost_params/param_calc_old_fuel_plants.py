@@ -1,5 +1,0 @@
-from elecsim.src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.param_calc_old_plants import OldPlantCosts
-
-# elecsim/src/plants/plant_costs/estimate_costs/estimate_old_plant_cost_params/param_calc_old_plants.py
-
-class OldPlantCostsFuel(OldPlantCosts):

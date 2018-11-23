@@ -7,17 +7,16 @@ __email__ = "Alexander@Kell.es"
 
 from elecsim.src.plants.power_plant import PowerPlant
 
-class NoFuelPlant(PowerPlant):
 
+class NoFuelPlant(PowerPlant):
 
     def __init__(self, name, plant_type, capacity_mw, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running, efficiency):
         """
-        Power plant of type that does not use fuel.
+        Power plant of type that does not use plant_type.
         """
         super().__init__(name, plant_type, capacity_mw, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw, min_running)
 
         self.efficiency = efficiency
-
 
     def calculate_lcoe(self, carbon_price):
         """

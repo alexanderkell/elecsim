@@ -9,24 +9,24 @@ pd.set_option('display.max_rows', 500)
 
 class PredictPlantStatistics:
 
-    def __init__(self, fuel, capacity, start_year):
+    def __init__(self, plant_type, capacity, start_year):
         """
-        Class which provides calculations to provide costing data for power plants based on fuel, capacity and start year
-        :param fuel (str): Type of fuel that plant runs on
+        Class which provides calculations to provide costing data for power plants based on plant_type, capacity and start year
+        :param plant_type (str): Type of plant_type that plant runs on
         :param capacity (int): Capacity of plant in MW
         :param start_year (int): Year that power plant begun construction
         """
-        self.fuel = fuel
+        self.plant_type = plant_type
         self.capacity = float(capacity)
         self.start_year = float(start_year)
 
         # Import UK power plant cost data
         self.cost_data = scenario.power_plant_costs
-        self.cost_data = self.cost_data[self.cost_data.Type == self.fuel].sort_values('Plant_Size')
+        self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
 
     def __call__(self):
         """
-        Function which estimates costs of power plant based on capacity, fuel and start year. Use of linear interpolation
+        Function which estimates costs of power plant based on capacity, plant_type and start year. Use of linear interpolation
         for plants of capacity that fall within known range of costing variables. If plant capacity to be calculated
         falls out of range of known values, the highest or lowest capacity value is chosen.
         :return (:obj:`dict`:obj:`str`): Returns dictionary containing variables for PowerPlant cost
@@ -85,7 +85,7 @@ class PredictPlantStatistics:
                 interp = interp1d(var_req.Plant_Size, var_req[cost_var_wanted])
                 return interp(self.capacity)
         else:
-            raise ValueError("No cost data for power plant of type:", self.fuel," or cost type: ",cost_var_wanted)
+            raise ValueError("No cost data for power plant of type:", self.plant_type, " or cost type: ", cost_var_wanted)
 
     def _estimate_duration_parameters(self, var_wanted):
         """

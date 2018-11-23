@@ -19,10 +19,10 @@ segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.91666
 # Change in load duration function by year
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
 
-# Gas prices (£/MWh)
+# Fuel prices (£/MWh)
 
 KW_TO_MW_CONV = 1000
-
+historical_fuel_prices = pd.read_csv('{}/data/fuel_data/Fuel costs/historical_fuel_costs/historical_fuel_costs_converted.csv'.format(ROOT_DIR))
 gas_prices = [KW_TO_MW_CONV*0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 coal_price = [KW_TO_MW_CONV*0.00906] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW_CONV*0.0039] * 42 # Source: The Economics of Nuclear Power: EconomicsNP.pdf
@@ -31,7 +31,7 @@ diesel_price = [KW_TO_MW_CONV*0.1] * 42 # Source: https://www.racfoundation.org/
 woodchip_price = [KW_TO_MW_CONV*0.0252] * 42 # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
 poultry_litter_price = [KW_TO_MW_CONV*0.01139] * 42 # Source: How much is poultry litter worth?: sp06ca08.pdf
 straw_price = [KW_TO_MW_CONV*0.016488] * 42 # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
-meat_price = [KW_TO_MW_CONV*0.01] * 42 # Assumption: Low price due to fuel being a waste product
+meat_price = [KW_TO_MW_CONV*0.01] * 42 # Assumption: Low price due to plant_type being a waste product
 waste_price_post_2000 = [KW_TO_MW_CONV*-0.0252] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 waste_price_pre_2000 = [KW_TO_MW_CONV*-0.01551] * 42 # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 
