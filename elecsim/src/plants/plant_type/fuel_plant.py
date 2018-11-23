@@ -63,7 +63,7 @@ class FuelPlant(PowerPlant):
 
         :param capex: Capital expenditure per year
         :param opex: Operating expenditure per year
-        :param fuel_costs: Fuel costs per year
+        :param fuel_costs: fuel_costs per year
         :return: Total costs over lifetime of power plant
         """
 

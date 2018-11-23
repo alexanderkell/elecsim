@@ -21,9 +21,10 @@ class FuelOldPlantCosts(OldPlantCosts):
         :return: Returns dictionary of the updated parameters for the power plant.
         """
 
-        # self.his_fuel_price[self.his_fuel_price]
 
         print(self.his_fuel_price)
+        print(self.his_fuel_price[self.his_fuel_price.Fuel == 'Coal'])
+
 
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
         # as they are unrelated.
