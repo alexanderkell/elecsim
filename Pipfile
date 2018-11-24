@@ -8,6 +8,7 @@ mesa = "*"
 pandas = "*"
 matplotlib = "*"
 scipy = "*"
+pytest = "*"
 
 [dev-packages]
 
