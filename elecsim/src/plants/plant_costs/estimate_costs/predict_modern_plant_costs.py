@@ -105,6 +105,7 @@ class PredictPlantStatistics:
         elif self.capacity < min(var_req.Plant_Size):
             var_req = var_req.reset_index()
             return var_req.iloc[0][var_wanted]
+
     def _closest_year_spread(self, var_wanted):
         """
         Function which selects the spread of payments required for construction and pre-development. This is achieved
