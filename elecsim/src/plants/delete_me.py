@@ -12,6 +12,6 @@ __email__ = "alexander@kell.es"
 
 class Solver:
 
-    def adder(self, a, b):
+    def adder(a, b):
         result = a + b
         return result
