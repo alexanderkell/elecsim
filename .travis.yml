@@ -5,4 +5,4 @@ install:
     'pip install pipenv'
     'pipenv install'
 script:
-    test
+    pipenv run elecsim/test
