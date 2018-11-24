@@ -81,7 +81,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
             raise ValueError("Both energy density and co2 density must be larger than 0")
 
 
-def find_fuel_type(plant_type):
+def plant_type_to_fuel(plant_type):
     """
     Function which infers fuel type from plant type.
     :return: String detailing fuel type

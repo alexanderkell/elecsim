@@ -5,7 +5,7 @@ from elecsim.src.data_manipulation.data_modifications.extrapolation_interpolate 
 # from elecsim.src.data_manipulation.data_modifications.value_estimations import closest_row
 from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
 
-from elecsim.src.plants.plant_type.plant_registry import plant_type_to_fuel, plant_registry
+from elecsim.src.plants.plant_type.plant_registry import plant_type_to_if_fuel, plant_registry
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
@@ -35,7 +35,7 @@ class LcoeToParameters:
 
         plant_stats = PredictPlantStatistics(self.technology, plant_size, CLOSEST_YEAR_TO_HISTORICAL_DATA)()
 
-        plant = plant_registry(plant_type_to_fuel(self.technology))(**plant_stats, name="Test", plant_type=self.technology, capacity_mw=plant_size, construction_year=self.year)
+        plant = plant_registry(plant_type_to_if_fuel(self.technology))(**plant_stats, name="Test", plant_type=self.technology, capacity_mw=plant_size, construction_year=self.year)
 
 
         # print(plant.construction_yearly_spend())

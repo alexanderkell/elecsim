@@ -1,6 +1,6 @@
 import pandas as pd
 from elecsim.src.scenario.scenario_data import power_plant_costs
-from elecsim.src.plants.plant_type.plant_registry import plant_type_to_fuel, plant_registry
+from elecsim.src.plants.plant_type.plant_registry import plant_type_to_if_fuel, plant_registry
 from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
 from elecsim.src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 import elecsim.src.scenario.scenario_data as scenario
@@ -20,13 +20,16 @@ class OldPlantCosts:
         # Import historical LCOE data for power plants, and use to predict LCOE for current year based on linear
         # interpolation
 
+        self.year = year
+        self.plant_type = plant_type
+        self.capacity = capacity
+        self.discount_rate = discount_rate
+
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
         self.lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
 
-        self.plant_type = plant_type
-        self.capacity = capacity
         self.modern_costs = power_plant_costs
-        does_plant_use_fuel = plant_type_to_fuel(self.plant_type)
+        does_plant_use_fuel = plant_type_to_if_fuel(self.plant_type)
 
         min_year = self.find_smallest_year_available()
 
@@ -35,7 +38,7 @@ class OldPlantCosts:
                                                          capacity_mw=self.capacity, construction_year=min_year,
                                                          **self.predicted_modern_cost_parameters)
 
-        self.modern_lcoe = self.plant.calculate_lcoe(discount_rate)
+        self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
         self.lcoe_scaler = self.lcoe/self.modern_lcoe
 
         print("LCOE Scale")

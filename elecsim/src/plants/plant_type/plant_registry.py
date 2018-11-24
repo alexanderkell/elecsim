@@ -21,9 +21,9 @@ def plant_registry(requires_fuel):
         return FuelPlant
 
 
-def plant_type_to_fuel(plant_type):
+def plant_type_to_if_fuel(plant_type):
     """
-    Takes a plant_type type and returns a boolean specifying whether the power plant requires plant_type or not
+    Takes a plant_type type and returns a boolean specifying whether the power plant uses fuel or not.
     :param plant_type: Type of plant
     :return: Boolean specifying whether plant requires plant_type or not
     """
