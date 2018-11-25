@@ -4,6 +4,7 @@ Date created: 25/11/2018
 Feature: # Tests for Non Fuel Old Plant Cost Estimation, using LCOE values, mapped to modern plant costs.
 '''
 from unittest import TestCase
+import pytest
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plants_old_params import NonFuelOldPlantCosts
 
 __author__ = "Alexander Kell"
@@ -14,5 +15,9 @@ __email__ = "alexander@kell.es"
 
 class TestNonFuelOldPlantCosts(TestCase):
     def test_estimate_cost_parameters(self):
-        non_fuel_plant = NonFuelOldPlantCosts(2018, "PV", 1200, 0.035)
-        assert non_fuel_plant.estimate_cost_parameters() ==
+        non_fuel_plant = NonFuelOldPlantCosts(2018, "CCGT", 1200, 0.035)
+        parameters = non_fuel_plant.estimate_cost_parameters()
+
+        assert parameters['connection_cost_per_kw'] == pytest.approx(5835.000686148205)
+        assert parameters['construction_cost_per_kw'] == pytest.approx(884.0910130527584)
+

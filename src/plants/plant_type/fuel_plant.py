@@ -1,3 +1,7 @@
+from src.plants.plant_type.power_plant import PowerPlant
+from src.plants.fuel.fuel import fuel_registry, plant_type_to_fuel
+
+
 """ fuel_plant.py: Child class of power plant which contains functions for a power plant which consumes fuel.
                     Most notably, the functinos contain the ability to calculate the cost of fuel.
 """
@@ -7,9 +11,6 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-from src.plants.plant_type.power_plant import PowerPlant
-from src.plants.fuel.fuel import fuel_registry, plant_type_to_fuel
-
 
 class FuelPlant(PowerPlant):
 
@@ -17,7 +18,6 @@ class FuelPlant(PowerPlant):
         """
         Initialisation of plant_type power plant object.
         :param efficiency: Efficiency of power plant at converting plant_type energy into electrical energy.
-        :param fuel: Type of plant_type that the power plant consumes.
         """
         super().__init__(name=name, type=plant_type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_kw=pre_dev_cost_per_kw, construction_cost_per_kw=construction_cost_per_kw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_kw=insurance_cost_per_kw, connection_cost_per_kw=connection_cost_per_kw, construction_year=construction_year)
         self.efficiency = efficiency

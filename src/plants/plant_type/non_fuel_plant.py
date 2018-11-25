@@ -5,7 +5,7 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-from src.plants import PowerPlant
+from src.plants.plant_type.power_plant import PowerPlant
 
 
 class NoFuelPlant(PowerPlant):

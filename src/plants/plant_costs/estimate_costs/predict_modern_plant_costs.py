@@ -158,5 +158,3 @@ class PredictPlantStatistics:
         else:
             raise ValueError('Plant cost data not found')
 
-pps = PredictPlantStatistics("CCGT", 10, 2018)
-print(pps())
