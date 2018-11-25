@@ -2,6 +2,7 @@ import src.scenario.scenario_data as scenario
 import numpy as np
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 from src.plants.fuel.fuel import plant_type_to_fuel
+from constants import DAYS_IN_YEAR, HOURS_IN_DAY
 
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
@@ -20,6 +21,17 @@ class FuelOldPlantCosts(OldPlantCosts):
     def calc_total_expenditure(self, expenditure):
         total_expenditure = sum(expenditure)
         return total_expenditure
+
+    def calc_total_fuel_expenditure(self, mean_fuel_cost):
+        """
+        Function which takes the mean
+        :param mean_fuel_cost:
+        :return:
+        """
+        fuel_costs = self.plant.fuel_costs(self.plant.electricity_generated())
+        total_fuel_costs = sum(fuel_costs)
+        return total_fuel_costs
+        # (mean_fuel_cost*self.plant.average_load_factor*HOURS_IN_DAY*DAYS_IN_YEAR*self.plant.capacity_mw*self.plant.operating_period)/self.plant.efficiency
 
     def estimate_cost_parameters(self):
         """
@@ -41,10 +53,15 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         total_capex = self.calc_total_expenditure(self.plant.capex())
         total_opex = self.calc_total_expenditure(self.plant.opex())
-
+        total_electricity_gen = sum(self.plant.electricity_generated())
         print("Total capex: " + str(total_capex))
         print("Total opex: " + str(total_opex))
 
+        total_fuel_costs = self.calc_total_fuel_expenditure(average_fuel_cost)
+        print("fuel costs: " + str(self.calc_total_fuel_expenditure(average_fuel_cost)))
+
+        opex_capex_scaler = (self.lcoe * total_electricity_gen - total_fuel_costs)/(total_opex+total_capex)
+        print("Opex and capex scaler"+str(opex_capex_scaler))
 
 
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
@@ -53,11 +70,17 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         # Multiply values by updated LCOE scale. Conditional based on whether parameter is in params_to_ignore list or
         # is an np.ndarray (ie. not list).
-        params = {key: value*self.lcoe_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
+        params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
                   for key, value in self.predicted_modern_cost_parameters.items()}
         return params
 
 
 
 
-FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()
+params = FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()
+print(params)
+
+from src.plants.plant_type.fuel_plant import FuelPlant
+
+ccgt = FuelPlant(name="Test", plant_type="CCGT", capacity_mw="1200", construction_year=2010, **params)
+print(ccgt.calculate_lcoe(0.035))

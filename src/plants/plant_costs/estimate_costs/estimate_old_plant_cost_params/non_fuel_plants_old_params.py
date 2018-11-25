@@ -25,5 +25,5 @@ class NonFuelOldPlantCosts(OldPlantCosts):
         return params
 
 
-params = NonFuelOldPlantCosts(2005,"CCGT", 1200, 0.035).estimate_cost_parameters()
+params = NonFuelOldPlantCosts(2005, "CCGT", 1200, 0.035).estimate_cost_parameters()
 print(params)
