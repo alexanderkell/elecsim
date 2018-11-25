@@ -4,24 +4,20 @@ ElecSIM
 ElecSIM is an electricity market simulation toolkit which utilises agent based modelling to mimic intelligent
 electricity generation companies, buyers.
 
-Look how easy it is to use:
-
-    import project
-    # Get your stuff done
-    project.do_stuff()
 
 Features
 --------
 
-- Data contained for every single
-- Make things faster
+- Data contained for every power plant in the UK, including costs and historical costs
+- Use of reinforcement learning to provide market power to generation companies
 
 Installation
 ------------
 
-Install $project by running:
+Install ElecSIM by running:
 
-    install project
+    pip install pipenv
+    pipenv install
 
 Contribute
 ----------
@@ -32,10 +28,10 @@ Contribute
 Support
 -------
 
-If you are having issues, please let us know.
-We have a mailing list located at: project@google-groups.com
+If you are having issues, please contact the following email address:
+alexander@kell.es
 
 License
 -------
 
-The project is licensed under the BSD license.
+The project is licensed under the MIT license.
