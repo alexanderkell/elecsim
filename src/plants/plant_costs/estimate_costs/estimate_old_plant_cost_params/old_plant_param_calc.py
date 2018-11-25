@@ -1,6 +1,6 @@
 import src.scenario.scenario_data as scenario
 from src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
-from plants.plant_type.plant_registry import plant_type_to_if_fuel, plant_registry
+from src.plants.plant_type.plant_registry import plant_type_to_if_fuel, plant_registry
 from src.scenario.scenario_data import power_plant_costs
 
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
