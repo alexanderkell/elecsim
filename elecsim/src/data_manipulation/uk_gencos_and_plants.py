@@ -24,7 +24,7 @@ def plants_owned(gen_co):
     return query
 
 
-# pp = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_2018.csv")
+# pp = pd.read_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_removed_location.csv")
 # print(pp.groupby('Fuel').count())
 # print("-----HI----")
 # print(pp.groupby('Fuel').sum().sort_values(['Capacity'], ascending=0))

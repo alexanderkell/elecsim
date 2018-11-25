@@ -66,7 +66,7 @@ class UKPlants:
                                                                    'Keadby GT', "Grain GT", 'Ratcliffe GT'])]
 
 
-pp_dat = UKPlants("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_2018.csv")
+pp_dat = UKPlants("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/Power_Plants/No_Location/power_plants_removed_location.csv")
 # plant_db = pp_dat.remove_black_start_motors()
 
 plant_db = pp_dat.modify_plant_db()
