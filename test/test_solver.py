@@ -5,7 +5,7 @@ Feature: #Enter feature description here
 '''
 from unittest import TestCase
 
-from src.plants import Solver
+from src.plants.delete_me import Solver
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
