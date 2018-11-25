@@ -1,4 +1,4 @@
-"""power_plant.py: Class which represents a photovoltaic farm"""
+"""power_plant.py: Class which represents a Power Plant"""
 
 import constants as constants
 
