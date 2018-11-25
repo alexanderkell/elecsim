@@ -1,9 +1,9 @@
-import elecsim.src.scenario.scenario_data as scenario
+import src.scenario.scenario_data as scenario
 import numpy as np
-from elecsim.src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
-from elecsim.src.plants.plant_type.fuel import plant_type_to_fuel
+from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
+from src.plants.fuel.fuel import plant_type_to_fuel
 
-from src.data_manipulation.data_modifications import ExtrapolateInterpolate
+from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
 
 class FuelOldPlantCosts(OldPlantCosts):
@@ -16,6 +16,10 @@ class FuelOldPlantCosts(OldPlantCosts):
 
     def estimate_fuel_costs(self):
         print(self.his_fuel_price)
+
+    def calc_total_expenditure(self, expenditure):
+        total_expenditure = sum(expenditure)
+        return total_expenditure
 
     def estimate_cost_parameters(self):
         """
@@ -30,6 +34,16 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
         average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
+
+        print("Average fuel cost "+str(average_fuel_cost))
+        print("Capex: " + str(self.plant.capex()))
+        print("Opex" + str(self.plant.opex()))
+
+        total_capex = self.calc_total_expenditure(self.plant.capex())
+        total_opex = self.calc_total_expenditure(self.plant.opex())
+
+        print("Total capex: " + str(total_capex))
+        print("Total opex: " + str(total_opex))
 
 
 
@@ -46,4 +60,4 @@ class FuelOldPlantCosts(OldPlantCosts):
 
 
 
-FuelOldPlantCosts(2017, "CCGT", 1200, 0.035).estimate_cost_parameters()
+FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()

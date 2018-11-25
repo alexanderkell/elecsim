@@ -18,7 +18,7 @@ class NoFuelPlant(PowerPlant):
 
         self.efficiency = efficiency
 
-    def calculate_lcoe(self, carbon_price):
+    def calculate_lcoe(self):
         """
         Function which calculates the levelised cost of electricity for this power plant instance
         :return: Returns LCOE value for power plant
