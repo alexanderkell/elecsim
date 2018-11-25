@@ -7,8 +7,8 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-from src.plants import PowerPlant
-from src.plants import fuel_registry, plant_type_to_fuel
+from src.plants.plant_type.power_plant import PowerPlant
+from src.plants.fuel.fuel import fuel_registry, plant_type_to_fuel
 
 
 class FuelPlant(PowerPlant):

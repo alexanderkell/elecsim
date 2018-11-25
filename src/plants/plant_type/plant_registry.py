@@ -1,5 +1,5 @@
-from src.plants import FuelPlant
-from src.plants import NoFuelPlant
+from src.plants.plant_type.fuel_plant import FuelPlant
+from src.plants.plant_type.non_fuel_plant import NoFuelPlant
 
 
 def plant_registry(requires_fuel):

@@ -22,8 +22,8 @@ yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.
 # Fuel prices (£/MWh)
 
 KW_TO_MW_CONV = 1000
-historical_fuel_prices = pd.read_csv('{}/data/fuel_data/fuel_costs/historical_fuel_cost_data/historical_fuel_costs_converted.csv'.format(ROOT_DIR))
-historical_fuel_prices_long = pd.read_csv('{}/data/fuel_data/fuel_costs/historical_fuel_cost_data/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
+historical_fuel_prices = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted.csv'.format(ROOT_DIR))
+historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 
 gas_prices = [KW_TO_MW_CONV*0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 coal_price = [KW_TO_MW_CONV*0.00906] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
@@ -39,12 +39,11 @@ waste_price_pre_2000 = [KW_TO_MW_CONV*-0.01551] * 42 # Source: Gate fees report 
 
 
 
-# Generator Companies imported from Government database
-power_plants = pd.read_csv(ROOT_DIR+'/data/Power_Plants/No_Location/power_plant_db_with_simplified_type.csv')
+# Generator Companies imported from Government data files
+power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/power_plant_db_with_simplified_type.csv')
+power_plant_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv')
 
-power_plant_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/Power_Plant_Costs_CSV/power_plant_costs_with_simplified_type.csv')
-
-power_plant_historical_costs = pd.read_csv(ROOT_DIR+'/data/Power_Plants/Power_Plant_Costs/historical_costs/historical_power_plant_costs_long.csv')
+power_plant_historical_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]

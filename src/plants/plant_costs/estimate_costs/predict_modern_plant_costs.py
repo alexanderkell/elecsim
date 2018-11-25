@@ -1,8 +1,8 @@
-import elecsim.src.scenario.scenario_data as scenario
+import src.scenario.scenario_data as scenario
 import pandas as pd
 from scipy.interpolate import interp1d
 
-from src.data_manipulation.data_modifications import closest_row
+from src.data_manipulation.data_modifications.value_estimations import closest_row
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)

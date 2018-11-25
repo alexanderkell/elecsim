@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params import OldPlantCosts
+from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 
 
 class NonFuelOldPlantCosts(OldPlantCosts):
