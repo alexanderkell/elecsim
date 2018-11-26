@@ -1,6 +1,6 @@
 import pandas as pd
 
-from constants import ROOT_DIR
+from constants import ROOT_DIR, KW_TO_MW_CONV
 
 """scenario_data.py: Scenario file containing data for a single simulation run."""
 
@@ -21,7 +21,6 @@ yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.
 
 # Fuel prices (£/MWh)
 
-KW_TO_MW_CONV = 1000
 historical_fuel_prices = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted.csv'.format(ROOT_DIR))
 historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 

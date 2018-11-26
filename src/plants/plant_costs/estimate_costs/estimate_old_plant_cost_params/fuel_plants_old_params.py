@@ -3,7 +3,7 @@ import numpy as np
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 from src.plants.fuel.fuel import plant_type_to_fuel
 from constants import DAYS_IN_YEAR, HOURS_IN_DAY
-
+from src.plants.plant_type.fuel_plant import FuelPlant
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
 
@@ -62,25 +62,33 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         opex_capex_scaler = (self.lcoe * total_electricity_gen - total_fuel_costs)/(total_opex+total_capex)
         print("Opex and capex scaler"+str(opex_capex_scaler))
-
+        print("NEW LCOE: "+str(self.modern_lcoe))
+        print("OLD LCOE: "+str(self.lcoe))
 
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
-        # as they are unrelated.
+        # as they are not related.
         params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency', 'average_load_factor']
 
         # Multiply values by updated LCOE scale. Conditional based on whether parameter is in params_to_ignore list or
         # is an np.ndarray (ie. not list).
+
+        print("Modern Params: "+str(self.predicted_modern_cost_parameters))
+
+        # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
+        #           for key, value in self.predicted_modern_cost_parameters.items()}
+
         params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
                   for key, value in self.predicted_modern_cost_parameters.items()}
+
         return params
 
 
 
 
-params = FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()
-print(params)
+# params = FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()
+# print(params)
+#
+# ccgt = FuelPlant(name="Test", plant_type="CCGT", capacity_mw="1200", construction_year=2010, **params)
+# print(ccgt.calculate_lcoe(0.035))
 
-from src.plants.plant_type.fuel_plant import FuelPlant
-
-ccgt = FuelPlant(name="Test", plant_type="CCGT", capacity_mw="1200", construction_year=2010, **params)
-print(ccgt.calculate_lcoe(0.035))
+params = FuelOldPlantCosts(2015, "Nuclear", 1200, 0.035).estimate_cost_parameters()
