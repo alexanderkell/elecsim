@@ -31,7 +31,11 @@ class OldPlantCosts:
 
         min_year = self.find_smallest_year_available()
 
+
         self.predicted_modern_cost_parameters = PredictPlantStatistics(self.plant_type, self.capacity, min_year)()
+
+        print("Modern cost parameters: "+str(self.predicted_modern_cost_parameters))
+
         self.plant = plant_registry(does_plant_use_fuel)(name="Modern Plant", plant_type=self.plant_type,
                                                          capacity_mw=self.capacity, construction_year=min_year,
                                                          **self.predicted_modern_cost_parameters)
@@ -57,4 +61,4 @@ class OldPlantCosts:
 
         return minimum_year_with_data
 
-# OldPlantCosts(2017,"CCGT", 1200, 0.035).estimate_cost_parameters()
+# OldPlantCosts(2017,"CCGT", 1200, 0.035).find_smallest_year_available()

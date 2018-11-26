@@ -9,7 +9,7 @@ __email__ = "Alexander@Kell.es"
 
 
 class PowerPlant:
-    def __init__(self, name, type, capacity_mw, construction_year, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw):
+    def __init__(self, name, plant_type, capacity_mw, construction_year, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw):
         """
         PowerPlant class which are built and operated by generation companies
         :param name: Name of power plant
@@ -34,7 +34,7 @@ class PowerPlant:
         # Data from BEIS
         self.name = name
 
-        self.type = type
+        self.type = plant_type
 
         self.capacity_mw = capacity_mw
 
@@ -73,7 +73,7 @@ class PowerPlant:
 
     @property
     def infrastructure(self):
-        return self._infrastructure #* constants.KW_TO_MW_CONV
+        return self._infrastructure
 
     @infrastructure.setter
     def infrastructure(self, value):

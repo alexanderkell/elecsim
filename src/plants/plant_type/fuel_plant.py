@@ -19,7 +19,7 @@ class FuelPlant(PowerPlant):
         Initialisation of plant_type power plant object.
         :param efficiency: Efficiency of power plant at converting plant_type energy into electrical energy.
         """
-        super().__init__(name=name, type=plant_type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_kw=pre_dev_cost_per_kw, construction_cost_per_kw=construction_cost_per_kw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_kw=insurance_cost_per_kw, connection_cost_per_kw=connection_cost_per_kw, construction_year=construction_year)
+        super().__init__(name=name, plant_type=plant_type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_kw=pre_dev_cost_per_kw, construction_cost_per_kw=construction_cost_per_kw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_kw=insurance_cost_per_kw, connection_cost_per_kw=connection_cost_per_kw, construction_year=construction_year)
         self.efficiency = efficiency
         # Finds fuel type of power plant eg. CCGT power plant type returns gas.
         fuel_string = plant_type_to_fuel(plant_type)
