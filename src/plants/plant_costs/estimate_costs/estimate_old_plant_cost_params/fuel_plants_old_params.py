@@ -46,9 +46,10 @@ class FuelOldPlantCosts(OldPlantCosts):
         # Functionality that calculates the average fuel price over the lifetime of the power plant
         fuel_price_filtered = self.historic_fuel_price[self.historic_fuel_price.Fuel == self.fuel]
         print("fuel price filtered: "+str(fuel_price_filtered))
-        extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Price,fuel_price_filtered.value)
+        extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Year, fuel_price_filtered.value)
 
         average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
+
         average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
 
         print("Average fuel cost "+str(average_fuel_cost))
