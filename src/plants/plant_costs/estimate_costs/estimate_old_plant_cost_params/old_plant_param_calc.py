@@ -28,13 +28,10 @@ class OldPlantCosts:
 
         self.modern_costs = power_plant_costs[power_plant_costs.Type==self.plant_type]
 
-        # does_plant_use_fuel = fuel_or_no_fuel(self.plant_type)
-
         min_year = self.find_smallest_year_available()
 
-
         self.estimated_modern_plant_parameters = PredictPlantStatistics(self.plant_type, self.capacity, min_year)()
-
+        print("historical LCOE: "+str(self.estimated_historical_lcoe))
         print("Parameters for modern plant: " + str(self.estimated_modern_plant_parameters))
 
         plant_object = PlantRegistry(self.plant_type).plant_type_to_fuel()

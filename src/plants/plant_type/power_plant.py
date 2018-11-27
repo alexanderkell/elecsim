@@ -54,7 +54,7 @@ class PowerPlant:
 
         self.operating_period = operating_period
 
-        self._infrastructure = infrastructure
+        self.infrastructure = infrastructure
 
         self.fixed_o_and_m_per_mw = fixed_o_and_m_per_mw
 
@@ -73,11 +73,11 @@ class PowerPlant:
 
     @property
     def infrastructure(self):
-        return self._infrastructure
+        return self.__infrastructure
 
     @infrastructure.setter
     def infrastructure(self, value):
-        self._infrastructure = value * constants.KW_TO_MW_CONV
+        self.__infrastructure = value * constants.KW_TO_MW_CONV
 
     # def __init__(self, name, constructionStartTime, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, capacity, construction_time, carbon_emissions, efficiency):
     #     # Fixed definitions
