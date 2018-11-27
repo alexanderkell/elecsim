@@ -21,7 +21,6 @@ yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.
 
 # Fuel prices (£/MWh)
 
-historical_fuel_prices = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted.csv'.format(ROOT_DIR))
 historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 
 gas_prices = [KW_TO_MW_CONV*0.018977] * 42 # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls

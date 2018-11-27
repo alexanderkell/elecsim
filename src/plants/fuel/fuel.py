@@ -37,6 +37,9 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     :param co2_density: Carbon density of plant_type (tonnes of CO2 per tonne of gas burnt)
     :return: Returns a Fuel object with characteristics of the plant_type in question
     """
+
+    fuel_prices = scenario.historical_fuel_prices_long
+
     if energy_density is None and co2_density is None:
         if fuel_type == "Gas":
             return Fuel(fuel_type, scenario.gas_prices, 35.8, 2.03)

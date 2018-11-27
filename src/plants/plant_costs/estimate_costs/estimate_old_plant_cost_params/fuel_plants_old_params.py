@@ -52,23 +52,23 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
 
-        print("Average fuel cost "+str(average_fuel_cost))
-        print("Capex: " + str(self.plant.capex()))
-        print("Opex" + str(self.plant.opex()))
+        # print("Average fuel cost "+str(average_fuel_cost))
+        # print("Capex: " + str(self.plant.capex()))
+        # print("Opex" + str(self.plant.opex()))
 
-        total_capex = self.calc_total_expenditure(self.plant.capex())
-        total_opex = self.calc_total_expenditure(self.plant.opex())
-        total_electricity_gen = sum(self.plant.electricity_generated())
-        print("Total capex: " + str(total_capex))
-        print("Total opex: " + str(total_opex))
+        # total_capex = self.calc_total_expenditure(self.plant.capex())
+        # total_opex = self.calc_total_expenditure(self.plant.opex())
+        # total_electricity_gen = sum(self.plant.electricity_generated())
+        # print("Total capex: " + str(total_capex))
+        # print("Total opex: " + str(total_opex))
 
-        total_fuel_costs = self.calc_total_fuel_expenditure(average_fuel_cost)
-        print("fuel costs: " + str(self.calc_total_fuel_expenditure(average_fuel_cost)))
-
-        opex_capex_scaler = (self.estimated_historical_lcoe * total_electricity_gen - total_fuel_costs) / (total_opex + total_capex)
-        print("Opex and capex scaler: "+str(opex_capex_scaler))
-        print("MODERN LCOE: "+str(self.modern_lcoe))
-        print("HISTORICAL LCOE: " + str(self.estimated_historical_lcoe))
+        # total_fuel_costs = self.calc_total_fuel_expenditure(average_fuel_cost)
+        # print("fuel costs: " + str(self.calc_total_fuel_expenditure(average_fuel_cost)))
+        #
+        # opex_capex_scaler = (self.estimated_historical_lcoe * total_electricity_gen - total_fuel_costs) / (total_opex + total_capex)
+        # print("Opex and capex scaler: "+str(opex_capex_scaler))
+        # print("MODERN LCOE: "+str(self.modern_lcoe))
+        # print("HISTORICAL LCOE: " + str(self.estimated_historical_lcoe))
 
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
         # as they are not related.

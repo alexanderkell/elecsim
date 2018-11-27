@@ -16,7 +16,7 @@ __email__ = "alexander@kell.es"
 class TestFuelOldPlantCosts(TestCase):
 
     def test_estimate_cost_parameters(self):
-        fuel_plant_costs_estimate = FuelOldPlantCosts(2018, "CCGT", 1200, 0.035)
+        fuel_plant_costs_estimate = FuelOldPlantCosts(2018, "CCGT", 1200)
         estimated_params = fuel_plant_costs_estimate.estimate_cost_parameters()
 
         # print(estimated_params)
