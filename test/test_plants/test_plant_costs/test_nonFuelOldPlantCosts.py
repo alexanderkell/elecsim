@@ -15,9 +15,9 @@ __email__ = "alexander@kell.es"
 
 class TestNonFuelOldPlantCosts(TestCase):
     def test_estimate_cost_parameters(self):
-        non_fuel_plant = NonFuelOldPlantCosts(2018, "CCGT", 1200, 0.035)
+        non_fuel_plant = NonFuelOldPlantCosts(2018, "CCGT", 1200)
         parameters = non_fuel_plant.estimate_cost_parameters()
-
-        assert parameters['connection_cost_per_kw'] == pytest.approx(5835.000686148205)
-        assert parameters['construction_cost_per_kw'] == pytest.approx(884.0910130527584)
+        print("TEST PARAMETERS: "+str(parameters))
+        assert parameters['connection_cost_per_kw'] == pytest.approx(6292.8209054998)
+        assert parameters['construction_cost_per_kw'] == pytest.approx(953.457712954515)
 

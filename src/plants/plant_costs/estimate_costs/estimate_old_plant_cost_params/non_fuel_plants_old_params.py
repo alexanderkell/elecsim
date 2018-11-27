@@ -5,7 +5,7 @@ from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_pl
 
 class NonFuelOldPlantCosts(OldPlantCosts):
 
-    def __init__(self, year, plant_type, capacity, discount_rate):
+    def __init__(self, year, plant_type, capacity):
         super().__init__(year=year, plant_type=plant_type, capacity=capacity)
 
     def estimate_cost_parameters(self):
@@ -25,5 +25,5 @@ class NonFuelOldPlantCosts(OldPlantCosts):
         return params
 
 
-params = NonFuelOldPlantCosts(2005, "CCGT", 1200, 0.035).estimate_cost_parameters()
+params = NonFuelOldPlantCosts(2005, "CCGT", 1200).estimate_cost_parameters()
 print(params)
