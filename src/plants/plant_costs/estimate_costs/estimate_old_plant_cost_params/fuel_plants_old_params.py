@@ -14,7 +14,7 @@ class FuelOldPlantCosts(OldPlantCosts):
 
     historic_fuel_price = scenario.historical_fuel_prices_long
 
-    def __init__(self, year, plant_type, capacity, discount_rate):
+    def __init__(self, year, plant_type, capacity):
         super().__init__(year=year, plant_type=plant_type, capacity=capacity)
         self.fuel = plant_type_to_fuel(self.plant_type)
 
@@ -45,6 +45,7 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         # Functionality that calculates the average fuel price over the lifetime of the power plant
         fuel_price_filtered = self.historic_fuel_price[self.historic_fuel_price.Fuel == self.fuel]
+        print("fuel price filtered: "+str(fuel_price_filtered))
         extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Price,fuel_price_filtered.value)
 
         average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
@@ -122,7 +123,6 @@ class FuelOldPlantCosts(OldPlantCosts):
 
 
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
-        # print("Parameters for modern plant:"+str(test_params))
 
         return lcoe
 
@@ -137,5 +137,6 @@ class FuelOldPlantCosts(OldPlantCosts):
 
 x0 = [30754.0163847643, 4659.699452237016, 113696.66663458318, 140722.92345755786, 19570.737699395464, 93.1939890447403, 27.958196713422094]
 
-lcoe = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035)._linear_optimisation(x0, 54.463849107579996)
-print("new LCOE: "+str(lcoe))
+# lcoe = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035)._linear_optimisation(x0, 54.463849107579996)
+# print("new LCOE: "+str(lcoe))
+print(FuelOldPlantCosts(2010, "CCGT", 1200).estimate_cost_parameters())
