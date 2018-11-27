@@ -6,7 +6,7 @@ from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_pl
 class NonFuelOldPlantCosts(OldPlantCosts):
 
     def __init__(self, year, plant_type, capacity, discount_rate):
-        super().__init__(year=year, plant_type=plant_type, capacity=capacity, discount_rate=discount_rate)
+        super().__init__(year=year, plant_type=plant_type, capacity=capacity)
 
     def estimate_cost_parameters(self):
         """
