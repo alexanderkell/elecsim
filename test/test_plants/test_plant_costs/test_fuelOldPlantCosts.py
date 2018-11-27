@@ -19,11 +19,11 @@ class TestFuelOldPlantCosts(TestCase):
         fuel_plant_costs_estimate = FuelOldPlantCosts(2010, "CCGT", 1200, 0.035)
         estimated_params = fuel_plant_costs_estimate.estimate_cost_parameters()
 
-        assert estimated_params['connection_cost_per_kw'] == pytest.approx(3300*8.781317895767428)
+        assert estimated_params['connection_cost_per_mw'] == pytest.approx(3300*8.781317895767428)
         assert estimated_params['construction_cost_per_kw'] == pytest.approx(500*8.781317895767428)
         assert estimated_params['fixed_o_and_m_per_mw'] == pytest.approx(12200*8.781317895767428)
         assert estimated_params['infrastructure'] == pytest.approx(15100*8.781317895767428)
-        assert estimated_params['insurance_cost_per_kw'] == pytest.approx(2100*8.781317895767428)
+        assert estimated_params['insurance_cost_per_mw'] == pytest.approx(2100*8.781317895767428)
         assert estimated_params['pre_dev_cost_per_kw'] == pytest.approx(10*8.781317895767428)
         assert estimated_params['variable_o_and_m_per_mwh'] == pytest.approx(3*8.781317895767428)
         assert estimated_params['pre_dev_period'] == 2

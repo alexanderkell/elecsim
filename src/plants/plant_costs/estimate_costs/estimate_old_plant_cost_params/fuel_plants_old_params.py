@@ -74,9 +74,6 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         print("Modern Params: " + str(self.estimated_modern_plant_parameters))
 
-        # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
-        #           for key, value in self.estimated_modern_plant_parameters.items()}
-
         params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
                   for key, value in self.estimated_modern_plant_parameters.items()}
 

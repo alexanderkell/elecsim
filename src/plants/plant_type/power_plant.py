@@ -9,7 +9,7 @@ __email__ = "Alexander@Kell.es"
 
 
 class PowerPlant:
-    def __init__(self, name, plant_type, capacity_mw, construction_year, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_kw, connection_cost_per_kw):
+    def __init__(self, name, plant_type, capacity_mw, construction_year, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_kw, construction_cost_per_kw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_mw, connection_cost_per_mw):
         """
         PowerPlant class which are built and operated by generation companies
         :param name: Name of power plant
@@ -27,8 +27,8 @@ class PowerPlant:
         :param infrastructure: Infrastructure cost in GBP
         :param fixed_o_and_m_per_mw: Fixed operation and maintenance cost
         :param variable_o_and_m_per_mwh: Variable operation and maintenance cost
-        :param insurance_cost_per_kw: Insurance cost
-        :param connection_cost_per_kw: Connection and use of system cost
+        :param insurance_cost_per_mw: Insurance cost
+        :param connection_cost_per_mw: Connection and use of system cost
         """
 
         # Data from BEIS
@@ -60,9 +60,9 @@ class PowerPlant:
 
         self.variable_o_and_m_per_mwh = variable_o_and_m_per_mwh
 
-        self.insurance_cost_per_kw = insurance_cost_per_kw
+        self.insurance_cost_per_mw = insurance_cost_per_mw
 
-        self.connection_cost_per_kw = connection_cost_per_kw
+        self.connection_cost_per_mw = connection_cost_per_mw
 
         #
         # self.min_running = min_running
@@ -162,7 +162,7 @@ class PowerPlant:
         Calculates the yearly insurance cost
         :return: List containing insurance cost for each year of the operating period
         """
-        insurance_cost_total = [self.insurance_cost_per_kw * self.capacity_mw] * int(self.operating_period) # Calculation of insurance cost for this instance of a power plant
+        insurance_cost_total = [self.insurance_cost_per_mw * self.capacity_mw] * int(self.operating_period) # Calculation of insurance cost for this instance of a power plant
         return insurance_cost_total
 
     def variable_o_and_m_cost(self):
@@ -215,5 +215,5 @@ class PowerPlant:
         return ret
 
     def __repr__(self):
-        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_kw, self.construction_cost_per_kw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_kw, self.connection_cost_per_kw)
+        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_kw, self.construction_cost_per_kw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
 

@@ -1,5 +1,5 @@
 import src.scenario.scenario_data as scenario
-from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictPlantStatistics
+from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictPlantParameters
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.plant_type.plant_registry import PlantRegistry
 from src.scenario.scenario_data import power_plant_costs
@@ -30,7 +30,7 @@ class OldPlantCosts:
 
         min_year = self.find_smallest_year_available()
 
-        self.estimated_modern_plant_parameters = PredictPlantStatistics(self.plant_type, self.capacity, min_year)()
+        self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year)()
         print("historical LCOE: "+str(self.estimated_historical_lcoe))
         print("Parameters for modern plant: " + str(self.estimated_modern_plant_parameters))
 

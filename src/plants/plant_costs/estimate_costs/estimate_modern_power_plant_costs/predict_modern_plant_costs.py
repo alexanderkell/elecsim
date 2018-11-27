@@ -8,7 +8,7 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
 
 
-class PredictPlantStatistics:
+class PredictPlantParameters:
 
     def __init__(self, plant_type, capacity, start_year):
         """
@@ -51,7 +51,6 @@ class PredictPlantStatistics:
             plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
         elif 2020 < self.start_year < 2025:
             plant_costs = [cost_variable+str(int(2020)) for cost_variable in plant_costs]
-
 
         parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
@@ -128,7 +127,7 @@ class PredictPlantStatistics:
         :return (str): Name in PowerPlant instance variable name format
         """
         if 'Connect_system_cost' in column:
-            return 'connection_cost_per_kw'
+            return 'connection_cost_per_mw'
         elif 'Constr_cost' in column:
             return 'construction_cost_per_kw'
         elif 'Fixed_cost' in column:
@@ -136,7 +135,7 @@ class PredictPlantStatistics:
         elif 'Infra_cost' in column:
             return 'infrastructure'
         elif 'Insurance_cost' in column:
-            return 'insurance_cost_per_kw'
+            return 'insurance_cost_per_mw'
         elif 'Pre_dev_cost' in column:
             return 'pre_dev_cost_per_kw'
         elif 'Var_cost' in column:
