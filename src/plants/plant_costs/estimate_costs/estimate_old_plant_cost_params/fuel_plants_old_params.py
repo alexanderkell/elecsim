@@ -12,7 +12,7 @@ class FuelOldPlantCosts(OldPlantCosts):
     his_fuel_price = scenario.historical_fuel_prices_long
 
     def __init__(self, year, plant_type, capacity, discount_rate):
-        super().__init__(year=year, plant_type=plant_type, capacity=capacity, discount_rate=discount_rate)
+        super().__init__(year=year, plant_type=plant_type, capacity=capacity)
         self.fuel = plant_type_to_fuel(self.plant_type)
 
     def estimate_fuel_costs(self):
