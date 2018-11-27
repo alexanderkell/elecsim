@@ -11,9 +11,9 @@ class OldPlantCosts:
     more detailed cost parameters using the same proportions as the BEIS Power Plant Cost Database.
     Specifically uses 2018 power plants from BEIS Power Plant Cost Database.
     """
-    hist_costs = scenario.power_plant_historical_costs
+    hist_costs = scenario.power_plant_historical_costs_long
 
-    def __init__(self, year, plant_type, capacity, discount_rate):
+    def __init__(self, year, plant_type, capacity):
 
         # Import historical LCOE data for power plants, and use to predict LCOE for current year based on linear
         # interpolation
@@ -22,10 +22,12 @@ class OldPlantCosts:
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
-        self.discount_rate = discount_rate
+
 
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
-        self.lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
+        self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
+
+        self.discount_rate = self.hist_costs.
 
         self.modern_costs = power_plant_costs
         does_plant_use_fuel = fuel_or_no_fuel(self.plant_type)
@@ -42,9 +44,9 @@ class OldPlantCosts:
                                                          **self.estimated_modern_plant_parameters)
 
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
-        print("Modern lcoe: "+str(self.modern_lcoe))
+        print("Modern estimated_historical_lcoe: "+str(self.modern_lcoe))
 
-        self.lcoe_scaler = self.lcoe/self.modern_lcoe
+        self.lcoe_scaler = self.estimated_historical_lcoe / self.modern_lcoe
 
         print("LCOE Scale")
         print(self.lcoe_scaler)

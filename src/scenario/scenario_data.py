@@ -42,7 +42,7 @@ waste_price_pre_2000 = [KW_TO_MW_CONV*-0.01551] * 42 # Source: Gate fees report 
 power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/power_plant_db_with_simplified_type.csv')
 power_plant_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv')
 
-power_plant_historical_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
+power_plant_historical_costs_long = pd.read_csv(ROOT_DIR + '/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
 
 # Initial money of generating companies
 starting_money_of_gencos = [100000,2000000,300000]
