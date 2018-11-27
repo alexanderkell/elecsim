@@ -63,4 +63,6 @@ class OldPlantCosts:
 
         return minimum_year_with_data
 
+
+
 # OldPlantCosts(1990,"CCGT", 1200, 0.035)

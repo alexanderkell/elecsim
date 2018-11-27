@@ -60,8 +60,6 @@ class PredictPlantParameters:
 
         yearly_cost_perc = {self._change_columns(spread): self._closest_year_spread(spread) for spread in yearly_cost_spread}
 
-
-
         parameters={**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
         return parameters

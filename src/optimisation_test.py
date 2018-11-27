@@ -1,16 +1,17 @@
-'''
+from scipy.optimize import minimize
+import numpy as np
+
+"""
 File name: optimisation_test
 Date created: 26/11/2018
 Feature: #Enter feature description here
-'''
+"""
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-from scipy.optimize import minimize
-import numpy as np
 
 a = 1
 b = 2
