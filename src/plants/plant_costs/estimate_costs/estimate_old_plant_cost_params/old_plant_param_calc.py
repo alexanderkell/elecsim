@@ -1,7 +1,7 @@
 import src.scenario.scenario_data as scenario
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictPlantStatistics
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
-from src.plants.plant_type.plant_registry import plant_type_to_if_fuel, plant_registry
+from src.plants.plant_type.plant_registry import fuel_or_no_fuel, plant_registry
 from src.scenario.scenario_data import power_plant_costs
 
 
@@ -17,7 +17,8 @@ class OldPlantCosts:
 
         # Import historical LCOE data for power plants, and use to predict LCOE for current year based on linear
         # interpolation
-
+        print("Historical costs:::")
+        print(self.hist_costs)
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
@@ -27,20 +28,22 @@ class OldPlantCosts:
         self.lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
 
         self.modern_costs = power_plant_costs
-        does_plant_use_fuel = plant_type_to_if_fuel(self.plant_type)
+        does_plant_use_fuel = fuel_or_no_fuel(self.plant_type)
 
         min_year = self.find_smallest_year_available()
 
 
-        self.predicted_modern_cost_parameters = PredictPlantStatistics(self.plant_type, self.capacity, min_year)()
+        self.estimated_modern_plant_parameters = PredictPlantStatistics(self.plant_type, self.capacity, min_year)()
 
-        print("Modern cost parameters: "+str(self.predicted_modern_cost_parameters))
+        print("Parameters for modern plant: " + str(self.estimated_modern_plant_parameters))
 
         self.plant = plant_registry(does_plant_use_fuel)(name="Modern Plant", plant_type=self.plant_type,
                                                          capacity_mw=self.capacity, construction_year=min_year,
-                                                         **self.predicted_modern_cost_parameters)
+                                                         **self.estimated_modern_plant_parameters)
 
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
+        print("Modern lcoe: "+str(self.modern_lcoe))
+
         self.lcoe_scaler = self.lcoe/self.modern_lcoe
 
         print("LCOE Scale")
@@ -61,4 +64,4 @@ class OldPlantCosts:
 
         return minimum_year_with_data
 
-# OldPlantCosts(2017,"CCGT", 1200, 0.035).find_smallest_year_available()
+# OldPlantCosts(1990,"CCGT", 1200, 0.035)
