@@ -5,6 +5,7 @@ Feature: #Tests the functionality of the FuelPlant class.
 """
 from unittest import TestCase
 from src.plants.plant_type.fuel_plant import FuelPlant
+from pytest import approx
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -13,7 +14,7 @@ __email__ = "alexander@kell.es"
 
 
 class TestFuelPlant(TestCase):
-    def test_fuel_costs(self):
+    def test_if_fuel_plant_correctly_calculates_fuel_costs(self):
         fuel_plant = FuelPlant(name="Test_Plant", plant_type="CCGT", capacity_mw=1200, construction_year=2010,
                                average_load_factor=0.93, efficiency=0.54, pre_dev_period=2, construction_period=3,
                                operating_period=25, pre_dev_spend_years=[0.44, 0.44, 0.12],
@@ -21,5 +22,9 @@ class TestFuelPlant(TestCase):
                                construction_cost_per_kw=500, infrastructure=15100, fixed_o_and_m_per_mw=12200,
                                variable_o_and_m_per_mwh=3, insurance_cost_per_mw=2100, connection_cost_per_mw=3300)
 
-        print(fuel_plant.fuel_costs(10))
-        # assert fuel_plant.fuel_costs(10) == []
+        assert fuel_plant.fuel_costs([10]*25)[-1] == approx(351.425926)
+        assert fuel_plant.fuel_costs([10]*25)[0] == 0
+        assert fuel_plant.fuel_costs([10]*25)[4] == 0
+        assert fuel_plant.fuel_costs([10]*25)[5] == approx(293.6148148)
+        assert fuel_plant.fuel_costs([10]*25)[6] == approx(236.2728148)
+
