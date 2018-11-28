@@ -38,3 +38,5 @@ class TestFuelPlant(TestCase):
         fuel_costs = [0, 0, 0, 1, 2, 3]
 
         assert fuel_plant.total_costs(capex=capex, opex=opex, fuel_costs=fuel_costs) == [1, 2, 3, 2, 4, 6]
+
+    def test_if

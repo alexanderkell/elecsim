@@ -203,10 +203,11 @@ class PowerPlant:
         :return: Returns a list containing the electricity generated per year
         """
         HOURS_PER_DAY = 24
-        DAYS_PER_YEAR = 356
+        DAYS_PER_YEAR = 365
 
         elec_gen = [self.capacity_mw * self.average_load_factor * HOURS_PER_DAY * DAYS_PER_YEAR] * int(self.operating_period)
-        elec_gen = [self.pre_dev_period+self.construction_period]+elec_gen
+        elec_gen = [0] * (self.pre_dev_period+self.construction_period) + elec_gen
+        print(elec_gen)
 
         return elec_gen
 
