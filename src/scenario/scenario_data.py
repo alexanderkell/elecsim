@@ -44,7 +44,6 @@ future_fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uraniu
                                           waste_price_pre_2000],
                                   columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
 total_fuel_prices = pd.concat([historical_fuel_prices_mw, future_fuel_prices], axis=1)
-total_fuel_prices.to_csv("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/fuel/fuel_costs/historical_fuel_costs/total_fuel_price.csv")
 
 
 # Generator Companies imported from Government data files
