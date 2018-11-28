@@ -81,9 +81,9 @@ class FuelPlant(PowerPlant):
         :return: Returns estimated cost of plant_type per year
         """
 
-        operationable_year = self.construction_year+self.pre_dev_period+self.construction_period
+        beginning_year_operation = int(self.construction_year+self.pre_dev_period+self.construction_period)
 
-        years_of_plant_operation = range(operationable_year, operationable_year+int(self.operating_period))
+        years_of_plant_operation = range(int(beginning_year_operation), int(beginning_year_operation)+int(self.operating_period))
 
         fuel_costs = [0]*int(self.pre_dev_period+self.construction_period)+[(self.fuel.fuel_price[i] * electricity_generated[i])/self.efficiency for i in years_of_plant_operation]
         return fuel_costs
