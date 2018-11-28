@@ -14,17 +14,27 @@ __email__ = "alexander@kell.es"
 
 
 class TestFuelPlant(TestCase):
-    def test_if_fuel_plant_correctly_calculates_fuel_costs(self):
+    def create_2018_ccgt_power_plant(self):
         fuel_plant = FuelPlant(name="Test_Plant", plant_type="CCGT", capacity_mw=1200, construction_year=2010,
                                average_load_factor=0.93, efficiency=0.54, pre_dev_period=2, construction_period=3,
                                operating_period=25, pre_dev_spend_years=[0.44, 0.44, 0.12],
                                construction_spend_years=[0.4, 0.4, 0.2], pre_dev_cost_per_kw=1000,
                                construction_cost_per_kw=500, infrastructure=15100, fixed_o_and_m_per_mw=12200,
                                variable_o_and_m_per_mwh=3, insurance_cost_per_mw=2100, connection_cost_per_mw=3300)
+        return fuel_plant
 
-        assert fuel_plant.fuel_costs([10]*25)[-1] == approx(351.425926)
-        assert fuel_plant.fuel_costs([10]*25)[0] == 0
-        assert fuel_plant.fuel_costs([10]*25)[4] == 0
-        assert fuel_plant.fuel_costs([10]*25)[5] == approx(293.6148148)
-        assert fuel_plant.fuel_costs([10]*25)[6] == approx(236.2728148)
+    def test_if_fuel_plant_correctly_calculates_fuel_costs(self):
+        fuel_plant = self.create_2018_ccgt_power_plant()
+        assert fuel_plant.fuel_costs([10] * 25)[-1] == approx(351.425926)
+        assert fuel_plant.fuel_costs([10] * 25)[0] == 0
+        assert fuel_plant.fuel_costs([10] * 25)[4] == 0
+        assert fuel_plant.fuel_costs([10] * 25)[5] == approx(293.6148148)
+        assert fuel_plant.fuel_costs([10] * 25)[6] == approx(236.2728148)
 
+    def test_if_total_costs_is_correctly_calculated(self):
+        fuel_plant = self.create_2018_ccgt_power_plant()
+        capex = [1, 2, 3]
+        opex = [0, 0, 0, 1, 2, 3]
+        fuel_costs = [0, 0, 0, 1, 2, 3]
+
+        assert fuel_plant.total_costs(capex=capex, opex=opex, fuel_costs=fuel_costs) == [1, 2, 3, 2, 4, 6]

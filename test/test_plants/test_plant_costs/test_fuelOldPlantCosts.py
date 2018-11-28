@@ -19,8 +19,7 @@ class TestFuelOldPlantCosts(TestCase):
         fuel_plant_costs_estimate = FuelOldPlantCosts(2018, "CCGT", 1200)
         estimated_params = fuel_plant_costs_estimate.estimate_cost_parameters()
 
-        # print(estimated_params)
-
+        print(estimated_params)
         # assert estimated_params['connection_cost_per_mw'] == pytest.approx(3300*8.781317895767428)
         # assert estimated_params['construction_cost_per_kw'] == pytest.approx(500*8.781317895767428)
         # assert estimated_params['fixed_o_and_m_per_mw'] == pytest.approx(12200*8.781317895767428)
