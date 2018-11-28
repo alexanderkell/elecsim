@@ -85,7 +85,10 @@ class FuelPlant(PowerPlant):
 
         years_of_plant_operation = range(int(beginning_year_operation), int(beginning_year_operation)+int(self.operating_period))
 
-        fuel_costs = [0]*int(self.pre_dev_period+self.construction_period)+[(self.fuel.fuel_price[i] * electricity_generated[i])/self.efficiency for i in years_of_plant_operation]
+        this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
+        print(this_fuel_price.iloc[0]["2020"])
+
+        fuel_costs = [0]*int(self.pre_dev_period+self.construction_period)+[(this_fuel_price.iloc[0][str(i)] * electricity_generated)/self.efficiency for i in years_of_plant_operation]
         return fuel_costs
 
     def __repr__(self):

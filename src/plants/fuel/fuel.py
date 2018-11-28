@@ -38,15 +38,15 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     :return: Returns a Fuel object with characteristics of the plant_type in question
     """
 
-    fuel_prices = scenario.historical_fuel_prices_long
+    fuel_prices = scenario.total_fuel_prices
 
     if energy_density is None and co2_density is None:
         if fuel_type == "Gas":
-            return Fuel(fuel_type, scenario.gas_prices, 35.8, 2.03)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 35.8, 2.03)
         if fuel_type == "Coal":
-            return Fuel(fuel_type, scenario.coal_price, 24.1, 2.23)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 24.1, 2.23)
         if fuel_type == "Uranium" or "Nuclear":
-            return Fuel(fuel_type, scenario.uranium_price, 1296000, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 1296000, 0)
         if fuel_type == "Wind" or "Wind (offshore)":
             return Fuel(fuel_type, 0, 0, 0)
         if fuel_type == "Solar":
@@ -54,21 +54,21 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
         if fuel_type == "Hydro":
             return Fuel(fuel_type, 0, 0, 0)
         if fuel_type == "Biomass_wood":
-            return Fuel(fuel_type, scenario.woodchip_price, 19.0, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 19.0, 0)
         if fuel_type == "Biomass_poultry_litter":
-            return Fuel(fuel_type, scenario.poultry_litter_price, 7.9, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 7.9, 0)
         if fuel_type == "Oil":
-            return Fuel(fuel_type, scenario.oil_price, 40.7, 3.2)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 40.7, 3.2)
         if fuel_type == "Diesel" or "Gas oil":
-            return Fuel(fuel_type, scenario.diesel_price, 42.6, 3.19)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 42.6, 3.19)
         if fuel_type == "Straw":
-            return Fuel(fuel_type, scenario.straw_price, 13.1, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13.1, 0)
         if fuel_type == "Meat":
-            return Fuel(fuel_type, scenario.meat_price, 16.2, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 16.2, 0)
         if fuel_type == "Waste_post_2000":
-            return Fuel(fuel_type, scenario.waste_price_post_2000, 13, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13, 0)
         if fuel_type == "Waste_pre_2000":
-            return Fuel(fuel_type, scenario.waste_price_pre_2000, 13, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13, 0)
         else:
             raise ValueError("Must provide energy and carbon densities as plant_type is not preset.")
     elif co2_density is None:
@@ -81,6 +81,50 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
             return Fuel(fuel_type,fuel_price, energy_density,co2_density)
         else:
             raise ValueError("Both energy density and co2 density must be larger than 0")
+
+
+
+    # if energy_density is None and co2_density is None:
+    #     if fuel_type == "Gas":
+    #         return Fuel(fuel_type, scenario.gas_price, 35.8, 2.03)
+    #     if fuel_type == "Coal":
+    #         return Fuel(fuel_type, scenario.coal_price, 24.1, 2.23)
+    #     if fuel_type == "Uranium" or "Nuclear":
+    #         return Fuel(fuel_type, scenario.uranium_price, 1296000, 0)
+    #     if fuel_type == "Wind" or "Wind (offshore)":
+    #         return Fuel(fuel_type, 0, 0, 0)
+    #     if fuel_type == "Solar":
+    #         return Fuel(fuel_type, 0, 0, 0)
+    #     if fuel_type == "Hydro":
+    #         return Fuel(fuel_type, 0, 0, 0)
+    #     if fuel_type == "Biomass_wood":
+    #         return Fuel(fuel_type, scenario.woodchip_price, 19.0, 0)
+    #     if fuel_type == "Biomass_poultry_litter":
+    #         return Fuel(fuel_type, scenario.poultry_litter_price, 7.9, 0)
+    #     if fuel_type == "Oil":
+    #         return Fuel(fuel_type, scenario.oil_price, 40.7, 3.2)
+    #     if fuel_type == "Diesel" or "Gas oil":
+    #         return Fuel(fuel_type, scenario.diesel_price, 42.6, 3.19)
+    #     if fuel_type == "Straw":
+    #         return Fuel(fuel_type, scenario.straw_price, 13.1, 0)
+    #     if fuel_type == "Meat":
+    #         return Fuel(fuel_type, scenario.meat_price, 16.2, 0)
+    #     if fuel_type == "Waste_post_2000":
+    #         return Fuel(fuel_type, scenario.waste_price_post_2000, 13, 0)
+    #     if fuel_type == "Waste_pre_2000":
+    #         return Fuel(fuel_type, scenario.waste_price_pre_2000, 13, 0)
+    #     else:
+    #         raise ValueError("Must provide energy and carbon densities as plant_type is not preset.")
+    # elif co2_density is None:
+    #     if energy_density > 0:
+    #         return Fuel(fuel_type, fuel_price, energy_density,0)
+    #     else:
+    #         raise ValueError("Energy Density must be greater than 0")
+    # else:
+    #     if energy_density > 0 & co2_density > 0:
+    #         return Fuel(fuel_type,fuel_price, energy_density,co2_density)
+    #     else:
+    #         raise ValueError("Both energy density and co2 density must be larger than 0")
 
 
 def plant_type_to_fuel(plant_type):
