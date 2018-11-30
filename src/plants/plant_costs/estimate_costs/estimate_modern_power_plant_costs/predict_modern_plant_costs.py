@@ -127,7 +127,7 @@ class PredictPlantParameters:
         if 'Connect_system_cost' in column:
             return 'connection_cost_per_mw'
         elif 'Constr_cost' in column:
-            return 'construction_cost_per_kw'
+            return 'construction_cost_per_mw'
         elif 'Fixed_cost' in column:
             return 'fixed_o_and_m_per_mw'
         elif 'Infra_cost' in column:
@@ -135,7 +135,7 @@ class PredictPlantParameters:
         elif 'Insurance_cost' in column:
             return 'insurance_cost_per_mw'
         elif 'Pre_dev_cost' in column:
-            return 'pre_dev_cost_per_kw'
+            return 'pre_dev_cost_per_mw'
         elif 'Var_cost' in column:
             return 'variable_o_and_m_per_mwh'
         elif 'Pre_Dur' in column:

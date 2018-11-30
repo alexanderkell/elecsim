@@ -18,11 +18,11 @@ class TestPredictPlantParameters(TestCase):
     def test___call__(self):
         estimated_plant_parameters = PredictPlantParameters("CCGT", 1200, 2018)()
         assert estimated_plant_parameters['connection_cost_per_mw'] == 3300
-        assert estimated_plant_parameters['construction_cost_per_kw'] == 500
+        assert estimated_plant_parameters['construction_cost_per_mw'] == 500
         assert estimated_plant_parameters['fixed_o_and_m_per_mw'] == 12200
         assert estimated_plant_parameters['infrastructure'] == 15100
         assert estimated_plant_parameters['insurance_cost_per_mw'] == 2100
-        assert estimated_plant_parameters['pre_dev_cost_per_kw'] == 10
+        assert estimated_plant_parameters['pre_dev_cost_per_mw'] == 10
         assert estimated_plant_parameters['variable_o_and_m_per_mwh'] == 3.00
         assert estimated_plant_parameters['pre_dev_period'] == 2
         assert estimated_plant_parameters['operating_period'] == 25

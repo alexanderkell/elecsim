@@ -1,5 +1,5 @@
 from src.plants.plant_type.fuel_plant import FuelPlant
-from src.plants.plant_type.non_fuel_plant import NoFuelPlant
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 
 class PlantRegistry:
 
@@ -26,7 +26,7 @@ class PlantRegistry:
             raise ValueError("Must enter a boolean for plant_registry function.")
 
         if not requires_fuel:
-            return NoFuelPlant
+            return NonFuelPlant
         elif requires_fuel:
             return FuelPlant
 
