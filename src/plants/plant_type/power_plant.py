@@ -170,7 +170,7 @@ class PowerPlant:
         :return: List containing variable operating and maintenance cost for each year of the operating period.
         """
         variable_o_and_m_cost_per_year = self.variable_o_and_m_per_mwh * self.capacity_mw * 365 * 24 * self.average_load_factor  # Variable cost is calculated as a function of time plant is utilised in a year
-        variable_o_and_m_cost_per_year = [0] * (self.pre_dev_period+self.construction_period) + [variable_o_and_m_cost_per_year] * int(self.operating_period)
+        variable_o_and_m_cost_per_year = [0] * int(self.pre_dev_period+self.construction_period) + [variable_o_and_m_cost_per_year] * int(self.operating_period)
         return variable_o_and_m_cost_per_year
 
     def fixed_o_and_m_cost(self):
