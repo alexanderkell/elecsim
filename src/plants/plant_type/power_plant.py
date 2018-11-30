@@ -179,7 +179,7 @@ class PowerPlant:
         :return: List containing fixed operating and maintenance cost for each year of the operating period.
         """
         fixed_o_and_m_per_mw_cost_total = self.fixed_o_and_m_per_mw * self.capacity_mw  # Fixed cost calculated for this instance of power plant
-        fixed_o_and_m_per_mw_cost_total = [0] * (self.pre_dev_period+self.construction_period) + [fixed_o_and_m_per_mw_cost_total] * int(self.operating_period)
+        fixed_o_and_m_per_mw_cost_total = [0] * int(self.pre_dev_period+self.construction_period) + [fixed_o_and_m_per_mw_cost_total] * int(self.operating_period)
         return fixed_o_and_m_per_mw_cost_total
 
     def opex(self):
@@ -205,7 +205,7 @@ class PowerPlant:
         DAYS_PER_YEAR = 365
 
         elec_gen = [self.capacity_mw * self.average_load_factor * HOURS_PER_DAY * DAYS_PER_YEAR] * int(self.operating_period)
-        elec_gen = [0] * (self.pre_dev_period+self.construction_period) + elec_gen
+        elec_gen = [0] * int(self.pre_dev_period+self.construction_period) + elec_gen
 
         return elec_gen
 
