@@ -115,7 +115,7 @@ class FuelPlant(PowerPlant):
         carbon_emitted = self.carbon_emitted()
 
         years_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
-        range_of_operating_years = list(range(years_of_operation,years_of_operation+self.operating_period))
+        range_of_operating_years = list(range(int(years_of_operation),int(years_of_operation+self.operating_period)))
         print(list(range_of_operating_years))
         carbon_taxation_years = carbon_cost_gbp[carbon_cost_gbp.year.isin(range_of_operating_years)]
         print('carbon_taxation_years')
