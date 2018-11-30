@@ -1,6 +1,6 @@
 from src.plants.plant_type.power_plant import PowerPlant
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.scenario.scenario_data import carbon_price
+from src.scenario.scenario_data import carbon_cost_gbp
 from itertools import zip_longest
 
 
@@ -109,7 +109,14 @@ class FuelPlant(PowerPlant):
         :return: Projected carbon costs per year in a list.
         """
         carbon_emitted = self.carbon_emitted()
-        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(carbon_price, carbon_emitted)]
+
+        years_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
+        range_of_operating_years = list(range(years_of_operation,years_of_operation+self.operating_period))
+        print(list(range_of_operating_years))
+        carbon_taxation_years = carbon_cost_gbp[carbon_cost_gbp.year.isin(range_of_operating_years)]
+        print('carbon_taxation_years')
+        print(carbon_taxation_years)
+        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(carbon_cost_gbp.price, carbon_emitted)]
 
         return carbon_costs
 

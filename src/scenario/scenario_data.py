@@ -39,11 +39,11 @@ waste_price_post_2000 = [KW_TO_MW * -0.0252] * 42  # Source: Gate fees report 20
 waste_price_pre_2000 = [KW_TO_MW * -0.01551] * 42  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 
 # Joining historical and future fuel prices for simulation purposes.
-future_fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price, diesel_price, woodchip_price,
-                                          poultry_litter_price, straw_price, meat_price, waste_price_post_2000,
-                                          waste_price_pre_2000],
-                                  columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
-total_fuel_prices = pd.concat([historical_fuel_prices_mw, future_fuel_prices], axis=1)
+fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price, diesel_price, woodchip_price,
+                                 poultry_litter_price, straw_price, meat_price, waste_price_post_2000,
+                                 waste_price_pre_2000],
+                           columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
+fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 
 
 # Generator Companies imported from Government data files
@@ -57,7 +57,10 @@ starting_money_of_gencos = [100000, 2000000, 300000]
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 carbon_price = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
+# Join historical and future carbon prices into dataframe for simulation purposes
+carbon_data = {'year': [str(i) for i in range(2019, (2019+len(carbon_price)))], 'price': carbon_price}
 
+carbon_cost_gbp = pd.DataFrame(carbon_data)
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
 lost_load = 6000
 

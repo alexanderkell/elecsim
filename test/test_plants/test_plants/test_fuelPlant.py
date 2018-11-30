@@ -48,8 +48,7 @@ class TestFuelPlant(TestCase):
 
     def test_carbon_costs(self):
         fuel_plant = self.create_2018_ccgt_power_plant()
-        assert fuel_plant.carbon_costs()[7] == approx(92985098.57)
-        assert fuel_plant.carbon_costs()[8] == approx(97680979.27)
+        assert fuel_plant.carbon_costs() == approx([0, 0, 0, 0, 0, 0, 88255913.76, 92985098.57, 97680979.27, 102410164.1, 107139348.9, 111835229.6, 116564414.4, 144040312.1, 171516209.8, 198992107.4, 226468005.1, 253943902.8, 281419800.5, 308895698.2, 336371595.8, 363847493.5, 391323391.2, 418799288.9, 446275186.6, 473751084.2, 501226981.9, 528702879.6, 556178777.3, 583654675, 611130572.6])
 
     def test_carbon_sum(self):
         fuel_plant = self.create_2018_ccgt_power_plant()

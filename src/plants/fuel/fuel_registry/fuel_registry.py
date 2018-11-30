@@ -29,7 +29,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     :return: Returns a Fuel object with characteristics of the plant_type in question
     """
 
-    fuel_prices = scenario.total_fuel_prices
+    fuel_prices = scenario.fuel_prices
 
     if energy_density is None and co2_density is None:
         if fuel_type == "Gas":
