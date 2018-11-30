@@ -161,7 +161,7 @@ class PowerPlant:
         Calculates the yearly insurance cost
         :return: List containing insurance cost for each year of the operating period
         """
-        insurance_cost_total = [0] * (self.pre_dev_period+self.construction_period) +[self.insurance_cost_per_mw * self.capacity_mw] * int(self.operating_period) # Calculation of insurance cost for this instance of a power plant
+        insurance_cost_total = [0] * int(self.pre_dev_period+self.construction_period) +[self.insurance_cost_per_mw * self.capacity_mw] * int(self.operating_period) # Calculation of insurance cost for this instance of a power plant
         return insurance_cost_total
 
     def variable_o_and_m_cost(self):

@@ -14,6 +14,7 @@ __email__ = "alexander@kell.es"
 
 
 class TestFuelPlant(TestCase):
+
     def create_2018_ccgt_power_plant(self):
         fuel_plant = FuelPlant(name="Test_Plant", plant_type="CCGT", capacity_mw=1200, construction_year=2018,
                                average_load_factor=0.93, efficiency=0.54, pre_dev_period=3, construction_period=3,
