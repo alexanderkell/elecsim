@@ -1,7 +1,7 @@
 import src.scenario.scenario_data as scenario
 import numpy as np
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
-from src.plants.fuel.fuel import plant_type_to_fuel
+from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from constants import DAYS_IN_YEAR, HOURS_IN_DAY
 from src.plants.plant_type.fuel_plant import FuelPlant
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate

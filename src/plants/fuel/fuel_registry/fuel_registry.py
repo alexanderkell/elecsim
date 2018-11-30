@@ -33,7 +33,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
 
     if energy_density is None and co2_density is None:
         if fuel_type == "Gas":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 35.8*GJ_TO_MW, 0.00203, 0.18396*KW_TO_MW*KG_TO_TONNES)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 35.8*GJ_TO_MW, 0.00203, 0.18396)
         if fuel_type == "Coal":
             return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 24.1*GJ_TO_MW, 0.002231398)
         if fuel_type == "Uranium" or "Nuclear":
