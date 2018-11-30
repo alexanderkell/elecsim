@@ -45,7 +45,7 @@ class FuelPlant(PowerPlant):
         fuel_costs = self.fuel_costs(elec_gen)
         carbon_costs = self.carbon_costs()
 
-        total_costs = self.total_costs(capex, opex, fuel_costs)
+        total_costs = self.total_costs(capex, opex, fuel_costs, carbon_costs)
 
         # Costs discounted using discount_rate variable.
         disc_costs = self.discounted_variable(total_costs, discount_rate)
@@ -60,7 +60,7 @@ class FuelPlant(PowerPlant):
 
         return lcoe
 
-    def total_costs(self, capex, opex, fuel_costs):
+    def total_costs(self, capex, opex, fuel_costs, carbon_costs):
         """
         Function which uses addition to calculate total costs from capital expenditure, operating expenditure and
         plant_type costs over the lifetime of the power plant.
@@ -76,9 +76,13 @@ class FuelPlant(PowerPlant):
 
         opex_fuel_remove_0 = opex_fuel[int(self.construction_period+self.pre_dev_period):]
         capex.extend(opex_fuel_remove_0)
-        # total_costs = [sum(x) for x in zip(opex_fuel, capex)]
+        sum_of_opex_fuel_capex = capex.copy()
+        print("Sum of opex fuel capex: {}".format(sum_of_opex_fuel_capex))
+        print("Carbon: {}".format(carbon_costs))
 
-        return capex
+        sum_of_carbon_opex_fuel_capex = [sum(x) for x in zip_longest(sum_of_opex_fuel_capex, carbon_costs)]
+
+        return sum_of_carbon_opex_fuel_capex
 
     def fuel_costs(self, electricity_generated):
         """
