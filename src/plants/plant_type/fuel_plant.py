@@ -43,6 +43,7 @@ class FuelPlant(PowerPlant):
         opex = self.opex()
         elec_gen = self.electricity_generated()
         fuel_costs = self.fuel_costs(elec_gen)
+        carbon_costs = self.carbon_costs()
 
         total_costs = self.total_costs(capex, opex, fuel_costs)
 
@@ -87,11 +88,10 @@ class FuelPlant(PowerPlant):
         """
 
         beginning_year_operation = self.construction_year
-
-        years_of_plant_operation = range(int(beginning_year_operation), int(beginning_year_operation)+int(self.operating_period)+int(self.construction_year+self.pre_dev_period+self.construction_period))
+        end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
+        years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
 
         this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
-
         fuel_costs = [(float(this_fuel_price.iloc[0][str(i)]) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
         return fuel_costs
 
@@ -121,6 +121,8 @@ class FuelPlant(PowerPlant):
         carbon_costs_total = sum(carbon_costs)
 
         return carbon_costs_total
+
+
 
     def __repr__(self):
         return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)

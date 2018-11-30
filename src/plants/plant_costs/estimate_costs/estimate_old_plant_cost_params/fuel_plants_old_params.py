@@ -45,40 +45,26 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         # Functionality that calculates the average fuel price over the lifetime of the power plant
         fuel_price_filtered = self.historic_fuel_price[self.historic_fuel_price.Fuel == self.fuel]
-        print("fuel price filtered: "+str(fuel_price_filtered))
         extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Year, fuel_price_filtered.value)
-
         average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
-
         average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
-
-        # print("Average fuel cost "+str(average_fuel_cost))
-        # print("Capex: " + str(self.plant.capex()))
-        # print("Opex" + str(self.plant.opex()))
-
-        # total_capex = self.calc_total_expenditure(self.plant.capex())
-        # total_opex = self.calc_total_expenditure(self.plant.opex())
-        # total_electricity_gen = sum(self.plant.electricity_generated())
-        # print("Total capex: " + str(total_capex))
-        # print("Total opex: " + str(total_opex))
-
-        # total_fuel_costs = self.calc_total_fuel_expenditure(average_fuel_cost)
-        # print("fuel costs: " + str(self.calc_total_fuel_expenditure(average_fuel_cost)))
-        #
-        # opex_capex_scaler = (self.estimated_historical_lcoe * total_electricity_gen - total_fuel_costs) / (total_opex + total_capex)
-        # print("Opex and capex scaler: "+str(opex_capex_scaler))
-        # print("MODERN LCOE: "+str(self.modern_lcoe))
-        # print("HISTORICAL LCOE: " + str(self.estimated_historical_lcoe))
-
+        print('average_fuel_cost: {}'.format(average_fuel_cost))
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
         # as they are not related.
-        params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency', 'average_load_factor']
-
-        # Multiply values by updated LCOE scale. Conditional based on whether parameter is in params_to_ignore list or
-        # is an np.ndarray (ie. not list).
+        params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
+                            'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
 
         print("Modern Params: " + str(self.estimated_modern_plant_parameters))
+        print("Params float: {}".format(self.estimated_modern_plant_parameters.values()))
 
+        params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
+                              if key not in params_to_ignore}
+
+        print("Params for scaling: {}".format(params_for_scaling))
+        parameter_values = list(params_for_scaling.values())
+
+        scaled_parameters = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
+        print("Scaled parameters: {}".format(scaled_parameters['x']))
         # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
         #           for key, value in self.estimated_modern_plant_parameters.items()}
 
