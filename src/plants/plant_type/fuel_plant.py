@@ -73,7 +73,7 @@ class FuelPlant(PowerPlant):
         # Addition of operating expenditure and plant_type costs, followed by operating expenditure, plant_type costs and capital expenditure.
         opex_fuel = [sum(x) for x in zip_longest(opex, fuel_costs, fillvalue=0)]
 
-        opex_fuel_remove_0 = opex_fuel[(self.construction_period+self.pre_dev_period):]
+        opex_fuel_remove_0 = opex_fuel[int(self.construction_period+self.pre_dev_period):]
         capex.extend(opex_fuel_remove_0)
         # total_costs = [sum(x) for x in zip(opex_fuel, capex)]
 
