@@ -1,9 +1,12 @@
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.data_manipulation.uk_gencos_and_plants import company_names
-from src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
+from src.plants.plant_costs.estimate_costs.estimate_costs import estimate_costs
 from src.power_exchange.power_exchange import PowerEx
+from src.plants.plant_type.plant_registry import PlantRegistry
 from mesa import Model
+
+import pandas as pd
 
 from src.mesa_addons.scheduler_addon import OrderedActivation
 
@@ -15,7 +18,7 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
-class Model(Model):
+class World(Model):
     """
     Model for the electricity landscape world
     """
@@ -47,13 +50,13 @@ class Model(Model):
             print(gen_id)
             # Add power plants to generation company portfolio
             genco_plant_db = plant_data[plant_data['Company'] == name]
+            genco_plant_db.Start_date = pd.to_numeric(genco_plant_db.Start_date)
             for plant in genco_plant_db.itertuples():
-                # print(plant.Simplified_Type)
-                estimated_statistics = PredictPlantStatistics(plant.Simplified_Type, plant.Capacity, plant.Start_date)()
-                # print(estimated_statistics)
-                # power_plant = PowerPlant(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity)
+                estimated_statistics = estimate_costs(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
+                power_plant_obj = PlantRegistry(plant.Simplified_Type).plant_type_to_plant_object()
+                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, **estimated_statistics)
 
-                # gen_co.plants.append(power_plant)
+                gen_co.plants.append(power_plant)
 
         self.schedule.add(gen_co)
 

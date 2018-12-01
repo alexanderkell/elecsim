@@ -6,7 +6,7 @@ class PlantRegistry:
     def __init__(self, plant_type):
         self.plant_type = plant_type
 
-    def plant_type_to_fuel(self):
+    def plant_type_to_plant_object(self):
         requires_fuel = self.fuel_or_no_fuel()
         return self._plant_object_registry(requires_fuel)
 

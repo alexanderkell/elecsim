@@ -1,4 +1,4 @@
-from elecsim.src.power_exchange.bid import Bid
+from src.power_exchange.bid import Bid
 from mesa import Agent
 
 """gen_co.py: Agent which represents a generation company"""

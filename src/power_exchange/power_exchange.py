@@ -10,7 +10,7 @@ from random import random
 
 from mesa import Agent
 
-from src import GenCo
+from src.agents.generation_company.gen_co import GenCo
 
 
 class PowerEx(Agent):

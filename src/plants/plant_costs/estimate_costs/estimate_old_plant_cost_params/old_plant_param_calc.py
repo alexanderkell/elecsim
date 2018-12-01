@@ -32,7 +32,7 @@ class OldPlantCosts:
 
         self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year)()
 
-        plant_object = PlantRegistry(self.plant_type).plant_type_to_fuel()
+        plant_object = PlantRegistry(self.plant_type).plant_type_to_plant_object()
 
         self.plant = plant_object(name="Modern Plant", plant_type=self.plant_type,
                                                          capacity_mw=self.capacity, construction_year=min_year,
