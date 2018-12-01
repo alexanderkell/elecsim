@@ -59,6 +59,7 @@ starting_money_of_gencos = [100000, 2000000, 300000]
 carbon_price = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
 # Join historical and future carbon prices into dataframe for simulation purposes
 carbon_data = {'year': [str(i) for i in range(2019, (2019+len(carbon_price)))], 'price': carbon_price}
+pd.read_csv('')
 
 carbon_cost_gbp = pd.DataFrame(carbon_data)
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf

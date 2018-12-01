@@ -44,23 +44,19 @@ class FuelOldPlantCosts(OldPlantCosts):
         """
 
         # Functionality that calculates the average fuel price over the lifetime of the power plant
-        fuel_price_filtered = self.historic_fuel_price[self.historic_fuel_price.Fuel == self.fuel]
-        extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Year, fuel_price_filtered.value)
-        average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
-        average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
-        print('average_fuel_cost: {}'.format(average_fuel_cost))
+        # fuel_price_filtered = self.historic_fuel_price[self.historic_fuel_price.Fuel == self.fuel]
+        # extrap_obj = ExtrapolateInterpolate(fuel_price_filtered.Year, fuel_price_filtered.value)
+        # average_fuel_cost = [float(extrap_obj(x)) for x in range(self.year, self.year+int(self.plant.operating_period)+1)]
+        # average_fuel_cost = sum(average_fuel_cost)/len(average_fuel_cost)
         # List containing parameters to not scale by updated LCOE value. For instance, time taken to build power plant,
         # as they are not related.
         params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
                             'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
 
-        print("Modern Params: " + str(self.estimated_modern_plant_parameters))
-        print("Params float: {}".format(self.estimated_modern_plant_parameters.values()))
 
         params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
                               if key not in params_to_ignore}
 
-        print("Params for scaling: {}".format(params_for_scaling))
         parameter_values = list(params_for_scaling.values())
 
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
@@ -68,7 +64,7 @@ class FuelOldPlantCosts(OldPlantCosts):
         print("Scaled parameters: {}".format(linear_optimisation_results['x']))
 
         print("type of linear opt parameters {}".format(type(linear_optimisation_parameters[0])))
-        scaled_parameters = {self.estimated_modern_plant_parameters[key]: params for key, params in
+        scaled_parameters = {key: params for key, params in
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in params_to_ignore}
         

@@ -114,11 +114,11 @@ class FuelPlant(PowerPlant):
 
         years_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
         range_of_operating_years = list(range(int(years_of_operation),int(years_of_operation+self.operating_period)))
-        print(list(range_of_operating_years))
         carbon_taxation_years = carbon_cost_gbp[carbon_cost_gbp.year.isin(range_of_operating_years)]
-        print('carbon_taxation_years')
-        print(carbon_taxation_years)
-        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(carbon_cost_gbp.price, carbon_emitted)]
+        print("carbon_cost_gbp {}".format(carbon_cost_gbp))
+        print("range ofoperation years {}".format(range_of_operating_years))
+        print("Carbon taxation years {}".format(carbon_taxation_years))
+        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(carbon_taxation_years.price, carbon_emitted)]
 
         return carbon_costs
 
