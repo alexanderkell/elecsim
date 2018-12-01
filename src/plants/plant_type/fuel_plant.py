@@ -1,6 +1,6 @@
 from src.plants.plant_type.power_plant import PowerPlant
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.scenario.scenario_data import carbon_cost_gbp
+from src.scenario.scenario_data import carbon_cost
 from itertools import zip_longest
 
 
@@ -77,8 +77,9 @@ class FuelPlant(PowerPlant):
         opex_fuel_remove_0 = opex_fuel[int(self.construction_period+self.pre_dev_period):]
         capex.extend(opex_fuel_remove_0)
         sum_of_opex_fuel_capex = capex.copy()
-
-        sum_of_carbon_opex_fuel_capex = [sum(x) for x in zip_longest(sum_of_opex_fuel_capex, carbon_costs)]
+        print("sum of opex fuel capex {}".format(sum_of_opex_fuel_capex))
+        print("carbon costs {}".format(carbon_costs))
+        sum_of_carbon_opex_fuel_capex = [sum(x) for x in zip(sum_of_opex_fuel_capex, carbon_costs)]
 
         return sum_of_carbon_opex_fuel_capex
 
@@ -92,7 +93,6 @@ class FuelPlant(PowerPlant):
         beginning_year_operation = self.construction_year
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
-
         this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
         fuel_costs = [(float(this_fuel_price.iloc[0][str(i)]) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
         return fuel_costs
@@ -113,11 +113,9 @@ class FuelPlant(PowerPlant):
         carbon_emitted = self.carbon_emitted()
 
         years_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
-        range_of_operating_years = list(range(int(years_of_operation),int(years_of_operation+self.operating_period)))
-        carbon_taxation_years = carbon_cost_gbp[carbon_cost_gbp.year.isin(range_of_operating_years)]
-        print("carbon_cost_gbp {}".format(carbon_cost_gbp))
-        print("range ofoperation years {}".format(range_of_operating_years))
-        print("Carbon taxation years {}".format(carbon_taxation_years))
+        # carbon_taxation_years = carbon_cost[carbon_cost.year.isin(range_of_operating_years)]
+        # carbon_taxation_years = carbon_cost[int(years_of_operation) <= carbon_cost.year <int(years_of_operation+self.operating_period)]
+        carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(years_of_operation), int(years_of_operation+self.operating_period))]
         carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(carbon_taxation_years.price, carbon_emitted)]
 
         return carbon_costs
