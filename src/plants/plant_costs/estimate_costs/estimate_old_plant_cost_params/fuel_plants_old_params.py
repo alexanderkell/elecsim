@@ -63,12 +63,20 @@ class FuelOldPlantCosts(OldPlantCosts):
         print("Params for scaling: {}".format(params_for_scaling))
         parameter_values = list(params_for_scaling.values())
 
-        scaled_parameters = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
-        print("Scaled parameters: {}".format(scaled_parameters['x']))
+        linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
+        linear_optimisation_parameters = linear_optimisation_results['x'].tolist()
+        print("Scaled parameters: {}".format(linear_optimisation_results['x']))
+
+        print("type of linear opt parameters {}".format(type(linear_optimisation_parameters[0])))
+        scaled_parameters = {self.estimated_modern_plant_parameters[key]: params for key, params in
+                             zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
+                             if key not in params_to_ignore}
+        
+        
         # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
         #           for key, value in self.estimated_modern_plant_parameters.items()}
-
-        # return params
+        print("Scaled_parameters final disct: {}".format(scaled_parameters))
+        return scaled_parameters
 
     def _linear_optimisation(self, x, lcoe_required):
 

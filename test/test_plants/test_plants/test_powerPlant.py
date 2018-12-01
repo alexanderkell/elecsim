@@ -30,8 +30,6 @@ class TestPowerPlant(TestCase):
         discount_rate = 0.05
         assert power_plant.discounted_variable(variable_to_discount, discount_rate) == approx([10, 9.52381, 9.070295, 8.6383762, 8.22702495])
 
-        assert power_plant.discounted_variable()
-
     def test_pre_dev_yearly_spend(self):
         power_plant = self.create_ccgt_2018_power_plant_object()
         assert power_plant.pre_dev_yearly_spend() == [5280000, 5280000, 1440000]
