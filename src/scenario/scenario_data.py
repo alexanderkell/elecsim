@@ -61,8 +61,10 @@ carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92,
 carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
 carbon_price_scenario_df = pd.DataFrame(carbon_data)
 historical_carbon_price = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/carbon_price/uk_carbon_tax_historical.csv')
-carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True).drop('Unnamed: 0', axis=1)
+print("Historical carbon price {}".format(historical_carbon_price))
+carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
 carbon_cost.year = pd.to_numeric(carbon_cost.year)
+print("Carbon costs: {}".format(carbon_cost))
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
 lost_load = 6000
