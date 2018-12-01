@@ -123,8 +123,8 @@ class FuelOldPlantCosts(OldPlantCosts):
 
 # params = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035).estimate_cost_parameters()
 
-x0 = [30754.0163847643, 4659.699452237016, 113696.66663458318, 140722.92345755786, 19570.737699395464, 93.1939890447403, 27.958196713422094]
+# x0 = [30754.0163847643, 4659.699452237016, 113696.66663458318, 140722.92345755786, 19570.737699395464, 93.1939890447403, 27.958196713422094]
 
 # lcoe = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035)._linear_optimisation(x0, 54.463849107579996)
 # print("new LCOE: "+str(lcoe))
-print(FuelOldPlantCosts(2010, "CCGT", 1200).estimate_cost_parameters())
+# print(FuelOldPlantCosts(2010, "CCGT", 1200).estimate_cost_parameters())

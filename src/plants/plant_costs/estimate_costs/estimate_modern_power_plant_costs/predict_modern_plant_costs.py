@@ -43,14 +43,16 @@ class PredictPlantParameters:
         # then use last known data point.
         if self.start_year in (2018, 2020, 2025):
             plant_costs = [cost_variable+str(int(self.start_year)) for cost_variable in plant_costs]
-        elif self.start_year < 2018:
-            plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
+        # elif self.start_year < 2018:
+        #     plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
         elif self.start_year > 2025:
             plant_costs = [cost_variable+str(int(2025)) for cost_variable in plant_costs]
         elif self.start_year == 2019:
             plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
         elif 2020 < self.start_year < 2025:
             plant_costs = [cost_variable+str(int(2020)) for cost_variable in plant_costs]
+        else:
+            raise ValueError("Construction year must be 2018 or higher to estimate parameters from modern plant.")
 
         parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']

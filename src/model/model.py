@@ -1,8 +1,8 @@
-from elecsim.src.agents.demand.demand import Demand
-from elecsim.src.agents.generation_company.gen_co import GenCo
-from elecsim.src.data_manipulation.uk_gencos_and_plants import company_names
-from elecsim.src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
-from elecsim.src.power_exchange.power_exchange import PowerEx
+from src.agents.demand.demand import Demand
+from src.agents.generation_company.gen_co import GenCo
+from src.data_manipulation.uk_gencos_and_plants import company_names
+from src.plants.plant_costs.estimate_costs.predict_modern_plant_costs import PredictPlantStatistics
+from src.power_exchange.power_exchange import PowerEx
 from mesa import Model
 
 from src.mesa_addons.scheduler_addon import OrderedActivation

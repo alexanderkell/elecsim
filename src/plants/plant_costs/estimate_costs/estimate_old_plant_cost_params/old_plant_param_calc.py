@@ -31,8 +31,6 @@ class OldPlantCosts:
         min_year = self.find_smallest_year_available()
 
         self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year)()
-        print("historical LCOE: "+str(self.estimated_historical_lcoe))
-        print("Parameters for modern plant: " + str(self.estimated_modern_plant_parameters))
 
         plant_object = PlantRegistry(self.plant_type).plant_type_to_fuel()
 
@@ -41,11 +39,9 @@ class OldPlantCosts:
                                                          **self.estimated_modern_plant_parameters)
 
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
-        print("Modern estimated_historical_lcoe: "+str(self.modern_lcoe))
 
         self.lcoe_scaler = self.estimated_historical_lcoe / self.modern_lcoe
 
-        print("LCOE Scale")
         print(self.lcoe_scaler)
 
     def find_smallest_year_available(self):
@@ -65,4 +61,3 @@ class OldPlantCosts:
 
 
 
-# OldPlantCosts(1990,"CCGT", 1200, 0.035)
