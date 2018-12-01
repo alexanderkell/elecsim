@@ -52,7 +52,8 @@ class FuelOldPlantCosts(OldPlantCosts):
         # as they are not related.
         params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
                             'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
-
+        dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
+                          if key in params_to_ignore}
 
         params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
                               if key not in params_to_ignore}
@@ -61,9 +62,7 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
         linear_optimisation_parameters = linear_optimisation_results['x'].tolist()
-        print("Scaled parameters: {}".format(linear_optimisation_results['x']))
 
-        print("type of linear opt parameters {}".format(type(linear_optimisation_parameters[0])))
         scaled_parameters = {key: params for key, params in
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in params_to_ignore}
@@ -71,7 +70,7 @@ class FuelOldPlantCosts(OldPlantCosts):
         
         # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
         #           for key, value in self.estimated_modern_plant_parameters.items()}
-        print("Scaled_parameters final disct: {}".format(scaled_parameters))
+        scaled_parameters.update(dict_to_ignore)
         return scaled_parameters
 
     def _linear_optimisation(self, x, lcoe_required):
@@ -110,8 +109,6 @@ class FuelOldPlantCosts(OldPlantCosts):
                                  operating_period=self.plant.operating_period,
                                  pre_dev_spend_years=self.plant.pre_dev_spend_years,
                                  construction_spend_years=self.plant.construction_spend_years)
-
-
 
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
 

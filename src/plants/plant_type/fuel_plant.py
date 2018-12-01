@@ -77,8 +77,6 @@ class FuelPlant(PowerPlant):
         opex_fuel_remove_0 = opex_fuel[int(self.construction_period+self.pre_dev_period):]
         capex.extend(opex_fuel_remove_0)
         sum_of_opex_fuel_capex = capex.copy()
-        print("sum of opex fuel capex {}".format(sum_of_opex_fuel_capex))
-        print("carbon costs {}".format(carbon_costs))
         sum_of_carbon_opex_fuel_capex = [sum(x) for x in zip(sum_of_opex_fuel_capex, carbon_costs)]
 
         return sum_of_carbon_opex_fuel_capex
