@@ -25,7 +25,7 @@ class PredictPlantParameters:
         self.cost_data = scenario.power_plant_costs
         self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
 
-    def __call__(self):
+    def parameter_estimation(self):
         """
         Function which estimates costs of power plant based on capacity, plant_type and start year. Use of linear interpolation
         for plants of capacity that fall within known range of costing variables. If plant capacity to be calculated
@@ -34,27 +34,13 @@ class PredictPlantParameters:
         """
 
         # Iterates through each type of plant cost to predict parameters.
-        plant_costs = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _', 'Fixed_cost-Medium _',
+        initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _', 'Fixed_cost-Medium _',
                        'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
                        'Var_cost-Medium _']
 
-        # Functionality that selects data from UK plant costing data based on year of plant construction.
-        # If power plant is built in year 2018, 2020 or 2025 then use provided data. If plant is not built on these dates
-        # then use last known data point.
-        if self.start_year in (2018, 2020, 2025):
-            plant_costs = [cost_variable+str(int(self.start_year)) for cost_variable in plant_costs]
-        # elif self.start_year < 2018:
-        #     plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
-        elif self.start_year > 2025:
-            plant_costs = [cost_variable+str(int(2025)) for cost_variable in plant_costs]
-        elif self.start_year == 2019:
-            plant_costs = [cost_variable+str(int(2018)) for cost_variable in plant_costs]
-        elif 2020 < self.start_year < 2025:
-            plant_costs = [cost_variable+str(int(2020)) for cost_variable in plant_costs]
-        else:
-            raise ValueError("Construction year must be 2018 or higher to estimate parameters from modern plant.")
+        full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
-        parameters_of_plant = {self._change_columns(cost_var): self.extrap_interp_parameters(cost_var) for cost_var in plant_costs}
+        parameters_of_plant = {self._change_columns(cost_var): self._extrapolate_interpolate_parameters(cost_var) for cost_var in initial_stub_cost_parameters}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
 
@@ -66,7 +52,27 @@ class PredictPlantParameters:
 
         return parameters
 
-    def extrap_interp_parameters(self, cost_var_wanted):
+    def _create_parameter_names(self, initial_stub_cost_parameters):
+        """
+        Function that chooses the names of the parameters to search the data file of modern plant costs. For instance,
+        choose Connect_system_cost-Medium _2018 for plant built in 2018 and 2019.
+        :param plant_costs: 
+        :return:
+        """
+
+        if self.start_year in (2018, 2020, 2025):
+            cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in initial_stub_cost_parameters]
+        elif self.start_year > 2025:
+            cost_parameter_variables = [cost_variable + str(int(2025)) for cost_variable in initial_stub_cost_parameters]
+        elif self.start_year == 2019:
+            cost_parameter_variables = [cost_variable + str(int(2018)) for cost_variable in initial_stub_cost_parameters]
+        elif 2020 < self.start_year < 2025:
+            cost_parameter_variables = [cost_variable + str(int(2020)) for cost_variable in initial_stub_cost_parameters]
+        else:
+            raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
+        return cost_parameter_variables
+
+    def _extrapolate_interpolate_parameters(self, cost_var_wanted):
         """
         Function which extrapolates and interpolates from known data. Use of linear interpolation between known
         points, and last known data point for extrapolation.

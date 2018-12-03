@@ -30,7 +30,7 @@ class OldPlantCosts:
 
         min_year = self.find_smallest_year_available()
 
-        self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year)()
+        self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year).parameter_estimation()
 
         plant_object = PlantRegistry(self.plant_type).plant_type_to_plant_object()
 

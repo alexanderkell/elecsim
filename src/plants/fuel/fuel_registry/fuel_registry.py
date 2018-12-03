@@ -35,31 +35,31 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
         if fuel_type == "Gas":
             return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 35.8*GJ_TO_MW, 0.00203, 0.18396)
         if fuel_type == "Coal":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 24.1*GJ_TO_MW, 0.002231398)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 24.1*GJ_TO_MW, 0.002231398, 0.31112)
         if fuel_type == "Uranium" or "Nuclear":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 1296000*GJ_TO_MW, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 1296000*GJ_TO_MW, 0, 0)
         if fuel_type == "Wind" or "Wind (offshore)":
-            return Fuel(fuel_type, 0, 0, 0)
+            return Fuel(fuel_type, 0, 0, 0, 0)
         if fuel_type == "Solar":
-            return Fuel(fuel_type, 0, 0, 0)
+            return Fuel(fuel_type, 0, 0, 0, 0)
         if fuel_type == "Hydro":
-            return Fuel(fuel_type, 0, 0, 0)
+            return Fuel(fuel_type, 0, 0, 0, 0)
         if fuel_type == "Biomass_wood":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 19.0*GJ_TO_MW, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 19.0*GJ_TO_MW, 0, 0.01506)
         if fuel_type == "Biomass_poultry_litter":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 7.9*GJ_TO_MW, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 7.9*GJ_TO_MW, 0, 0)
         if fuel_type == "Oil":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 40.7*GJ_TO_MW, 0.003200345)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 40.7*GJ_TO_MW, 0.003200345, 0.26831)
         if fuel_type == "Diesel" or "Gas oil":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 42.6*GJ_TO_MW, 0.00319)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 42.6*GJ_TO_MW, 0.00319, 0.27652)
         if fuel_type == "Straw":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13.1*GJ_TO_MW, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13.1*GJ_TO_MW, 0, 0.01314)
         if fuel_type == "Meat":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 16.2*GJ_TO_MW, 0)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 16.2*GJ_TO_MW, 0, 0)
         if fuel_type == "Waste_post_2000":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13*GJ_TO_MW, 0.00033777)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13*GJ_TO_MW, 0.00033777, 0.001215972) # Taken average carbon emissions per tonne of mixture, and converted to conversion factor using tonne of CO2 emitted per tonne of waste. CO2 per tonne of waste taken from: Energy recovery for residual waste, a carbon based modelling approach. 11918_WR1910Energyrecoveryforresidualwaste-Acarbonbasedmodellingapporach.pdf
         if fuel_type == "Waste_pre_2000":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13*GJ_TO_MW, 0.00033777)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 13*GJ_TO_MW, 0.00033777, 0.001215972)
         else:
             raise ValueError("Must provide energy and carbon densities as plant_type is not preset.")
     elif co2_density is None:
