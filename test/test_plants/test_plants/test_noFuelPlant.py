@@ -5,7 +5,7 @@ Feature: #Enter feature description here
 """
 from unittest import TestCase
 
-from plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

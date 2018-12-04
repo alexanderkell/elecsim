@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from pytest import approx
 
-from plants.plant_type.fuel_plants.fuel_plant import FuelPlant
+from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

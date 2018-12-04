@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from pytest import approx
 
-from plants.plant_type.fuel_plants.fuel_plant import FuelPlant
+from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 
 __author__ = "Alexander Kell"
