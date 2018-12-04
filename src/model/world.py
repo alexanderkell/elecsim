@@ -47,15 +47,15 @@ class World(Model):
         # Initialize generation companies
         for gen_id, name in enumerate(names,0):
             gen_co = GenCo(gen_id, self, name=name)
-            print(gen_id)
+            print("adding to GenCo {}".format(gen_co.name))
             # Add power plants to generation company portfolio
             genco_plant_db = plant_data[plant_data['Company'] == name]
             genco_plant_db.Start_date = pd.to_numeric(genco_plant_db.Start_date)
             for plant in genco_plant_db.itertuples():
-                estimated_statistics = estimate_costs(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
+                estimated_cost_parameters = estimate_costs(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
                 power_plant_obj = PlantRegistry(plant.Simplified_Type).plant_type_to_plant_object()
-                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, **estimated_statistics)
-
+                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, **estimated_cost_parameters)
+                print("Registering plant {}, of type {}, with capacity {}, and estimated parameters {}".format(plant.Name, plant.Fuel, plant.Capacity, estimated_cost_parameters))
                 gen_co.plants.append(power_plant)
 
         self.schedule.add(gen_co)
@@ -83,3 +83,7 @@ class World(Model):
         # self.PowerExchange.tender_bids(self.schedule.agents, self.demand.segment_hours, self.demand.segment_consumption)
 
         self.year_number += 1
+
+
+from scenario import scenario_data
+world = World(scenario=scenario_data)

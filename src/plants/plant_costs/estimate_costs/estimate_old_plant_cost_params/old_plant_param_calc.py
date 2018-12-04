@@ -1,5 +1,5 @@
 import src.scenario.scenario_data as scenario
-from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictPlantParameters
+from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.plant_type.plant_registry import PlantRegistry
 from src.scenario.scenario_data import power_plant_costs
@@ -20,8 +20,13 @@ class OldPlantCosts:
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
-
+        print(self.hist_costs)
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
+        if self.hist_costs.empty:
+            raise ValueError("Technology type {} was not found in power plant historical costs".format(plant_type))
+
+        print("plant type: {}".format(plant_type))
+        print(self.hist_costs)
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
 
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
@@ -30,7 +35,7 @@ class OldPlantCosts:
 
         min_year = self.find_smallest_year_available()
 
-        self.estimated_modern_plant_parameters = PredictPlantParameters(self.plant_type, self.capacity, min_year).parameter_estimation()
+        self.estimated_modern_plant_parameters = PredictModernPlantParameters(self.plant_type, self.capacity, min_year).parameter_estimation()
 
         plant_object = PlantRegistry(self.plant_type).plant_type_to_plant_object()
 

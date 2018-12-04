@@ -14,7 +14,5 @@ __email__ = "alexander@kell.es"
 
 class TestWorld(TestCase):
     def test_world_initialization(self):
-        # TODO
-        # World(scenario=scenario_data)
-        # pass
-        self.fail()
+        world = World(scenario=scenario_data)
+

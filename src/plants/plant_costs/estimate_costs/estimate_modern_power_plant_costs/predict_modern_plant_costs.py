@@ -8,7 +8,7 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
 
 
-class PredictPlantParameters:
+class PredictModernPlantParameters:
 
     def __init__(self, plant_type, capacity, start_year):
         """
@@ -40,7 +40,7 @@ class PredictPlantParameters:
 
         full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
-        parameters_of_plant = {self._change_columns(cost_var): self._extrapolate_interpolate_parameters(cost_var) for cost_var in initial_stub_cost_parameters}
+        parameters_of_plant = {self._change_columns(cost_var): self._extrapolate_interpolate_parameters(cost_var) for cost_var in full_cost_parameters}
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
 

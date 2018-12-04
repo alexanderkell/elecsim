@@ -1,6 +1,7 @@
 import pandas as pd
 from scipy.interpolate import interp1d
 
+
 class ExtrapolateInterpolate:
 
     def __init__(self, x, y):
@@ -28,7 +29,6 @@ class ExtrapolateInterpolate:
         """
         if point <= min(self.x):
             return self.y.iloc[0]
-            # return var_req[cost_var_wanted].iloc[0]
         elif point >= max(self.x):
             return self.y.iloc[-1]
         else:

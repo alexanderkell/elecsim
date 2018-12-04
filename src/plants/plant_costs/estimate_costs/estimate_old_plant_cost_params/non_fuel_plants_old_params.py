@@ -24,6 +24,3 @@ class NonFuelOldPlantCosts(OldPlantCosts):
                   for key, value in self.estimated_modern_plant_parameters.items()}
         return params
 
-
-params = NonFuelOldPlantCosts(2005, "CCGT", 1200).estimate_cost_parameters()
-print(params)
