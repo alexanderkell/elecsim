@@ -4,8 +4,8 @@ Date created: 25/11/2018
 Feature: # Tests for Non Fuel Old Plant Cost Estimation, using LCOE values, mapped to modern plant costs.
 '''
 from unittest import TestCase
-import pytest
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plants_old_params import NonFuelOldPlantCosts
+
+from plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

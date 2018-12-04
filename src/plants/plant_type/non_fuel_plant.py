@@ -18,7 +18,7 @@ class NonFuelPlant(PowerPlant):
 
         self.efficiency = efficiency
 
-    def calculate_lcoe(self):
+    def calculate_lcoe(self, discount_rate):
         """
         Function which calculates the levelised cost of electricity for this power plant instance
         :return: Returns LCOE value for power plant
@@ -30,7 +30,25 @@ class NonFuelPlant(PowerPlant):
         opex = self.opex()
         elec_gen = self.electricity_generated()
 
-        print(capex)
-        print(opex)
+        total_costs = self.total_costs(capex, opex)
 
+        # Discount data
+        discounted_total_costs = self.discount_data(total_costs, discount_rate)
+        discounted_electricity_generated = self.discount_data(elec_gen, discount_rate)
 
+        # Sum total costs over life time of plant
+        discounted_costs_sum = sum(discounted_total_costs)
+        discounted_electricity_sum = sum(discounted_electricity_generated)
+
+        lcoe = discounted_costs_sum/discounted_electricity_sum
+
+        return lcoe
+
+    def total_costs(self, capex, opex):
+        """
+        Calculates total costs of plant by adding capital expenses plus operating expenses.
+        :return: Total costs over lifetime of plant
+        """
+
+        capex.extend(opex)
+        return capex

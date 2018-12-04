@@ -110,7 +110,7 @@ class PowerPlant:
     def reset_plant_contract(self):
         self.capacity_fulfilled = 0
 
-    def discounted_variable(self, variable, discount_rate):
+    def discount_data(self, variable, discount_rate):
         discount_multiplier = [1]
 
         for _ in range(len(variable)):

@@ -4,9 +4,12 @@ Date created: 26/11/2018
 Feature: #Enter feature description here
 '''
 from unittest import TestCase
+
 import pytest
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plants_old_params import FuelOldPlantCosts
+
+from plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
 from src.plants.plant_type.fuel_plant import FuelPlant
+
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"

@@ -1,5 +1,4 @@
 import src.scenario.scenario_data as scenario
-import numpy as np
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from constants import DAYS_IN_YEAR, HOURS_IN_DAY
@@ -19,7 +18,8 @@ class FuelOldPlantCosts(OldPlantCosts):
         self.fuel = plant_type_to_fuel(self.plant_type)
 
     def estimate_fuel_costs(self):
-        print(self.historic_fuel_price)
+        # print(self.historic_fuel_price)
+        print("TEST")
 
     def calc_total_expenditure(self, expenditure):
         total_expenditure = sum(expenditure)
@@ -114,17 +114,3 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         return lcoe
 
-
-# params = FuelOldPlantCosts(2010, "CCGT", 1200, 0.035).estimate_cost_parameters()
-# print(params)
-#
-# ccgt = FuelPlant(name="Test", plant_type="CCGT", capacity_mw="1200", construction_year=2010, **params)
-# print(ccgt.calculate_lcoe(0.035))
-
-# params = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035).estimate_cost_parameters()
-
-# x0 = [30754.0163847643, 4659.699452237016, 113696.66663458318, 140722.92345755786, 19570.737699395464, 93.1939890447403, 27.958196713422094]
-
-# lcoe = FuelOldPlantCosts(2015, "CCGT", 1200, 0.035)._linear_optimisation(x0, 54.463849107579996)
-# print("new LCOE: "+str(lcoe))
-# print(FuelOldPlantCosts(2010, "CCGT", 1200).estimate_cost_parameters())

@@ -26,17 +26,17 @@ historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/his
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
 # User input of future fuel prices
-gas_price = [KW_TO_MW * 0.018977] * 42  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-coal_price = [KW_TO_MW * 0.00906] * 42  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-uranium_price = [KW_TO_MW * 0.0039] * 42  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
-oil_price = [KW_TO_MW * 0.02748] * 42  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-diesel_price = [KW_TO_MW * 0.1] * 42  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
-woodchip_price = [KW_TO_MW * 0.0252] * 42  # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
-poultry_litter_price = [KW_TO_MW * 0.01139] * 42  # Source: How much is poultry litter worth?: sp06ca08.pdf
-straw_price = [KW_TO_MW * 0.016488] * 42  # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
+gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
+oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+diesel_price = [KW_TO_MW * 0.1] * 60  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
+woodchip_price = [KW_TO_MW * 0.0252] * 60  # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
+poultry_litter_price = [KW_TO_MW * 0.01139] * 60  # Source: How much is poultry litter worth?: sp06ca08.pdf
+straw_price = [KW_TO_MW * 0.016488] * 60  # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
 meat_price = [KW_TO_MW * 0.01] * 42  # Assumption: Low price due to plant_type being a waste product
-waste_price_post_2000 = [KW_TO_MW * -0.0252] * 42  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
-waste_price_pre_2000 = [KW_TO_MW * -0.01551] * 42  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+waste_price_post_2000 = [KW_TO_MW * -0.0252] * 60  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+waste_price_pre_2000 = [KW_TO_MW * -0.01551] * 60  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 
 # Joining historical and future fuel prices for simulation purposes.
 fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price, diesel_price, woodchip_price,

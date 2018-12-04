@@ -64,10 +64,11 @@ class PredictModernPlantParameters:
             cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in initial_stub_cost_parameters]
         elif self.start_year > 2025:
             cost_parameter_variables = [cost_variable + str(int(2025)) for cost_variable in initial_stub_cost_parameters]
-        elif self.start_year == 2019:
+        elif self.start_year == 2019 or self.start_year<2018:
             cost_parameter_variables = [cost_variable + str(int(2018)) for cost_variable in initial_stub_cost_parameters]
         elif 2020 < self.start_year < 2025:
             cost_parameter_variables = [cost_variable + str(int(2020)) for cost_variable in initial_stub_cost_parameters]
+
         else:
             raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
         return cost_parameter_variables

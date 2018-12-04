@@ -1,7 +1,7 @@
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.data_manipulation.uk_gencos_and_plants import company_names
-from src.plants.plant_costs.estimate_costs.estimate_costs import estimate_costs
+from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.power_exchange.power_exchange import PowerEx
 from src.plants.plant_type.plant_registry import PlantRegistry
 from mesa import Model
@@ -52,10 +52,11 @@ class World(Model):
             genco_plant_db = plant_data[plant_data['Company'] == name]
             genco_plant_db.Start_date = pd.to_numeric(genco_plant_db.Start_date)
             for plant in genco_plant_db.itertuples():
-                estimated_cost_parameters = estimate_costs(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
+                print("Trying to add plant type {}, with capacity {} of year {}".format(plant.Simplified_Type, plant.Capacity, plant.Start_date))
+                estimated_cost_parameters = select_cost_estimator(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
                 power_plant_obj = PlantRegistry(plant.Simplified_Type).plant_type_to_plant_object()
-                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, **estimated_cost_parameters)
-                print("Registering plant {}, of type {}, with capacity {}, and estimated parameters {}".format(plant.Name, plant.Fuel, plant.Capacity, estimated_cost_parameters))
+                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, construction_year= plant.Start_date, **estimated_cost_parameters)
+                print("Registering plant {}, of type {}, with capacity {}, and estimated parameters {}".format(plant.Name, plant.Simplified_Type, plant.Capacity, estimated_cost_parameters))
                 gen_co.plants.append(power_plant)
 
         self.schedule.add(gen_co)
@@ -84,6 +85,3 @@ class World(Model):
 
         self.year_number += 1
 
-
-from scenario import scenario_data
-world = World(scenario=scenario_data)

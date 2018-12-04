@@ -20,13 +20,7 @@ class OldPlantCosts:
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
-        print(self.hist_costs)
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
-        if self.hist_costs.empty:
-            raise ValueError("Technology type {} was not found in power plant historical costs".format(plant_type))
-
-        print("plant type: {}".format(plant_type))
-        print(self.hist_costs)
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
 
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
