@@ -22,7 +22,7 @@ def select_cost_estimator(start_year, plant_type, capacity):
     hist_costs = scenario.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology == plant_type].dropna()
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
-        require_fuel = PlantRegistry(plant_type).fuel_or_no_fuel()
+        require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
         return fuel_type_cost_estimator(capacity, plant_type, require_fuel, start_year)
     else:
         return PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()

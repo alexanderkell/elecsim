@@ -7,7 +7,7 @@ class PlantRegistry:
         self.plant_type = plant_type
 
     def plant_type_to_plant_object(self):
-        requires_fuel = self.fuel_or_no_fuel()
+        requires_fuel = self.check_if_fuel_required()
         return self._plant_object_registry(requires_fuel)
 
     def _plant_object_registry(self, requires_fuel):
@@ -19,7 +19,7 @@ class PlantRegistry:
         :return: Object of type of power plant
         """
 
-        requires_fuel = self.fuel_or_no_fuel()
+        requires_fuel = self.check_if_fuel_required()
 
         if not isinstance(requires_fuel, bool):
             # print("is not bool")
@@ -31,7 +31,7 @@ class PlantRegistry:
             return FuelPlant
 
 
-    def fuel_or_no_fuel(self):
+    def check_if_fuel_required(self):
         """
         Takes a plant_type type and returns a boolean specifying whether the power plant uses fuel or not.
         :param plant_type: Type of plant
@@ -82,6 +82,8 @@ class PlantRegistry:
             return False
         elif plant_type == "recip_diesel":
             return False
+        elif plant_type == "efw":
+            return True
         else:
             raise ValueError("Plant Type not Found: "+plant_type)
 

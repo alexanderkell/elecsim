@@ -47,7 +47,7 @@ fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 
 
 # Generator Companies imported from Government data files
-power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/power_plant_db_with_simplified_type.csv')
+power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/uk_power_plants.csv')
 power_plant_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv')
 
 power_plant_historical_costs_long = pd.read_csv(ROOT_DIR + '/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
