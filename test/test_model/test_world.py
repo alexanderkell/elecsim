@@ -16,3 +16,4 @@ class TestWorld(TestCase):
     def test_world_initialization(self):
         world = World(scenario=scenario_data)
 
+        assert 1 == 1

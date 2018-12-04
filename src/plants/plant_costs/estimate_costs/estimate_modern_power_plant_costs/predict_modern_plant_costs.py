@@ -41,6 +41,8 @@ class PredictModernPlantParameters:
         full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
         parameters_of_plant = {self._change_columns(cost_var): self._extrapolate_interpolate_parameters(cost_var) for cost_var in full_cost_parameters}
+        self.check_for_modern_cost_data(parameters_of_plant)
+
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
 
@@ -51,6 +53,10 @@ class PredictModernPlantParameters:
         parameters={**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
         return parameters
+
+    def check_for_modern_cost_data(self, parameters_of_plant):
+        if all(value == 0 for value in parameters_of_plant.values()):
+            raise ValueError("No cost data for power plant of type:", self.plant_type)
 
     def _create_parameter_names(self, initial_stub_cost_parameters):
         """
@@ -80,38 +86,38 @@ class PredictModernPlantParameters:
         :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
         :return (int): Returns extrapolated/interpolated cost of cost variable
         """
-        var_req = self.cost_data[['Plant_Size', cost_var_wanted]].dropna()
+        variable_required = self.cost_data[['Plant_Size', cost_var_wanted]].dropna()
 
-        if not var_req.empty:
-            if self.capacity <= min(var_req.Plant_Size):
-                return var_req[cost_var_wanted].iloc[0]
-            elif self.capacity >= max(var_req.Plant_Size):
-                return var_req[cost_var_wanted].iloc[-1]
+        if not variable_required.empty:
+            if self.capacity <= min(variable_required.Plant_Size):
+                return variable_required[cost_var_wanted].iloc[0]
+            elif self.capacity >= max(variable_required.Plant_Size):
+                return variable_required[cost_var_wanted].iloc[-1]
 
             else:
-                interp = interp1d(var_req.Plant_Size, var_req[cost_var_wanted])
+                interp = interp1d(variable_required.Plant_Size, variable_required[cost_var_wanted])
                 return interp(self.capacity)
         else:
-            raise ValueError("No cost data for power plant of type:", self.plant_type, " or cost type: ", cost_var_wanted)
+            return 0
 
-    def _estimate_duration_parameters(self, var_wanted):
+    def _estimate_duration_parameters(self, variable_wanted):
         """
         Estimates parameters time scale required for construction, pre-development and operating period.
         This is done by selecting the operating period, construction and pre-development of the closest sized
         power plant in data
-        :param var_wanted (str): Variable that is required to estimate
+        :param variable_wanted (str): Variable that is required to estimate
         :return (int): Returns estimated duration parameter in years.
         """
-        var_req = self.cost_data[['Plant_Size',var_wanted]].dropna()
-        if min(var_req.Plant_Size) < self.capacity < max(var_req.Plant_Size):
-            interp = interp1d(var_req.Plant_Size, var_req[var_wanted], kind='nearest')
+        column_required = self.cost_data[['Plant_Size', variable_wanted]].dropna()
+        if min(column_required.Plant_Size) <= self.capacity <= max(column_required.Plant_Size):
+            interp = interp1d(column_required.Plant_Size, column_required[variable_wanted], kind='nearest')
             return interp(self.capacity)
-        elif self.capacity > max(var_req.Plant_Size):
-            var_req = var_req.reset_index()
-            return var_req.iloc[-1][var_wanted]
-        elif self.capacity < min(var_req.Plant_Size):
-            var_req = var_req.reset_index()
-            return var_req.iloc[0][var_wanted]
+        elif self.capacity > max(column_required.Plant_Size):
+            column_required = column_required.reset_index()
+            return column_required.iloc[-1][variable_wanted]
+        elif self.capacity < min(column_required.Plant_Size):
+            column_required = column_required.reset_index()
+            return column_required.iloc[0][variable_wanted]
 
     def _closest_year_spread(self, var_wanted):
         """

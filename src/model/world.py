@@ -43,7 +43,6 @@ class World(Model):
 
         plant_data = scenario.power_plants
         names = company_names(plant_data)
-
         # Initialize generation companies
         for gen_id, name in enumerate(names,0):
             gen_co = GenCo(gen_id, self, name=name)
