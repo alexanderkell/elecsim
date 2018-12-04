@@ -4,9 +4,11 @@ Date created: 01/12/2018
 Feature: # Test for Estimate costs. Takes a construction date, plant type and capacity and returns cost parameters
 """
 from unittest import TestCase
+
 from pytest import approx
+
+from plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
-from src.plants.plant_type.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

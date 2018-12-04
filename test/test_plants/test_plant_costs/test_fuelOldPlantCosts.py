@@ -8,7 +8,7 @@ from unittest import TestCase
 import pytest
 
 from plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
-from src.plants.plant_type.fuel_plant import FuelPlant
+from plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
