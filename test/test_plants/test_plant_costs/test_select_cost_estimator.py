@@ -14,6 +14,6 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-class TestSelect_cost_estimator(TestCase):
+class TestSelectCostEstimator(TestCase):
     def test_select_cost_estimator(self):
         print(select_cost_estimator(1983.0, "Hydro_Store", 1800.0))

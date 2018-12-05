@@ -26,5 +26,5 @@ class TestNoFuelPlant(TestCase):
 
     def test_calculate_lcoe(self):
         power_plant = self.create_2018_biomass_power_plant()
-        # TO DO
+        # TODO
         # assert power_plant.calculate_lcoe() == 1

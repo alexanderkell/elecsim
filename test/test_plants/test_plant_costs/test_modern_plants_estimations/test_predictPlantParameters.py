@@ -6,10 +6,8 @@ Feature: #Enter feature description here
 from unittest import TestCase
 from pytest import approx
 
-
-from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
-
-
+from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import \
+    PredictModernPlantParameters
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -36,25 +34,109 @@ class TestPredictPlantParameters(TestCase):
         assert estimated_plant_parameters['pre_dev_spend_years'] == [0.44, 0.44, 0.12]
 
     def setup_method(self, module):
-        self.initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _', 'Fixed_cost-Medium _',
-                       'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
-                       'Var_cost-Medium _']
+        self.initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _',
+                                             'Fixed_cost-Medium _',
+                                             'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
+                                             'Var_cost-Medium _']
 
     def test_creation_of_parameter_names_2018(self):
-
         PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2018)
         cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
 
-        assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018', 'Fixed_cost-Medium _2018',
-                       'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018', 'Pre_dev_cost-Medium _2018',
-                       'Var_cost-Medium _2018']
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018',
+                                            'Fixed_cost-Medium _2018',
+                                            'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018',
+                                            'Pre_dev_cost-Medium _2018',
+                                            'Var_cost-Medium _2018']
 
     def test_creation_of_parameter_names_2019(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2019)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
 
-            PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2018)
-            cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018',
+                                            'Fixed_cost-Medium _2018',
+                                            'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018',
+                                            'Pre_dev_cost-Medium _2018',
+                                            'Var_cost-Medium _2018']
 
-            assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018', 'Fixed_cost-Medium _2018',
-                           'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018', 'Pre_dev_cost-Medium _2018',
-                           'Var_cost-Medium _2018']
+    def test_creation_of_parameter_names_2020(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2020)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
 
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2020', 'Constr_cost-Medium _2020',
+                                            'Fixed_cost-Medium _2020',
+                                            'Infra_cost-Medium _2020', 'Insurance_cost-Medium _2020',
+                                            'Pre_dev_cost-Medium _2020',
+                                            'Var_cost-Medium _2020']
+
+    def test_creation_of_parameter_names_2021(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2021)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2020', 'Constr_cost-Medium _2020',
+                                            'Fixed_cost-Medium _2020',
+                                            'Infra_cost-Medium _2020', 'Insurance_cost-Medium _2020',
+                                            'Pre_dev_cost-Medium _2020',
+                                            'Var_cost-Medium _2020']
+
+    def test_creation_of_parameter_names_2022(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2022)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2020', 'Constr_cost-Medium _2020',
+                                            'Fixed_cost-Medium _2020',
+                                            'Infra_cost-Medium _2020', 'Insurance_cost-Medium _2020',
+                                            'Pre_dev_cost-Medium _2020',
+                                            'Var_cost-Medium _2020']
+
+    def test_creation_of_parameter_names_2023(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2023)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2020', 'Constr_cost-Medium _2020',
+                                            'Fixed_cost-Medium _2020',
+                                            'Infra_cost-Medium _2020', 'Insurance_cost-Medium _2020',
+                                            'Pre_dev_cost-Medium _2020',
+                                            'Var_cost-Medium _2020']
+
+    def test_creation_of_parameter_names_2024(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2024)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2020', 'Constr_cost-Medium _2020',
+                                            'Fixed_cost-Medium _2020',
+                                            'Infra_cost-Medium _2020', 'Insurance_cost-Medium _2020',
+                                            'Pre_dev_cost-Medium _2020',
+                                            'Var_cost-Medium _2020']
+
+    def test_creation_of_parameter_names_2025(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2025)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2025', 'Constr_cost-Medium _2025',
+                                            'Fixed_cost-Medium _2025',
+                                            'Infra_cost-Medium _2025', 'Insurance_cost-Medium _2025',
+                                            'Pre_dev_cost-Medium _2025',
+                                            'Var_cost-Medium _2025']
+
+    def test_creation_of_parameter_names_high_year(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 200000)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2025', 'Constr_cost-Medium _2025',
+                                            'Fixed_cost-Medium _2025',
+                                            'Infra_cost-Medium _2025', 'Insurance_cost-Medium _2025',
+                                            'Pre_dev_cost-Medium _2025',
+                                            'Var_cost-Medium _2025']
+
+    def test_creation_of_parameter_names_high_year(self):
+        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 0)
+        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+
+        assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018',
+                                            'Fixed_cost-Medium _2018',
+                                            'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018',
+                                            'Pre_dev_cost-Medium _2018',
+                                            'Var_cost-Medium _2018']
+
+    # def test_extrapolate_interpolate_parameters(self):

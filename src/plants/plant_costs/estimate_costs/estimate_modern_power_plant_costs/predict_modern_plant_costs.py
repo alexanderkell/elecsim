@@ -1,6 +1,7 @@
 import src.scenario.scenario_data as scenario
 import pandas as pd
 from scipy.interpolate import interp1d
+from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
 from src.data_manipulation.data_modifications.value_estimations import closest_row
 
@@ -40,8 +41,13 @@ class PredictModernPlantParameters:
 
         full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
-        parameters_of_plant = {self._change_columns(cost_var): self._extrapolate_interpolate_parameters(cost_var) for cost_var in full_cost_parameters}
+        # parameters_of_plant = {self._change_columns(cost_variable_required): self._extrapolate_interpolate_parameters(cost_variable_required) for cost_variable_required in full_cost_parameters}
+        # self.check_for_modern_cost_data(parameters_of_plant)
+
+        parameters_of_plant = {self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'], self.cost_data[cost_variable_required])(self.capacity) for cost_variable_required in full_cost_parameters}
         self.check_for_modern_cost_data(parameters_of_plant)
+
+
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
@@ -78,27 +84,6 @@ class PredictModernPlantParameters:
         else:
             raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
         return cost_parameter_variables
-
-    def _extrapolate_interpolate_parameters(self, cost_var_wanted):
-        """
-        Function which extrapolates and interpolates from known data. Use of linear interpolation between known
-        points, and last known data point for extrapolation.
-        :param cost_var_wanted (str): Cost variable to be extrapolated/interpolated.
-        :return (int): Returns extrapolated/interpolated cost of cost variable
-        """
-        variable_required = self.cost_data[['Plant_Size', cost_var_wanted]].dropna()
-
-        if not variable_required.empty:
-            if self.capacity <= min(variable_required.Plant_Size):
-                return variable_required[cost_var_wanted].iloc[0]
-            elif self.capacity >= max(variable_required.Plant_Size):
-                return variable_required[cost_var_wanted].iloc[-1]
-
-            else:
-                interp = interp1d(variable_required.Plant_Size, variable_required[cost_var_wanted])
-                return interp(self.capacity)
-        else:
-            return 0
 
     def _estimate_duration_parameters(self, variable_wanted):
         """
