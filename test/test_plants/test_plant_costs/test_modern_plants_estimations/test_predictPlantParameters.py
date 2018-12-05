@@ -6,6 +6,7 @@ Feature: #Enter feature description here
 from unittest import TestCase
 from pytest import approx
 
+
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
 
 
@@ -34,12 +35,12 @@ class TestPredictPlantParameters(TestCase):
         assert estimated_plant_parameters['construction_spend_years'] == [0.4, 0.4, 0.2]
         assert estimated_plant_parameters['pre_dev_spend_years'] == [0.44, 0.44, 0.12]
 
-    def setup_method(self):
+    def setup_method(self, module):
         self.initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _', 'Fixed_cost-Medium _',
                        'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
                        'Var_cost-Medium _']
 
-    def test_creation_of_parameter_names_2018(self, setup_method):
+    def test_creation_of_parameter_names_2018(self):
 
         PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2018)
         cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
@@ -48,7 +49,7 @@ class TestPredictPlantParameters(TestCase):
                        'Infra_cost-Medium _2018', 'Insurance_cost-Medium _2018', 'Pre_dev_cost-Medium _2018',
                        'Var_cost-Medium _2018']
 
-    def test_creation_of_parameter_names_2019(self, setup_method):
+    def test_creation_of_parameter_names_2019(self):
 
             PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2018)
             cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
