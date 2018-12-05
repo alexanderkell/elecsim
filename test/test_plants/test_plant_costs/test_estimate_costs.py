@@ -35,3 +35,4 @@ class TestEstimateCosts(TestCase):
         params_2011 = select_cost_estimator(2011, "CCGT", 1200)
         assert FuelPlant(name="Test", plant_type="CCGT", construction_year=2011, capacity_mw=1200,
                          **params_2011).calculate_lcoe(0.1) == approx(100.6760057)
+

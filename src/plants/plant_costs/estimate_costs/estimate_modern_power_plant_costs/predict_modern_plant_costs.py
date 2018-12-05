@@ -10,7 +10,6 @@ pd.set_option('display.max_rows', 500)
 
 
 class PredictModernPlantParameters:
-
     def __init__(self, plant_type, capacity, start_year):
         """
         Class which provides calculations to provide costing data for power plants based on plant_type, capacity and start year
@@ -36,33 +35,36 @@ class PredictModernPlantParameters:
 
         # Iterates through each type of plant cost to predict parameters.
         initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _', 'Fixed_cost-Medium _',
-                       'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
-                       'Var_cost-Medium _']
+                                        'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
+                                        'Var_cost-Medium _']
 
         full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
-        # parameters_of_plant = {self._change_columns(cost_variable_required): self._extrapolate_interpolate_parameters(cost_variable_required) for cost_variable_required in full_cost_parameters}
-        # self.check_for_modern_cost_data(parameters_of_plant)
-
-        parameters_of_plant = {self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'], self.cost_data[cost_variable_required])(self.capacity) for cost_variable_required in full_cost_parameters}
-        self.check_for_modern_cost_data(parameters_of_plant)
-
-
+        parameters_of_plant = {
+        self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'],
+                                                                             self.cost_data[cost_variable_required])(
+            self.capacity) for cost_variable_required in full_cost_parameters}
+        self.check_plant_exists(parameters_of_plant)
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
-        durations_parameters = {self._change_columns(dur): self._estimate_duration_parameters(dur) for dur in durations}
+        durations_parameters = {self._change_columns(dur): self._estimate_non_interpolatable_parameters(dur) for dur in durations}
 
         yearly_cost_spread = ['Constr', 'Pre']
 
-        yearly_cost_perc = {self._change_columns(spread): self._closest_year_spread(spread) for spread in yearly_cost_spread}
+        yearly_cost_perc = {self._change_columns(spread): self._payment_spread_estimator(spread) for spread in
+                            yearly_cost_spread}
 
-        parameters={**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
+        parameters = {**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
         return parameters
 
-    def check_for_modern_cost_data(self, parameters_of_plant):
+    def check_plant_exists(self, parameters_of_plant):
+        """
+        Function which checks that there is data for specified power plant in the modern costs database.
+        :param parameters_of_plant: Dictionary of plant which contains all of the values of the estimated power plant.
+        """
         if all(value == 0 for value in parameters_of_plant.values()):
-            raise ValueError("No cost data for power plant of type:", self.plant_type)
+            raise ValueError("No cost data for power plant of type: " + self.plant_type)
 
     def _create_parameter_names(self, initial_stub_cost_parameters):
         """
@@ -73,19 +75,23 @@ class PredictModernPlantParameters:
         """
 
         if self.start_year in (2018, 2020, 2025):
-            cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in initial_stub_cost_parameters]
+            cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in
+                                        initial_stub_cost_parameters]
         elif self.start_year > 2025:
-            cost_parameter_variables = [cost_variable + str(int(2025)) for cost_variable in initial_stub_cost_parameters]
-        elif self.start_year == 2019 or self.start_year<2018:
-            cost_parameter_variables = [cost_variable + str(int(2018)) for cost_variable in initial_stub_cost_parameters]
+            cost_parameter_variables = [cost_variable + str(int(2025)) for cost_variable in
+                                        initial_stub_cost_parameters]
+        elif self.start_year == 2019 or self.start_year < 2018:
+            cost_parameter_variables = [cost_variable + str(int(2018)) for cost_variable in
+                                        initial_stub_cost_parameters]
         elif 2020 < self.start_year < 2025:
-            cost_parameter_variables = [cost_variable + str(int(2020)) for cost_variable in initial_stub_cost_parameters]
+            cost_parameter_variables = [cost_variable + str(int(2020)) for cost_variable in
+                                        initial_stub_cost_parameters]
 
         else:
             raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
         return cost_parameter_variables
 
-    def _estimate_duration_parameters(self, variable_wanted):
+    def _estimate_non_interpolatable_parameters(self, variable_wanted):
         """
         Estimates parameters time scale required for construction, pre-development and operating period.
         This is done by selecting the operating period, construction and pre-development of the closest sized
@@ -104,7 +110,7 @@ class PredictModernPlantParameters:
             column_required = column_required.reset_index()
             return column_required.iloc[0][variable_wanted]
 
-    def _closest_year_spread(self, var_wanted):
+    def _payment_spread_estimator(self, var_wanted):
         """
         Function which selects the spread of payments required for construction and pre-development. This is achieved
         by selecting the power plant of the closest size.
@@ -113,7 +119,8 @@ class PredictModernPlantParameters:
         """
         # df_sort = self.cost_data.iloc[(self.cost_data['Plant_Size']-self.capacity).abs().argsort()[:1]]
         df_sort = closest_row(self.cost_data, "Plant_Size", self.capacity)
-        df_sort = df_sort.filter(regex=var_wanted).filter(regex='^((?!Dur).)*$').filter(regex='^((?!-).)*$').dropna(axis=1).values.tolist()[0]
+        df_sort = df_sort.filter(regex=var_wanted).filter(regex='^((?!Dur).)*$').filter(regex='^((?!-).)*$').dropna(
+            axis=1).values.tolist()[0]
 
         return df_sort
 
@@ -154,4 +161,3 @@ class PredictModernPlantParameters:
             return 'average_load_factor'
         else:
             raise ValueError('Plant cost data not found')
-
