@@ -34,14 +34,11 @@ class OldPlantCosts:
         plant_object = PlantRegistry(self.plant_type).plant_type_to_plant_object()
 
         self.plant = plant_object(name="Modern Plant", plant_type=self.plant_type,
-                                                         capacity_mw=self.capacity, construction_year=min_year,
+                                                         capacity_mw=self.capacity, construction_year=self.year,
                                                          **self.estimated_modern_plant_parameters)
-
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
 
         self.lcoe_scaler = self.estimated_historical_lcoe / self.modern_lcoe
-
-        print(self.lcoe_scaler)
 
     def find_smallest_year_available(self):
         """

@@ -14,24 +14,25 @@ class FuelOldPlantCosts(OldPlantCosts):
         super().__init__(year=year, plant_type=plant_type, capacity=capacity)
         self.fuel = plant_type_to_fuel(self.plant_type)
 
-    def estimate_fuel_costs(self):
-        # print(self.historic_fuel_price)
-        print("TEST")
-
-    def calc_total_expenditure(self, expenditure):
-        total_expenditure = sum(expenditure)
-        return total_expenditure
-
-    def calc_total_fuel_expenditure(self, mean_fuel_cost):
-        """
-        Function which takes the mean
-        :param mean_fuel_cost:
-        :return:
-        """
-        fuel_costs = self.plant.fuel_costs(self.plant.electricity_generated())
-        total_fuel_costs = sum(fuel_costs)
-        return total_fuel_costs
-        # (mean_fuel_cost*self.plant.average_load_factor*HOURS_IN_DAY*DAYS_IN_YEAR*self.plant.capacity_mw*self.plant.operating_period)/self.plant.efficiency
+    # def estimate_fuel_costs(self):
+    #     # print(self.historic_fuel_price)
+    #     print("TEST")
+    #
+    # def calc_total_expenditure(self, expenditure):
+    #     total_expenditure = sum(expenditure)
+    #     return total_expenditure
+    #
+    # def calc_total_fuel_expenditure(self, mean_fuel_cost):
+    #     """
+    #     Function which takes the mean
+    #     :param mean_fuel_cost:
+    #     :return:
+    #     """
+    #     fuel_costs = self.plant.fuel_costs(self.plant.electricity_generated())
+    #     print("fuel costs: {}".format(fuel_costs))
+    #     total_fuel_costs = sum(fuel_costs)
+    #     return total_fuel_costs
+    #     # (mean_fuel_cost*self.plant.average_load_factor*HOURS_IN_DAY*DAYS_IN_YEAR*self.plant.capacity_mw*self.plant.operating_period)/self.plant.efficiency
 
     def estimate_cost_parameters(self):
         """
@@ -54,7 +55,7 @@ class FuelOldPlantCosts(OldPlantCosts):
 
         params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
                               if key not in params_to_ignore}
-
+        print("Parameters for scaling: {}".format(params_for_scaling))
         parameter_values = list(params_for_scaling.values())
 
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
@@ -63,7 +64,7 @@ class FuelOldPlantCosts(OldPlantCosts):
         scaled_parameters = {key: params for key, params in
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in params_to_ignore}
-        
+        print("scaled parameters: {}".format(scaled_parameters))
         
         # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
         #           for key, value in self.estimated_modern_plant_parameters.items()}
@@ -87,7 +88,6 @@ class FuelOldPlantCosts(OldPlantCosts):
                 {'type': 'eq', 'fun': lambda x: x[4] / x[5] - insurance_cost_per_mw / pre_dev_cost_per_kw},
                 {'type': 'eq', 'fun': lambda x: x[5] / x[6] - pre_dev_cost_per_kw / variable_o_and_m_per_mwh},
                 {'type': 'eq', 'fun': lambda x: self._calculate_lcoe_wrapper(x)-lcoe_required}]
-
         return minimize(self._calculate_lcoe_wrapper, x0=x, constraints=cons)
 
     def _calculate_lcoe_wrapper(self, x0):
@@ -100,13 +100,12 @@ class FuelOldPlantCosts(OldPlantCosts):
         test_params = {key:value for key, value in zip(self.estimated_modern_plant_parameters, x0)}
 
         holder_plant = FuelPlant(**test_params, name="LinOptim", plant_type=self.plant_type, capacity_mw=self.capacity,
-                                 construction_year=2018, average_load_factor=self.plant.average_load_factor,
+                                 construction_year=self.plant.construction_year, average_load_factor=self.plant.average_load_factor,
                                  efficiency=self.plant.efficiency, pre_dev_period=self.plant.pre_dev_period,
                                  construction_period=self.plant.construction_period,
                                  operating_period=self.plant.operating_period,
                                  pre_dev_spend_years=self.plant.pre_dev_spend_years,
                                  construction_spend_years=self.plant.construction_spend_years)
-
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
 
         return lcoe

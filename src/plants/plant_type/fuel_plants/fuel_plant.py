@@ -21,7 +21,7 @@ class FuelPlant(PowerPlant):
         Initialisation of plant_type power plant object.
         :param efficiency: Efficiency of power plant at converting plant_type energy into electrical energy.
         """
-        super().__init__(name=name, plant_type=plant_type, capacity_mw=capacity_mw, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw, construction_year=construction_year)
+        super().__init__(name=name, plant_type=plant_type, capacity_mw=capacity_mw, construction_year=construction_year, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw)
         self.efficiency = efficiency
         # Finds fuel type of power plant eg. CCGT power plant type returns gas.
         fuel_string = plant_type_to_fuel(plant_type)
@@ -43,6 +43,7 @@ class FuelPlant(PowerPlant):
         opex = self.opex()
         elec_gen = self.electricity_generated()
         fuel_costs = self.fuel_costs(elec_gen)
+        print("Fuel costs: {}".format(fuel_costs))
         carbon_costs = self.carbon_costs()
 
         total_costs = self.total_costs(capex, opex, fuel_costs, carbon_costs)
@@ -89,6 +90,7 @@ class FuelPlant(PowerPlant):
         """
 
         beginning_year_operation = self.construction_year
+        print("Construction year: {}".format(self.construction_year))
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
         this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
@@ -110,10 +112,15 @@ class FuelPlant(PowerPlant):
         """
         carbon_emitted = self.carbon_emitted()
 
-        years_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
-        carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(years_of_operation+self.operating_period-1))]
-        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(list(carbon_taxation_years.price), carbon_emitted)]
+        year_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
+        carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(year_of_operation+self.operating_period-1))]
+        print("construction year {}".format(int(self.construction_year)))
+        print("end of tax period {}".format(int(year_of_operation+self.operating_period-1)))
 
+        print("carbon_taxation_years: {}".format(carbon_taxation_years))
+        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(list(carbon_taxation_years.price), carbon_emitted)]
+        print("year of operation: {}".format(year_of_operation))
+        print("Carbon costs: {}".format(carbon_costs))
         return carbon_costs
 
     def carbon_cost_total(self, carbon_costs):

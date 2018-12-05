@@ -51,9 +51,6 @@ class TestPredictPlantParameters(TestCase):
         assert estimated_plant_parameters['construction_spend_years'] == [0.4, 0.4, 0.2]
         assert estimated_plant_parameters['pre_dev_spend_years'] == [0.44, 0.44, 0.12]
 
-
-
-
     def setup_method(self, module):
         self.initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _',
                                              'Fixed_cost-Medium _',
@@ -61,8 +58,8 @@ class TestPredictPlantParameters(TestCase):
                                              'Var_cost-Medium _']
 
     def test_creation_of_parameter_names_2018(self):
-        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2018)
-        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+        predict_plant = PredictModernPlantParameters("CCGT", 1200, 2018)
+        cost_parameter_variables = predict_plant._create_parameter_names(self.initial_stub_cost_parameters)
 
         assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018',
                                             'Fixed_cost-Medium _2018',
@@ -71,8 +68,8 @@ class TestPredictPlantParameters(TestCase):
                                             'Var_cost-Medium _2018']
 
     def test_creation_of_parameter_names_2019(self):
-        PredictPlant = PredictModernPlantParameters("CCGT", 1200, 2019)
-        cost_parameter_variables = PredictPlant._create_parameter_names(self.initial_stub_cost_parameters)
+        predict_plant = PredictModernPlantParameters("CCGT", 1200, 2019)
+        cost_parameter_variables = predict_plant._create_parameter_names(self.initial_stub_cost_parameters)
 
         assert cost_parameter_variables == ['Connect_system_cost-Medium _2018', 'Constr_cost-Medium _2018',
                                             'Fixed_cost-Medium _2018',

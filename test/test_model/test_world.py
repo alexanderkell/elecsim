@@ -1,7 +1,7 @@
 """
 File name: test_world
 Date created: 01/12/2018
-Feature: #Enter feature description here
+Feature: # Tests the model
 """
 from unittest import TestCase
 from src.model.world import World
