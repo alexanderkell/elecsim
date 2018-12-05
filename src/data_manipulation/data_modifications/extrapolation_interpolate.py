@@ -19,6 +19,8 @@ class ExtrapolateInterpolate:
 
         if len(self.x) != len(self.y):
             raise ValueError("The x axis and y axis must be of the same size.")
+        elif len(self.x)==0 or len(self.y)==0:
+            raise ValueError("Length of x or y can not be 0.")
 
     def __call__(self, point):
         """

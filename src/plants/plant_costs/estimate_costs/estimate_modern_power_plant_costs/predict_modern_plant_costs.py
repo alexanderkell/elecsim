@@ -41,9 +41,10 @@ class PredictModernPlantParameters:
         full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
         parameters_of_plant = {
-        self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'],
-                                                                             self.cost_data[cost_variable_required])(
-            self.capacity) for cost_variable_required in full_cost_parameters}
+            self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'],
+                                                                                 self.cost_data[
+                                                                                     cost_variable_required])(self.capacity)
+            for cost_variable_required in full_cost_parameters}
         self.check_plant_exists(parameters_of_plant)
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
