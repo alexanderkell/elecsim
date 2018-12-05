@@ -51,6 +51,9 @@ class TestPredictPlantParameters(TestCase):
         assert estimated_plant_parameters['construction_spend_years'] == [0.4, 0.4, 0.2]
         assert estimated_plant_parameters['pre_dev_spend_years'] == [0.44, 0.44, 0.12]
 
+
+
+
     def setup_method(self, module):
         self.initial_stub_cost_parameters = ['Connect_system_cost-Medium _', 'Constr_cost-Medium _',
                                              'Fixed_cost-Medium _',
