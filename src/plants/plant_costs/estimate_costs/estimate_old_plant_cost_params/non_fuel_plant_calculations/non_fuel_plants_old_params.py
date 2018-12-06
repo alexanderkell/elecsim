@@ -1,4 +1,5 @@
 import numpy as np
+from math import isnan
 
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 
@@ -26,6 +27,11 @@ class NonFuelOldPlantCosts(OldPlantCosts):
         scaled_params = {key: value*self.lcoe_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
                   for key, value in self.estimated_modern_plant_parameters.items()}
 
+        # Remove NA's from scaled parameters
+        print("Should not contain lists: {}".format(scaled_params))
+        scaled_params = {key: 0 if isnan(scaled_params[key]) else scaled_params[key] for key in scaled_params}
+
         scaled_params.update(dict_to_ignore)
+
         return scaled_params
 

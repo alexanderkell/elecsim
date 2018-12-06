@@ -28,3 +28,6 @@ class TestSelectCostEstimator(TestCase):
 
     def test_parameter_estimator_for_historic_small_gas_turbine_with_capacity_matching_data(self):
         print(select_cost_estimator(1990, "CCGT", 168.0))
+
+
+    def test_
