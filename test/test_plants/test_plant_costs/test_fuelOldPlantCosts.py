@@ -8,7 +8,7 @@ from unittest import TestCase
 import pytest
 
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
-from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
+from plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -23,13 +23,13 @@ class TestFuelOldPlantCosts(TestCase):
         estimated_params = fuel_plant_costs_estimate.estimate_cost_parameters()
         print("Estimated parameters")
         print(estimated_params)
-        assert estimated_params['connection_cost_per_mw'] == pytest.approx(3300*4.362321492)
-        assert estimated_params['construction_cost_per_mw'] == pytest.approx(500000*4.362321492)
-        assert estimated_params['fixed_o_and_m_per_mw'] == pytest.approx(12200*4.362321492)
-        assert estimated_params['infrastructure'] == pytest.approx(15100*4.362321492)
-        assert estimated_params['insurance_cost_per_mw'] == pytest.approx(2100*4.362321492)
-        assert estimated_params['pre_dev_cost_per_mw'] == pytest.approx(10000*4.362321492)
-        assert estimated_params['variable_o_and_m_per_mwh'] == pytest.approx(3*4.362321492)
+        assert estimated_params['connection_cost_per_mw'] == pytest.approx(3300*5.4570773402)
+        assert estimated_params['construction_cost_per_mw'] == pytest.approx(500000*5.4570773402)
+        assert estimated_params['fixed_o_and_m_per_mw'] == pytest.approx(12200*5.4570773402)
+        assert estimated_params['infrastructure'] == pytest.approx(15100*5.4570773402)
+        assert estimated_params['insurance_cost_per_mw'] == pytest.approx(2100*5.4570773402)
+        assert estimated_params['pre_dev_cost_per_mw'] == pytest.approx(10000*5.4570773402)
+        assert estimated_params['variable_o_and_m_per_mwh'] == pytest.approx(3*5.4570773402)
         assert estimated_params['pre_dev_period'] == 3
         assert estimated_params['construction_period'] == 3
         assert estimated_params['efficiency'] == 0.54

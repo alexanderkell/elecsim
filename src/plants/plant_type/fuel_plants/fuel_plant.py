@@ -2,7 +2,8 @@ from src.plants.plant_type.power_plant import PowerPlant
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.scenario.scenario_data import carbon_cost
 from itertools import zip_longest
-
+from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+import pandas as pd
 
 """ fuel_plant.py: Child class of power plant which contains functions for a power plant which consumes fuel.
                     Most notably, the functinos contain the ability to calculate the cost of fuel.
@@ -43,7 +44,6 @@ class FuelPlant(PowerPlant):
         opex = self.opex()
         elec_gen = self.electricity_generated()
         fuel_costs = self.fuel_costs(elec_gen)
-        print("Fuel costs: {}".format(fuel_costs))
         carbon_costs = self.carbon_costs()
 
         total_costs = self.total_costs(capex, opex, fuel_costs, carbon_costs)
@@ -90,12 +90,17 @@ class FuelPlant(PowerPlant):
         """
 
         beginning_year_operation = self.construction_year
-        print("Construction year: {}".format(self.construction_year))
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
         this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
-        fuel_costs = [(float(this_fuel_price.iloc[0][str(i)]) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
-        return fuel_costs
+        # fuel_price = [(float(this_fuel_price.iloc[0][str(i)]) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
+        fuel_price = [(float(self.select_fuel_year(this_fuel_price, i)) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
+        return fuel_price
+
+    def select_fuel_year(self, fuel_costs, year):
+        year = int(year)
+        fuel_price = ExtrapolateInterpolate(fuel_costs.Year, fuel_costs.value)(year)
+        return fuel_price
 
     def carbon_emitted(self):
         """
@@ -114,13 +119,8 @@ class FuelPlant(PowerPlant):
 
         year_of_operation = self.construction_year+self.pre_dev_period+self.construction_period
         carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(year_of_operation+self.operating_period-1))]
-        print("construction year {}".format(int(self.construction_year)))
-        print("end of tax period {}".format(int(year_of_operation+self.operating_period-1)))
 
-        print("carbon_taxation_years: {}".format(carbon_taxation_years))
         carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(list(carbon_taxation_years.price), carbon_emitted)]
-        print("year of operation: {}".format(year_of_operation))
-        print("Carbon costs: {}".format(carbon_costs))
         return carbon_costs
 
     def carbon_cost_total(self, carbon_costs):

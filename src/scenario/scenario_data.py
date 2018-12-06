@@ -44,6 +44,9 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
                                  waste_price_pre_2000],
                            columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
+# Convert from wide to long
+fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2018'].columns))
+fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 
 
 # Generator Companies imported from Government data files
