@@ -12,7 +12,7 @@ class FuelOldPlantCosts(OldPlantCosts):
 
     def __init__(self, year, plant_type, capacity):
         super().__init__(year=year, plant_type=plant_type, capacity=capacity)
-        self.fuel = plant_type_to_fuel(self.plant_type)
+        self.fuel = plant_type_to_fuel(self.plant_type, self.year)
 
     def estimate_cost_parameters(self):
         """
