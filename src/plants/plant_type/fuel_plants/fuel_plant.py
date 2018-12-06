@@ -25,7 +25,7 @@ class FuelPlant(PowerPlant):
         super().__init__(name=name, plant_type=plant_type, capacity_mw=capacity_mw, construction_year=construction_year, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw)
         self.efficiency = efficiency
         # Finds fuel type of power plant eg. CCGT power plant type returns gas.
-        fuel_string = plant_type_to_fuel(plant_type)
+        fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
         # Fuel object, containing information on fuel.
         self.fuel = fuel_registry(fuel_string)
 
@@ -92,15 +92,12 @@ class FuelPlant(PowerPlant):
         beginning_year_operation = self.construction_year
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
-        this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type]
-        # fuel_price = [(float(this_fuel_price.iloc[0][str(i)]) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
-        fuel_price = [(float(self.select_fuel_year(this_fuel_price, i)) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
+        this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type].dropna()
+        fuel_extrapolation = ExtrapolateInterpolate(this_fuel_price.Year, this_fuel_price.value)
+        fuel_price = [(float(fuel_extrapolation(i)) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
+
         return fuel_price
 
-    def select_fuel_year(self, fuel_costs, year):
-        year = int(year)
-        fuel_price = ExtrapolateInterpolate(fuel_costs.Year, fuel_costs.value)(year)
-        return fuel_price
 
     def carbon_emitted(self):
         """

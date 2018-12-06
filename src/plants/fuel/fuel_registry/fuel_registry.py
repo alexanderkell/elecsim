@@ -45,7 +45,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
         if fuel_type == "Hydro":
             return Fuel(fuel_type, 0, 0, 0, 0)
         if fuel_type == "Biomass_wood":
-            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 19.0*GJ_TO_MW, 0, 0.01506)
+            return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == 'Woodchip'], 19.0*GJ_TO_MW, 0, 0.01506)
         if fuel_type == "Biomass_poultry_litter":
             return Fuel(fuel_type, fuel_prices[fuel_prices.Fuel == fuel_type], 7.9*GJ_TO_MW, 0, 0)
         if fuel_type == "Oil":
@@ -118,7 +118,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     #         raise ValueError("Both energy density and co2 density must be larger than 0")
 
 
-def plant_type_to_fuel(plant_type):
+def plant_type_to_fuel(plant_type, construction_year):
     """
     Function which infers fuel type from plant type.
     :return: String detailing fuel type
@@ -132,13 +132,13 @@ def plant_type_to_fuel(plant_type):
     elif plant_type == "Offshore":
         return None
     elif plant_type == "Biomass_poultry_litter":
-        return "Biomass_poultry_litter"
+        return "Poultry_litter"
     elif plant_type == "Straw":
         return "Straw"
     elif plant_type == "Diesel":
         return "Diesel"
     elif plant_type == "Biomass_wood":
-        return "Biomass_wood"
+        return "Woodchip"
     elif plant_type == "Gas":
         return "Gas"
     elif plant_type == "Nuclear":
@@ -150,9 +150,11 @@ def plant_type_to_fuel(plant_type):
     elif plant_type == "OCGT":
         return "Gas"
     elif plant_type == "Gas oil":
-        return "Gas oil"
-    elif plant_type == "Waste":
-        return "Waste"
+        return "Diesel"
+    elif plant_type == "Waste" and construction_year<=2000:
+        return "Waste_pre_2000"
+    elif plant_type == "Waste" and construction_year>2000:
+        return "Waste_pre_2000"
     elif plant_type == "Pumped storage":
         return None
     elif plant_type == "Wind":

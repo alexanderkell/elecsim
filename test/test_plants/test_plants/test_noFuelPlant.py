@@ -5,7 +5,8 @@ Feature: #Enter feature description here
 """
 from unittest import TestCase
 
-from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+# from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -15,7 +16,7 @@ __email__ = "alexander@kell.es"
 
 class TestNoFuelPlant(TestCase):
     def create_2018_biomass_power_plant(self):
-        fuel_plant = NonFuelPlant(name="Test_Plant", plant_type="Biomass", capacity_mw=1200, construction_year=2010,
+        fuel_plant = FuelPlant(name="Test_Plant", plant_type="Biomass_wood", capacity_mw=1200, construction_year=2010,
                                   average_load_factor=0.93, efficiency=0.54, pre_dev_period=3, construction_period=3,
                                   operating_period=25, pre_dev_spend_years=[0.44, 0.44, 0.12],
                                   construction_spend_years=[0.4, 0.4, 0.2], pre_dev_cost_per_mw=1000,
@@ -26,5 +27,5 @@ class TestNoFuelPlant(TestCase):
 
     def test_calculate_lcoe(self):
         power_plant = self.create_2018_biomass_power_plant()
-        # TODO
+        print("LCOE for biomass: {}".format(power_plant.calculate_lcoe(0.1)))
         # assert power_plant.calculate_lcoe() == 1

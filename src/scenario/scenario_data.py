@@ -1,5 +1,6 @@
 import pandas as pd
-
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
 from constants import ROOT_DIR, KW_TO_MW
 
 """scenario_data.py: Scenario file containing data for a single simulation run."""
@@ -47,7 +48,6 @@ fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
 fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2018'].columns))
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
-
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/uk_power_plants.csv')
