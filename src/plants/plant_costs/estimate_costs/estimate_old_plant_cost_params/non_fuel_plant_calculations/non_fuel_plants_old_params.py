@@ -27,11 +27,21 @@ class NonFuelOldPlantCosts(OldPlantCosts):
         scaled_params = {key: value*self.lcoe_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
                   for key, value in self.estimated_modern_plant_parameters.items()}
 
-        # Remove NA's from scaled parameters
-        print("Should not contain lists: {}".format(scaled_params))
-        scaled_params = {key: 0 if isnan(scaled_params[key]) else scaled_params[key] for key in scaled_params}
-
         scaled_params.update(dict_to_ignore)
+
+        # scaled_params = {key:0 if not isinstance(scaled_params[key], (list,)) if isnan(scaled_params[key]) else scaled_params[key] for key in scaled_params}
+
+        # scaled_params = {
+        # key: 0 if not isinstance(scaled_params[key], list) else scaled_params[key] if isnan(scaled_params[key]) else
+        # scaled_params[key] for key in scaled_params}
+
+        scaled_params = self.convert_nan_to_0(scaled_params)
 
         return scaled_params
 
+    def convert_nan_to_0(self, scaled_params):
+        for key in scaled_params:
+            if not isinstance(scaled_params[key], list):
+                if isnan(scaled_params[key]):
+                    scaled_params[key] = 0
+        return scaled_params

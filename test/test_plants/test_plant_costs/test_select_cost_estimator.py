@@ -30,4 +30,5 @@ class TestSelectCostEstimator(TestCase):
         print(select_cost_estimator(1990, "CCGT", 168.0))
 
 
-    def test_
+    def test_parameter_estimator_for_recip_gas_with_540_capacity(self):
+        print(select_cost_estimator(1968, "Recip_gas", 540))

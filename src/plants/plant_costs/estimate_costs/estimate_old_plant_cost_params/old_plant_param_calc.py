@@ -44,7 +44,7 @@ class OldPlantCosts:
         """
         Method which takes the modern cost BEIS database of power plants, and finds the earliest year
         that data for specified power plant type exists. For example, only returns data on Coal power plants from 2025
-        as only this data is provided in the BEIS databais
+        as only this data is provided in the BEIS datafile
         :return: Int containing smallest year available.
         """
         available_years = self.modern_costs[['Constr_cost-Medium _2018','Constr_cost-Medium _2020', 'Constr_cost-Medium _2025']]

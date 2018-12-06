@@ -37,8 +37,6 @@ class FuelOldPlantCosts(OldPlantCosts):
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in params_to_ignore}
 
-        # params = {key: value*opex_capex_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
-        #           for key, value in self.estimated_modern_plant_parameters.items()}
         scaled_parameters.update(dict_to_ignore)
         return scaled_parameters
 
