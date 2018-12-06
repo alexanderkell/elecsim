@@ -3,7 +3,7 @@ from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.pre
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.plant_type.plant_registry import PlantRegistry
 from src.scenario.scenario_data import power_plant_costs
-
+import pandas as pd
 
 class OldPlantCosts:
     """
@@ -21,6 +21,14 @@ class OldPlantCosts:
         self.plant_type = plant_type
         self.capacity = capacity
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
+        print(self.hist_costs)
+        if not all(self.hist_costs.capacity_range.str.contains("All")):
+            self.hist_costs = self.hist_costs[[pd.eval(f"{self.capacity}{j}") for j in self.hist_costs['capacity_range']]]
+            print(str(self.hist_costs))
+            # print("Some ranges in historical LCOE data file.")
+
+
+
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
 
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]

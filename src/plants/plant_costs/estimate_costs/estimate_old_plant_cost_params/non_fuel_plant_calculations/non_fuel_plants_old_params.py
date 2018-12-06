@@ -24,22 +24,22 @@ class NonFuelOldPlantCosts(OldPlantCosts):
 
         # Multiply values by updated LCOE scale. Conditional based on whether parameter is in params_to_ignore list or
         # is an np.ndarray (ie. not list).
-        scaled_params = {key: value*self.lcoe_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
-                  for key, value in self.estimated_modern_plant_parameters.items()}
+        scaled_params = {
+            key: value * self.lcoe_scaler if type(value) is np.ndarray and key not in params_to_ignore else value
+            for key, value in self.estimated_modern_plant_parameters.items()}
 
         scaled_params.update(dict_to_ignore)
-
-        # scaled_params = {key:0 if not isinstance(scaled_params[key], (list,)) if isnan(scaled_params[key]) else scaled_params[key] for key in scaled_params}
-
-        # scaled_params = {
-        # key: 0 if not isinstance(scaled_params[key], list) else scaled_params[key] if isnan(scaled_params[key]) else
-        # scaled_params[key] for key in scaled_params}
 
         scaled_params = self.convert_nan_to_0(scaled_params)
 
         return scaled_params
 
     def convert_nan_to_0(self, scaled_params):
+        """
+        Converts nan's which should be of value 0 to zero.
+        :param scaled_params: Dictionary with parameters that may contain nan's instead of zeros.
+        :return: Dictionary with parameters converted to zero.
+        """
         for key in scaled_params:
             if not isinstance(scaled_params[key], list):
                 if isnan(scaled_params[key]):
