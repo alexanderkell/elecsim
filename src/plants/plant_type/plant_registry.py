@@ -54,7 +54,13 @@ class PlantRegistry:
             return True
         elif plant_type == "offshore":
             return False
-        elif plant_type == "biomass":
+        elif plant_type == "biomass_wood":
+            return True
+        elif plant_type == "biomass_poultry_litter":
+            return True
+        elif plant_type == "biomass_straw":
+            return True
+        elif plant_type == "biomass_meat":
             return True
         elif plant_type == "onshore":
             return False

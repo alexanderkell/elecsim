@@ -20,7 +20,8 @@ class PredictModernPlantParameters:
 
         # Import UK power plant cost data
         self.cost_data = scenario.power_plant_costs
-        self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
+        # self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
+        self.cost_data = self.cost_data[self.cost_data.apply(lambda x: x['Type'] in self.plant_type, axis=1)].sort_values('Plant_Size')
 
     def parameter_estimation(self):
         """

@@ -93,6 +93,7 @@ class FuelPlant(PowerPlant):
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
         this_fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Fuel == self.fuel.fuel_type].dropna()
+
         fuel_extrapolation = ExtrapolateInterpolate(this_fuel_price.Year, this_fuel_price.value)
         fuel_price = [(float(fuel_extrapolation(i)) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
 

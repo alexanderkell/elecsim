@@ -29,9 +29,14 @@ class TestSelectCostEstimator(TestCase):
     def test_parameter_estimator_for_historic_small_gas_turbine_with_capacity_matching_data(self):
         print(select_cost_estimator(1990, "CCGT", 168.0))
 
-
     def test_parameter_estimator_for_old_recip_gas_with_540_capacity(self):
         print(select_cost_estimator(1968, "Recip_gas", 540))
 
-    def test_parameter_estimator_for_old_biomass(self):
+    def test_parameter_estimator_for_old_hydro(self):
         print(select_cost_estimator(1980, "Hydro", 100))
+
+    def test_parameter_estimator_for_old_biomass(self):
+        print(select_cost_estimator(1974, "Biomass_wood", 100))
+
+    def test_parameter_estimator_for_small_old_hydro(self):
+        print(select_cost_estimator(2002, "Hydro", 10))

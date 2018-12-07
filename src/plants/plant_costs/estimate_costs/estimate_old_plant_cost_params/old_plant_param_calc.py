@@ -21,16 +21,11 @@ class OldPlantCosts:
         self.plant_type = plant_type
         self.capacity = capacity
         self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
-        print(self.hist_costs)
-        if not all(self.hist_costs.capacity_range.str.contains("All")):
+
+        if not all(self.hist_costs.capacity_range.str.contains(">0")):
             self.hist_costs = self.hist_costs[[pd.eval(f"{self.capacity}{j}") for j in self.hist_costs['capacity_range']]]
-            print(str(self.hist_costs))
-            # print("Some ranges in historical LCOE data file.")
-
-
 
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
-
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
 
         self.modern_costs = power_plant_costs[power_plant_costs.Type==self.plant_type]
