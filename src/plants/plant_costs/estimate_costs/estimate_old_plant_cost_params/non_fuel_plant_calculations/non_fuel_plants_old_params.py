@@ -30,7 +30,7 @@ class NonFuelOldPlantCosts(OldPlantCosts):
 
         scaled_params.update(dict_to_ignore)
 
-        scaled_params = self.convert_nan_to_0(scaled_params)
+        # scaled_params = self.convert_nan_to_0(scaled_params)
 
         return scaled_params
 

@@ -40,7 +40,6 @@ class OldPlantCosts:
                                                          capacity_mw=self.capacity, construction_year=self.year,
                                                          **self.estimated_modern_plant_parameters)
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
-
         self.lcoe_scaler = self.estimated_historical_lcoe / self.modern_lcoe
 
     def find_smallest_year_available(self):
