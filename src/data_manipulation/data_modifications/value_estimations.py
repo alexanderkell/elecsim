@@ -1,7 +1,4 @@
-import pandas as pd
 
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.max_rows', 500)
 
 def closest_row(dataframe, column, value):
     """
@@ -12,5 +9,5 @@ def closest_row(dataframe, column, value):
     :return: Returns row that is closest to the value of the selected column of the dataframe
     """
     sort = dataframe.iloc[(dataframe[column]-value).abs().argsort()[:1]]
-    return(sort)
+    return sort
 

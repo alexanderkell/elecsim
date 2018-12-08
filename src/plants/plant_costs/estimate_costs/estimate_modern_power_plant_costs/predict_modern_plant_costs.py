@@ -22,6 +22,7 @@ class PredictModernPlantParameters:
         self.cost_data = scenario.power_plant_costs
         # self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
         self.cost_data = self.cost_data[self.cost_data.apply(lambda x: x['Type'] in self.plant_type, axis=1)].sort_values('Plant_Size')
+
     def parameter_estimation(self):
         """
         Function which estimates costs of power plant based on capacity, plant_type and start year. Use of linear interpolation
@@ -54,6 +55,15 @@ class PredictModernPlantParameters:
 
         parameters = {**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
+        parameters = self.check_pre_dev_spend(parameters)
+
+        return parameters
+
+    def check_pre_dev_spend(self, parameters):
+        if not parameters['pre_dev_spend_years']:
+            parameters['pre_dev_cost_per_mw'] = 0
+        if not parameters['construction_spend_years']:
+            parameters['construction_cost_per_mw'] = 0
         return parameters
 
     def check_plant_exists(self, parameters_of_plant):

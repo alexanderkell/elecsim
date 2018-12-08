@@ -5,6 +5,7 @@ Feature: #Enter feature description here
 """
 from unittest import TestCase
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
+from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -39,4 +40,9 @@ class TestSelectCostEstimator(TestCase):
         print(select_cost_estimator(1974, "Biomass_wood", 100))
 
     def test_parameter_estimator_for_small_old_hydro(self):
-        print(select_cost_estimator(2002, "Hydro", 10))
+        parameters = select_cost_estimator(2002, "Hydro", 5)
+        plant = NonFuelPlant(name="Modern Plant", plant_type="Hydro",
+                             capacity_mw=5, construction_year=2002,
+                             **parameters)
+        print("parameters: {}".format(parameters))
+        print("LCOE: {}".format(plant.calculate_lcoe(0.075)))

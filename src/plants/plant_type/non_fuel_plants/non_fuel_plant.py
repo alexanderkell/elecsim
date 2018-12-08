@@ -6,7 +6,7 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 from src.plants.plant_type.power_plant import PowerPlant
-
+from itertools import zip_longest
 
 class NonFuelPlant(PowerPlant):
 
@@ -27,10 +27,14 @@ class NonFuelPlant(PowerPlant):
         # Calculations to convert into total costs for this power plant instance
 
         capex = self.capex()
+        print("Capex: {}".format(capex))
         opex = self.opex()
+        print("Opex: {}".format(opex))
         elec_gen = self.electricity_generated()
+        print("Elec_gen: {}".format(elec_gen))
 
         total_costs = self.total_costs(capex, opex)
+        print("total_costs: {}".format(total_costs))
 
         # Discount data
         discounted_total_costs = self.discount_data(total_costs, discount_rate)
@@ -50,5 +54,6 @@ class NonFuelPlant(PowerPlant):
         :return: Total costs over lifetime of plant
         """
 
-        capex.extend(opex)
-        return capex
+        total_costs = [x + y for x, y in zip_longest(capex, opex, fillvalue=0)]
+        # capex.extend(opex)
+        return total_costs
