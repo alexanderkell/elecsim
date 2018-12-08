@@ -35,3 +35,4 @@ class TestNoFuelPlant(TestCase):
         params = {'connection_cost_per_mw': 0.0, 'construction_cost_per_mw': 4103676.6103626275, 'fixed_o_and_m_per_mw': 37265.847352193756, 'infrastructure': 311.06133108680143, 'insurance_cost_per_mw': 0.0, 'pre_dev_cost_per_mw': 0, 'variable_o_and_m_per_mwh': 3.074841257793032, 'pre_dev_period': 0, 'operating_period': 35, 'construction_period': 0, 'efficiency': 1, 'average_load_factor': 0.4, 'construction_spend_years': [1.0], 'pre_dev_spend_years': []}
         hydro_plant = NonFuelPlant(name="Hydro", plant_type="Hydro", capacity_mw=5, construction_year=2002, **params)
         assert hydro_plant.calculate_lcoe(0.075) == approx(103.8260236534459)
+

@@ -4,8 +4,10 @@ Date created: 04/12/2018
 Feature: #Enter feature description here
 """
 from unittest import TestCase
+from pytest import approx
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -45,4 +47,8 @@ class TestSelectCostEstimator(TestCase):
                              capacity_mw=5, construction_year=2002,
                              **parameters)
         print("parameters: {}".format(parameters))
-        print("LCOE: {}".format(plant.calculate_lcoe(0.075)))
+        assert parameters['construction_spend_years'] == approx([1.0])
+        assert parameters['pre_dev_spend_years'] == []
+        assert parameters['operating_period'] == 35
+
+        assert plant.calculate_lcoe(0.075) == approx(103.82602365344589)
