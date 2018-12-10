@@ -36,8 +36,8 @@ def select_cost_estimator(start_year, plant_type, capacity):
 
 
 def check_int(value, string):
-    if not isinstance(value, int):
-        raise ValueError("{} must be an integer".format(string))
+    if not isinstance(value, int) or isinstance(value, float):
+        raise ValueError("{} must be a number".format(string))
 
 def check_positive(variable, string):
     if variable < 0:
