@@ -46,6 +46,7 @@ class TestSelectCostEstimator:
 
     def test_parameter_estimator_for_small_old_hydro(self):
         parameters = select_cost_estimator(2002, "Hydro", 5)
+        print(parameters)
         plant = NonFuelPlant(name="Modern Plant", plant_type="Hydro",
                              capacity_mw=5, construction_year=2002,
                              **parameters)
@@ -54,6 +55,56 @@ class TestSelectCostEstimator:
         assert parameters['pre_dev_spend_years'] == []
         assert parameters['operating_period'] == 35
         assert plant.calculate_lcoe(0.075) == approx(103.82602365344589)
+
+    def test_parameter_estimator_for_5mw_modern_hydro(self):
+        parameters = select_cost_estimator(2018, "Hydro", 5)
+        assert parameters['construction_cost_per_mw'] == approx(3180.831826*1000)
+        assert parameters['fixed_o_and_m_per_mw'] == approx(28885.4129)
+        assert parameters['infrastructure'] == approx(241.1091019)
+        assert parameters['insurance_cost_per_mw'] == approx(0)
+        assert parameters['pre_dev_cost_per_mw'] == 0
+        assert parameters['variable_o_and_m_per_mwh'] == approx(2.383363472)
+        assert parameters['pre_dev_period'] == 0
+        assert parameters['operating_period'] == 35
+        assert parameters['construction_period'] == 0
+        assert parameters['efficiency'] == 1
+        assert parameters['average_load_factor'] == 0.4
+        assert parameters['construction_spend_years'] == [1]
+        assert parameters['pre_dev_spend_years'] == []
+
+    def test_parameter_estimator_for_20kw_modern_hydro(self):
+        parameters = select_cost_estimator(2018, "Hydro", 0.02)
+        print("parameters: {}".format(parameters))
+        assert parameters['construction_cost_per_mw'] == approx(6300*1000)
+        assert parameters['fixed_o_and_m_per_mw'] == approx(83300)
+        assert parameters['infrastructure'] == approx(0)
+        assert parameters['insurance_cost_per_mw'] == approx(0)
+        assert parameters['pre_dev_cost_per_mw'] == 0
+        assert parameters['variable_o_and_m_per_mwh'] == approx(0)
+        assert parameters['pre_dev_period'] == 0
+        assert parameters['operating_period'] == 35
+        assert parameters['construction_period'] == 0
+        assert parameters['efficiency'] == 1
+        assert parameters['average_load_factor'] == 0.6
+        assert parameters['construction_spend_years'] == [1]
+        assert parameters['pre_dev_spend_years'] == []
+
+    def test_parameter_estimator_for_15mw_modern_hydro(self):
+        parameters = select_cost_estimator(2018, "Hydro", 15)
+        print("parameters: {}".format(parameters))
+        assert parameters['construction_cost_per_mw'] == approx(3000*1000)
+        assert parameters['fixed_o_and_m_per_mw'] == approx(45100)
+        assert parameters['infrastructure'] == approx(0)
+        assert parameters['insurance_cost_per_mw'] == approx(0)
+        assert parameters['pre_dev_cost_per_mw'] == 60*1000
+        assert parameters['variable_o_and_m_per_mwh'] == approx(6)
+        assert parameters['pre_dev_period'] == 2
+        assert parameters['operating_period'] == 41
+        assert parameters['construction_period'] == 2
+        assert parameters['efficiency'] == 1
+        assert parameters['average_load_factor'] == 0.35
+        assert parameters['construction_spend_years'] == [0.7, 0.3]
+        assert parameters['pre_dev_spend_years'] == [0.77, 0.23]
 
 
     @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
