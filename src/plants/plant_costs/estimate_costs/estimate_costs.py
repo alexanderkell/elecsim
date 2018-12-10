@@ -20,8 +20,8 @@ EARLIEST_MODERN_PLANT_YEAR = 2018
 
 
 def select_cost_estimator(start_year, plant_type, capacity):
-    check_int(capacity, "capacity")
-    check_int(start_year, "start_year")
+    check_digit(capacity, "capacity")
+    check_digit(start_year, "start_year")
     check_positive(start_year, "start_year")
     check_positive(capacity, "start_year")
 
@@ -35,8 +35,8 @@ def select_cost_estimator(start_year, plant_type, capacity):
         return PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()
 
 
-def check_int(value, string):
-    if not isinstance(value, int) or isinstance(value, float):
+def check_digit(value, string):
+    if not isinstance(value, int) and not isinstance(value, float):
         raise ValueError("{} must be a number".format(string))
 
 def check_positive(variable, string):

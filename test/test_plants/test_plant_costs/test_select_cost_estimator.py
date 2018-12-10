@@ -31,7 +31,9 @@ class TestSelectCostEstimator:
                                                               'pre_dev_spend_years': [0.435, 0.435, 0.13]}
 
     def test_parameter_estimator_for_historic_small_gas_turbine_with_capacity_matching_data(self):
+        print(type(168.0))
         print(select_cost_estimator(1990, "CCGT", 168.0))
+
 
     def test_parameter_estimator_for_old_recip_gas_with_540_capacity(self):
         print(select_cost_estimator(1968, "Recip_gas", 540))
