@@ -8,6 +8,7 @@ from pytest import approx
 import pytest
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
 
 __author__ = "Alexander Kell"
@@ -30,10 +31,30 @@ class TestSelectCostEstimator:
                                                               'construction_spend_years': [0.4, 0.4, 0.2],
                                                               'pre_dev_spend_years': [0.435, 0.435, 0.13]}
 
-    def test_parameter_estimator_for_historic_small_gas_turbine_with_capacity_matching_data(self):
-        print(type(168.0))
-        print(select_cost_estimator(1990, "CCGT", 168.0))
-
+    def test_parameter_estimator_for_historic_gas_turbine_with_capacity_matching_data(self):
+        CAPACITY = 1200
+        START_YEAR = 1990
+        PLANT_TYPE = "CCGT"
+        parameters = select_cost_estimator(START_YEAR, PLANT_TYPE, CAPACITY)
+        print(parameters)
+        plant = FuelPlant(name="Modern Plant", plant_type=PLANT_TYPE,
+                     capacity_mw=CAPACITY, construction_year=START_YEAR,
+                     **parameters)
+        assert plant.calculate_lcoe(0.05) == approx(82.55488)
+        assert parameters['construction_cost_per_mw'] == approx(500*1000*6.4047971336)
+        assert parameters['fixed_o_and_m_per_mw'] == approx(12200*6.4047971336)
+        assert parameters['infrastructure'] == approx(15100*6.4047971336)
+        assert parameters['insurance_cost_per_mw'] == approx(2100*6.4047971336)
+        assert parameters['pre_dev_cost_per_mw'] == approx(10*1000*6.4047971336)
+        assert parameters['variable_o_and_m_per_mwh'] == approx(3*6.4047971336)
+        assert parameters['connection_cost_per_mw'] == approx(3300*6.4047971336)
+        assert parameters['pre_dev_period'] == 3
+        assert parameters['operating_period'] == 25
+        assert parameters['construction_period'] == 3
+        assert parameters['efficiency'] == 0.54
+        assert parameters['average_load_factor'] == 0.93
+        assert parameters['construction_spend_years'] == [0.4, 0.4, 0.2]
+        assert parameters['pre_dev_spend_years'] == [0.44, 0.44, 0.12]
 
     def test_parameter_estimator_for_old_recip_gas_with_540_capacity(self):
         print(select_cost_estimator(1968, "Recip_gas", 540))
@@ -46,7 +67,6 @@ class TestSelectCostEstimator:
 
     def test_parameter_estimator_for_small_old_hydro(self):
         parameters = select_cost_estimator(2002, "Hydro", 5)
-        print(parameters)
         plant = NonFuelPlant(name="Modern Plant", plant_type="Hydro",
                              capacity_mw=5, construction_year=2002,
                              **parameters)
@@ -108,6 +128,8 @@ class TestSelectCostEstimator:
 
     def test_parameter_estimator_for_5mw_old_hydro(self):
         parameters = select_cost_estimator(2012, "Hydro", 5)
+
+
         assert parameters['construction_cost_per_mw'] == approx(3180.831826*1000*1.2901268706825089)
         assert parameters['fixed_o_and_m_per_mw'] == approx(28885.4129*1.2901268706825089)
         assert parameters['infrastructure'] == approx(241.1091019*1.2901268706825089)
@@ -148,5 +170,4 @@ class TestSelectCostEstimator:
     def test_lcoe_calculations_value_error_raised(self, year, plant_type, capacity):
         with pytest.raises(ValueError):
             select_cost_estimator(year, plant_type, capacity)
-
 
