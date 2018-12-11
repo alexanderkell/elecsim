@@ -180,12 +180,18 @@ class TestSelectCostEstimator:
                                  (1992, "CCGT", 1200, 82.55488000000001),
                                  (2004, "CCGT", 1200, 93.58202434782609),
                                  (2015, "CCGT", 1200, 103.69024),
+                                 (1981, "Coal", 1200, 177.19296),
+                                 (1984, "Coal", 1200, 102.93248),
+                                 (1992, "Coal", 1200, 89.86624),
+                                 (1995, "Coal", 1200, 89.86624),
+                                 (1995, "Coal", 390, 89.86624),
                              ]
                              )
     def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, expected_output):
         parameters = select_cost_estimator(year, plant_type, capacity)
+        print(parameters)
         plant = FuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
-                             **parameters)
+                          **parameters)
         lcoe = plant.calculate_lcoe(0.05)
         assert lcoe == approx(expected_output)
 

@@ -1,5 +1,6 @@
 from scipy.optimize import minimize
-
+import numpy as np
+import scipy.special as sc
 import src.scenario.scenario_data as scenario
 from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
@@ -33,29 +34,42 @@ class FuelOldPlantCosts(OldPlantCosts):
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
         linear_optimisation_parameters = linear_optimisation_results['x'].tolist()
 
+
+
         scaled_parameters = {key: params for key, params in
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in params_to_ignore}
+
 
         scaled_parameters.update(dict_to_ignore)
         return scaled_parameters
 
     def _linear_optimisation(self, x, lcoe_required):
-
+        # lcoe_required = sc.expit(lcoe_required)
+        #
+        # print("x before transformation: {}".format(x))
+        # x = np.exp(np.divide(x, 100000))
+        # x = sc.expit(x)
+        # print("x: {}".format(x))
+        #
+        # lcoe_required = np.exp(np.divide(lcoe_required,100000))
+        # lcoe_required = sc.expit(lcoe_required)
+        # print("lcoe_required: {}".format(lcoe_required))
         connection_cost_per_mw = x[0]
-        construction_cost_per_kw = x[1]
+        construction_cost_per_mw = x[1]
         fixed_o_and_m_per_mw = x[2]
         infrastructure = x[3]
         insurance_cost_per_mw = x[4]
-        pre_dev_cost_per_kw = x[5]
+        pre_dev_cost_per_mw = x[5]
         variable_o_and_m_per_mwh = x[6]
 
-        cons = [{'type': 'eq', 'fun': lambda x: x[0] / x[1] - connection_cost_per_mw / construction_cost_per_kw},
-                {'type': 'eq', 'fun': lambda x: x[1] / x[2] - construction_cost_per_kw / fixed_o_and_m_per_mw},
+        variable_o_and_m_per_mwh = x[6]
+        cons = [{'type': 'eq', 'fun': lambda x: x[0] / x[1] - connection_cost_per_mw / construction_cost_per_mw},
+                {'type': 'eq', 'fun': lambda x: x[1] / x[2] - construction_cost_per_mw / fixed_o_and_m_per_mw},
                 {'type': 'eq', 'fun': lambda x: x[2] / x[3] - fixed_o_and_m_per_mw / infrastructure},
                 {'type': 'eq', 'fun': lambda x: x[3] / x[4] - infrastructure / insurance_cost_per_mw},
-                {'type': 'eq', 'fun': lambda x: x[4] / x[5] - insurance_cost_per_mw / pre_dev_cost_per_kw},
-                {'type': 'eq', 'fun': lambda x: x[5] / x[6] - pre_dev_cost_per_kw / variable_o_and_m_per_mwh},
+                {'type': 'eq', 'fun': lambda x: x[4] / x[5] - insurance_cost_per_mw / pre_dev_cost_per_mw},
+                {'type': 'eq', 'fun': lambda x: x[5] / x[6] - pre_dev_cost_per_mw / variable_o_and_m_per_mwh},
                 {'type': 'ineq', 'fun': lambda x: x[0]},
                 {'type': 'ineq', 'fun': lambda x: x[1]},
                 {'type': 'ineq', 'fun': lambda x: x[2]},
@@ -63,7 +77,14 @@ class FuelOldPlantCosts(OldPlantCosts):
                 {'type': 'ineq', 'fun': lambda x: x[4]},
                 {'type': 'ineq', 'fun': lambda x: x[5]},
                 {'type': 'eq', 'fun': lambda x: self._calculate_lcoe_wrapper(x)-lcoe_required}]
-        return minimize(self._calculate_lcoe_wrapper, x0=x, constraints=cons)
+        result = minimize(self._calculate_lcoe_wrapper, x0=x, constraints=cons)
+        # parameter_result = result['x']
+        # print("untransformed: {}".format(result['x']))
+        # retransform = np.log(parameter_result)*100000
+        # print("retransform: {}".format(retransform))
+        # print("reason for termination: {}".format(result['message']))
+        # result['x'] = np.log(parameter_result)*100000
+        return result
 
     def _calculate_lcoe_wrapper(self, x0):
         """
@@ -84,5 +105,9 @@ class FuelOldPlantCosts(OldPlantCosts):
                                  construction_spend_years=self.plant.construction_spend_years,
                                  )
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
+
+        # lcoe = np.exp(np.divide(lcoe,100000))
+
+        print("LCOE:{}".format(lcoe))
         return lcoe
 
