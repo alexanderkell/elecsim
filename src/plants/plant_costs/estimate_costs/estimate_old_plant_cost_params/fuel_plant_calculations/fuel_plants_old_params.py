@@ -75,13 +75,14 @@ class FuelOldPlantCosts(OldPlantCosts):
         test_params = {key:value for key, value in zip(self.estimated_modern_plant_parameters, x0)}
 
         holder_plant = FuelPlant(**test_params, name="LinOptim", plant_type=self.plant_type, capacity_mw=self.capacity,
-                                 construction_year=self.plant.construction_year, average_load_factor=self.plant.average_load_factor,
+                                 construction_year=self.plant.construction_year,
+                                 average_load_factor=self.plant.average_load_factor,
                                  efficiency=self.plant.efficiency, pre_dev_period=self.plant.pre_dev_period,
                                  construction_period=self.plant.construction_period,
                                  operating_period=self.plant.operating_period,
                                  pre_dev_spend_years=self.plant.pre_dev_spend_years,
-                                 construction_spend_years=self.plant.construction_spend_years)
+                                 construction_spend_years=self.plant.construction_spend_years,
+                                 )
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
-
         return lcoe
 

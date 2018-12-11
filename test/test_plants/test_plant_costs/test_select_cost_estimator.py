@@ -146,18 +146,47 @@ class TestSelectCostEstimator:
 
     @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
                              [
-                                 (1, "Hydro", 5, 103.82602365344589),
-                                 (2010, "Hydro", 5, 103.82602365344589),
-                                 (2011, "Hydro", 5, 103.82602365344589),
-                                 (2012, "Hydro", 5, 103.82602365344589),
-                                 (2015, "PV", 1000, 159.505145013519)
+                                 # (1, "Hydro", 5, 103.82602365344589),
+                                 # (2010, "Hydro", 5, 103.82602365344589),
+                                 # (2011, "Hydro", 5, 103.82602365344589),
+                                 # (2012, "Hydro", 5, 103.82602365344589),
+                                 # (200, "PV", 1000, 440.87611118675716),
+                                 # (2009, "PV", 1000, 440.87611118675716),
+                                 # (2010, "PV", 1000, 440.87611118675716),
+                                 # (2011, "PV", 1000, 427.94063296309986),
+                                 # (2012, "PV", 1000, 489.4084693341632),
+                                 # (2013, "PV", 1000, 225.93320235756386),
+                                 # (2014, "PV", 1000, 194.4212102939174),
+                                 # (2015, "PV", 1000, 159.505145013519),
+                                 # (2016, "PV", 1000, 158.33803419634694),
+                                 # (2017, "PV", 1000, 145.791592911747),
+                                 # (1989, "Onshore", 1000, 227.84511564123014),
+                                 # (1999, "Onshore", 1000, 148.07367387033398),
+                                 # (2016, "Onshore", 1000, 76.71672469801007),
+                                 # (1992, "CCGT", 1200, 82.55488000000001),
+                                 # (2016, "CCGT", 1200, 103.69024),
                              ]
                              )
-    def test_lcoe_calculations(self, year, plant_type, capacity, expected_output):
+    def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, expected_output):
         parameters = select_cost_estimator(year, plant_type, capacity)
         plant = NonFuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
                              **parameters)
         lcoe = plant.calculate_lcoe(0.075)
+        assert lcoe == approx(expected_output)
+
+    @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
+                             [
+                                 (1980, "CCGT", 1200, 82.55488000000001),
+                                 (1992, "CCGT", 1200, 82.55488000000001),
+                                 (2004, "CCGT", 1200, 93.58202434782609),
+                                 (2015, "CCGT", 1200, 103.69024),
+                             ]
+                             )
+    def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, expected_output):
+        parameters = select_cost_estimator(year, plant_type, capacity)
+        plant = FuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
+                             **parameters)
+        lcoe = plant.calculate_lcoe(0.05)
         assert lcoe == approx(expected_output)
 
     @pytest.mark.parametrize("year, plant_type, capacity",

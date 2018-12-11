@@ -25,7 +25,6 @@ def select_cost_estimator(start_year, plant_type, capacity):
     check_positive(start_year, "start_year")
     check_positive(capacity, "start_year")
 
-
     hist_costs = scenario.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology == plant_type].dropna()
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
