@@ -44,14 +44,8 @@ class FuelPlant(PowerPlant):
         capex = self.capex()
         opex = self.opex()
         elec_gen = self.electricity_generated()
-        # elec_gen = [exp(i) for i in self.electricity_generated()]
-
         fuel_costs = self.fuel_costs(elec_gen)
-        # fuel_costs = [exp(i) for i in self.fuel_costs(elec_gen)]
-
         carbon_costs = self.carbon_costs()
-        # carbon_costs = [exp(i) for i in self.fuel_costs(elec_gen)]
-
 
         total_costs = self.total_costs(capex, opex, fuel_costs, carbon_costs)
 

@@ -45,16 +45,6 @@ class FuelOldPlantCosts(OldPlantCosts):
         return scaled_parameters
 
     def _linear_optimisation(self, x, lcoe_required):
-        # lcoe_required = sc.expit(lcoe_required)
-        #
-        # print("x before transformation: {}".format(x))
-        # x = np.exp(np.divide(x, 100000))
-        # x = sc.expit(x)
-        # print("x: {}".format(x))
-        #
-        # lcoe_required = np.exp(np.divide(lcoe_required,100000))
-        # lcoe_required = sc.expit(lcoe_required)
-        # print("lcoe_required: {}".format(lcoe_required))
         connection_cost_per_mw = x[0]
         construction_cost_per_mw = x[1]
         fixed_o_and_m_per_mw = x[2]
@@ -78,12 +68,7 @@ class FuelOldPlantCosts(OldPlantCosts):
                 {'type': 'ineq', 'fun': lambda x: x[5]},
                 {'type': 'eq', 'fun': lambda x: self._calculate_lcoe_wrapper(x)-lcoe_required}]
         result = minimize(self._calculate_lcoe_wrapper, x0=x, constraints=cons)
-        # parameter_result = result['x']
-        # print("untransformed: {}".format(result['x']))
-        # retransform = np.log(parameter_result)*100000
-        # print("retransform: {}".format(retransform))
-        # print("reason for termination: {}".format(result['message']))
-        # result['x'] = np.log(parameter_result)*100000
+
         return result
 
     def _calculate_lcoe_wrapper(self, x0):
