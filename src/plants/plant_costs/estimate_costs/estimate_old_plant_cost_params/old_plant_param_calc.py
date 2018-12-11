@@ -42,8 +42,6 @@ class OldPlantCosts:
         self.modern_lcoe = self.plant.calculate_lcoe(self.discount_rate)
         self.lcoe_scaler = self.estimated_historical_lcoe / self.modern_lcoe
 
-        print("LCOE Scaler: {}".format(self.lcoe_scaler))
-
     def find_smallest_year_available(self):
         """
         Method which takes the modern cost BEIS database of power plants, and finds the earliest year

@@ -30,7 +30,7 @@ def select_cost_estimator(start_year, plant_type, capacity):
     hist_costs = hist_costs[hist_costs.Technology == plant_type].dropna()
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
-        return estimate_old_plant_costs_based_on_fuel(capacity, plant_type, require_fuel, start_year)
+        return estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
     else:
         return PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()
 
@@ -44,10 +44,10 @@ def check_positive(variable, string):
         raise ValueError("{} must be greater than 0".format(string))
 
 
-def estimate_old_plant_costs_based_on_fuel(capacity, plant_type, require_fuel, start_year):
+def estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year):
     if require_fuel:
         fuel_plant_parameters = FuelOldPlantCosts(start_year, plant_type, capacity)
         return fuel_plant_parameters.estimate_cost_parameters()
     else:
         non_fuel_plant_parameters = NonFuelOldPlantCosts(start_year, plant_type, capacity)
-        return non_fuel_plant_parameters.estimate_cost_parameters()
+        return non_fuel_plant_parameters.get_cost_parameters()

@@ -149,7 +149,8 @@ class TestSelectCostEstimator:
                                  (1, "Hydro", 5, 103.82602365344589),
                                  (2010, "Hydro", 5, 103.82602365344589),
                                  (2011, "Hydro", 5, 103.82602365344589),
-                                 (2012, "Hydro", 5, 103.82602365344589)
+                                 (2012, "Hydro", 5, 103.82602365344589),
+                                 (2015, "PV", 1000, 159.505145013519)
                              ]
                              )
     def test_lcoe_calculations(self, year, plant_type, capacity, expected_output):
@@ -170,4 +171,16 @@ class TestSelectCostEstimator:
     def test_lcoe_calculations_value_error_raised(self, year, plant_type, capacity):
         with pytest.raises(ValueError):
             select_cost_estimator(year, plant_type, capacity)
+
+    # @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
+    #                          [
+    #
+    #                          ])
+    # def test_various_historical_LCOE_calculations_for_PV(self, year, plant_type, capacity, expected_output):
+    #     parameters = select_cost_estimator(year, plant_type, capacity)
+    #     plant = NonFuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
+    #                          **parameters)
+    #     lcoe = plant.calculate_lcoe(0.075)
+    #     assert lcoe == approx(expected_output)
+
 
