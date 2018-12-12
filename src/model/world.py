@@ -54,7 +54,7 @@ class World(Model):
                 print("Trying to add plant type {}, with capacity {} of year {}".format(plant.Simplified_Type, plant.Capacity, plant.Start_date))
                 estimated_cost_parameters = select_cost_estimator(start_year=plant.Start_date, plant_type=plant.Simplified_Type, capacity=plant.Capacity)
                 power_plant_obj = PlantRegistry(plant.Simplified_Type).plant_type_to_plant_object()
-                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Fuel, capacity_mw = plant.Capacity, construction_year= plant.Start_date, **estimated_cost_parameters)
+                power_plant = power_plant_obj(name = plant.Name, plant_type = plant.Simplified_Type, capacity_mw = plant.Capacity, construction_year= plant.Start_date, **estimated_cost_parameters)
                 print("Registering plant {}, of type {}, with capacity {}, and estimated parameters {}".format(plant.Name, plant.Simplified_Type, plant.Capacity, estimated_cost_parameters))
                 print("Estimated parameters {}".format(estimated_cost_parameters))
 

@@ -33,7 +33,10 @@ def select_cost_estimator(start_year, plant_type, capacity):
 
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
-        return estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
+        cost_parameters = estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
+        print('cost_parameters: {}'.format(cost_parameters))
+        assert all(value == 0 for value in cost_parameters.values()), "All values are 0 for cost parameters for power plant of year {}, type {}, and capacity {}".format(start_year, plant_type, capacity)
+        return cost_parameters
     else:
         return PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()
 

@@ -133,7 +133,9 @@ def plant_type_to_fuel(plant_type, construction_year):
         return None
     elif plant_type == "Biomass_poultry_litter":
         return "Poultry_litter"
-    elif plant_type == "Straw":
+    elif plant_type == "Biomass_meat":
+        return "Meat"
+    elif plant_type == "Biomass_straw":
         return "Straw"
     elif plant_type == "Diesel":
         return "Diesel"
@@ -151,9 +153,9 @@ def plant_type_to_fuel(plant_type, construction_year):
         return "Gas"
     elif plant_type == "Gas oil":
         return "Diesel"
-    elif plant_type == "Waste" and construction_year<=2000:
+    elif plant_type == "EfW" and construction_year<=2000:
         return "Waste_pre_2000"
-    elif plant_type == "Waste" and construction_year>2000:
+    elif plant_type == "EfW" and construction_year>2000:
         return "Waste_pre_2000"
     elif plant_type == "Pumped storage":
         return None
