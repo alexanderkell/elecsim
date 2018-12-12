@@ -142,68 +142,85 @@ class TestSelectCostEstimator:
         assert parameters['construction_spend_years'] == [1]
         assert parameters['pre_dev_spend_years'] == []
 
-    @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
                              [
-                                 # (1, "Hydro", 5, 103.82602365344589),
-                                 # (2010, "Hydro", 5, 103.82602365344589),
-                                 # (2011, "Hydro", 5, 103.82602365344589),
-                                 # (2012, "Hydro", 5, 103.82602365344589),
-                                 # (200, "PV", 1000, 440.87611118675716),
-                                 # (2009, "PV", 1000, 440.87611118675716),
-                                 # (2010, "PV", 1000, 440.87611118675716),
-                                 # (2011, "PV", 1000, 427.94063296309986),
-                                 # (2012, "PV", 1000, 489.4084693341632),
-                                 # (2013, "PV", 1000, 225.93320235756386),
-                                 # (2014, "PV", 1000, 194.4212102939174),
-                                 # (2015, "PV", 1000, 159.505145013519),
-                                 # (2016, "PV", 1000, 158.33803419634694),
-                                 # (2017, "PV", 1000, 145.791592911747),
-                                 # (1989, "Onshore", 1000, 227.84511564123014),
-                                 # (1999, "Onshore", 1000, 148.07367387033398),
-                                 # (2016, "Onshore", 1000, 76.71672469801007),
-                                 # (1992, "CCGT", 1200, 82.55488000000001),
-                                 # (2016, "CCGT", 1200, 103.69024),
+                                 (1, "Hydro", 5, 0.075, 103.82602365344589),
+                                 (2010, "Hydro", 5, 0.075, 103.82602365344589),
+                                 (2011, "Hydro", 5, 0.075, 103.82602365344589),
+                                 (2012, "Hydro", 5, 0.075, 103.82602365344589),
+                                 (1, "Hydro", 20, 0.075, 135.22924001633953),
+                                 (2010, "Hydro", 50, 0.075, 135.22924001633953),
+                                 (2011, "Hydro", 60, 0.075, 135.22924001633953),
+                                 (2012, "Hydro", 70, 0.075, 135.22924001633953),
+                                 (200, "PV", 1000, 0.075, 440.87611118675716),
+                                 (2009, "PV", 1000, 0.075, 440.87611118675716),
+                                 (2010, "PV", 1000, 0.075, 440.87611118675716),
+                                 (2011, "PV", 1000, 0.075, 427.94063296309986),
+                                 (2012, "PV", 1, 0.075, 489.4084693341632),
+                                 (2013, "PV", 1.3, 0.075, 225.93320235756386),
+                                 (2014, "PV", 9, 0.075, 194.4212102939174),
+                                 (2015, "PV", 1000, 0.075, 159.505145013519),
+                                 (2016, "PV", 1000, 0.075, 158.33803419634694),
+                                 (2017, "PV", 1000, 0.075, 145.791592911747),
+                                 (1989, "Onshore", 1000, 0.075, 227.84511564123014),
+                                 (1999, "Onshore", 1000, 0.075, 148.07367387033398),
+                                 (1999, "Onshore", 1, 0.075, 148.07367387033398),
+                                 (1999, "Onshore", 2.3, 0.075, 148.07367387033398),
+                                 (1999, "Onshore", 100000.54, 0.075, 148.07367387033398),
+                                 (2016, "Onshore", 1000, 0.075, 76.71672469801007),
                              ]
                              )
-    def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, expected_output):
+    def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, discount_rate, expected_output):
         parameters = select_cost_estimator(year, plant_type, capacity)
         plant = NonFuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
                              **parameters)
-        lcoe = plant.calculate_lcoe(0.075)
+        lcoe = plant.calculate_lcoe(discount_rate)
         assert lcoe == approx(expected_output)
 
-    @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
                              [
-                                 (1980, "CCGT", 1200, 82.55488000000001),
-                                 (1992, "CCGT", 1200, 82.55488000000001),
-                                 (2004, "CCGT", 1200, 93.58202434782609),
-                                 (2015, "CCGT", 1200, 103.69024),
-                                 (1981, "Coal", 1200, 177.19296),
-                                 (1984, "Coal", 1200, 102.93248),
-                                 (1992, "Coal", 1200, 89.86624),
-                                 (1995, "Coal", 1200, 89.86624),
-                                 (1995, "Coal", 390, 89.86624),
-                                 (1995, "Coal", 552.0, 89.86624),
-                                 (1995, "Coal", 624.0, 89.86624),
-                                 (1995, "Coal", 652.0, 89.86624),
-                                 (1995, "Coal", 760.0, 89.86624),
-                                 (1995, "Coal", 734.0, 89.86624),
-                                 (1995, "Coal", 624.0, 89.86624),
-                                 (1984, "Coal", 624.0, 102.93248),
-                                 (2015, "Nuclear", 624.0, 82.82112),
-                                 (1981, "Nuclear", 624.0, 123.83232),
-                                 (1984, "Nuclear", 624.0, 66.99008),
-                                 (1984, "Nuclear", 1, 66.99008),
-                                 (1984, "Nuclear", 10000000, 66.99008),
-                                 (1983, "Nuclear", 10000000, 85.93749333333335),
-                                 (1910, "Nuclear", 10000000, 123.83232000000001),
+                                 (1980, "CCGT", 1200, 0.05, 82.55488000000001),
+                                 (1992, "CCGT", 1200, 0.05, 82.55488000000001),
+                                 (2004, "CCGT", 1200, 0.05, 93.58202434782609),
+                                 (2015, "CCGT", 1200, 0.05, 103.69024),
+                                 (1981, "Coal", 1200, 0.05, 177.19296),
+                                 (1984, "Coal", 1200, 0.05, 102.93248),
+                                 (1992, "Coal", 1200, 0.05, 89.86624),
+                                 (1995, "Coal", 1200, 0.05, 89.86624),
+                                 (1995, "Coal", 390, 0.05, 89.86624),
+                                 (1995, "Coal", 552.0, 0.05, 89.86624),
+                                 (1995, "Coal", 624.0, 0.05, 89.86624),
+                                 (1995, "Coal", 652.0, 0.05, 89.86624),
+                                 (1995, "Coal", 760.0, 0.05, 89.86624),
+                                 (1995, "Coal", 734.0, 0.05, 89.86624),
+                                 (1995, "Coal", 624.0, 0.05, 89.86624),
+                                 (1984, "Coal", 624.0, 0.05, 102.93248),
+                                 (1984, "Coal", 54.5, 0.05, 102.93248),
+                                 (2015, "Nuclear", 624.0, 0.05, 82.82112),
+                                 (1981, "Nuclear", 624.0, 0.05, 123.83232),
+                                 (1984, "Nuclear", 624.0, 0.05, 66.99008),
+                                 (1984, "Nuclear", 1, 0.05, 66.99008),
+                                 (1984, "Nuclear", 1.3, 0.05, 66.99008),
+                                 (1984, "Nuclear", 10000000, 0.05, 66.99008),
+                                 (1983, "Nuclear", 10000000, 0.05, 85.93749333333335),
+                                 (1910, "Nuclear", 10000000, 0.05, 123.83232000000001),
+                                 (2016, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (1960, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2013, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2016, 'Biomass_wood', 1000, 0.075, 87.5333112879068),
+                                 (2016, 'Biomass_wood', 1, 0.075, 87.5333112879068),
+                                 (2017, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2010, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
+                                 (2005, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_poultry_litter', 10000, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_poultry_litter', 1.3, 0.075, 87.5333112879068),
                              ]
                              )
-    def test_lcoe_calculations_for_non_fuel_plant(self, year, plant_type, capacity, expected_output):
+    def test_lcoe_calculations_for_fuel_plant(self, year, plant_type, capacity, discount_rate, expected_output):
         parameters = select_cost_estimator(year, plant_type, capacity)
         plant = FuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
                           **parameters)
-        lcoe = plant.calculate_lcoe(0.05)
+        lcoe = plant.calculate_lcoe(discount_rate)
         assert lcoe == approx(expected_output)
 
     @pytest.mark.parametrize("year, plant_type, capacity",

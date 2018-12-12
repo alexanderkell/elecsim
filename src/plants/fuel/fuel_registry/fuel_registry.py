@@ -159,5 +159,7 @@ def plant_type_to_fuel(plant_type, construction_year):
         return None
     elif plant_type == "Wind":
         return None
+    else:
+        raise ValueError("No fuel data for {}".format(plant_type))
 
 

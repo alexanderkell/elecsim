@@ -20,7 +20,8 @@ class OldPlantCosts:
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
-        self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
+        # self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
+        self.hist_costs = self.hist_costs[self.hist_costs['Technology'].map(lambda x: x in plant_type)].dropna()
 
         if not all(self.hist_costs.capacity_range.str.contains(">0")):
             self.hist_costs = self.hist_costs[[pd.eval(f"{self.capacity}{j}") for j in self.hist_costs['capacity_range']]]
@@ -28,8 +29,8 @@ class OldPlantCosts:
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
 
-        self.modern_costs = power_plant_costs[power_plant_costs.Type==self.plant_type]
-
+        # self.modern_costs = power_plant_costs[power_plant_costs.Type==self.plant_type]
+        self.modern_costs = power_plant_costs[power_plant_costs['Type'].map(lambda x: x in plant_type)]
         min_year = self.find_smallest_year_available()
 
         self.estimated_modern_plant_parameters = PredictModernPlantParameters(self.plant_type, self.capacity, min_year).parameter_estimation()
