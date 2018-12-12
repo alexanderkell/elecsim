@@ -77,7 +77,6 @@ class FuelOldPlantCosts(OldPlantCosts):
         :param params: Dict which contains parameters for the FuelPlant class
         :return: LCOE
         """
-
         test_params = {key:value for key, value in zip(self.estimated_modern_plant_parameters, x0)}
 
         holder_plant = FuelPlant(**test_params, name="LinOptim", plant_type=self.plant_type, capacity_mw=self.capacity,
@@ -91,8 +90,5 @@ class FuelOldPlantCosts(OldPlantCosts):
                                  )
         lcoe = holder_plant.calculate_lcoe(self.discount_rate)
 
-        # lcoe = np.exp(np.divide(lcoe,100000))
-
-        print("LCOE:{}".format(lcoe))
         return lcoe
 

@@ -81,7 +81,7 @@ class PlantRegistry:
         elif plant_type == "ocgt":
             return True
         elif plant_type == "nuclear":
-            return False
+            return True
         elif plant_type == "recip_gas":
             return False
         elif plant_type == "pumped_storage":
