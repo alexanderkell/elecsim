@@ -441,7 +441,6 @@
 440,440,Lark,Chalgrove - Langlay Hall - Solar Farm,Solar,2.4,2014.00,PV
 441,441,Lark,Coton Park Solar Farm,Solar,2.7,2015.00,PV
 442,442,Lark,Ellough Solar Farm,Solar,19.9,2014.00,PV
-443,443,Lark,Ellough Solar Farm Phase two,Solar,0.0,2016.00,PV
 444,444,Lark,Fen Road Solar Farm,Solar,1.4,2011.00,PV
 445,445,Lark,Fiskerton Solar Farm,Solar,13.0,2015.00,PV
 446,446,Lark,Huddlesford House Farm,Solar,0.9,2016.00,PV
@@ -527,11 +526,6 @@
 526,526,LightsourceBP,Moor Solar 2,Solar,1.1,2011.00,PV
 527,527,LightsourceBP,Morfa,Solar,2.0,2016.00,PV
 528,528,LightsourceBP,Nefyn (Tyddyn Cae),Solar,4.9,2015.00,PV
-529,529,LightsourceBP,NI Cluster Belfast Road,Solar,0.0,2017.00,PV
-530,530,LightsourceBP,NI Cluster Hillside,Solar,0.0,2017.00,PV
-531,531,LightsourceBP,NI Cluster Knockairn Road,Solar,0.0,2017.00,PV
-532,532,LightsourceBP,NI Cluster Lough Road,Solar,0.0,2016.00,PV
-533,533,LightsourceBP,NI Cluster Moira Road,Solar,0.0,2017.00,PV
 534,534,LightsourceBP,Norrington,Solar,11.1,2014.00,PV
 535,535,LightsourceBP,North Tenement,Solar,5.0,2017.00,PV
 536,536,LightsourceBP,Park Farm West ,Solar,3.9,2017.00,PV
@@ -899,7 +893,6 @@
 898,898,SSE,Lednock,Hydro,3.0,1961.00,Hydro
 899,899,SSE,Lochay,Hydro,46.0,1958.00,Hydro
 900,900,SSE,Lochay Compensation Set,Hydro,2.0,1959.00,Hydro
-901,901,SSE,Lochay Fish Pass Generator,Hydro,0.0,1959.00,Hydro
 902,902,SSE,Lubreoch,Hydro,4.0,1958.00,Hydro
 903,903,SSE,St. Fillans,Hydro,16.8,1957.00,Hydro
 904,904,SSE,Achanalt,Hydro,3.0,1956.00,Hydro
