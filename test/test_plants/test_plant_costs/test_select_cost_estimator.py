@@ -10,6 +10,8 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_est
 from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
 from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
+from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
+
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
@@ -179,54 +181,54 @@ class TestSelectCostEstimator:
 
     @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
                              [
-                                 # (1980, "CCGT", 1200, 0.05, 82.55488000000001),
-                                 # (1992, "CCGT", 1200, 0.05, 82.55488000000001),
-                                 # (2004, "CCGT", 1200, 0.05, 93.58202434782609),
-                                 # (2015, "CCGT", 1200, 0.05, 103.69024),
-                                 # (1981, "Coal", 1200, 0.05, 177.19296),
-                                 # (1984, "Coal", 1200, 0.05, 102.93248),
-                                 # (1992, "Coal", 1200, 0.05, 89.86624),
-                                 # (1995, "Coal", 1200, 0.05, 89.86624),
-                                 # (1995, "Coal", 390, 0.05, 89.86624),
-                                 # (1995, "Coal", 552.0, 0.05, 89.86624),
-                                 # (1995, "Coal", 624.0, 0.05, 89.86624),
-                                 # (1995, "Coal", 652.0, 0.05, 89.86624),
-                                 # (1995, "Coal", 760.0, 0.05, 89.86624),
-                                 # (1995, "Coal", 734.0, 0.05, 89.86624),
-                                 # (1995, "Coal", 624.0, 0.05, 89.86624),
-                                 # (1984, "Coal", 624.0, 0.05, 102.93248),
-                                 # (1984, "Coal", 54.5, 0.05, 102.93248),
-                                 # (2015, "Nuclear", 624.0, 0.05, 82.82112),
-                                 # (1981, "Nuclear", 624.0, 0.05, 123.83232),
-                                 # (1984, "Nuclear", 624.0, 0.05, 66.99008),
-                                 # (1984, "Nuclear", 1, 0.05, 66.99008),
-                                 # (1984, "Nuclear", 1.3, 0.05, 66.99008),
-                                 # (1984, "Nuclear", 10000000, 0.05, 66.99008),
-                                 # (1983, "Nuclear", 10000000, 0.05, 85.93749333333335),
-                                 # (1910, "Nuclear", 10000000, 0.05, 123.83232000000001),
-                                 # (2016, 'Biomass_wood', 65, 0.075, 87.5333112879068),
-                                 # (1960, 'Biomass_wood', 65, 0.075, 87.5333112879068),
-                                 # (2013, 'Biomass_wood', 65, 0.075, 87.5333112879068),
-                                 # (2016, 'Biomass_wood', 1000, 0.075, 87.5333112879068),
-                                 # (2016, 'Biomass_wood', 1, 0.075, 87.5333112879068),
-                                 # (2017, 'Biomass_wood', 65, 0.075, 87.5333112879068),
-                                 # (2010, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
-                                 # (2005, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
-                                 # (2015, 'Biomass_poultry_litter', 10000, 0.075, 87.5333112879068),
-                                 # (2015, 'Biomass_poultry_litter', 1.3, 0.075, 87.5333112879068),
-                                 # (2010, 'Biomass_meat', 100, 0.075, 87.5333112879068),
-                                 # (2005, 'Biomass_meat', 100, 0.075, 87.5333112879068),
-                                 # (2015, 'Biomass_meat', 10000, 0.075, 87.5333112879068),
-                                 # (2015, 'Biomass_meat', 1.3, 0.075, 87.5333112879068),
-                                 # (2010, 'Biomass_straw', 100, 0.075, 87.5333112879068),
-                                 # (2005, 'Biomass_straw', 100, 0.075, 87.5333112879068),
-                                 # (2015, 'Biomass_straw', 10000, 0.075, 87.5333112879068),
+                                 (1980, "CCGT", 1200, 0.05, 82.55488000000001),
+                                 (1992, "CCGT", 1200, 0.05, 82.55488000000001),
+                                 (2004, "CCGT", 1200, 0.05, 93.58202434782609),
+                                 (2015, "CCGT", 1200, 0.05, 103.69024),
+                                 (1981, "Coal", 1200, 0.05, 177.19296),
+                                 (1984, "Coal", 1200, 0.05, 102.93248),
+                                 (1992, "Coal", 1200, 0.05, 89.86624),
+                                 (1995, "Coal", 1200, 0.05, 89.86624),
+                                 (1995, "Coal", 390, 0.05, 89.86624),
+                                 (1995, "Coal", 552.0, 0.05, 89.86624),
+                                 (1995, "Coal", 624.0, 0.05, 89.86624),
+                                 (1995, "Coal", 652.0, 0.05, 89.86624),
+                                 (1995, "Coal", 760.0, 0.05, 89.86624),
+                                 (1995, "Coal", 734.0, 0.05, 89.86624),
+                                 (1995, "Coal", 624.0, 0.05, 89.86624),
+                                 (1984, "Coal", 624.0, 0.05, 102.93248),
+                                 (1984, "Coal", 54.5, 0.05, 102.93248),
+                                 (2015, "Nuclear", 624.0, 0.05, 82.82112),
+                                 (1981, "Nuclear", 624.0, 0.05, 123.83232),
+                                 (1984, "Nuclear", 624.0, 0.05, 66.99008),
+                                 (1984, "Nuclear", 1, 0.05, 66.99008),
+                                 (1984, "Nuclear", 1.3, 0.05, 66.99008),
+                                 (1984, "Nuclear", 10000000, 0.05, 66.99008),
+                                 (1983, "Nuclear", 10000000, 0.05, 85.93749333333335),
+                                 (1910, "Nuclear", 10000000, 0.05, 123.83232000000001),
+                                 (2016, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (1960, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2013, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2016, 'Biomass_wood', 1000, 0.075, 87.5333112879068),
+                                 (2016, 'Biomass_wood', 1, 0.075, 87.5333112879068),
+                                 (2017, 'Biomass_wood', 65, 0.075, 87.5333112879068),
+                                 (2010, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
+                                 (2005, 'Biomass_poultry_litter', 100, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_poultry_litter', 10000, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_poultry_litter', 1.3, 0.075, 87.5333112879068),
+                                 (2010, 'Biomass_meat', 100, 0.075, 87.5333112879068),
+                                 (2005, 'Biomass_meat', 100, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_meat', 10000, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_meat', 1.3, 0.075, 87.5333112879068),
+                                 (2010, 'Biomass_straw', 100, 0.075, 87.5333112879068),
+                                 (2005, 'Biomass_straw', 100, 0.075, 87.5333112879068),
+                                 (2015, 'Biomass_straw', 10000, 0.075, 87.5333112879068),
                                  (2015, 'Biomass_straw', 1.3, 0.075, 87.5333112879068),
                              ]
                              )
     def test_lcoe_calculations_for_fuel_plant(self, year, plant_type, capacity, discount_rate, expected_output):
         parameters = select_cost_estimator(year, plant_type, capacity)
-        plant = FuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
+        plant = FuelPlant(name="TestPlant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
                           **parameters)
         lcoe = plant.calculate_lcoe(discount_rate)
         assert lcoe == approx(expected_output)
@@ -243,13 +245,56 @@ class TestSelectCostEstimator:
         with pytest.raises(ValueError):
             select_cost_estimator(year, plant_type, capacity)
 
-            # @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
-            #                          [
-            #
-            #                          ])
-            # def test_various_historical_LCOE_calculations_for_PV(self, year, plant_type, capacity, expected_output):
-            #     parameters = select_cost_estimator(year, plant_type, capacity)
-            #     plant = NonFuelPlant(name="Modern Plant", plant_type=plant_type, capacity_mw=capacity, construction_year=year,
-            #                          **parameters)
-            #     lcoe = plant.calculate_lcoe(0.075)
-            #     assert lcoe == approx(expected_output)
+    @pytest.mark.parametrize("year, plant_type, capacity",
+                             [
+                                 (1980, "CCGT", 1200),
+                                 (1992, "CCGT", 1200),
+                                 (2004, "CCGT", 1200),
+                                 (2015, "CCGT", 1200),
+                                 (1981, "Coal", 1200),
+                                 (1984, "Coal", 1200),
+                                 (1992, "Coal", 1200),
+                                 (1995, "Coal", 1200),
+                                 (1995, "Coal", 390),
+                                 (1995, "Coal", 552.0),
+                                 (1995, "Coal", 624.0),
+                                 (1995, "Coal", 652.0),
+                                 (1995, "Coal", 760.0),
+                                 (1995, "Coal", 734.0),
+                                 (1995, "Coal", 624.0),
+                                 (1984, "Coal", 624.0),
+                                 (1984, "Coal", 54.5),
+                                 (2015, "Nuclear", 624.0),
+                                 (1981, "Nuclear", 624.0),
+                                 (1984, "Nuclear", 624.0),
+                                 (1984, "Nuclear", 1),
+                                 (1984, "Nuclear", 1.3),
+                                 (1984, "Nuclear", 10000000),
+                                 (1983, "Nuclear", 10000000),
+                                 (1910, "Nuclear", 10000000),
+                                 (2016, 'Biomass_wood', 65),
+                                 (1960, 'Biomass_wood', 65),
+                                 (2013, 'Biomass_wood', 65),
+                                 (2016, 'Biomass_wood', 1000),
+                                 (2016, 'Biomass_wood', 1),
+                                 (2017, 'Biomass_wood', 65),
+                                 (2010, 'Biomass_poultry_litter', 100),
+                                 (2005, 'Biomass_poultry_litter', 100),
+                                 (2015, 'Biomass_poultry_litter', 1000),
+                                 (2015, 'Biomass_poultry_litter', 1.3),
+                                 (2010, 'Biomass_meat', 100),
+                                 (2005, 'Biomass_meat', 100),
+                                 (2015, 'Biomass_meat', 10000),
+                                 (2015, 'Biomass_meat', 1.3),
+                                 (2010, 'Biomass_straw', 100),
+                                 (2005, 'Biomass_straw', 100),
+                                 (2015, 'Biomass_straw', 10000),
+                                 (2015, 'Biomass_straw', 1.3),
+                             ])
+    def test_estimated_fuel_plant_parameters_scaled_equally(self, year, plant_type, capacity):
+        parameters = select_cost_estimator(start_year=year, plant_type=plant_type, capacity=capacity)
+        fuel_plant_params_calc = FuelOldPlantCosts(year, plant_type, capacity)
+        modern_parameters = fuel_plant_params_calc.estimate_modern_parameters()
+
+        divided_params = {key: round(parameters[key]/modern_parameters[key], 4) for key in modern_parameters if key in parameters}
+        assert len(set(divided_params.values())) == 1

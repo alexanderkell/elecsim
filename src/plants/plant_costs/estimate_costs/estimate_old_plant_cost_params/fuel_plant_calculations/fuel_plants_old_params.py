@@ -22,27 +22,30 @@ class FuelOldPlantCosts(OldPlantCosts):
         :return: Returns dictionary of the updated parameters for the power plant.
         """
 
-        params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
-                            'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
-        dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
-                          if key in params_to_ignore}
-
-        params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in self.estimated_modern_plant_parameters
-                              if key not in params_to_ignore}
+        params_for_scaling = self.estimate_modern_parameters()
         parameter_values = list(params_for_scaling.values())
 
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
         linear_optimisation_parameters = linear_optimisation_results['x'].tolist()
 
-
-
         scaled_parameters = {key: params for key, params in
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
-                             if key not in params_to_ignore}
+                             if key not in self.params_to_ignore}
 
 
-        scaled_parameters.update(dict_to_ignore)
+        scaled_parameters.update(self.dict_to_ignore)
         return scaled_parameters
+
+    def estimate_modern_parameters(self):
+        self.params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
+                                 'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
+        self.dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in
+                               self.estimated_modern_plant_parameters
+                               if key in self.params_to_ignore}
+        params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in
+                              self.estimated_modern_plant_parameters
+                              if key not in self.params_to_ignore}
+        return params_for_scaling
 
     def _linear_optimisation(self, x, lcoe_required):
         connection_cost_per_mw = x[0]
