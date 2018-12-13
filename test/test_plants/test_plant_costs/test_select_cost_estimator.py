@@ -346,14 +346,12 @@ class TestSelectCostEstimator:
                              ])
     def test_estimated_non_fuel_plant_parameters_scaled_equally(self, year, plant_type, capacity):
         parameters = select_cost_estimator(start_year=year, plant_type=plant_type, capacity=capacity)
-        nonfuel_calculator = NonFuelOldPlantCosts(year=year, plant_type=plant_type,
-                                                 capacity=capacity)
+        nonfuel_calculator = NonFuelOldPlantCosts(year=year, plant_type=plant_type, capacity=capacity)
 
         nonfuel_calculator.get_params_to_scale()
 
         modern_parameters = nonfuel_calculator.estimated_modern_plant_parameters
 
         divided_params = {key: round(parameters[key] / modern_parameters[key], 4) for key in modern_parameters if
-                          key not in nonfuel_calculator.dict_to_ignore}
-        removed_nans = {k: divided_params[k] for k in divided_params if not isnan(divided_params[k])}
-        assert len(set(removed_nans.values())) == 1
+                          key not in nonfuel_calculator.dict_to_ignore and modern_parameters[key] != 0}
+        assert len(set(divided_params.values())) == 1

@@ -28,15 +28,11 @@ def select_cost_estimator(start_year, plant_type, capacity):
     check_positive(capacity, "start_year")
 
     hist_costs = scenario.power_plant_historical_costs_long
-    # hist_costs = hist_costs[hist_costs.Technology == plant_type].dropna()
     hist_costs = hist_costs[hist_costs.Technology.map(lambda x: x in plant_type)].dropna()
-    # hist_costs = hist_costs.filter(like=plant_type, axis=0).dropna
-    # hist_costs = hist_costs[hist_costs.Technology.str.contains("Biomass")].dropna()
 
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
         cost_parameters = estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
-        print('cost_parameters: {}'.format(cost_parameters))
         check_parameters(capacity, cost_parameters, plant_type, start_year)
         return cost_parameters
     else:
