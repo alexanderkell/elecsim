@@ -10,7 +10,12 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_est
 from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
 from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
+from math import isnan
+
+from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import \
+    FuelOldPlantCosts
+from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import \
+    NonFuelOldPlantCosts
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -302,5 +307,53 @@ class TestSelectCostEstimator:
         fuel_plant_params_calc = FuelOldPlantCosts(year, plant_type, capacity)
         modern_parameters = fuel_plant_params_calc.estimate_modern_parameters()
 
-        divided_params = {key: round(parameters[key]/modern_parameters[key], 4) for key in modern_parameters if key in parameters}
+        divided_params = {key: round(parameters[key] / modern_parameters[key], 4) for key in modern_parameters if
+                          key in parameters}
         assert len(set(divided_params.values())) == 1
+
+    @pytest.mark.parametrize("year, plant_type, capacity",
+                             [
+                                 (1, "Hydro", 5),
+                                 (2010, "Hydro", 5),
+                                 (2011, "Hydro", 5),
+                                 (2012, "Hydro", 5),
+                                 (1, "Hydro", 20),
+                                 (2010, "Hydro", 50),
+                                 (2011, "Hydro", 60),
+                                 (2012, "Hydro", 70),
+                                 (200, "PV", 1000),
+                                 (2009, "PV", 1000),
+                                 (2010, "PV", 1000),
+                                 (2011, "PV", 1000),
+                                 (2012, "PV", 1),
+                                 (2013, "PV", 1.3),
+                                 (2014, "PV", 9),
+                                 (2015, "PV", 1000),
+                                 (2016, "PV", 1000),
+                                 (2017, "PV", 1000),
+                                 (1989, "Onshore", 1000),
+                                 (1999, "Onshore", 1000),
+                                 (1999, "Onshore", 1),
+                                 (1999, "Onshore", 2.3),
+                                 (1999, "Onshore", 100000.54),
+                                 (2016, "Onshore", 1000),
+                                 (1989, "Offshore", 1000),
+                                 (2006, "Offshore", 1000),
+                                 (2006, "Offshore", 1),
+                                 (2006, "Offshore", 2.3),
+                                 (2006, "Offshore", 100000.54),
+                                 (2016, "Offshore", 1000),
+                             ])
+    def test_estimated_non_fuel_plant_parameters_scaled_equally(self, year, plant_type, capacity):
+        parameters = select_cost_estimator(start_year=year, plant_type=plant_type, capacity=capacity)
+        nonfuel_calculator = NonFuelOldPlantCosts(year=year, plant_type=plant_type,
+                                                 capacity=capacity)
+
+        nonfuel_calculator.get_params_to_scale()
+
+        modern_parameters = nonfuel_calculator.estimated_modern_plant_parameters
+
+        divided_params = {key: round(parameters[key] / modern_parameters[key], 4) for key in modern_parameters if
+                          key not in nonfuel_calculator.dict_to_ignore}
+        removed_nans = {k: divided_params[k] for k in divided_params if not isnan(divided_params[k])}
+        assert len(set(removed_nans.values())) == 1

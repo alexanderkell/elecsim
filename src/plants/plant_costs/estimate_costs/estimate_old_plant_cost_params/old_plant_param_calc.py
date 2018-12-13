@@ -29,11 +29,10 @@ class OldPlantCosts:
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
 
-        # self.modern_costs = power_plant_costs[power_plant_costs.Type==self.plant_type]
         self.modern_costs = power_plant_costs[power_plant_costs['Type'].map(lambda x: x in plant_type)]
-        min_year = self.find_smallest_year_available()
+        minimum_year = self.find_smallest_year_available()
 
-        self.estimated_modern_plant_parameters = PredictModernPlantParameters(self.plant_type, self.capacity, min_year).parameter_estimation()
+        self.estimated_modern_plant_parameters = PredictModernPlantParameters(self.plant_type, self.capacity, minimum_year).parameter_estimation()
 
         plant_object = PlantRegistry(self.plant_type).plant_type_to_plant_object()
 
@@ -58,5 +57,11 @@ class OldPlantCosts:
 
         return minimum_year_with_data
 
+    def get_params_to_scale(self):
+        self.params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
+                            'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
+        self.dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in
+                          self.estimated_modern_plant_parameters
+                          if key in self.params_to_ignore}
 
-
+        self.dict_to_ignore

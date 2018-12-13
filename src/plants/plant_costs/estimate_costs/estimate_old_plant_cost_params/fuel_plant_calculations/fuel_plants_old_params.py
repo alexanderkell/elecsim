@@ -37,14 +37,17 @@ class FuelOldPlantCosts(OldPlantCosts):
         return scaled_parameters
 
     def estimate_modern_parameters(self):
-        self.params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
-                                 'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
-        self.dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in
-                               self.estimated_modern_plant_parameters
-                               if key in self.params_to_ignore}
+        # self.params_to_ignore = ['pre_dev_period', 'operating_period', 'construction_period', 'efficiency',
+        #                          'average_load_factor', 'construction_spend_years', 'pre_dev_spend_years']
+        # self.dict_to_ignore = {key: self.estimated_modern_plant_parameters[key] for key in
+        #                        self.estimated_modern_plant_parameters
+        #                        if key in self.params_to_ignore}
+
+        self.get_params_to_scale()
+
         params_for_scaling = {key: self.estimated_modern_plant_parameters[key] for key in
                               self.estimated_modern_plant_parameters
-                              if key not in self.params_to_ignore}
+                              if key not in self.dict_to_ignore}
         return params_for_scaling
 
     def _linear_optimisation(self, x, lcoe_required):
