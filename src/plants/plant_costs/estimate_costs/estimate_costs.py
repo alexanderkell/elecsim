@@ -36,22 +36,27 @@ def select_cost_estimator(start_year, plant_type, capacity):
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
         cost_parameters = estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
+        print('cost_parameters: {}'.format(cost_parameters))
         check_parameters(capacity, cost_parameters, plant_type, start_year)
+        return cost_parameters
+    else:
+        cost_parameters = PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()
+        check_parameters(capacity, cost_parameters, plant_type, start_year)
+        return PredictModernPlantParameters(plant_type, capacity, start_year).parameter_estimation()
 
 
 def check_parameters(capacity, cost_parameters, plant_type, start_year):
-    assert not all(value == 0 for value in cost_parameters.values()), \
-        "All values are 0 for cost parameters for power plant of year {}, type {}, and capacity {}".format(
-            start_year, plant_type, capacity)
-    assert not any(isnan(value).any() for value in cost_parameters.values()), \
-        "All values are nan for cost parameters for power plant of year {}, type {}, and capacity {}".format(
-            start_year, plant_type, capacity)
+    assert not all(value == 0 for value in
+                   cost_parameters.values()), "All values are 0 for cost parameters for power plant of year {}, type {}, and capacity {}".format(
+        start_year, plant_type, capacity)
+    assert not any(isnan(value).any() for value in
+                   cost_parameters.values()), "All values are nan for cost parameters for power plant of year {}, type {}, and capacity {}".format(
+        start_year, plant_type, capacity)
 
 
 def check_digit(value, string):
     if not isinstance(value, int) and not isinstance(value, float):
         raise ValueError("{} must be a number".format(string))
-
 
 def check_positive(variable, string):
     if variable < 0:
