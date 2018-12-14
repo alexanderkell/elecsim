@@ -36,14 +36,9 @@ class World(Model):
         self.PowerExchange = PowerEx(self)
         self.schedule.add(self.PowerExchange)
 
-        # # Create and add generation companies
-        # for i in range(scenario.number_of_gencos):
-        #     gen_co = GenCo(i, self, scenario.generators_owned[i], scenario.starting_money_of_gencos[i], )
-        #     self.schedule.add(gen_co)
-
         plant_data = scenario.power_plants
         names = company_names(plant_data)
-        # Initialize generation companies
+        # Initialize generation companies with their respective power plants
         for gen_id, name in enumerate(names,0):
             gen_co = GenCo(gen_id, self, name=name)
             print("adding to GenCo {}".format(gen_co.name))
@@ -62,20 +57,6 @@ class World(Model):
 
         self.schedule.add(gen_co)
 
-        # for i in range(len(names)):
-        #     gen_co = GenCo(i, self, name=names[i])
-        #     rows = plant_data.loc[plant_data['Company'] == names[i]]
-        #     plants = []
-        #     for j in range(len(rows)):
-        #         # plants.append()
-        #         print(rows.iloc[j])
-        #         print(rows.iloc[j].Name)
-        #         print(rows.iloc[j].Fuel)
-        #         print(rows.iloc[j].Capacity)
-        #         print(rows.iloc[j].Start_date)
-        #     self.schedule.add(gen_co)
-        #     print('-------------- NEW COMPANY --------------')
-        # Set running to true
         self.running = True
 
     def step(self):
