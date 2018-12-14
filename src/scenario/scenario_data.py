@@ -50,12 +50,15 @@ fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=lis
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 
 # Generator Companies imported from Government data files
-power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/uk_power_plants.csv')
+power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/uk_power_plants.csv', dtype={'Start_date': int})
 power_plant_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv')
 power_plant_historical_costs_long = pd.read_csv(ROOT_DIR + '/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
 
-# Initial money of generating companies
-starting_money_of_gencos = [100000, 2000000, 300000]
+# Company financials
+# starting_money_of_gencos = [100000, 2000000, 300000]
+company_financials = pd.read_csv('{}/data/processed/companies/company_financials.csv'.format(ROOT_DIR))
+
+
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
