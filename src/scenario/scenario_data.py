@@ -50,9 +50,9 @@ fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=lis
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 
 # Generator Companies imported from Government data files
-power_plants = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/uk_power_plants/uk_power_plants.csv', dtype={'Start_date': int})
-power_plant_costs = pd.read_csv(ROOT_DIR+'/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv')
-power_plant_historical_costs_long = pd.read_csv(ROOT_DIR + '/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv')
+power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+power_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
+power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
 # Company financials
 # starting_money_of_gencos = [100000, 2000000, 300000]
