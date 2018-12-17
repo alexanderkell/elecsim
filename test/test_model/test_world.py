@@ -16,4 +16,7 @@ class TestWorld(TestCase):
     def test_world_initialization(self):
         world = World(scenario=scenario_data)
 
+        for i in range(20):
+            world.step()
+
         assert 1 == 1

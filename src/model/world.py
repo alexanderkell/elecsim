@@ -46,7 +46,7 @@ class World(Model):
         '''Advance model by one step'''
         self.schedule.step()
 
-        # self.PowerExchange.tender_bids(self.schedule.agents, self.demand.segment_hours, self.demand.segment_consumption)
+        self.PowerExchange.tender_bids(self.schedule.agents, self.demand.segment_hours, self.demand.segment_consumption)
 
         self.year_number += 1
 
@@ -57,10 +57,11 @@ class World(Model):
         :param financial_data: Data containing information about generation company's financial status
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
-        # Initializing generator company data
+        # Initialising generator company data
         companies_groups = plant_data.groupby('Company')
         company_financials = financial_data.groupby('Company')
 
+        print("Initialising generation companies with their power plants.")
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
             gen_co = GenCo(self, gen_id, name=name, money=financials.cash_in_bank.iloc[0])
@@ -70,6 +71,7 @@ class World(Model):
                 power_plant = self.generate_power_plant(plant)
                 gen_co.plants.append(power_plant)
         self.schedule.add(gen_co)
+        print("Added generation companies.")
 
     def generate_power_plant(self, plant):
         estimated_cost_parameters = select_cost_estimator(start_year=plant.Start_date,
