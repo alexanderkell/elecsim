@@ -13,7 +13,7 @@ from mesa import Agent
 from src.agents.generation_company.gen_co import GenCo
 
 
-class PowerEx(Agent):
+class PowerExchange(Agent):
 
     def __init__(self, model):
         """

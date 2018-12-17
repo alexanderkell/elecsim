@@ -1,6 +1,6 @@
 from mesa import Agent
 
-from market.electricity.bid import Bid
+from src.market.electricity.bid import Bid
 
 """gen_co.py: Agent which represents a generation company"""
 

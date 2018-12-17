@@ -1,6 +1,6 @@
 from mesa import Model
 
-from src.market.electricity.power_exchange import PowerEx
+from src.market.electricity.power_exchange import PowerExchange
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.mesa_addons.scheduler_addon import OrderedActivation
@@ -30,7 +30,7 @@ class World(Model):
         self.schedule.add(self.demand)
 
         # Create PowerExchange
-        self.PowerExchange = PowerEx(self)
+        self.PowerExchange = PowerExchange(self)
         self.schedule.add(self.PowerExchange)
 
         # Import company data including financials and plant data
