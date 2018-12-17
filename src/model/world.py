@@ -1,6 +1,6 @@
 from mesa import Model
 
-from market.electricity.power_exchange import PowerEx
+from src.market.electricity.power_exchange import PowerEx
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.mesa_addons.scheduler_addon import OrderedActivation
