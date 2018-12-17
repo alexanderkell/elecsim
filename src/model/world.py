@@ -1,4 +1,5 @@
 from mesa import Model
+from random import uniform
 
 from src.market.electricity.power_exchange import PowerExchange
 from src.agents.demand.demand import Demand
@@ -6,6 +7,11 @@ from src.agents.generation_company.gen_co import GenCo
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.plants.plant_type.plant_registry import PlantRegistry
+
+from random import random
+import logging
+logger = logging.getLogger(__name__)
+
 
 """Model.py: Model for the electricity landscape world"""
 
@@ -20,25 +26,29 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, scenario):
+    def __init__(self, scenario, initialization_year):
         # Set up model objects
-        self.year_number = 0
+        self.year_number = initialization_year
+        self.unique_id_generator = 0
 
         self.schedule = OrderedActivation(self)
 
-        self.demand = Demand(1, scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
-        self.schedule.add(self.demand)
-
-        # Create PowerExchange
-        self.PowerExchange = PowerExchange(self)
-        self.schedule.add(self.PowerExchange)
-
         # Import company data including financials and plant data
         plant_data = scenario.power_plants
+        plant_data = plant_data[:150]
         financial_data = scenario.company_financials
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
+
+        self.demand = Demand(self.unique_id_generator, scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
+        self.unique_id_generator+=1
+        self.schedule.add(self.demand)
+
+        # Create PowerExchange
+        self.PowerExchange = PowerExchange(self.unique_id_generator, self)
+        self.unique_id_generator+=1
+        self.schedule.add(self.PowerExchange)
 
         self.running = True
 
@@ -46,7 +56,7 @@ class World(Model):
         '''Advance model by one step'''
         self.schedule.step()
 
-        self.PowerExchange.tender_bids(self.schedule.agents, self.demand.segment_hours, self.demand.segment_consumption)
+        self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
 
         self.year_number += 1
 
@@ -61,19 +71,21 @@ class World(Model):
         companies_groups = plant_data.groupby('Company')
         company_financials = financial_data.groupby('Company')
 
-        print("Initialising generation companies with their power plants.")
+        logger.info("Initialising generation companies with their power plants.")
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
-            gen_co = GenCo(self, gen_id, name=name, money=financials.cash_in_bank.iloc[0])
-
+            gen_co = GenCo(unique_id=gen_id, model=self, discount_rate=round(uniform(0.04,0.08),3), name=name, money=financials.cash_in_bank.iloc[0])
+            self.unique_id_generator+=1
             # Add power plants to generation company portfolio
             for plant in data.itertuples():
-                power_plant = self.generate_power_plant(plant)
+                power_plant = self.create_power_plant(plant)
                 gen_co.plants.append(power_plant)
-        self.schedule.add(gen_co)
-        print("Added generation companies.")
+            logger.debug('Adding generation company: {}'.format(gen_co.name))
+            self.schedule.add(gen_co)
+        logger.info("Added generation companies.")
 
-    def generate_power_plant(self, plant):
+    @staticmethod
+    def create_power_plant(plant):
         estimated_cost_parameters = select_cost_estimator(start_year=plant.Start_date,
                                                           plant_type=plant.Simplified_Type,
                                                           capacity=plant.Capacity)

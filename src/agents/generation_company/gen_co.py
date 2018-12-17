@@ -1,6 +1,8 @@
 from mesa import Agent
 
 from src.market.electricity.bid import Bid
+import logging
+logger = logging.getLogger(__name__)
 
 """gen_co.py: Agent which represents a generation company"""
 
@@ -12,7 +14,7 @@ __email__ = "Alexander@Kell.es"
 
 class GenCo(Agent):
 
-    def __init__(self, unique_id, model, name="Empty", plants=None, money=5000000):
+    def __init__(self, unique_id, model, name, discount_rate, plants=None, money=5000000):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -22,17 +24,19 @@ class GenCo(Agent):
         :param money: Money which the agent is initialised with
         """
         super().__init__(unique_id, model)
-        if plants is None: plants = []
+        if plants is None:
+            plants = []
 
+        self.name = name
         self.plants = plants
         self.money = money
-        self.name = name
+
+        self.discount_rate = discount_rate
 
     def step(self):
-        print("Stepping generation company "+str(self.unique_id))
+        logger.debug("Stepping generation company: {}".format(self.name))
         self.invest()
         self.reset_contracts()
-        # self.make_bid()
 
     def calculate_bids(self, segment_hour, segment_value):
         """
@@ -42,14 +46,15 @@ class GenCo(Agent):
         :param segment_value: Electricity consumption required for the specified number of hours
         :return: Bids returned for the available plants at the specified segment hour
         """
-        bid = []
-        for i in range(len(self.plants)):
-            plant = self.plants[i]
-            if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity:
+        bids = []
+        for plant in self.plants:
+            if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                 # price = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*segment_hour))*1.1
-                price = plant.calculate_lcoe
-                bid.append(Bid(self, plant, segment_hour, plant.capacity-plant.capacity_fulfilled, price))
-        return bid
+                price = plant.calculate_lcoe(self.discount_rate)
+                bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, price))
+        return bids
+    def reset_bids(self):
+        self.bids = []
 
     # def purchase_fuel(self):
 

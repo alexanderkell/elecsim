@@ -17,6 +17,7 @@ class NonFuelPlant(PowerPlant):
         super().__init__(name, plant_type, capacity_mw, construction_year, average_load_factor, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_mw, construction_cost_per_mw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_mw, connection_cost_per_mw)
 
         self.efficiency = efficiency
+        self.min_running = 0
 
     def calculate_lcoe(self, discount_rate):
         """

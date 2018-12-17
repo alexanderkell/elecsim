@@ -1,3 +1,7 @@
+import logging
+logger = logging.getLogger(__name__)
+
+
 """Bid.py: A class which holds information for each bid"""
 
 __author__ = "Alexander Kell"
@@ -45,7 +49,7 @@ class Bid:
         self.plant.capacity_fulfilled = self.plant.capacity_fulfilled + self.capacity_bid
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
-        print("Bid accepted: "+str(self.plant))
+        logger.debug("Bid accepted: {}".format(self.plant))
 
     def partially_accept_bid(self, demand_fulfilled):
         """
@@ -59,7 +63,7 @@ class Bid:
 
         # Update price based on electricity capacity sold on partly accepted bid
         self.price_per_mwh = ((self.plant.down_payment / self.plant.lifetime + self.plant.ann_cost + self.plant.operating_cost) / (demand_fulfilled * self.segment_hours)) * 1.1
-        print("Bid partly accepted: "+str(self.plant))
+        logger.debug("Bid partly accepted: {}".format(self.plant))
 
     def __str__(self):
         return "Plant type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()

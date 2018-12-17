@@ -30,6 +30,11 @@ class FuelPlant(PowerPlant):
         # Fuel object, containing information on fuel.
         self.fuel = fuel_registry(fuel_string)
 
+        if plant_type in ['Coal', 'Nuclear']:
+            self.min_running = 5000
+        else:
+            self.min_running = 0
+
     def calculate_lcoe(self, discount_rate):
         """
         Function which calculates the levelised cost of electricity for this power plant instance at a

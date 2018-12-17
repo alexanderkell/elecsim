@@ -1,12 +1,16 @@
+from mesa import Agent
+
+import logging
+logger = logging.getLogger(__name__)
+
+
+
 """demand.py: Agent which simulates the demand of the UK"""
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
-
-from mesa import Agent
-
 
 class Demand(Agent):
 
@@ -24,7 +28,7 @@ class Demand(Agent):
         self.count = 0
 
     def step(self):
-        print("Stepping demand")
+        logger.debug("Stepping demand")
         self.segment_consumption = [i * self.yearly_demand_change[self.count] for i in self.segment_consumption]
         self.count += 1
         # load to change each year due to certain scenario
