@@ -1,5 +1,6 @@
-from src.power_exchange.bid import Bid
 from mesa import Agent
+
+from market.electricity.bid import Bid
 
 """gen_co.py: Agent which represents a generation company"""
 
@@ -15,7 +16,7 @@ def create_gencos(psd):
 
 class GenCo(Agent):
 
-    def __init__(self, unique_id, model, name="Empty", plants=None, money=5000000, carbon_tax=0):
+    def __init__(self, unique_id, model, name="Empty", plants=None, money=5000000):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -30,7 +31,6 @@ class GenCo(Agent):
         self.plants = plants
         self.money = money
         self.name = name
-        self.carbon_tax = carbon_tax
 
     def step(self):
         print("Stepping generation company "+str(self.unique_id))
