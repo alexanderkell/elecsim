@@ -1,6 +1,5 @@
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
-from src.data_manipulation.uk_gencos_and_plants import company_names
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.power_exchange.power_exchange import PowerEx
 from src.plants.plant_type.plant_registry import PlantRegistry
