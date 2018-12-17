@@ -46,7 +46,6 @@ class PowerExchange(Agent):
             bids = []
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hours[j], segment_values[j]))
-                logger.debug(bids)
             bids = list(chain.from_iterable(bids))
             sorted_bids = self.sort_bids(bids)
             self.bids_response(sorted_bids, segment_values[j])
@@ -71,17 +70,16 @@ class PowerExchange(Agent):
         :param capacity_required: Capacity required for this segment
         :return:
         """
-        logger.info("Segment electricity demand: ".format(capacity_required))
+        logger.info("Segment electricity demand: {}".format(capacity_required))
         for bid in bids:
             if capacity_required > bid.capacity_bid:
                 bid.accept_bid()
                 capacity_required -= bid.capacity_bid
-            elif bids.capacity_bid > capacity_required > 0:
+            elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(capacity_required)
                 capacity_required = 0
             else:
                 bid.reject_bid()
-            logger.info("Capacity required: ".format(capacity_required))
 
     def step(self):
         logger.debug("Stepping power exchange")

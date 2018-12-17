@@ -53,8 +53,6 @@ class GenCo(Agent):
                 price = plant.calculate_lcoe(self.discount_rate)
                 bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, price))
         return bids
-    def reset_bids(self):
-        self.bids = []
 
     # def purchase_fuel(self):
 

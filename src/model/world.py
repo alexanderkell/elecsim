@@ -35,7 +35,7 @@ class World(Model):
 
         # Import company data including financials and plant data
         plant_data = scenario.power_plants
-        plant_data = plant_data[:150]
+        # plant_data = plant_data[:150]
         financial_data = scenario.company_financials
 
         # Initialize generation companies using financial and plant data
