@@ -10,10 +10,6 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
-def create_gencos(psd):
-    print(psd)
-
-
 class GenCo(Agent):
 
     def __init__(self, unique_id, model, name="Empty", plants=None, money=5000000):
