@@ -73,13 +73,13 @@ class PowerPlant:
 
         self.capacity_fulfilled = 0
 
-    @property
-    def infrastructure(self):
-        return self._infrastructure
-
-    @infrastructure.setter
-    def infrastructure(self, value):
-        self._infrastructure = value * constants.KW_TO_MW
+    # @property
+    # def infrastructure(self):
+    #     return self._infrastructure
+    #
+    # @infrastructure.setter
+    # def infrastructure(self, value):
+    #     self._infrastructure = value * constants.KW_TO_MW
 
     # def __init__(self, name, constructionStartTime, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, capacity, construction_time, carbon_emissions, efficiency):
     #     # Fixed definitions
