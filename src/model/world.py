@@ -3,7 +3,7 @@ from random import uniform
 
 from mesa import Model
 
-from plants.plant_registry import PlantRegistry
+from src.plants.plant_registry import PlantRegistry
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.market.electricity.power_exchange import PowerExchange

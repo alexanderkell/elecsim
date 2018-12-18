@@ -1,5 +1,5 @@
-from plants.plant_type.fuel_plant import FuelPlant
-from plants.plant_type.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.fuel_plant import FuelPlant
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 
 
 class PlantRegistry:
