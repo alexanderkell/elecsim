@@ -6,8 +6,8 @@ Feature: # Testing estimation capabilities of seelct_cost_estimator. Asserting i
 import pytest
 from pytest import approx
 
-from plants.plant_type.fuel_plant import FuelPlant
-from plants.plant_type.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.fuel_plant import FuelPlant
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts

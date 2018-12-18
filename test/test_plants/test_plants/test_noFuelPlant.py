@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from pytest import approx
 
-from plants.plant_type.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 
 # from src.plants.plant_type.fuel_plants.fuel_plant import NonFuelPlant
 
