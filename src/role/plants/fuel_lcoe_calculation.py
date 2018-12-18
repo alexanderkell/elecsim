@@ -2,6 +2,9 @@ from src.role.plants.lcoe_calculation import LCOECalculation
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from scenario.scenario_data import carbon_cost
+from itertools import zip_longest
+
+
 """
 File name: fuel_lcoe_calculation
 Date created: 18/12/2018
@@ -34,17 +37,17 @@ class FuelLCOECalculation(LCOECalculation):
 
         # Calculations of capital expenditure, operating expenditure, total expected electricity expenditure and plant_type cost
         # This is used to estimate a LCOE price.
-        capex = self.capex()
-        opex = self.opex()
-        elec_gen = self.electricity_generated()
+        capex = self._capex()
+        opex = self._opex_cost()
+        elec_gen = self._electricity_generated()
         fuel_costs = self._fuel_costs(elec_gen)
         carbon_costs = self._carbon_costs()
 
         total_costs = self._total_costs(capex, opex, fuel_costs, carbon_costs)
 
         # Costs discounted using discount_rate variable.
-        disc_costs = self.discount_data(total_costs, discount_rate)
-        disc_elec = self.discount_data(elec_gen, discount_rate)
+        disc_costs = self._discount_data(total_costs, discount_rate)
+        disc_elec = self._discount_data(elec_gen, discount_rate)
 
         # Sum total costs over life time of plant
         disc_total_costs = sum(disc_costs)
@@ -98,7 +101,7 @@ class FuelLCOECalculation(LCOECalculation):
         Calculates projected tonnes of CO2 emitted by power plant per year
         :return: A list containing tonnes of CO2 emitted per year
         """
-        carbon_emitted = [self.fuel.mwh_to_co2e_conversion_factor*(elec_gen/self.efficiency) for elec_gen in self.electricity_generated()]
+        carbon_emitted = [self.fuel.mwh_to_co2e_conversion_factor * (elec_gen/self.efficiency) for elec_gen in self._electricity_generated()]
         return carbon_emitted
 
     def _carbon_costs(self):

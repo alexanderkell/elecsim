@@ -1,10 +1,6 @@
 from src.plants.plant_type.power_plant import PowerPlant
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.scenario.scenario_data import carbon_cost
-from itertools import zip_longest
-from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
-from math import exp
 
 """ fuel_plant.py: Child class of power plant which contains functions for a power plant which consumes fuel.
                     Most notably, the functinos contain the ability to calculate the cost of fuel.

@@ -50,7 +50,7 @@ class LCOECalculation:
     def infrastructure(self, value):
         self._infrastructure = value * constants.KW_TO_MW
 
-    def discount_data(self, variable, discount_rate):
+    def _discount_data(self, variable, discount_rate):
         discount_multiplier = [1]
 
         for _ in range(len(variable)):
@@ -59,7 +59,7 @@ class LCOECalculation:
         discounted_var = [a*b for a,b in zip(variable, discount_multiplier)]
         return discounted_var
 
-    def pre_dev_yearly_spend(self):
+    def _pre_dev_yearly_spend(self):
         """
         Calculate the yearly pre-development spend
         :return: List containing the spend per year for pre-development costs.
@@ -70,7 +70,7 @@ class LCOECalculation:
 
         return pre_dev_spend_per_year
 
-    def construction_yearly_spend(self):
+    def _construction_yearly_spend(self):
         """
 
         Calculate the cost of yearly construction spend. Includes infrastructure cost during the final year of construction.
@@ -86,17 +86,17 @@ class LCOECalculation:
 
         # return construction_spend_per_year
 
-    def capex(self):
+    def _capex(self):
         """
         Calculation of capital expenditure, which includes insurance, building and pre-development costs. This is done
         by adding pre-development yearly cost with construction yearly spend.
         :return: Capital expenditure cost
         """
-        capex = self.pre_dev_yearly_spend() + self.construction_yearly_spend()
+        capex = self._pre_dev_yearly_spend() + self._construction_yearly_spend()
         capex[-1]+=self.infrastructure
         return capex
 
-    def insurance_cost(self):
+    def _insurance_cost(self):
         """
         Calculates the yearly insurance cost
         :return: List containing insurance cost for each year of the operating period
@@ -104,7 +104,7 @@ class LCOECalculation:
         insurance_cost_total = [0] * int(self.pre_dev_period+self.construction_period) +[self.insurance_cost_per_mw * self.capacity_mw] * int(self.operating_period) # Calculation of insurance cost for this instance of a power plant
         return insurance_cost_total
 
-    def variable_o_and_m_cost(self):
+    def _variable_o_and_m_cost(self):
         """
         Calculates the operating and maintenance cost per year. Makes an assumption based on average load factor.
         :return: List containing variable operating and maintenance cost for each year of the operating period.
@@ -113,7 +113,7 @@ class LCOECalculation:
         variable_o_and_m_cost_per_year = [0] * int(self.pre_dev_period+self.construction_period) + [variable_o_and_m_cost_per_year] * int(self.operating_period)
         return variable_o_and_m_cost_per_year
 
-    def fixed_o_and_m_cost(self):
+    def _fixed_o_and_m_cost(self):
         """
         Calculates the fixed operating and maintenance cost per year.
         :return: List containing fixed operating and maintenance cost for each year of the operating period.
@@ -122,29 +122,29 @@ class LCOECalculation:
         fixed_o_and_m_per_mw_cost_total = [0] * int(self.pre_dev_period+self.construction_period) + [fixed_o_and_m_per_mw_cost_total] * int(self.operating_period)
         return fixed_o_and_m_per_mw_cost_total
 
-    def opex(self):
+    def _opex_cost(self):
         """
         Calculation of operating expenditure, which includes fixed and variable costs
         :return: Operating expenditure cost
         """
 
-        insur_cost = self.insurance_cost()
-        var_o_and_m_cost = self.variable_o_and_m_cost()
-        fixed_o_and_m_cost = self.fixed_o_and_m_cost()
+        insur_cost = self._insurance_cost()
+        var_o_and_m_cost = self._variable_o_and_m_cost()
+        fixed_o_and_m_cost = self._fixed_o_and_m_cost()
 
         opex = [sum(x) for x in zip(insur_cost, var_o_and_m_cost, fixed_o_and_m_cost)]
 
         return opex
 
-    def electricity_generated(self):
+    def _electricity_generated(self):
         """
         Estimates the amount of electricity generated over the lifetime of the project based on the average load factor
         :return: Returns a list containing the electricity generated per year
         """
-        HOURS_PER_DAY = 24
-        DAYS_PER_YEAR = 365
+        HOURS_IN_DAY = constants.HOURS_IN_DAY
+        DAYS_IN_YEAR = constants.DAYS_IN_YEAR
 
-        elec_gen = [self.capacity_mw * self.average_load_factor * HOURS_PER_DAY * DAYS_PER_YEAR] * int(self.operating_period)
+        elec_gen = [self.capacity_mw * self.average_load_factor * HOURS_IN_DAY * DAYS_IN_YEAR] * int(self.operating_period)
         elec_gen = [0] * int(self.pre_dev_period+self.construction_period) + elec_gen
 
         return elec_gen
