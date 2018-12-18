@@ -19,7 +19,6 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
-
 class PowerExchange(Agent):
 
     def __init__(self, unique_id, model):
