@@ -1,5 +1,5 @@
 """
-File name: calculate_lcoe
+File name: fuel_lcoe_calculation
 Date created: 18/12/2018
 Feature: #Enter feature description here
 """
