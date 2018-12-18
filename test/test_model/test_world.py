@@ -4,7 +4,7 @@ Date created: 01/12/2018
 Feature: # Tests the model
 """
 from unittest import TestCase
-from model.world import World
+from src.model.world import World
 from src.scenario import scenario_data
 import logging
 __author__ = "Alexander Kell"
