@@ -10,3 +10,5 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
+def calculate_NPV():
+    pass

@@ -35,6 +35,8 @@ class FuelPlant(PowerPlant):
         else:
             self.min_running = 0
 
+        self.capacity_fulfilled = 0
+
     def calculate_lcoe(self, discount_rate):
         """
         Function which calculates the levelised cost of electricity for this power plant instance at a
