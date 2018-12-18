@@ -20,7 +20,6 @@ class OldPlantCosts:
         self.year = year
         self.plant_type = plant_type
         self.capacity = capacity
-        # self.hist_costs = self.hist_costs[self.hist_costs.Technology == plant_type].dropna()
         self.hist_costs = self.hist_costs[self.hist_costs['Technology'].map(lambda x: x in plant_type)].dropna()
 
         if not all(self.hist_costs.capacity_range.str.contains(">0")):
@@ -45,7 +44,7 @@ class OldPlantCosts:
     def find_smallest_year_available(self):
         """
         Method which takes the modern cost BEIS database of power plants, and finds the earliest year
-        that data for specified power plant plant_type exists. For example, only returns data on Coal power plants from 2025
+        that data for specified power plant type exists. For example, only returns data on Coal power plants from 2025
         as only this data is provided in the BEIS datafile
         :return: Int containing smallest year available.
         """

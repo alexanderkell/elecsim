@@ -65,4 +65,4 @@ class Bid:
         self.price_per_mwh = self.plant.calculate_lcoe(self.gen_co.discount_rate)
 
     def __str__(self):
-        return "Plant plant_type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()
+        return "Plant type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()

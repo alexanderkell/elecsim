@@ -23,7 +23,7 @@ class FuelPlant(PowerPlant):
         """
         super().__init__(name=name, plant_type=plant_type, capacity_mw=capacity_mw, construction_year=construction_year, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw)
         self.efficiency = efficiency
-        # Finds fuel plant_type of power plant eg. CCGT power plant plant_type returns gas.
+        # Finds fuel type of power plant eg. CCGT power plant plant_type returns gas.
         fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
         # Fuel object, containing information on fuel.
         self.fuel = fuel_registry(fuel_string)

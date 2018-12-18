@@ -120,8 +120,8 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
 
 def plant_type_to_fuel(plant_type, construction_year):
     """
-    Function which infers fuel plant_type from plant plant_type.
-    :return: String detailing fuel plant_type
+    Function which infers fuel type from plant plant_type.
+    :return: String detailing fuel type
     """
     if plant_type == "CCGT":
         return "Gas"
