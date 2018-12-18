@@ -1,15 +1,15 @@
-from mesa import Model
+import logging
 from random import uniform
 
-from src.market.electricity.power_exchange import PowerExchange
+from mesa import Model
+
+from plants.plant_registry import PlantRegistry
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
+from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
-from src.plants.plant_type.plant_registry import PlantRegistry
 
-from random import random
-import logging
 logger = logging.getLogger(__name__)
 
 

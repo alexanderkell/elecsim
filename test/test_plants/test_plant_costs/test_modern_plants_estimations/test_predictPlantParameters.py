@@ -204,6 +204,3 @@ class TestPredictPlantParameters(TestCase):
         assert predict_modern_parameters._payment_spread_estimator("Constr") == [0.4, 0.4, 0.2]
         assert predict_modern_parameters._payment_spread_estimator("Pre") == [0.435, 0.435, 0.13]
 
-
-
-    # def test_extrapolate_interpolate_parameters(self):

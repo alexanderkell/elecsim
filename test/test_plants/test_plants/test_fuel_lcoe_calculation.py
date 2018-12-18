@@ -7,7 +7,6 @@ from unittest import TestCase
 
 from pytest import approx
 
-from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 from src.role.plants.fuel_lcoe_calculation import FuelLCOECalculation
 
 __author__ = "Alexander Kell"

@@ -4,8 +4,11 @@ Date created: 28/11/2018
 Feature: #Enter feature description here
 """
 from unittest import TestCase
+
 from pytest import approx
-from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
+
+from plants.plant_type.non_fuel_plant import NonFuelPlant
+
 # from src.plants.plant_type.fuel_plants.fuel_plant import NonFuelPlant
 
 

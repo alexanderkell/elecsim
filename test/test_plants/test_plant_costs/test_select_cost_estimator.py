@@ -3,12 +3,12 @@ File name: test_select_cost_estimator
 Date created: 04/12/2018
 Feature: # Testing estimation capabilities of seelct_cost_estimator. Asserting if LCOE's are as expected, and individual cost data is returned.
 """
-from pytest import approx
 import pytest
-from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
-from src.plants.plant_type.non_fuel_plants.non_fuel_plant import NonFuelPlant
-from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
+from pytest import approx
 
+from plants.plant_type.fuel_plant import FuelPlant
+from plants.plant_type.non_fuel_plant import NonFuelPlant
+from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
 
