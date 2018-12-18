@@ -43,10 +43,10 @@ def select_cost_estimator(start_year, plant_type, capacity):
 
 def check_parameters(capacity, cost_parameters, plant_type, start_year):
     assert not all(value == 0 for value in
-                   cost_parameters.values()), "All values are 0 for cost parameters for power plant of year {}, type {}, and capacity {}".format(
+                   cost_parameters.values()), "All values are 0 for cost parameters for power plant of year {}, plant_type {}, and capacity {}".format(
         start_year, plant_type, capacity)
     assert not any(isnan(value).any() for value in
-                   cost_parameters.values()), "All values are nan for cost parameters for power plant of year {}, type {}, and capacity {}".format(
+                   cost_parameters.values()), "All values are nan for cost parameters for power plant of year {}, plant_type {}, and capacity {}".format(
         start_year, plant_type, capacity)
 
 

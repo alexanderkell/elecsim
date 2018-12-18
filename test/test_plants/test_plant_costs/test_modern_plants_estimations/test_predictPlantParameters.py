@@ -164,7 +164,7 @@ class TestPredictPlantParameters(TestCase):
                  'infrastructure': 0, 'insurance_cost_per_mw': 0, 'pre_dev_cost_per_mw': 0,
                  'variable_o_and_m_per_mwh': 0, 'pre_dev_period': 0, 'operating_period': 0, 'construction_period': 0,
                  'efficiency': 0, 'average_load_factor': 0, 'construction_spend_years': 0, 'pre_dev_spend_years': 0})
-        assert "No cost data for power plant of type: Fake_Plant" in str(excinfo.value)
+        assert "No cost data for power plant of plant_type: Fake_Plant" in str(excinfo.value)
 
     def test_check_plant_exists_with_data(self):
         PredictModernPlantParameters("Fake_Plant", 1200, 2018).check_plant_exists(

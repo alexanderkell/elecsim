@@ -72,7 +72,7 @@ class PredictModernPlantParameters:
         :param parameters_of_plant: Dictionary of plant which contains all of the values of the estimated power plant.
         """
         if all(value == 0 for value in parameters_of_plant.values()):
-            raise ValueError("No cost data for power plant of type: " + self.plant_type)
+            raise ValueError("No cost data for power plant of plant_type: " + self.plant_type)
 
     def _create_parameter_names(self, initial_stub_cost_parameters):
         """

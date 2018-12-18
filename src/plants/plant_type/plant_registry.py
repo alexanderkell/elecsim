@@ -12,11 +12,11 @@ class PlantRegistry:
 
     def _plant_object_registry(self, requires_fuel):
         """
-        Power Plant Registry which takes a boolean variable on whether a plant requires plant_type and returns object of type
+        Power Plant Registry which takes a boolean variable on whether a plant requires plant_type and returns object of plant_type
         either FuelPlant or RenewablePlant
 
         :param requires_fuel: Boolean on whether the power plant requires plant_type or not
-        :return: Object of type of power plant
+        :return: Object of plant_type of power plant
         """
 
         requires_fuel = self.check_if_fuel_required()
@@ -33,7 +33,7 @@ class PlantRegistry:
 
     def check_if_fuel_required(self):
         """
-        Takes a plant_type type and returns a boolean specifying whether the power plant uses fuel or not.
+        Takes a plant_type plant_type and returns a boolean specifying whether the power plant uses fuel or not.
         :param plant_type: Type of plant
         :return: Boolean specifying whether plant requires plant_type or not
         """

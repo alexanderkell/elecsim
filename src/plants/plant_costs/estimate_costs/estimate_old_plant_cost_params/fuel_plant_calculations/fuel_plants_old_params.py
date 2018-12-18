@@ -6,6 +6,8 @@ from src.plants.plant_type.fuel_plants.fuel_plant import FuelPlant
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 
+import logging
+logging.getLogger(__name__)
 
 class FuelOldPlantCosts(OldPlantCosts):
 
@@ -58,8 +60,6 @@ class FuelOldPlantCosts(OldPlantCosts):
         insurance_cost_per_mw = x[4]
         pre_dev_cost_per_mw = x[5]
         variable_o_and_m_per_mwh = x[6]
-
-        variable_o_and_m_per_mwh = x[6]
         cons = [{'type': 'eq', 'fun': lambda x: x[0] / x[1] - connection_cost_per_mw / construction_cost_per_mw},
                 {'type': 'eq', 'fun': lambda x: x[1] / x[2] - construction_cost_per_mw / fixed_o_and_m_per_mw},
                 {'type': 'eq', 'fun': lambda x: x[2] / x[3] - fixed_o_and_m_per_mw / infrastructure},
@@ -74,7 +74,6 @@ class FuelOldPlantCosts(OldPlantCosts):
                 {'type': 'ineq', 'fun': lambda x: x[5]},
                 {'type': 'eq', 'fun': lambda x: self._calculate_lcoe_wrapper(x)-lcoe_required}]
         result = minimize(self._calculate_lcoe_wrapper, x0=x, constraints=cons)
-
         return result
 
     def _calculate_lcoe_wrapper(self, x0):
