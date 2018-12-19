@@ -8,6 +8,7 @@ from src.model.world import World
 from src.scenario import scenario_data
 import logging
 import pytest
+
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
