@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 """
 File name: test_future_renewable_energy_costs
 Date created: 21/12/2018
-Feature: #Enter feature description here
+Feature: # Test for future renewable energy costs.
 """
 
 __author__ = "Alexander Kell"
@@ -43,7 +43,6 @@ class TestFuture_renewable_energy_costs:
         return lcoe
 
     def test_future_renewable_energy_costs(self, calculate_latest_lcoe):
-        # future_costs = future_renewable_energy_costs(modern_plant_costs)
         logging.info("Testing future renewable energy costs using scenario data")
 
         starting_lcoe = calculate_latest_lcoe
