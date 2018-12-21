@@ -10,6 +10,7 @@ matplotlib = "*"
 scipy = "*"
 pytest = "*"
 sphinx = "*"
+gym = "*"
 
 [dev-packages]
 
