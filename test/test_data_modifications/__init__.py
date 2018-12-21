@@ -1,9 +1,7 @@
-import gym
-
 """
-File name: delete_me
-Date created: 19/12/2018
-Feature: # Testing gym
+File name: __init__.py
+Date created: 21/12/2018
+Feature: #Enter feature description here
 """
 
 __author__ = "Alexander Kell"
