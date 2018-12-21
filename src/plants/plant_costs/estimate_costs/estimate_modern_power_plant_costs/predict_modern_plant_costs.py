@@ -59,7 +59,8 @@ class PredictModernPlantParameters:
 
         return parameters
 
-    def check_pre_dev_spend(self, parameters):
+    @staticmethod
+    def check_pre_dev_spend(parameters):
         if not parameters['pre_dev_spend_years']:
             parameters['pre_dev_cost_per_mw'] = 0
         if not parameters['construction_spend_years']:
@@ -132,7 +133,8 @@ class PredictModernPlantParameters:
 
         return df_sort
 
-    def _change_columns(self, column):
+    @staticmethod
+    def _change_columns(column):
         """
         Function which converts variable names from UK power plant data, to PowerPlant instance variable names for easy
         conversion
