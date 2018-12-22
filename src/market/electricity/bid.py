@@ -49,6 +49,7 @@ class Bid:
         self.plant.capacity_fulfilled = self.plant.capacity_fulfilled + self.capacity_bid
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
+        logging.debug("Bid accepted for gen_co: {}, for plant: {}, for price: {}".format(self.gen_co.name, self.plant, self.price_per_mwh))
 
     def partially_accept_bid(self, demand_fulfilled):
         """

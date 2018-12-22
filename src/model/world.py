@@ -27,6 +27,7 @@ class World(Model):
     """
 
     def __init__(self, scenario, initialization_year):
+        super().__init__()
         # Set up model objects
         self.year_number = initialization_year
         self.unique_id_generator = 0
@@ -35,7 +36,7 @@ class World(Model):
 
         # Import company data including financials and plant data
         plant_data = scenario.power_plants
-        # plant_data = plant_data[:150]
+        plant_data = plant_data[:150]
         financial_data = scenario.company_financials
 
         # Initialize generation companies using financial and plant data
@@ -46,9 +47,9 @@ class World(Model):
         self.schedule.add(self.demand)
 
         # Create PowerExchange
-        self.PowerExchange = PowerExchange(self.unique_id_generator, self)
+        self.PowerExchange = PowerExchange(self)
         self.unique_id_generator+=1
-        self.schedule.add(self.PowerExchange)
+        # self.schedule.add(self.PowerExchange)
 
         self.running = True
 
