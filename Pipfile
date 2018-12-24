@@ -11,6 +11,8 @@ scipy = "*"
 pytest = "*"
 sphinx = "*"
 gym = "*"
+ipykernel = "*"
+xlrd = "*"
 
 [dev-packages]
 
