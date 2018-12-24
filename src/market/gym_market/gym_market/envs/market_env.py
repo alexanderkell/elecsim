@@ -17,6 +17,10 @@ import numpy as np
 
 from src.market.electricity.power_exchange import PowerExchange
 
+
+
+
+
 class MarketEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     """
@@ -46,13 +50,12 @@ class MarketEnv(gym.Env):
     Solved Requirements
         Considered solved when the average reward is greater than or equal to 9800.
     """
-    def __init__(self):
-
-
+    def __init__(self, shared, idx):
         self.action_space = spaces.Box(low=-1000, high=1000, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Discrete(2)
-
         self.number_of_steps = None
+        self.idx = idx
+        self.shared = shared
 
     def step(self, action):
         done = False

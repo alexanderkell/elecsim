@@ -11,6 +11,8 @@ scipy = "*"
 pytest = "*"
 sphinx = "*"
 gym = "*"
+keral-rl = "*"
+keras-rl = "*"
 
 [dev-packages]
 
