@@ -1,5 +1,5 @@
 from numpy import isnan
-
+from numpy import ndarray
 import src.scenario.scenario_data as scenario
 from src.plants.plant_registry import PlantRegistry
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
@@ -63,12 +63,12 @@ def _check_parameters(capacity, cost_parameters, plant_type, start_year):
 
 
 def _check_digit(value, string):
-    if not isinstance(value, int) and not isinstance(value, float):
+    if not isinstance(value, int) and not isinstance(value, float) and not isinstance(value, ndarray):
         raise ValueError("{} must be a number".format(string))
 
 def _check_positive(variable, string):
     if variable < 0:
-        raise ValueError("{} must be greater than 0".format(string))
+        raise ValueError("{} must be greater than 0. Produced is: {}".format(string, variable))
 
 
 def _estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year):

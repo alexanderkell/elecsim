@@ -13,6 +13,7 @@ sphinx = "*"
 gym = "*"
 ipykernel = "*"
 xlrd = "*"
+seaborn = "*"
 
 [dev-packages]
 

@@ -61,6 +61,7 @@ class FuelPlantCostCalculations(LCOECalculation):
         fuel_costs = self._fuel_costs(elec_gen)
         carbon_costs = self._carbon_costs()
         total_costs = self._total_costs(capex, opex, fuel_costs, carbon_costs)
+
         return elec_gen, total_costs
 
     def _total_costs(self, capex, opex, fuel_costs, carbon_costs):
@@ -140,7 +141,7 @@ class FuelPlantCostCalculations(LCOECalculation):
 
         return carbon_costs_total
 
-    def total_returns(self, expected_sale_price):
+    def total_income(self, expected_sale_price):
         beginning_year_operation = self.construction_year
         end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
