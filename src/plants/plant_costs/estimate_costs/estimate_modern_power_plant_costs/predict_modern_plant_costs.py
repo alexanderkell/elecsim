@@ -1,6 +1,9 @@
 import src.scenario.scenario_data as scenario
 from scipy.interpolate import interp1d
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+import logging
+import math
+logging.getLogger(__name__)
 
 from src.data_manipulation.data_modifications.value_estimations import closest_row
 
@@ -36,14 +39,22 @@ class PredictModernPlantParameters:
                                         'Infra_cost-Medium _', 'Insurance_cost-Medium _', 'Pre_dev_cost-Medium _',
                                         'Var_cost-Medium _']
 
-        full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
+        condition = True
+        while condition:
+            full_cost_parameters = self._create_parameter_names(initial_stub_cost_parameters)
 
-        parameters_of_plant = {
-            self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'],
-                                                                                 self.cost_data[
-                                                                                     cost_variable_required])(self.capacity)
-            for cost_variable_required in full_cost_parameters}
-        self.check_plant_exists(parameters_of_plant)
+            parameters_of_plant = {
+                self._change_columns(cost_variable_required): ExtrapolateInterpolate(self.cost_data['Plant_Size'],
+                                                                                     self.cost_data[
+                                                                                         cost_variable_required])(self.capacity)
+                for cost_variable_required in full_cost_parameters}
+            self.check_plant_exists(parameters_of_plant)
+            logging.debug("parameter of plant: {}".format(parameters_of_plant))
+
+            if all(math.isnan(value) for value in parameters_of_plant.values()):
+                self.start_year+=1
+            else:
+                condition=False
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_non_interpolatable_parameters(dur) for dur in durations}

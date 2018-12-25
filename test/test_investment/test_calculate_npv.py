@@ -1,3 +1,5 @@
+import logging
+logging.getLogger(__name__)
 
 from src.role.investment.calculate_npv import calculate_npv
 
@@ -12,7 +14,9 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 class TestCalculate_npv:
     def test_calculate_npv(self):
-        calculate_npv(0.05)
+        calculate_npv(0.05, 2018, 2)

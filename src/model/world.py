@@ -8,7 +8,9 @@ from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
-from src.plants.plant_costs.estimate_costs.estimate_costs import select_cost_estimator
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -78,19 +80,10 @@ class World(Model):
             self.unique_id_generator+=1
             # Add power plants to generation company portfolio
             for plant in data.itertuples():
-                power_plant = self.create_power_plant(plant)
+                power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                 gen_co.plants.append(power_plant)
             logger.debug('Adding generation company: {}'.format(gen_co.name))
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
 
-    @staticmethod
-    def create_power_plant(plant):
-        estimated_cost_parameters = select_cost_estimator(start_year=plant.Start_date,
-                                                          plant_type=plant.Simplified_Type,
-                                                          capacity=plant.Capacity)
-        power_plant_obj = PlantRegistry(plant.Simplified_Type).plant_type_to_plant_object()
-        power_plant = power_plant_obj(name=plant.Name, plant_type=plant.Simplified_Type,
-                                      capacity_mw=plant.Capacity, construction_year=plant.Start_date,
-                                      **estimated_cost_parameters)
-        return power_plant
+
