@@ -1,7 +1,7 @@
 from mesa import Agent
 
 from src.market.electricity.bid import Bid
-from src.role.investment.calculate_npv import calculate_npv
+from src.role.investment.calculate_npv import CalculateNPV
 import logging
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,8 @@ class GenCo(Agent):
     # def purchase_fuel(self):
 
     def invest(self):
-        calculate_npv(self.discount_rate, self.model.year_number)
+        # calculate_npv(self.discount_rate, self.model.year_number)
+        pass
 
     def reset_contracts(self):
         """
