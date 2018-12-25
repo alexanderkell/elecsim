@@ -1,16 +1,18 @@
 from numpy import npv
-from scipy.optimize import minimize
-import numpy as np
 import seaborn as sns
 from operator import itemgetter
 import pandas as pd
 import matplotlib.pyplot as plt
+from src.plants.plant_registry import PlantRegistry
+
+from src.scenario.scenario_data import modern_plant_costs
 
 import logging
 from inspect import signature
 logger = logging.getLogger(__name__)
 
-from src.role.plants.fuel_lcoe_calculation import FuelPlantCostCalculations
+from src.role.plants.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.role.plants.non_fuel_cost_calculations import NonFuelCostCalculation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 
@@ -25,40 +27,51 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
+class CalculateNPV:
 
-def calculate_npv(plant_size, discount_rate, year, plant_type, expected_sell_price, lookback_period):
-    plant = create_power_plant("Test", year, plant_type, plant_size)
-    plant_dict = vars(plant)
-    expected_cash_flow = calculate_expected_cash_flow(plant_dict, expected_sell_price)
-    npv_value = npv(discount_rate, expected_cash_flow)
-    return npv_value
+    def __init__(self, discount_rate, year, expected_sell_price):
+        self.discount_rate = discount_rate
+        self.year = year
+        self.expected_sell_price = expected_sell_price
 
-def calculate_expected_cash_flow(plant_dict, expected_sell_price):
-    func = FuelPlantCostCalculations
-    args_to_use = signature(func)._parameters
-    dict_to_use = {key: plant_dict[key] for key in plant_dict if key in args_to_use}
-    cost_calc = FuelPlantCostCalculations(**dict_to_use)
-    total_costs = cost_calc.calculate_total_costs()[1]
-    total_income = cost_calc.total_income(expected_sell_price)
-    expected_cash_flow = [income - cost for income, cost in zip(total_income, total_costs)]
+    def calculate_npv(self, year, plant_type, plant_size):
+        plant = create_power_plant("Test", year, plant_type, plant_size)
 
-    return expected_cash_flow
+        expected_cash_flow = self.calculate_expected_cash_flow(plant)
+        npv_value = npv(self.discount_rate, expected_cash_flow)
+        return npv_value
 
-def maximum_return():
-    cost_list = []
-    for plant_type in ['CCGT','Coal','Nuclear','OCGT']:
-        for i in range(0,2000):
-            npv = calculate_npv(i, 0.06, 2018, plant_type, 80, 4)
-            dict = {"npv":npv, "capacity":i, "plant_type":plant_type}
-            cost_list.append(dict.copy())
-    #
-    # cost_list = {"npv":calculate_npv(i, 0.06, 2018, 'Nuclear', 80, 4), "capacity":i for i in range(10)}
-    # cost_list1 = {"npv":calculate_npv(i, 0.06, 2018, 'CCGT', 80, 4) for i in range(10)}
-    # cost_list2 = {"npv":calculate_npv(i, 0.06, 2018, 'Coal', 80, 4) for i in range(10)}
+    def calculate_expected_cash_flow(self, plant):
+        fuel_required = PlantRegistry(plant.plant_type).check_if_fuel_required()
+        if fuel_required:
+            CostCalculation = FuelPlantCostCalculations
+        else:
+            CostCalculation = NonFuelCostCalculation
 
-    df = pd.DataFrame(cost_list)
-    # plt.plot(df['capacity'], df['npv'])
-    sns.lineplot(x='capacity', y="npv", hue='plant_type', data = df)
-    plt.show()
-    logging.debug(max(cost_list,key=itemgetter(0)))
+
+        plant_dict = vars(plant)
+        func = CostCalculation
+        args_to_use = signature(func)._parameters
+        dict_to_use = {key: plant_dict[key] for key in plant_dict if key in args_to_use}
+        cost_calc = CostCalculation(**dict_to_use)
+        total_costs = cost_calc.calculate_total_costs()[1]
+        total_income = cost_calc.total_income(self.expected_sell_price)
+        expected_cash_flow = [income - cost for income, cost in zip(total_income, total_costs)]
+        return expected_cash_flow
+
+
+    def maximum_npv(self):
+        cost_list = []
+        for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV', 'Pumped_storage', 'Hydro', 'Biomass_wood']:
+            plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
+            for plant_row in plant_cost_data.itertuples():
+                npv = self.calculate_npv(self.year, plant_row.Type, plant_row.Plant_Size)
+                dict = {"npv":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                cost_list.append(dict)
+
+        npv_results = pd.DataFrame(cost_list)
+        # # plt.plot(df['capacity'], df['npv'])
+        sns.scatterplot(x='capacity', y="npv", hue='plant_type', data = npv_results)
+        plt.show()
+        logging.debug(npv_results[npv_results['npv']==npv_results['npv'].max()])
 

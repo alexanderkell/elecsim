@@ -148,3 +148,14 @@ class LCOECalculation:
         elec_gen = [0] * int(self.pre_dev_period+self.construction_period) + elec_gen
 
         return elec_gen
+
+    def total_income(self, expected_sale_price):
+        beginning_year_operation = self.construction_year
+        end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
+        years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
+
+        yearly_return = self.capacity_mw*self.average_load_factor*365*24*expected_sale_price
+        returns = [yearly_return]*(len(years_of_plant_operation)-int(self.construction_period+self.pre_dev_period))
+        years_not_running = [0]*int(self.construction_period+self.pre_dev_period)
+        expected_returns = years_not_running + returns
+        return expected_returns

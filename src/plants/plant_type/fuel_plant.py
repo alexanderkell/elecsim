@@ -1,6 +1,6 @@
 from src.plants.plant_type.power_plant import PowerPlant
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.role.plants.fuel_lcoe_calculation import FuelPlantCostCalculations
+from src.role.plants.fuel_plant_cost_calculations import FuelPlantCostCalculations
 
 import logging
 logging.getLogger(__name__)

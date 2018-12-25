@@ -120,13 +120,13 @@ class PredictModernPlantParameters:
         :return (int): Returns estimated duration parameter in years.
         """
         column_required = self.cost_data[['Plant_Size', variable_wanted]].dropna()
-        if min(column_required.Plant_Size) <= self.capacity <= max(column_required.Plant_Size):
+        if min(column_required.Plant_Size) < self.capacity < max(column_required.Plant_Size):
             interp = interp1d(column_required.Plant_Size, column_required[variable_wanted], kind='nearest')
             return interp(self.capacity)
-        elif self.capacity > max(column_required.Plant_Size):
+        elif self.capacity >= max(column_required.Plant_Size):
             column_required = column_required.reset_index()
             return column_required.iloc[-1][variable_wanted]
-        elif self.capacity < min(column_required.Plant_Size):
+        elif self.capacity <= min(column_required.Plant_Size):
             column_required = column_required.reset_index()
             return column_required.iloc[0][variable_wanted]
 

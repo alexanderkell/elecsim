@@ -7,7 +7,7 @@ from src.plants.plant_type.power_plant import PowerPlant
 from pytest import approx
 from unittest import TestCase
 import pytest
-from src.role.plants.fuel_lcoe_calculation import FuelPlantCostCalculations
+from src.role.plants.fuel_plant_cost_calculations import FuelPlantCostCalculations
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
