@@ -1,4 +1,4 @@
-from src.role.plants.lcoe_calculation import LCOECalculation
+from src.role.plants.plant_cost_calculation import PlantCostCalculations
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.scenario.scenario_data import carbon_cost
@@ -18,7 +18,7 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-class FuelPlantCostCalculations(LCOECalculation):
+class FuelPlantCostCalculations(PlantCostCalculations):
 
     def __init__(self, plant_type, capacity_mw, construction_year, average_load_factor, efficiency, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_mw, construction_cost_per_mw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_mw, connection_cost_per_mw):
         super().__init__(capacity_mw=capacity_mw, construction_year=construction_year, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw)
