@@ -52,12 +52,12 @@ fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
-wind_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv')
+wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
 # Solar
-solar_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv')
+solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
 
 # UK Hourly Demand
-historical_hourly_demand = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/electricity_demand/uk_all_year_demand.csv')
+historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
 
 
 # Learning rate for renewables
