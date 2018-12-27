@@ -1,4 +1,4 @@
-from scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand, segment_demand
+from src.scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand, segment_demand
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
