@@ -51,15 +51,16 @@ class GenCo(Agent):
         for plant in self.plants:
             if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                 # price = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*segment_hour))*1.1
-                price = plant.calculate_lcoe(self.discount_rate)
-                bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, price))
+                # price = plant.calculate_lcoe(self.discount_rate)
+                price = plant.short_run_marginal_cost()
+                marked_up_price = price*1.1
+                bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))
         return bids
 
     # def purchase_fuel(self):
 
     def invest(self):
-        # calculate_npv(self.discount_rate, self.model.year_number)
-        pass
+        CalculateNPV(self.discount_rate, self.model.year_number, 70)
 
     def reset_contracts(self):
         """

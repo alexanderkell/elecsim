@@ -49,6 +49,17 @@ fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2018'].columns))
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 
+
+# Capacity factor data (from https://www.renewables.ninja/)
+# Wind
+wind_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv')
+# Solar
+solar_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv')
+
+# UK Hourly Demand
+uk_hourly_demand = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/electricity_demand/uk_all_year_demand.csv')
+
+
 # Learning rate for renewables
 learning_rate = 0.5
 

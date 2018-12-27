@@ -5,7 +5,8 @@ from src.scenario.scenario_data import carbon_cost
 from itertools import zip_longest
 
 import logging
-logging = logging.getLogger(__name__)
+
+logger = logging.getLogger(__name__)
 
 """
 File name: fuel_lcoe_calculation
@@ -18,10 +19,20 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-class FuelPlantCostCalculations(PlantCostCalculations):
 
-    def __init__(self, plant_type, capacity_mw, construction_year, average_load_factor, efficiency, pre_dev_period, construction_period, operating_period, pre_dev_spend_years, construction_spend_years, pre_dev_cost_per_mw, construction_cost_per_mw, infrastructure, fixed_o_and_m_per_mw, variable_o_and_m_per_mwh, insurance_cost_per_mw, connection_cost_per_mw):
-        super().__init__(capacity_mw=capacity_mw, construction_year=construction_year, average_load_factor=average_load_factor, pre_dev_period=pre_dev_period, construction_period=construction_period, operating_period=operating_period, pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years, pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw, infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw, connection_cost_per_mw=connection_cost_per_mw)
+class FuelPlantCostCalculations(PlantCostCalculations):
+    def __init__(self, plant_type, capacity_mw, construction_year, average_load_factor, efficiency, pre_dev_period,
+                 construction_period, operating_period, pre_dev_spend_years, construction_spend_years,
+                 pre_dev_cost_per_mw, construction_cost_per_mw, infrastructure, fixed_o_and_m_per_mw,
+                 variable_o_and_m_per_mwh, insurance_cost_per_mw, connection_cost_per_mw):
+        super().__init__(capacity_mw=capacity_mw, construction_year=construction_year,
+                         average_load_factor=average_load_factor, pre_dev_period=pre_dev_period,
+                         construction_period=construction_period, operating_period=operating_period,
+                         pre_dev_spend_years=pre_dev_spend_years, construction_spend_years=construction_spend_years,
+                         pre_dev_cost_per_mw=pre_dev_cost_per_mw, construction_cost_per_mw=construction_cost_per_mw,
+                         infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw,
+                         variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw,
+                         connection_cost_per_mw=connection_cost_per_mw)
         self.efficiency = efficiency
         # Finds fuel plant_type of power plant eg. CCGT power plant plant_type returns gas.
         fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
@@ -50,7 +61,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         disc_total_elec = sum(disc_elec)
 
         # LCOE calculated
-        lcoe = disc_total_costs/disc_total_elec
+        lcoe = disc_total_costs / disc_total_elec
 
         return lcoe
 
@@ -78,7 +89,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         # Addition of operating expenditure and plant_type costs, followed by operating expenditure, plant_type costs and capital expenditure.
         opex_fuel = [sum(x) for x in zip_longest(opex, fuel_costs, fillvalue=0)]
 
-        opex_fuel_remove_0 = opex_fuel[int(self.construction_period+self.pre_dev_period):]
+        opex_fuel_remove_0 = opex_fuel[int(self.construction_period + self.pre_dev_period):]
         capex.extend(opex_fuel_remove_0)
         sum_of_opex_fuel_capex = capex.copy()
         sum_of_carbon_opex_fuel_capex = [sum(x) for x in zip(sum_of_opex_fuel_capex, carbon_costs)]
@@ -92,7 +103,8 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :return: Returns estimated cost of plant_type per year
         """
         beginning_year_operation = self.construction_year
-        end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
+        end_of_lifetime_year = int(beginning_year_operation) + int(self.operating_period) + int(
+            self.pre_dev_period + self.construction_period)
         years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
 
         if fuel_price is None:
@@ -100,10 +112,9 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         else:
             this_fuel_price = fuel_price
 
-
-
         fuel_extrapolation = ExtrapolateInterpolate(this_fuel_price.Year, this_fuel_price.value)
-        fuel_price = [(float(fuel_extrapolation(i)) * elec_gen)/self.efficiency for i, elec_gen in zip(years_of_plant_operation, electricity_generated)]
+        fuel_price = [(float(fuel_extrapolation(i)) * elec_gen) / self.efficiency for i, elec_gen in
+                      zip(years_of_plant_operation, electricity_generated)]
 
         return fuel_price
 
@@ -112,10 +123,11 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         Calculates projected tonnes of CO2 emitted by power plant per year
         :return: A list containing tonnes of CO2 emitted per year
         """
-        carbon_emitted = [self.fuel.mwh_to_co2e_conversion_factor * (elec_gen/self.efficiency) for elec_gen in self._electricity_generated()]
+        carbon_emitted = [self.fuel.mwh_to_co2e_conversion_factor * (elec_gen / self.efficiency) for elec_gen in
+                          self._electricity_generated()]
         return carbon_emitted
 
-    def _carbon_costs(self, carbon_price = None):
+    def _carbon_costs(self, carbon_price=None):
         """
         Costs of carbon emissions based on carbon tax
         :return: Projected carbon costs per year in a list.
@@ -124,12 +136,14 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         if carbon_price is not None:
             carbon_taxation_years = carbon_price
         else:
-            year_of_beginning_operation = self.construction_year+self.pre_dev_period+self.construction_period
-            carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(year_of_beginning_operation+self.operating_period-1))]
+            year_of_beginning_operation = self.construction_year + self.pre_dev_period + self.construction_period
+            carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(
+                year_of_beginning_operation + self.operating_period - 1))]
 
         carbon_emitted = self._carbon_emitted()
 
-        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in zip(list(carbon_taxation_years.price), carbon_emitted)]
+        carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in
+                        zip(list(carbon_taxation_years.price), carbon_emitted)]
         return carbon_costs
 
     def _carbon_cost_total(self, carbon_costs):
@@ -141,15 +155,15 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         return carbon_costs_total
 
-    # def total_income(self, expected_sale_price):
-    #     beginning_year_operation = self.construction_year
-    #     end_of_lifetime_year = int(beginning_year_operation)+int(self.operating_period)+int(self.pre_dev_period+self.construction_period)
-    #     years_of_plant_operation = range(int(beginning_year_operation), end_of_lifetime_year)
-    #
-    #     yearly_return = self.capacity_mw*self.average_load_factor*365*24*expected_sale_price
-    #     returns = [yearly_return]*(len(years_of_plant_operation)-int(self.construction_period+self.pre_dev_period))
-    #     years_not_running = [0]*int(self.construction_period+self.pre_dev_period)
-    #     expected_returns = years_not_running + returns
-    #     return expected_returns
+    def calculate_short_run_marginal_cost(self, model):
+        """
+        Calculates the short run marginal cost for a fuel power plant
+        :param model: Model containing information such as current year
+        :return: returns marginal cost to burn 1MWh of fuel.
+        """
+        fuel_cost = self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1].value.iloc[0]
+        co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
+                   carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
 
-
+        marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
+        return marginal_cost

@@ -3,7 +3,7 @@ from scipy.interpolate import interp1d
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 import logging
 import math
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 from src.data_manipulation.data_modifications.value_estimations import closest_row
 
@@ -49,7 +49,6 @@ class PredictModernPlantParameters:
                                                                                          cost_variable_required])(self.capacity)
                 for cost_variable_required in full_cost_parameters}
             self.check_plant_exists(parameters_of_plant)
-            logging.debug("parameter of plant: {}".format(parameters_of_plant))
 
             if all(math.isnan(value) for value in parameters_of_plant.values()):
                 self.start_year+=1

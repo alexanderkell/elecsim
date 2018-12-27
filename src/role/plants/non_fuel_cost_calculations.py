@@ -4,7 +4,7 @@ from itertools import zip_longest
 """
 File name: non_fuel_lcoe_calculation
 Date created: 18/12/2018
-Feature: #Enter feature description here
+Feature: # Calculates the costs of non fuel plants such as LCOE and marginal cost.
 """
 
 __author__ = "Alexander Kell"
@@ -49,6 +49,9 @@ class NonFuelCostCalculation(PlantCostCalculations):
         total_costs = self._total_costs(capex, opex)
         return elec_gen, total_costs
 
+    def calculate_short_run_marginal_cost(self, model):
+        return self.variable_o_and_m_per_mwh
+
     def _total_costs(self, capex, opex):
         """
         Calculates total costs of plant by adding capital expenses plus operating expenses.
@@ -56,7 +59,6 @@ class NonFuelCostCalculation(PlantCostCalculations):
         """
 
         total_costs = [x + y for x, y in zip_longest(capex, opex, fillvalue=0)]
-        # _capex.extend(_opex_cost)
         return total_costs
 
 
