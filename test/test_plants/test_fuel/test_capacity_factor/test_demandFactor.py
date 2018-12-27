@@ -1,4 +1,4 @@
-from src.plants.fuel.capacity_factor.solar_capacity_factor import DemandFactor
+from src.plants.fuel.capacity_factor.capacity_factor_calculations import DemandFactor
 import logging
 """
 File name: test_demandFactor
@@ -17,5 +17,5 @@ __email__ = "alexander@kell.es"
 
 class TestDemandFactor(TestCase):
     def test_calculate_demand_factor_for_segment(self):
-        demand_factor = DemandFactor("Onshore")
+        demand_factor = DemandFactor("pv")
         demand_factor.calculate_demand_factor_for_segment()
