@@ -2,6 +2,8 @@ from mesa import Agent
 
 from src.market.electricity.bid import Bid
 from src.role.investment.calculate_npv import CalculateNPV
+from src.plants.fuel.capacity_factor.capacity_factor_calculations import CapacityFactorCalculations
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -49,12 +51,22 @@ class GenCo(Agent):
         """
         bids = []
         for plant in self.plants:
+
+            if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
+                capacity_calculator = CapacityFactorCalculations(plant.plant_type)
+                no_fuel_required = True
             if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                 # price = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*segment_hour))*1.1
                 # price = plant.calculate_lcoe(self.discount_rate)
                 price = plant.short_run_marginal_cost()
                 marked_up_price = price*1.1
-                bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))
+                if no_fuel_required:
+                    capacity_factor = capacity_calculator._calculate_demand_factors()
+                    capacity_factor
+                    bids.append(Bid(self, plant, segment_hour, (plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
+                else:
+                    bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))
+
         return bids
 
     # def purchase_fuel(self):

@@ -1,4 +1,4 @@
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import DemandFactor
+from src.plants.fuel.capacity_factor.capacity_factor_calculations import CapacityFactorCalculations
 import pytest
 import logging
 logger = logging.getLogger(__name__)
@@ -19,16 +19,16 @@ __email__ = "alexander@kell.es"
 
 class TestDemandFactor(TestCase):
     def test_calculate_pv_demand_factor_for_segment(self):
-        demand_factor = DemandFactor("pv")
-        demand_factors = demand_factor.calculate_demand_factor_for_segment()
+        demand_factor = CapacityFactorCalculations("pv")
+        demand_factors = demand_factor._calculate_demand_factors()
         assert demand_factors.mean() ==  pytest.approx(0.1053, abs=0.01)
 
     def test_calculate_onshore_demand_factor_for_segment(self):
-        demand_factor = DemandFactor("onshore")
-        demand_factors = demand_factor.calculate_demand_factor_for_segment()
+        demand_factor = CapacityFactorCalculations("onshore")
+        demand_factors = demand_factor._calculate_demand_factors()
         assert demand_factors.mean() == pytest.approx(0.3, abs=0.5)
 
     def test_calculate_offshore_demand_factor_for_segment(self):
-        demand_factor = DemandFactor("offshore")
-        demand_factors = demand_factor.calculate_demand_factor_for_segment()
+        demand_factor = CapacityFactorCalculations("offshore")
+        demand_factors = demand_factor._calculate_demand_factors()
         assert demand_factors.mean() == pytest.approx(0.39, abs=1)
