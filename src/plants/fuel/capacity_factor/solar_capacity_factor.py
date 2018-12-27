@@ -1,5 +1,9 @@
-from scenario.scenario_data import wind_capacity_factor, solar_capacity_factor
+from scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand
+import logging
+import pandas as pd
+import matplotlib.pyplot as plt
 
+logger = logging.getLogger(__name__)
 """
 File name: solar_capacity_factor
 Date created: 27/12/2018
@@ -15,7 +19,18 @@ __email__ = "alexander@kell.es"
 class DemandFactor():
 
     def __init__(self, renewable_type):
-        self.renewable_type = renewable_type
-        if self.renewable_type == "Onshore" or 'Offshore':
-            self.capacity_data = wind_capacity_factor[['time',self.renewable_type.lower()]]
+        self.historical_demand = historical_hourly_demand
+        self.renewable_type = renewable_type.lower()
+        if self.renewable_type == "onshore" or 'offshore':
+            self.capacity_data = wind_capacity_factor[['time',self.renewable_type]]
+        elif(self.renewable_type=="pv"):
+            self.capacity_data = solar_capacity_factor
+        else:
+            raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
 
+    def calculate_demand_factor_for_segment(self):
+        demand_capacity = self.capacity_data.join(self.historical_demand, how='inner').dropna()
+
+        factor_by_demand = demand_capacity.groupby(pd.cut(demand_capacity.demand, 20))[self.renewable_type].mean()
+
+        print(factor_by_demand)

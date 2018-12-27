@@ -57,7 +57,7 @@ wind_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. E
 solar_capacity_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv')
 
 # UK Hourly Demand
-uk_hourly_demand = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/electricity_demand/uk_all_year_demand.csv')
+historical_hourly_demand = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/electricity_demand/uk_all_year_demand.csv')
 
 
 # Learning rate for renewables
