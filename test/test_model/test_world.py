@@ -7,7 +7,8 @@ Feature: # Tests the model
 from src.model.world import World
 from src.scenario import scenario_data
 import logging
-import pytest
+from pycallgraph import PyCallGraph
+from pycallgraph.output import GraphvizOutput
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -19,9 +20,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 class TestWorld:
     def test_world_initialization(self):
+        # with PyCallGraph(output=GraphvizOutput()):
         world = World(scenario=scenario_data, initialization_year=1990)
 
-        for i in range(2):
+        for i in range(1):
             world.step()
 
         assert 1 == 1
