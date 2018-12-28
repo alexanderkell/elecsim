@@ -15,15 +15,15 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 class TestWorld:
     def test_world_initialization(self):
-        # with PyCallGraph(output=GraphvizOutput()):
-        world = World(scenario=scenario_data, initialization_year=1990)
+        with PyCallGraph(output=GraphvizOutput()):
+            world = World(scenario=scenario_data, initialization_year=1990)
 
-        for i in range(1):
-            world.step()
+            for i in range(1):
+                world.step()
 
-        assert 1 == 1
+            assert 1 == 1
