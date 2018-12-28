@@ -60,6 +60,10 @@ solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/nin
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
 
 
+# Load duration curve:
+load_duration_curve = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve.csv'.format(ROOT_DIR))
+
+
 # Learning rate for renewables
 learning_rate = 0.5
 

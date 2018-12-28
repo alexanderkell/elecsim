@@ -43,7 +43,7 @@ class World(Model):
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-        self.demand = Demand(self.unique_id_generator, scenario.segment_time, scenario.segment, scenario.yearly_demand_change)
+        self.demand = Demand(self.unique_id_generator, scenario.segment_time, scenario.segment_demand_diff, scenario.yearly_demand_change)
         self.unique_id_generator+=1
         self.schedule.add(self.demand)
 

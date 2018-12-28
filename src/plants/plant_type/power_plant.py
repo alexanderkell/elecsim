@@ -114,7 +114,7 @@ class PowerPlant(ABC):
         self.capacity_fulfilled = 0
 
     @abstractmethod
-    def short_run_marginal_cost(self):
+    def short_run_marginal_cost(self, model):
         pass
 
     def __str__(self):

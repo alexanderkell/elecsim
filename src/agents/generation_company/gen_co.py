@@ -51,19 +51,18 @@ class GenCo(Agent):
         """
         bids = []
         for plant in self.plants:
-
+            no_fuel_required=False
             if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
-                capacity_calculator = CapacityFactorCalculations(plant.plant_type)
                 no_fuel_required = True
             if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                 # price = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*segment_hour))*1.1
                 # price = plant.calculate_lcoe(self.discount_rate)
-                price = plant.short_run_marginal_cost()
+                price = plant.short_run_marginal_cost(self.model)
                 marked_up_price = price*1.1
                 if no_fuel_required:
-                    capacity_factor = capacity_calculator._calculate_demand_factors()
-                    capacity_factor
-                    bids.append(Bid(self, plant, segment_hour, (plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
+                    capacity_calculator = CapacityFactorCalculations(plant.plant_type)
+                    capacity_factor = capacity_calculator.get_capacity_factor()
+                    bids.append(Bid(self, plant, segment_hour, capacity_factor*(plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
                 else:
                     bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))
 

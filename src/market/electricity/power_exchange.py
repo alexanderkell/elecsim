@@ -1,6 +1,4 @@
 from itertools import chain
-from random import random
-
 from mesa import Agent
 
 import logging
@@ -41,13 +39,12 @@ class PowerExchange(Agent):
         agent = self.model.schedule.agents
 
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
-        for j in range(len(segment_hours)):
+        for seg_hour, seg_value in zip(segment_hours, segment_values):
             bids = []
             for generation_company in generator_companies:
-                bids.append(generation_company.calculate_bids(segment_hours[j], segment_values[j]))
-            bids = list(chain.from_iterable(bids))
+                bids.append(generation_company.calculate_bids(seg_hour, seg_value))
             sorted_bids = self.sort_bids(bids)
-            accepted_bids = self.bids_response(sorted_bids, segment_values[j])
+            accepted_bids = self.respond_to_bids(sorted_bids, seg_value)
             self.accept_bids(accepted_bids)
 
     @staticmethod
@@ -66,11 +63,12 @@ class PowerExchange(Agent):
         :param bids: Bid objects
         :return: Return bids in order of price
         """
+        bids = list(chain.from_iterable(bids))
         sorted_bids = sorted(bids, key=lambda x: x.price_per_mwh)
         return sorted_bids
 
     @staticmethod
-    def bids_response(bids, capacity_required):
+    def respond_to_bids(bids, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.

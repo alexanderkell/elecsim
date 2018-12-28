@@ -32,3 +32,7 @@ class TestDemandFactor(TestCase):
         demand_factor = CapacityFactorCalculations("offshore")
         demand_factors = demand_factor._calculate_demand_factors()
         assert demand_factors.mean() == pytest.approx(0.39, abs=1)
+
+    def test_calculate_hours_of_demand(self):
+        demand_factor = CapacityFactorCalculations("offshore")
+        demand_factor.get_capacity_factor()
