@@ -21,7 +21,7 @@ class TestWorld:
     def test_world_initialization(self):
         world = World(scenario=scenario_data, initialization_year=1990)
 
-        for i in range(20):
+        for i in range(2):
             world.step()
 
         assert 1 == 1

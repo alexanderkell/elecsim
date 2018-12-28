@@ -60,7 +60,9 @@ class GenCo(Agent):
                 price = plant.short_run_marginal_cost(self.model)
                 marked_up_price = price*1.1
                 if no_fuel_required:
+                    logger.debug("Getting capacity factor")
                     capacity_calculator = CapacityFactorCalculations(plant.plant_type)
+                    logger.debug("Got capacity factor")
                     capacity_factor = capacity_calculator.get_capacity_factor()
                     bids.append(Bid(self, plant, segment_hour, capacity_factor*(plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
                 else:
