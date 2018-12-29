@@ -1,5 +1,3 @@
-# from src.plants.fuel.capacity_factor.capacity_factor_calculations import CapacityFactorCalculations
-
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor, get_capacity_data, segment_capacity_data_by_load_curve
 from src.scenario.scenario_data import historical_hourly_demand
 
@@ -9,7 +7,7 @@ logger = logging.getLogger(__name__)
 """
 File name: test_demandFactor
 Date created: 27/12/2018
-Feature: #Enter feature description here
+Feature: # Testing for demand factor calculations.
 """
 from unittest import TestCase
 logging.basicConfig(level=logging.DEBUG)

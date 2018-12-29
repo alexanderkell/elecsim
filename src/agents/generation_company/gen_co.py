@@ -3,6 +3,8 @@ from mesa import Agent
 from src.market.electricity.bid import Bid
 from src.role.investment.calculate_npv import CalculateNPV
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
+from src.role.investment.latest_market_data import LatestMarketData
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -70,6 +72,9 @@ class GenCo(Agent):
     # def purchase_fuel(self):
 
     def invest(self):
+
+        self.model
+
         CalculateNPV(self.discount_rate, self.model.year_number, 70)
 
     def reset_contracts(self):

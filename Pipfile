@@ -14,7 +14,6 @@ gym = "*"
 ipykernel = "*"
 xlrd = "*"
 seaborn = "*"
-pytest-mock = "*"
 pycallgraph = "*"
 
 [dev-packages]

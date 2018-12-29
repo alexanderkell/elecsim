@@ -2,6 +2,7 @@ import logging
 from random import uniform
 
 from mesa import Model
+from mesa.datacollection import DataCollector
 
 from src.plants.plant_registry import PlantRegistry
 from src.agents.demand.demand import Demand
@@ -48,9 +49,7 @@ class World(Model):
         self.schedule.add(self.demand)
 
         # Create PowerExchange
-        self.PowerExchange = PowerExchange(self.unique_id_generator, self)
-        self.unique_id_generator+=1
-        self.schedule.add(self.PowerExchange)
+        self.PowerExchange = PowerExchange(self)
 
         self.running = True
 

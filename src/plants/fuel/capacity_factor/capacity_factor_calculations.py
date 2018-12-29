@@ -27,10 +27,6 @@ def get_capacity_factor(renewable_type, demand_hour):
         capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
         capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,
                                                                       renewable_type)
-        logger.debug(capacity_factor)
-
-
-        # logger.debug("cfv: {}".format(capacity_factor_value))
         return capacity_factor_value
 
 def get_capacity_data(renewable_type):
@@ -46,8 +42,7 @@ def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewa
     demand_capacity = capacity_data.join(historical_demand, how='inner').dropna()
     demand_capacity = demand_capacity[segment_demand[-1] < demand_capacity.demand]
     demand_capacity = demand_capacity[segment_demand[0] > demand_capacity.demand]
-    capacity_factor = demand_capacity.groupby(pd.cut(demand_capacity.demand, 20))[
-        renewable_type].mean()
+    capacity_factor = demand_capacity.groupby(pd.cut(demand_capacity.demand, 20))[renewable_type].mean()
     capacity_factor = capacity_factor.to_frame()
     capacity_factor['diff'] = load_duration_curve_diff['hours'].sort_values(ascending=False).values
     return capacity_factor

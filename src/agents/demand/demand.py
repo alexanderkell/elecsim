@@ -25,11 +25,11 @@ class Demand(Agent):
         self.segment_consumption = segment_consumption
         self.yearly_demand_change = yearly_demand_change
 
-        self.count = 0
+        self.years_from_start = 0
 
     def step(self):
         logger.debug("Stepping demand")
-        self.segment_consumption = [i * self.yearly_demand_change[self.count] for i in self.segment_consumption]
-        self.count += 1
+        self.segment_consumption = [i * self.yearly_demand_change[self.years_from_start] for i in self.segment_consumption]
+        self.years_from_start += 1
         # load to change each year due to certain scenario
 

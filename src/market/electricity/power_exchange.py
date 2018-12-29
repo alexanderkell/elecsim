@@ -17,15 +17,15 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
-class PowerExchange(Agent):
+class PowerExchange:
 
-    def __init__(self, unique_id, model):
+    def __init__(self, model):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
         :param model: Model in which the agents are contained in.
         """
 
-        super().__init__(model=model, unique_id=unique_id)
+        self.model = model
 
     def tender_bids(self, segment_hours, segment_demand):
         """
@@ -91,6 +91,4 @@ class PowerExchange(Agent):
                 bid.reject_bid()
         return accepted_bids
 
-    def step(self):
-        logger.debug("Stepping power exchange")
 
