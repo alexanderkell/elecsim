@@ -1,7 +1,7 @@
 import logging
 from src.data_manipulation.data_modifications.linear_regression import linear_regression
 
-import scenario.scenario_data as scenario
+import src.scenario.scenario_data as scenario
 logger = logging.getLogger(__name__)
 
 """

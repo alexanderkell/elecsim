@@ -1,5 +1,4 @@
 from constants import KW_TO_MW
-import scenario.scenario_data as scenario
 
 from src.role.investment.latest_market_data import LatestMarketData
 
