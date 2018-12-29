@@ -1,7 +1,7 @@
 import logging
 from src.data_manipulation.data_modifications.linear_regression import linear_regression
 
-
+import scenario.scenario_data as scenario
 logger = logging.getLogger(__name__)
 
 """
@@ -22,21 +22,40 @@ class LatestMarketData:
         self.model = model
         self.demand = self.model.demand
 
-    def demand_data(self, years_to_look_back):
-        years_for_regression = list(range(self.demand.years_from_start-years_to_look_back-1,self.demand.years_from_start-1))
-        logger.debug("years of regression: {}".format(years_for_regression))
-
+    def agent_forecast_demand(self, years_to_look_back):
+        years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
         regression = self._get_yearly_demand_change_for_regression(years_for_regression)
+
 
         logger.debug(regression)
 
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
 
+
     def _get_yearly_demand_change_for_regression(self, years_for_regression):
         regression = [self.demand.yearly_demand_change[i] if i > 0 else self.demand.yearly_demand_change[0] if
-        self.demand.yearly_demand_change[i] == None else self.demand.yearly_demand_change[-1] for i in
+        i > len(self.demand.yearly_demand_change) else self.demand.yearly_demand_change[-1] for i in
                       years_for_regression]
         return regression
 
 
+    def agent_forecast_fuel(self, years_to_look_back):
+        pass
+
+    @staticmethod
+    def _switch_statements_for_price_data(price_requried):
+        try:
+            price_requried = price_requried.lower()
+        except:
+            raise ValueError("Price required must be a string, not a {}".format(type(price_requried)))
+        if price_requried == "coal":
+            return scenario.coal_price
+        elif price_requried == "gas":
+            return scenario.gas_price
+        elif price_requried == "uranium":
+            return scenario.uranium_price
+        elif price_requried == "co2":
+            return scenario.carbon_price_scenario
+        else:
+            raise ValueError("Could not find {}".format(price_requried))

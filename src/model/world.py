@@ -11,8 +11,6 @@ from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -32,6 +30,7 @@ class World(Model):
     def __init__(self, scenario, initialization_year):
         # Set up model objects
         self.year_number = initialization_year
+        self.step_number = 0
         self.unique_id_generator = 0
 
         self.schedule = OrderedActivation(self)
@@ -60,6 +59,7 @@ class World(Model):
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
 
         self.year_number += 1
+        self.step_number +=1
 
     def initialize_gencos(self, financial_data, plant_data):
         """
