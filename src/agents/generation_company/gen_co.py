@@ -2,7 +2,7 @@ from mesa import Agent
 
 from src.market.electricity.bid import Bid
 from src.role.investment.calculate_npv import CalculateNPV
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import CapacityFactorCalculations
+from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
 import logging
 logger = logging.getLogger(__name__)
@@ -41,12 +41,12 @@ class GenCo(Agent):
         self.invest()
         self.reset_contracts()
 
-    def calculate_bids(self, segment_hour, segment_value):
+    def calculate_bids(self, segment_hour, segment_demand):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
         The bids submitted are the fixed costs divided by lifetime of plant plus yearly variable costs plus a 10% margin
         :param segment_hour: Number of hours in which the current segment is required
-        :param segment_value: Electricity consumption required for the specified number of hours
+        :param segment_demand: Electricity consumption required for the specified number of hours
         :return: Bids returned for the available plants at the specified segment hour
         """
         bids = []
@@ -55,15 +55,12 @@ class GenCo(Agent):
             if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 no_fuel_required = True
             if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
-                # price = ((plant.down_payment/plant.lifetime + plant.ann_cost + plant.operating_cost)/(plant.capacity*segment_hour))*1.1
-                # price = plant.calculate_lcoe(self.discount_rate)
                 price = plant.short_run_marginal_cost(self.model)
                 marked_up_price = price*1.1
                 if no_fuel_required:
-                    logger.debug("Getting capacity factor")
-                    capacity_calculator = CapacityFactorCalculations(plant.plant_type)
-                    logger.debug("Got capacity factor")
-                    capacity_factor = capacity_calculator.get_capacity_factor()
+                    # capacity_calculator = CapacityFactorCalculations(plant.plant_type)
+                    logger.debug("segment value: {}".format(segment_demand))
+                    capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                     bids.append(Bid(self, plant, segment_hour, capacity_factor*(plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
                 else:
                     bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))

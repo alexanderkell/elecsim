@@ -62,7 +62,7 @@ historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_
 
 # Load duration curve:
 load_duration_curve = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve.csv'.format(ROOT_DIR))
-
+load_duration_curve_diff = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve_difference.csv'.format(ROOT_DIR))
 
 # Learning rate for renewables
 learning_rate = 0.5

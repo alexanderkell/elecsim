@@ -27,30 +27,30 @@ class PowerExchange(Agent):
 
         super().__init__(model=model, unique_id=unique_id)
 
-    def tender_bids(self, segment_hours, segment_values):
+    def tender_bids(self, segment_hours, segment_demand):
         """
         Function which iterates through the generator companies, requests their bids, orders them in order of price,
         and accepts bids.
         :param agents: All agents from simulation model.
         :param segment_hours: Value for number of hours particular electricity generation is required.
-        :param segment_values: Size of electricity consumption required.
+        :param segment_demand: Size of electricity consumption required.
         :return: None
         """
         agent = self.model.schedule.agents
 
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
-        for seg_hour, seg_value in zip(segment_hours, segment_values):
+        for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
-                bids.append(generation_company.calculate_bids(seg_hour, seg_value))
+                bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
             sorted_bids = self.sort_bids(bids)
-            accepted_bids = self.respond_to_bids(sorted_bids, seg_value)
+            accepted_bids = self.respond_to_bids(sorted_bids, segment_demand)
             self.accept_bids(accepted_bids)
 
     @staticmethod
     def accept_bids(accepted_bids):
         highest_accepted_bid = accepted_bids[-1].price_per_mwh
-        logger.debug("Highest accepted bid price: {}".format(highest_accepted_bid))
+        logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
             bids.price_per_mwh = highest_accepted_bid
 
