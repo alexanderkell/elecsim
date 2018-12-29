@@ -21,7 +21,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-class TestDemandFactor(TestCase):
+class TestDemandFactor:
     def test_calculate_pv_demand_factor_for_segment(self):
         capacity_data = get_capacity_data('pv')
         logger.debug(capacity_data)
@@ -40,15 +40,25 @@ class TestDemandFactor(TestCase):
 
     def test_calculate_offshore_demand_factor_for_segment(self):
         capacity_data = get_capacity_data('offshore')
-        logger.debug(capacity_data)
         capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_hourly_demand, "offshore")
         logger.debug(capacity_factor)
         assert capacity_factor.mean()[0] == pytest.approx(0.39, abs=1)
 
-    # def test_calculate_hours_of_demand(self):
-    #     demand_factor = CapacityFactorCalculations("offshore")
-    #     demand_factor.get_capacity_factor()
-
-
-    def test_get_capacity_factor(self):
-        get_capacity_factor("offshore", 6910)
+    @pytest.mark.parametrize("plant_type, demand_hour, expected_output",
+                             [
+                                 ("pv", 6910, 0.208738),
+                                 ("pv", 8752.500000, 0.304236),
+                                 ("pv", 0, 0.004586),
+                                 ("pv", 2763, 0.037869),
+                                 ("pv", 1841, 0.032182),
+                                 ("offshore", 8752.500000, 0.472709),
+                                 ("offshore", 6910, 0.408348),
+                                 ("offshore", 6448, 0.388440),
+                                 ("offshore", 0, 0.332907),
+                                 ("onshore", 8752.500000, 0.359845),
+                                 ("onshore", 6910, 0.314773),
+                                 ("onshore", 6448, 0.299287),
+                                 ("onshore", 0, 0.236361),
+                             ])
+    def test_get_capacity_factor(self, plant_type, demand_hour, expected_output):
+         assert get_capacity_factor(plant_type, demand_hour) == pytest.approx(expected_output, rel=0.001)

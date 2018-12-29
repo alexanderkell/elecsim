@@ -18,35 +18,6 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-# class CapacityFactorCalculations:
-#     def __init__(self, renewable_type):
-#         self.historical_demand = historical_hourly_demand
-#         self.renewable_type = renewable_type.lower()
-#         if self.renewable_type in ["onshore", 'offshore']:
-#             self.capacity_data = wind_capacity_factor[['time', self.renewable_type]]
-#         elif self.renewable_type == "pv":
-#             self.capacity_data = solar_capacity_factor
-#         else:
-#             raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
-#
-    # def _calculate_demand_factors(self):
-    #     demand_capacity = self.capacity_data.join(self.historical_demand, how='inner').dropna()
-    #
-    #     demand_capacity = demand_capacity[segment_demand[-1] < demand_capacity.demand]
-    #     demand_capacity = demand_capacity[segment_demand[0] > demand_capacity.demand]
-    #
-    #     capacity_factor_by_demand = demand_capacity.groupby(pd.cut(demand_capacity.demand, 20))[
-    #         self.renewable_type].mean()
-    #
-    #     return capacity_factor_by_demand
-
-    # @functools.lru_cache(maxsize=128)
-    # def get_capacity_factor(self, demand_value):
-    #     capacity_factor =self._calculate_demand_factors()
-    #     value = capacity_factor[[demand_value in index for index in capacity_factor.index]].values
-    #     return value
-
-
 @functools.lru_cache(maxsize=128)
 def get_capacity_factor(renewable_type, demand_hour):
         historical_demand = historical_hourly_demand
@@ -56,6 +27,7 @@ def get_capacity_factor(renewable_type, demand_hour):
         capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
         capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,
                                                                       renewable_type)
+        logger.debug(capacity_factor)
 
 
         # logger.debug("cfv: {}".format(capacity_factor_value))
