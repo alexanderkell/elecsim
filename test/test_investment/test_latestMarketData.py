@@ -75,10 +75,10 @@ class TestLatestMarketData:
                                 ("co2", [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00])
                             ])
     def test_switch_statements_for_value_data(self, latest_market_data, value_required, expected_output):
-        assert latest_market_data._switch_statements_for_price_data(value_required) == expected_output
+        assert latest_market_data._get_value_data(value_required) == expected_output
 
     def test_switch_statements_for_valueerror_for_value_data(self, latest_market_data):
         with pytest.raises(ValueError):
-            assert latest_market_data._switch_statements_for_price_data("sdfsf")
+            assert latest_market_data._get_value_data("sdfsf")
         with pytest.raises(ValueError):
-            assert latest_market_data._switch_statements_for_price_data(-1)
+            assert latest_market_data._get_value_data(-1)
