@@ -1,12 +1,12 @@
-from constants import KW_TO_MW
-
-from src.role.investment.latest_market_data import LatestMarketData
+import logging
+from unittest import mock
 
 import pytest
-from unittest import mock
 from pytest import approx
 
-import logging
+from constants import KW_TO_MW
+from src.role.market.latest_market_data import LatestMarketData
+
 logger = logging.getLogger(__name__)
 """
 File name: test_latestMarketData

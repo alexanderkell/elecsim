@@ -23,6 +23,14 @@ EARLIEST_MODERN_PLANT_YEAR = 2018
 
 
 def create_power_plant(name, start_date, simplified_type, capacity):
+    """
+    Functionality that estimates the cost of a power plant based solely on year of construction, type of plant and capacity.
+    :param name: Name of power plant.
+    :param start_date: Starting year of power plant
+    :param simplified_type: Type of power plant
+    :param capacity: Capacity of power plant
+    :return: Power plant object initialized with relevant variables.
+    """
     estimated_cost_parameters = _select_cost_estimator(start_year=start_date,
                                                        plant_type=simplified_type,
                                                        capacity=capacity)

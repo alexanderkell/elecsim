@@ -1,13 +1,10 @@
+import logging
+
 from mesa import Agent
 
 from src.market.electricity.bid import Bid
-from src.role.investment.calculate_npv import CalculateNPV
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.role.investment.latest_market_data import LatestMarketData
-
-from itertools import filterfalse
-
-import logging
+from src.role.investment.calculate_npv import CalculateNPV
 logger = logging.getLogger(__name__)
 
 """gen_co.py: Agent which represents a generation company"""
