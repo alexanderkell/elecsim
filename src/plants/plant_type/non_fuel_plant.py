@@ -1,4 +1,5 @@
-from role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
+from src.role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
+from src.plants.plant_type.power_plant import PowerPlant
 
 """ no_fuel_plant.py: Child class of power plant which contains functions for a power plant that does not require fuel"""
 
@@ -6,8 +7,6 @@ __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
-
-from src.plants.plant_type.power_plant import PowerPlant
 
 
 class NonFuelPlant(PowerPlant):

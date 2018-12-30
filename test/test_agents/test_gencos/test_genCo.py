@@ -53,7 +53,7 @@ class TestGenCo:
 
         UNIQUE_ID = 1
         DISCOUNT_RATE = 0.06
-        genco = GenCo(UNIQUE_ID, model, "test_name", DISCOUNT_RATE, [plant, plant2])
+        genco = GenCo(UNIQUE_ID, model, "test_genco", DISCOUNT_RATE, [plant, plant2])
         genco.check_plants_end_of_life()
         assert len(genco.plants)==expected_output
         for plant, name in zip(genco.plants, expected_name):

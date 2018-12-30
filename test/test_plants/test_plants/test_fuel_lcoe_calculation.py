@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from pytest import approx
 
-from role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
