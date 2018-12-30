@@ -1,10 +1,11 @@
-from src.role.plants.fuel_plant_cost_calculations import FuelPlantCostCalculations
-# from pytest_mock import mocker
-from src.model.world import World
+import logging
 from unittest.mock import Mock
+
 import pytest
 
-import logging
+from role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.model.world import World
+
 logger = logging.getLogger(__name__)
 
 """
@@ -12,7 +13,6 @@ File name: test_fuelPlantCostCalculations
 Date created: 27/12/2018
 Feature: #Enter feature description here
 """
-from unittest import TestCase
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

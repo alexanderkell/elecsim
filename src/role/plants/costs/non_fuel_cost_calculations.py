@@ -1,5 +1,6 @@
-from src.role.plants.plant_cost_calculation import PlantCostCalculations
 from itertools import zip_longest
+
+from role.plants.costs.plant_cost_calculation import PlantCostCalculations
 
 """
 File name: non_fuel_lcoe_calculation

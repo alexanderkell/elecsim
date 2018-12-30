@@ -1,8 +1,9 @@
-from src.plants.plant_type.power_plant import PowerPlant
-from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.role.plants.fuel_plant_cost_calculations import FuelPlantCostCalculations
-
 import logging
+
+from role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
+from src.plants.plant_type.power_plant import PowerPlant
+
 logging.getLogger(__name__)
 
 """ fuel_plant.py: Child class of power plant which contains functions for a power plant which consumes fuel.
