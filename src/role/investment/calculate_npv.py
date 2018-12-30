@@ -9,8 +9,8 @@ from src.scenario.scenario_data import modern_plant_costs
 
 logger = logging.getLogger(__name__)
 
-from role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
+from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 
