@@ -46,7 +46,6 @@ class CalculateNPV:
         else:
             CostCalculation = NonFuelCostCalculation
 
-
         plant_dict = vars(plant)
         func = CostCalculation
         args_to_use = signature(func)._parameters
@@ -58,20 +57,22 @@ class CalculateNPV:
         return expected_cash_flow
 
 
-    def highest_npv(self):
+    def compare_npv(self):
         cost_list = []
         for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV', 'Pumped_storage', 'Hydro', 'Biomass_wood']:
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
-                dict = {"npv":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                dict = {"npv":npv, "npv_per_mw":npv/plant_row.Plant_Size, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
                 cost_list.append(dict)
 
         npv_results = pd.DataFrame(cost_list)
 
         # max_result = npv_results[npv_results['npv']==npv_results['npv'].max()]
         # logger.debug(npv_results[npv_results['npv']==npv_results['npv'].max()])
-        sorted_npv = npv_results.sort_values(by='npv', ascending=False)
+        sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
         logger.debug("sorted_npv: {}".format(sorted_npv))
+        return sorted_npv
         # return npv_results[npv_results['npv']==npv_results['npv'].max()]
+
 

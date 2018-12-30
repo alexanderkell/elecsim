@@ -49,6 +49,8 @@ class TestCalculate_npv:
         plant = create_power_plant("Test", year, plant_type, capacity)
         assert calculate_latest_NPV.calculate_npv(plant_type, capacity) == pytest.approx(expected_output)
 
-    def test_maximum_npv(self, calculate_latest_NPV):
-        calculate_latest_NPV.highest_npv()
+    def test_compare_npv(self, calculate_latest_NPV):
+        calculate_latest_NPV.compare_npv()
         assert 1==1
+
+
