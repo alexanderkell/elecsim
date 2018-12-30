@@ -1,7 +1,7 @@
 import logging
 from itertools import zip_longest
 
-from role.plants.costs.plant_cost_calculation import PlantCostCalculations
+from src.role.plants.costs.plant_cost_calculation import PlantCostCalculations
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.scenario.scenario_data import carbon_cost
