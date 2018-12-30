@@ -5,6 +5,7 @@ from src.role.investment.calculate_npv import CalculateNPV
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.role.investment.latest_market_data import LatestMarketData
 
+from itertools import filterfalse
 
 import logging
 logger = logging.getLogger(__name__)
@@ -79,10 +80,19 @@ class GenCo(Agent):
         CalculateNPV(self.discount_rate, self.model.year_number, 70)
 
     def check_plants_end_of_life(self):
-        for plant in self.plants:
-            if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period <= self.model.year_number:
-                logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
-                plant.in_service = False
+        def get_running_plants(plants):
+            for plant in plants:
+                if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
+                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
+                    yield plant
+                else:
+                    continue
+
+        plants_filtered = list(get_running_plants(self.plants))
+        self.plants = plants_filtered
+
+
+
 
     def reset_contracts(self):
         """

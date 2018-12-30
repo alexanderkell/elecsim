@@ -1,7 +1,7 @@
 from src.agents.generation_company.gen_co import GenCo
 
 from unittest.mock import Mock
-
+import pytest
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,9 +22,18 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class TestGenCo:
-    def test_check_plants_end_of_life(self):
+
+
+
+    @pytest.mark.parametrize("year_number, expected_name, expected_output",
+                             [
+                                 (2020, ["Plant_1", "Plant_2"], 2),
+                                 (2080, [], 0),
+                                 (2037, ['Plant_1'], 1),
+                             ])
+    def test_check_plants_end_of_life(self, year_number, expected_name, expected_output):
         model = Mock()
-        model.year_number = 2040
+        model.year_number = year_number
 
         plant = Mock()
         plant.name = "Plant_1"
@@ -46,5 +55,6 @@ class TestGenCo:
         DISCOUNT_RATE = 0.06
         genco = GenCo(UNIQUE_ID, model, "test_name", DISCOUNT_RATE, [plant, plant2])
         genco.check_plants_end_of_life()
-        assert genco.plants[0].in_service == True
-        assert genco.plants[1].in_service == False
+        assert len(genco.plants)==expected_output
+        for plant, name in zip(genco.plants, expected_name):
+            assert plant.name == name
