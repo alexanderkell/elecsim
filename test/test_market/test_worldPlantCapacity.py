@@ -1,6 +1,7 @@
 from src.role.market.world_plant_capacity import WorldPlantCapacity
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.agents.generation_company.gen_co import GenCo
+
 from unittest.mock import Mock
 import logging
 import pytest
@@ -21,29 +22,39 @@ logging.basicConfig(level=logging.DEBUG)
 
 @pytest.mark.parametrize("reference_year, expected_output",
                          [
-                             (2011, ['plant1', 'plant2', 'plant3', 'plant4']),
+                             (2019, ['plant1', 'plant2', 'plant3']),
+                             (2011, ['plant1', 'plant3', 'plant4']),
                              (2080, []),
-                             (2030, ['plant2', 'plant3'])
+                             (2030, ['plant2']),
+                             (1990, ['plant4'])
                          ])
 class TestWorldPlantCapacity:
     def test_get_capacity(self, reference_year, expected_output):
         model = Mock()
-        agent1 = Mock(spec=GenCo)
-        agent2 = Mock(spec=GenCo)
         plant1 = create_power_plant("plant1", 1990, "CCGT", 1200)
         plant2 = create_power_plant("plant2", 2010, "Onshore", 60)
         plant3 = create_power_plant("plant3", 1990, "Offshore", 120)
         plant4 = create_power_plant("plant4", 1980, "Coal", 120)
 
+        agent1 = GenCo(1, model, "Test", 0.06, [plant1, plant2, plant3])
+        agent2 = GenCo(1, model, "Test", 0.06, [plant4])
 
-        agent1.plants = [plant1, plant2, plant3]
-        agent2.plants = [plant4]
 
+        model.year_number = reference_year
+        agent1.operate_constructed_plants()
+        agent2.operate_constructed_plants()
+        agent1.dismantle_old_plants()
+        agent2.dismantle_old_plants()
         schedule = Mock()
         schedule.agents = [agent1, agent2]
         model.schedule = schedule
+
+
         calculate_capacity = WorldPlantCapacity(model)
         plant_list = calculate_capacity.get_power_plants_running_in_year(reference_year)
 
+
         for plant, expected_name in zip(plant_list, expected_output):
+            logger.debug("{}, {}".format(plant.name, expected_name))
             assert plant.name == expected_name
+
