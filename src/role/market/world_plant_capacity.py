@@ -15,16 +15,17 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-class WorldPlantCapacity:
 
+class WorldPlantCapacity:
     def __init__(self, model):
         self.model = model
 
     def get_total_capacity(self):
-        plant_list = []
-        for agent in self.model.schedule.agents:
-            if isinstance(agent, GenCo):
-                for plants in agent.plants:
-                    plant_list.append(plants)
-                    
-        logger.debug("Plant list: {}".format(len(plant_list)))
+        self.get_power_plants_running_in_year()
+
+    def get_power_plants_running_in_year(self, reference_year):
+        plant_list = [plant for agent in self.model.schedule.agents if isinstance(agent, GenCo) for plant in
+                      agent.plants if
+                      plant.construction_period + plant.construction_year + plant.operating_period + plant.pre_dev_period >= reference_year]
+
+        return plant_list

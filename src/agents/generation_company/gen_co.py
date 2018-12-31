@@ -38,7 +38,7 @@ class GenCo(Agent):
 
     def step(self):
         logger.debug("Stepping generation company: {}".format(self.name))
-        self.check_plants_end_of_life()
+        self.dismantle_old_plants()
         self.invest()
         self.reset_contracts()
 
@@ -76,7 +76,7 @@ class GenCo(Agent):
 
         CalculateNPV(self.discount_rate, self.model.year_number, 70)
 
-    def check_plants_end_of_life(self):
+    def dismantle_old_plants(self):
         def get_running_plants(plants):
             for plant in plants:
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
@@ -88,8 +88,10 @@ class GenCo(Agent):
         plants_filtered = list(get_running_plants(self.plants))
         self.plants = plants_filtered
 
-
-
+    def operate_constructed_plants(self):
+        for plant in self.plants:
+            if plant.is_operating is False and self.model.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period:
+                plant.is_operating = True
 
     def reset_contracts(self):
         """

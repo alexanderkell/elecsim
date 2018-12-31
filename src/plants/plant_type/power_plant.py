@@ -64,6 +64,8 @@ class PowerPlant(ABC):
 
         self.connection_cost_per_mw = connection_cost_per_mw
 
+        self.is_operating = False
+
         #
         # self.min_running = min_running
 
