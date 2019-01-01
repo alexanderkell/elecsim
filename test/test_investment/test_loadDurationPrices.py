@@ -25,9 +25,6 @@ logging.basicConfig(level=logging.DEBUG)
 class TestLoadDurationPrices:
     def test_get_load_curve_price_predictions(self):
         model = Mock()
-        # model.PowerExchange.load_duration_curve_prices = pd.DataFrame(np.random.randint(0, 100, size=(100, 5)),
-        #                                                               columns=['year', 'segment_hour', 'segment_price',
-        #                                                                        'segment_demand', 'accepted_price'])
 
         model.PowerExchange.load_duration_curve_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_curve.csv'.format(ROOT_DIR))
         model.PowerExchange.load_duration_curve_prices = model.PowerExchange.load_duration_curve_prices.drop('Prices', axis=1)
@@ -38,5 +35,5 @@ class TestLoadDurationPrices:
 
         assert forecasted_ldp.loc[8752.500000] == approx(130.17626975)
         assert forecasted_ldp.loc[8291.833333] == approx(82.56968175)
-        assert forecasted_ldp.loc[0.083333] == approx(94.93571675)
+        assert forecasted_ldp.loc[0.083333 ] == approx(94.93571675)
 

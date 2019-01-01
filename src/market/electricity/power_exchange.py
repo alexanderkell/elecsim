@@ -42,15 +42,15 @@ class PowerExchange:
             bids = []
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
-            sorted_bids = self.sort_bids(bids)
-            accepted_bids = self.respond_to_bids(sorted_bids, segment_demand)
-            self.accept_bids(accepted_bids)
+            sorted_bids = self._sort_bids(bids)
+            accepted_bids = self._respond_to_bids(sorted_bids, segment_demand)
+            self._accept_bids(accepted_bids)
             highest_bid = accepted_bids[-1].price_per_mwh
-            self.create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
+            self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
 
-    def create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
+    def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
                 'year': self.model.year_number,
                 'segment_hour': segment_hour,
@@ -62,14 +62,14 @@ class PowerExchange:
 
 
     @staticmethod
-    def accept_bids(accepted_bids):
+    def _accept_bids(accepted_bids):
         highest_accepted_bid = accepted_bids[-1].price_per_mwh
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
             bids.price_per_mwh = highest_accepted_bid
 
     @staticmethod
-    def sort_bids(bids):
+    def _sort_bids(bids):
         """
         Sorts bids in order of price
         :param bids: Bid objects
@@ -80,7 +80,7 @@ class PowerExchange:
         return sorted_bids
 
     @staticmethod
-    def respond_to_bids(bids, capacity_required):
+    def _respond_to_bids(bids, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
