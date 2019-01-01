@@ -2,6 +2,8 @@ import logging
 
 from mesa import Agent
 
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
+
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.role.investment.calculate_npv import CalculateNPV
@@ -45,6 +47,15 @@ class GenCo(Agent):
         self.invest()
         self.reset_contracts()
 
+    # def calculate_non_fuel_bids(self, segment_hour):
+    #     bids = []
+    #     renewable_plants = [renewable_plant for renewable_plant in self.plants if isinstance(renewable_plant, NonFuelPlant)]
+    #     for plant in renewable_plants:
+    #         marked_up_price = plant.short_run_marginal_cost(self.model)*1.1
+    #         bids.append(Bid(self, plant, segment_hour, plant.capacity_mw, marked_up_price))
+    #     return bids
+
+
     def calculate_bids(self, segment_hour, segment_demand):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
@@ -64,28 +75,31 @@ class GenCo(Agent):
                 if no_fuel_required:
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                     bids.append(
-                        Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
-                            marked_up_price))
+                        Bid(
+                            self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
+                            marked_up_price
+                        )
+                    )
                 else:
                     bids.append(
-                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price))
-
+                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
+                    )
         return bids
 
     # def purchase_fuel(self):
 
     def invest(self):
-
+        pass
         # load_duration_prices = LoadDurationPrices(model=self.model)
         # load_duration_prices.get_load_curve_price_predictions(2020, 5)
-        LOOK_BACK_YEARS = 4
-
-        load_duration_price_predictor = LoadDurationPrices(model=self.model)
-        load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
-                                                                                              self.model.year_number + 1)
-
-
-        CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
+        # LOOK_BACK_YEARS = 4
+        #
+        # load_duration_price_predictor = LoadDurationPrices(model=self.model)
+        # load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
+        #                                                                                       self.model.year_number + 1)
+        #
+        #
+        # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
 
     def dismantle_old_plants(self):
@@ -130,3 +144,4 @@ class GenCo(Agent):
         """
         for i in range(len(self.plants)):
             self.plants[i].reset_plant_contract()
+

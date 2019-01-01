@@ -7,6 +7,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 from src.agents.generation_company.gen_co import GenCo
+from src.role.market.world_plant_capacity import WorldPlantCapacity
+
+
 
 """power_exchange.py: Functionality to run power exchange"""
 
@@ -36,19 +39,45 @@ class PowerExchange:
         :return: None
         """
         agent = self.model.schedule.agents
-
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
+        
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
             sorted_bids = self._sort_bids(bids)
             accepted_bids = self._respond_to_bids(sorted_bids, segment_demand)
+
+            logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
             highest_bid = accepted_bids[-1].price_per_mwh
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
+
+    def adjust_load_duration_curve_for_renewables(self):
+
+        onshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Onshore")
+        total_onshore_capacity = sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants)
+
+        offshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Offshore")
+        total_offshore_capacity = sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants)
+
+        pv_plants = WorldPlantCapacity(self.model).get_renewable_by_type("PV")
+        total_pv_capacity = sum(pv_plant.capacity_mw for pv_plant in pv_plants)
+
+
+
+        # agent = self.model.schedule.agents
+        #
+        # generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
+        #
+        # renewable_bids = []
+        # for genco in generator_companies:
+        #     renewable_bids.append(genco.calculate_non_fuel_bids())
+        #
+        # [demand for demand in segment_demand]
+
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
@@ -66,6 +95,7 @@ class PowerExchange:
         highest_accepted_bid = accepted_bids[-1].price_per_mwh
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
+            logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
             bids.price_per_mwh = highest_accepted_bid
 
     @staticmethod

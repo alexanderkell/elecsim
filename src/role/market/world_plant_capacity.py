@@ -1,4 +1,5 @@
 from src.agents.generation_company.gen_co import GenCo
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 
 import logging
 
@@ -24,6 +25,16 @@ class WorldPlantCapacity:
         plant_list = self.get_power_plants_running_in_current_year()
         total_capacity = self._calculate_total_capacity(plant_list)
         return total_capacity
+
+    def get_renewable_plants(self):
+        all_plants = self.get_power_plants_running_in_current_year()
+        renewable_plants = [plant for plant in all_plants if isinstance(plant, NonFuelPlant)]
+        return renewable_plants
+
+    def get_renewable_by_type(self, type):
+        renewable_plants = self.get_renewable_plants()
+        renewable_type = [onshore_plant for onshore_plant in renewable_plants if onshore_plant.plant_type == type]
+        return renewable_type
 
     def get_reference_year_total_capacity(self, reference_year):
         plant_list = self.get_power_plants_running_in_reference_year(reference_year)
