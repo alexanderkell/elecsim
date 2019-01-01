@@ -19,8 +19,6 @@ __email__ = "alexander@kell.es"
 
 logging.basicConfig(level=logging.DEBUG)
 
-
-
 class TestWorldPlantCapacity:
     @pytest.mark.parametrize("reference_year, expected_output",
                          [
@@ -114,7 +112,6 @@ class TestWorldPlantCapacity:
         agent1 = GenCo(1, model, "Test", 0.06, [plant1, plant2, plant3])
         agent2 = GenCo(1, model, "Test", 0.06, [plant4])
 
-
         model.year_number = 2018
         agent1.operate_constructed_plants()
         agent2.operate_constructed_plants()
@@ -124,8 +121,6 @@ class TestWorldPlantCapacity:
         schedule.agents = [agent1, agent2]
         model.schedule = schedule
 
-
         calculate_capacity = WorldPlantCapacity(model)
-        plant_list = calculate_capacity.get_power_plants_running_in_reference_year(reference_year)
 
         assert calculate_capacity.get_reference_year_total_capacity(reference_year) == expected_output

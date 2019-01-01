@@ -1,9 +1,12 @@
 import logging
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 from src.role.investment.calculate_npv import CalculateNPV
 import pytest
+from unittest.mock import Mock
+import pandas as pd
+from constants import ROOT_DIR
 """
 File name: test_calculate_npv
 Date created: 24/12/2018
@@ -25,7 +28,10 @@ class TestCalculate_npv:
         DISCOUNT_RATE = 0.06
         START_YEAR = 2018
         EXPECTED_PRICE = 70
-        npv_calculations = CalculateNPV(DISCOUNT_RATE, START_YEAR, EXPECTED_PRICE)
+        LOOK_BACK_YEARS = 4
+        model = Mock()
+
+        npv_calculations = CalculateNPV(model, DISCOUNT_RATE, START_YEAR, LOOK_BACK_YEARS, EXPECTED_PRICE)
         return npv_calculations
 
 
@@ -53,4 +59,9 @@ class TestCalculate_npv:
         calculate_latest_NPV.compare_npv()
         assert 1==1
 
+    def test_calculate_expected_load_factor(self, calculate_latest_NPV):
+        load_duration_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_prices.csv'.format(ROOT_DIR))
+        load_duration_series = pd.Series(load_duration_prices['Unnamed: 1'].values, index=load_duration_prices['segment_hour'])
+        # logger.debug("\n: {}".format(load_duration_series))
 
+        calculate_latest_NPV.get_expected_load_factor(load_duration_series, 20)

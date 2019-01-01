@@ -28,7 +28,7 @@ class LoadDurationPrices:
         logger.debug("\n {}".format(data))
 
         # regressed_data = data.groupby('segment_hour').apply(self.model, new_value=reference_year)
-        average_price = data.groupby('segment_hour')['accepted_price'].mean()
+        average_price = data.groupby('segment_hour')['accepted_price'].mean().sort_index(ascending=False)
         return average_price
 
     # Linear regression model

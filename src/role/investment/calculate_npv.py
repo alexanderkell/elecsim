@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.role.market.latest_market_data import LatestMarketData
 
 
 """
@@ -27,10 +28,30 @@ __email__ = "alexander@kell.es"
 
 class CalculateNPV:
 
-    def __init__(self, discount_rate, year, expected_sell_price):
+    def __init__(self, model, discount_rate, year, look_back_years, expected_sell_price):
+        self.model = model
         self.discount_rate = discount_rate
         self.year = year
+        self.look_back_years = look_back_years
         self.expected_sell_price = expected_sell_price
+
+        self.latest_market_data = LatestMarketData(model=self.model)
+
+    def compare_npv(self):
+        cost_list = []
+        for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV', 'Pumped_storage', 'Hydro', 'Biomass_wood']:
+            plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
+            for plant_row in plant_cost_data.itertuples():
+                npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
+                dict = {"npv":npv, "npv_per_mw":npv/plant_row.Plant_Size, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                cost_list.append(dict)
+
+        npv_results = pd.DataFrame(cost_list)
+
+        sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
+        logger.debug("sorted_npv: {}".format(sorted_npv))
+        return sorted_npv
+        # return npv_results[npv_results['npv']==npv_results['npv'].max()]
 
     def calculate_npv(self, plant_type, plant_size):
         plant = create_power_plant("Test", self.year, plant_type, plant_size)
@@ -56,23 +77,13 @@ class CalculateNPV:
         expected_cash_flow = [income - cost for income, cost in zip(total_income, total_costs)]
         return expected_cash_flow
 
+    def get_expected_load_factor(self, load_duration_prices, expected_marginal_cost):
+        logger.debug(load_duration_prices)
 
-    def compare_npv(self):
-        cost_list = []
-        for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV', 'Pumped_storage', 'Hydro', 'Biomass_wood']:
-            plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
-            for plant_row in plant_cost_data.itertuples():
-                npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
-                dict = {"npv":npv, "npv_per_mw":npv/plant_row.Plant_Size, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
-                cost_list.append(dict)
+        total_hours = 8760
 
-        npv_results = pd.DataFrame(cost_list)
-
-        # max_result = npv_results[npv_results['npv']==npv_results['npv'].max()]
-        # logger.debug(npv_results[npv_results['npv']==npv_results['npv'].max()])
-        sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
-        logger.debug("sorted_npv: {}".format(sorted_npv))
-        return sorted_npv
-        # return npv_results[npv_results['npv']==npv_results['npv'].max()]
-
+        for index, value in load_duration_prices.iteritems():
+            if expected_marginal_cost < value and total_hours > 0:
+                total_hours -= index
+                logger.debug("total_hours: {}".format(total_hours))
 

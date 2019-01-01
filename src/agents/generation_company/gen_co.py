@@ -6,7 +6,7 @@ from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.role.investment.calculate_npv import CalculateNPV
 from src.role.investment.expected_load_duration_prices import LoadDurationPrices
-
+from src.role.market.latest_market_data import LatestMarketData
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,6 @@ __email__ = "Alexander@Kell.es"
 
 
 class GenCo(Agent):
-
     def __init__(self, unique_id, model, name, discount_rate, plants=None, money=5000000):
         """
         Agent which defines a generating company
@@ -56,17 +55,20 @@ class GenCo(Agent):
         """
         bids = []
         for plant in self.plants:
-            no_fuel_required=False
+            no_fuel_required = False
             if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 no_fuel_required = True
             if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                 price = plant.short_run_marginal_cost(self.model)
-                marked_up_price = price*1.1
+                marked_up_price = price * 1.1
                 if no_fuel_required:
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-                    bids.append(Bid(self, plant, segment_hour, capacity_factor*(plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
+                    bids.append(
+                        Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
+                            marked_up_price))
                 else:
-                    bids.append(Bid(self, plant, segment_hour, plant.capacity_mw-plant.capacity_fulfilled, marked_up_price))
+                    bids.append(
+                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price))
 
         return bids
 
@@ -76,19 +78,28 @@ class GenCo(Agent):
 
         # load_duration_prices = LoadDurationPrices(model=self.model)
         # load_duration_prices.get_load_curve_price_predictions(2020, 5)
+        LOOK_BACK_YEARS = 4
 
-        CalculateNPV(self.discount_rate, self.model.year_number, 70)
+        load_duration_price_predictor = LoadDurationPrices(model=self.model)
+        load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
+                                                                                              self.model.year_number + 1)
+
+
+        CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
+
 
     def dismantle_old_plants(self):
         """
         Remove plants that are past their lifetime agent from plant list
         """
+
         def get_running_plants(plants):
             for plant in plants:
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
                     yield plant
                 else:
-                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
+                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                                                                                                        plant.construction_year))
                     continue
 
         plants_filtered = list(get_running_plants(self.plants))
@@ -99,6 +110,19 @@ class GenCo(Agent):
             if plant.is_operating is False and self.model.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period:
                 plant.is_operating = True
 
+    def pay_money(self):
+        # self.money -=
+        # fixed_costs = sum(plant for plant in self.plants)
+        # expenditure = sum(bid for plant in self.plants for bid in plant.bids)
+
+        for plant in self.plants:
+            pass
+
+    def collect_money(self):
+        income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.bids if
+                     bid.partly_accepted or bid.bid_accepted)
+        self.money += income
+
     def reset_contracts(self):
         """
         Function to reset the contracts of all plants
@@ -106,4 +130,3 @@ class GenCo(Agent):
         """
         for i in range(len(self.plants)):
             self.plants[i].reset_plant_contract()
-
