@@ -1,5 +1,4 @@
 from itertools import chain
-from mesa import Agent
 
 import pandas as pd
 import logging
@@ -44,6 +43,8 @@ class PowerExchange:
                 bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
             sorted_bids = self._sort_bids(bids)
             accepted_bids = self._respond_to_bids(sorted_bids, segment_demand)
+
+            logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
             highest_bid = accepted_bids[-1].price_per_mwh
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
@@ -66,6 +67,7 @@ class PowerExchange:
         highest_accepted_bid = accepted_bids[-1].price_per_mwh
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
+            logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
             bids.price_per_mwh = highest_accepted_bid
 
     @staticmethod
@@ -94,10 +96,14 @@ class PowerExchange:
                 bid.accept_bid()
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
+                logger.debug("bid accepted: capacity_required: {}, plant name: {}, plant type: {}, bid price: {}".format(capacity_required, bid.plant.name, bid.plant.plant_type, bid.price_per_mwh))
+
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
+                logger.debug("partially accepted: capacity_required: {}, plant name: {}, plant type: {}, bid price: {}".format(capacity_required, bid.plant.name, bid.plant.plant_type, bid.price_per_mwh))
+
             else:
                 bid.reject_bid()
         return accepted_bids

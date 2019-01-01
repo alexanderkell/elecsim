@@ -27,6 +27,7 @@ class Bid:
         self.capacity_bid = capacity_bid
         self.price_per_mwh = price_per_mwh
 
+
         self.bid_accepted = False
         self.bid_rejected = False
         self.partly_accepted = False
@@ -44,11 +45,12 @@ class Bid:
         Function to be called when bid is accepted
         :return: None
         """
-
         # Update capacity of plant once bid is accepted
         self.plant.capacity_fulfilled = self.plant.capacity_fulfilled + self.capacity_bid
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
+        self.plant.capacity_fully_filled = True
+
 
     def partially_accept_bid(self, demand_fulfilled):
         """
@@ -58,6 +60,7 @@ class Bid:
         """
         # Update capacity of plant once bid is partly accepted
         self.plant.capacity_fulfilled += demand_fulfilled
+        self.plant.percentage_fulfilled = False
         self.partly_accepted = True
 
         # Update price based on electricity capacity sold on partly accepted bid

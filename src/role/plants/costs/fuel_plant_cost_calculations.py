@@ -1,5 +1,6 @@
 import logging
 from itertools import zip_longest
+from math import isnan
 
 from src.role.plants.costs.plant_cost_calculation import PlantCostCalculations
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
@@ -166,4 +167,6 @@ class FuelPlantCostCalculations(PlantCostCalculations):
                    carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
 
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
+        if marginal_cost is isnan(marginal_cost):
+            logger.debug("fuel cost: {}, co2_cost: {}".format(fuel_cost, co2_cost))
         return marginal_cost

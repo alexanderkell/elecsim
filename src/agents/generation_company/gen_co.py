@@ -58,7 +58,7 @@ class GenCo(Agent):
             no_fuel_required = False
             if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 no_fuel_required = True
-            if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
+            if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw and not plant.capacity_fully_filled:
                 price = plant.short_run_marginal_cost(self.model)
                 marked_up_price = price * 1.1
                 if no_fuel_required:
@@ -75,17 +75,17 @@ class GenCo(Agent):
     # def purchase_fuel(self):
 
     def invest(self):
-
+        pass
         # load_duration_prices = LoadDurationPrices(model=self.model)
         # load_duration_prices.get_load_curve_price_predictions(2020, 5)
-        LOOK_BACK_YEARS = 4
-
-        load_duration_price_predictor = LoadDurationPrices(model=self.model)
-        load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
-                                                                                              self.model.year_number + 1)
-
-
-        CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
+        # LOOK_BACK_YEARS = 4
+        #
+        # load_duration_price_predictor = LoadDurationPrices(model=self.model)
+        # load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
+        #                                                                                       self.model.year_number + 1)
+        #
+        #
+        # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
 
     def dismantle_old_plants(self):
