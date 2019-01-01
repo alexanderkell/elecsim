@@ -23,6 +23,10 @@ class WorldPlantCapacity:
     def get_total_capacity(self):
         self.get_power_plants_running_in_current_year()
 
+
+    def _calculate_total_capacity(self, plant_list):
+        
+
     def get_power_plants_running_in_current_year(self):
         plant_list = [plant for agent in self.model.schedule.agents if isinstance(agent, GenCo) for plant in
                       agent.plants if plant.is_operating is True]
@@ -32,6 +36,5 @@ class WorldPlantCapacity:
     def get_power_plants_running_in_reference_year(self, reference_year):
         plant_list = [plant for agent in self.model.schedule.agents if isinstance(agent, GenCo) for plant in
                       agent.plants if
-                      reference_year < plant.construction_year + plant.operating_period + plant.pre_dev_period + plant.construction_period
-                      and reference_year > plant.construction_year + plant.pre_dev_period + plant.construction_period]
+                      plant.construction_year + plant.pre_dev_period + plant.construction_period < reference_year < plant.construction_year + plant.operating_period + plant.pre_dev_period + plant.construction_period]
         return plant_list
