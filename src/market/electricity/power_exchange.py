@@ -1,13 +1,12 @@
 from itertools import chain
 from mesa import Agent
 
+import pandas as pd
 import logging
+
 logger = logging.getLogger(__name__)
 
-
 from src.agents.generation_company.gen_co import GenCo
-
-
 
 """power_exchange.py: Functionality to run power exchange"""
 
@@ -18,14 +17,14 @@ __email__ = "Alexander@Kell.es"
 
 
 class PowerExchange:
-
     def __init__(self, model):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
         :param model: Model in which the agents are contained in.
         """
-
         self.model = model
+        self.hold_duration_curve_prices = []
+        self.load_duration_curve_prices = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
 
     def tender_bids(self, segment_hours, segment_demand):
         """
@@ -46,6 +45,21 @@ class PowerExchange:
             sorted_bids = self.sort_bids(bids)
             accepted_bids = self.respond_to_bids(sorted_bids, segment_demand)
             self.accept_bids(accepted_bids)
+            highest_bid = accepted_bids[-1].price_per_mwh
+            self.create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
+
+        self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
+
+    def create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
+        segment_price_data = {
+                'year': self.model.year_number,
+                'segment_hour': segment_hour,
+                'segment_demand': segment_demand,
+                'accepted_price': accepted_price
+            }
+
+        self.hold_duration_curve_prices.append(segment_price_data)
+
 
     @staticmethod
     def accept_bids(accepted_bids):
@@ -53,8 +67,6 @@ class PowerExchange:
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
             bids.price_per_mwh = highest_accepted_bid
-
-
 
     @staticmethod
     def sort_bids(bids):
@@ -76,7 +88,6 @@ class PowerExchange:
         :param capacity_required: Capacity required for this segment
         :return:
         """
-        logger.info("Segment electricity demand: {}".format(capacity_required))
         accepted_bids = []
         for bid in bids:
             if capacity_required > bid.capacity_bid:
@@ -90,5 +101,3 @@ class PowerExchange:
             else:
                 bid.reject_bid()
         return accepted_bids
-
-

@@ -38,10 +38,6 @@ class LatestMarketData:
         regression = [value_required[i] if i > 0 else value_required[0] for i in years_for_regression]
         return regression
 
-
-    def agent_forecast_fuel(self, years_to_look_back):
-        pass
-
     @staticmethod
     def _get_value_data(values_required):
         try:

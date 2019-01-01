@@ -5,6 +5,9 @@ from mesa import Agent
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.role.investment.calculate_npv import CalculateNPV
+from src.role.investment.expected_load_duration_prices import LoadDurationPrices
+
+
 logger = logging.getLogger(__name__)
 
 """gen_co.py: Agent which represents a generation company"""
@@ -60,8 +63,6 @@ class GenCo(Agent):
                 price = plant.short_run_marginal_cost(self.model)
                 marked_up_price = price*1.1
                 if no_fuel_required:
-                    # capacity_calculator = CapacityFactorCalculations(plant.plant_type)
-                    logger.debug("segment value: {}".format(segment_demand))
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                     bids.append(Bid(self, plant, segment_hour, capacity_factor*(plant.capacity_mw-plant.capacity_fulfilled), marked_up_price))
                 else:
@@ -73,7 +74,8 @@ class GenCo(Agent):
 
     def invest(self):
 
-        self.model
+        # load_duration_prices = LoadDurationPrices(model=self.model)
+        # load_duration_prices.get_load_curve_price_predictions(2020, 5)
 
         CalculateNPV(self.discount_rate, self.model.year_number, 70)
 
@@ -84,9 +86,9 @@ class GenCo(Agent):
         def get_running_plants(plants):
             for plant in plants:
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
-                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
                     yield plant
                 else:
+                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
                     continue
 
         plants_filtered = list(get_running_plants(self.plants))
