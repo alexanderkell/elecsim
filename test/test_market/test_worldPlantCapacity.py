@@ -95,3 +95,37 @@ class TestWorldPlantCapacity:
         for plant, expected_name in zip(plant_list, expected_output):
             logger.debug("{}, {}".format(plant.name, expected_name))
             assert plant.name == expected_name
+
+    @pytest.mark.parametrize("reference_year, expected_output",
+                         [
+                             (2019, 1380),
+                             (2011, 1320),
+                             (2080, 0),
+                             (2030, 60),
+                         ])
+    def test_get_reference_year_total_capacity(self, reference_year, expected_output):
+
+        model = Mock()
+        plant1 = create_power_plant("plant1", 1990, "CCGT", 1200)
+        plant2 = create_power_plant("plant2", 2010, "Onshore", 60)
+        plant3 = create_power_plant("plant3", 1990, "Offshore", 120)
+        plant4 = create_power_plant("plant4", 1980, "Coal", 120)
+
+        agent1 = GenCo(1, model, "Test", 0.06, [plant1, plant2, plant3])
+        agent2 = GenCo(1, model, "Test", 0.06, [plant4])
+
+
+        model.year_number = 2018
+        agent1.operate_constructed_plants()
+        agent2.operate_constructed_plants()
+        agent1.dismantle_old_plants()
+        agent2.dismantle_old_plants()
+        schedule = Mock()
+        schedule.agents = [agent1, agent2]
+        model.schedule = schedule
+
+
+        calculate_capacity = WorldPlantCapacity(model)
+        plant_list = calculate_capacity.get_power_plants_running_in_reference_year(reference_year)
+
+        assert calculate_capacity.get_reference_year_total_capacity(reference_year) == expected_output

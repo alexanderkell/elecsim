@@ -27,6 +27,8 @@ class WorldPlantCapacity:
 
     def get_reference_year_total_capacity(self, reference_year):
         plant_list = self.get_power_plants_running_in_reference_year(reference_year)
+        for i in plant_list:
+            logger.debug(i.name)
         total_capacity = self._calculate_total_capacity(plant_list)
         return total_capacity
 
