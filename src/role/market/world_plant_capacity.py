@@ -20,12 +20,19 @@ class WorldPlantCapacity:
     def __init__(self, model):
         self.model = model
 
-    def get_total_capacity(self):
-        self.get_power_plants_running_in_current_year()
+    def get_current_total_plant_capacity(self):
+        plant_list = self.get_power_plants_running_in_current_year()
+        total_capacity = self._calculate_total_capacity(plant_list)
+        return total_capacity
 
+    def get_reference_year_total_capacity(self, reference_year):
+        plant_list = self.get_power_plants_running_in_reference_year(reference_year)
+        total_capacity = self._calculate_total_capacity(plant_list)
+        return total_capacity
 
     def _calculate_total_capacity(self, plant_list):
-        
+        sumation = sum(plant.capacity_mw for plant in plant_list)
+        return sumation
 
     def get_power_plants_running_in_current_year(self):
         plant_list = [plant for agent in self.model.schedule.agents if isinstance(agent, GenCo) for plant in
