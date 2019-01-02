@@ -103,7 +103,7 @@ class PowerExchange:
         highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
-            logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
+            # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
             bids.price_per_mwh = highest_accepted_bid
 
     @staticmethod
@@ -127,15 +127,36 @@ class PowerExchange:
         :return:
         """
         accepted_bids = []
+        # for bid in bids:
+        #     if capacity_required > bid.capacity_bid:
+        #         bid.accept_bid()
+        #         capacity_required -= bid.capacity_bid
+        #         accepted_bids.append(bid)
+        #         logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+        #     elif capacity_required > bid.capacity_bid > 0:
+        #         bid.partially_accept_bid(capacity_required)
+        #         capacity_required = 0
+        #         accepted_bids.append(bid)
+        #         logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+        #     else:
+        #         bid.reject_bid()
+        #         logger.debug('bid REJECTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+
         for bid in bids:
-            if capacity_required > bid.capacity_bid:
+            # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
+            if capacity_required > 0 and capacity_required > bid.capacity_bid:
                 bid.accept_bid()
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-            elif capacity_required > bid.capacity_bid > 0:
+                logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+            elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
+                logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
                 bid.reject_bid()
+
+
+
         return accepted_bids
