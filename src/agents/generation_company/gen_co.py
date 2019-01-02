@@ -2,7 +2,7 @@ import logging
 
 from mesa import Agent
 
-from src.plants.plant_type.non_fuel_plant import NonFuelPlant
+from src.plants.plant_type.fuel_plant import FuelPlant
 
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
@@ -26,7 +26,7 @@ class GenCo(Agent):
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
         :param model:  Model which defines the world that the agent lives in
-        :param name
+        :param name: Name of generating company
         :param plants: Plants which the generating company is initialised with
         :param money: Money which the agent is initialised with
         """
@@ -64,27 +64,45 @@ class GenCo(Agent):
         :param segment_demand: Electricity consumption required for the specified number of hours
         :return: Bids returned for the available plants at the specified segment hour
         """
+
         bids = []
+
         for plant in self.plants:
-            no_fuel_required = False
-            if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
-                no_fuel_required = True
-            if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
-                price = plant.short_run_marginal_cost(self.model)
-                marked_up_price = price * 1.1
-                if no_fuel_required:
-                    capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-                    bids.append(
-                        Bid(
-                            self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
-                            marked_up_price
-                        )
-                    )
-                else:
+            price = plant.short_run_marginal_cost(self.model)
+            marked_up_price = price * 1.1
+            if isinstance(plant, FuelPlant):
+                if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
                     bids.append(
                         Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
                     )
+            else:
+                Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price).accept_bid()
         return bids
+
+
+
+        # Commented out as automatically assume that offshore, onshore and PV plants are used.
+        # bids = []
+        # for plant in self.plants:
+        #     no_fuel_required = False
+        #     if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
+        #         no_fuel_required = True
+        #     if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
+        #         price = plant.short_run_marginal_cost(self.model)
+        #         marked_up_price = price * 1.1
+        #         if no_fuel_required:
+        #             capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
+        #             bids.append(
+        #                 Bid(
+        #                     self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
+        #                     marked_up_price
+        #                 )
+        #             )
+        #         else:
+        #             bids.append(
+        #                 Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
+        #             )
+        # return bids
 
     # def purchase_fuel(self):
 
