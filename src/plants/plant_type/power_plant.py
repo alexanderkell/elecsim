@@ -73,7 +73,28 @@ class PowerPlant(ABC):
         # Bids
         self.accepted_bids = []
 
-        self.capacity_fulfilled = {}
+        self.capacity_fulfilled = {
+            0.08: 0,
+            460.75: 0,
+            921.42: 0,
+            1382.08: 0,
+            1842.67: 0,
+            2303.33: 0,
+            2764: 0,
+            3224.67: 0,
+            3685.33: 0,
+            4146: 0,
+            4606.58: 0,
+            5067.25: 0,
+            5527.92: 0,
+            5988.58: 0,
+            6449.25: 0,
+            6909.92: 0,
+            7370.5: 0,
+            7831.17: 0,
+            8291.83: 0,
+            8752.5: 0
+        }
 
     # @property
     # def infrastructure(self):
@@ -113,7 +134,7 @@ class PowerPlant(ABC):
 
 
     def reset_plant_contract(self):
-        self.capacity_fulfilled = 0
+        self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
 
     @abstractmethod
     def short_run_marginal_cost(self, model):

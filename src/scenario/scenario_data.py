@@ -12,10 +12,10 @@ __email__ = "Alexander@Kell.es"
 
 
 # Demand per segment of load duration function
-segment_demand_diff = [17568, 4396, 1163, 1200, 1193, 1240, 1128, 1047, 930, 856, 846, 748, 873, 994, 1323, 1975, 2105, 2621, 3003, 6943]
+segment_demand_diff = [17568, 21964, 23127, 24327, 25520, 26760, 27888, 28935, 29865, 30721, 31567, 32315, 33188, 34182, 35505, 37480, 39585, 42206, 45209, 52152]
 segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315, 31567, 30721, 29865, 28935, 27888, 26760, 25520, 24327, 23127, 21964, 17568]
 # Time of load duration function
-segment_time = [8752.5, 8291.833333333332, 7831.166666666666, 7370.5, 6909.916666666666, 6449.25, 5988.5833333333, 5527.916666666666, 5067.25, 4606.583333333333, 4146, 3685.33333333333, 3224.6666666666665, 2764, 2303.333333333333, 1842.6666666666665, 1382.0833333333333, 921.4166666666666, 460.75, 0.08333333333333333]
+segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
 # Change in load duration function by year
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
@@ -26,7 +26,7 @@ yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.
 historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
-# User input of future fuel prices
+# Future fuel prices
 gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
@@ -51,7 +51,6 @@ fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 # Fill NA's with average of group
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
 
-
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
 wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
@@ -71,6 +70,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))

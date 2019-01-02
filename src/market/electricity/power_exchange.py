@@ -1,5 +1,4 @@
 from itertools import chain
-from mesa import Agent
 
 import pandas as pd
 import logging
@@ -42,14 +41,14 @@ class PowerExchange:
         agent = self.model.schedule.agents
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
 
-        self.adjust_load_duration_curve_for_renewables()
+        # self.adjust_load_duration_curve_for_renewables()
 
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
             sorted_bids = self._sort_bids(bids)
-            accepted_bids = self._respond_to_bids(sorted_bids, segment_demand)
+            accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
             logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
@@ -103,6 +102,8 @@ class PowerExchange:
         highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
+            logger.debug('plant_type: {}, variable_cost:{}'.format(bids.plant.plant_type, bids.price_per_mwh))
+
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
             bids.price_per_mwh = highest_accepted_bid
 
@@ -118,7 +119,7 @@ class PowerExchange:
         return sorted_bids
 
     @staticmethod
-    def _respond_to_bids(bids, capacity_required):
+    def _respond_to_bids(bids, segement_hour, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
@@ -131,17 +132,17 @@ class PowerExchange:
         for bid in bids:
             # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
             if capacity_required > 0 and capacity_required > bid.capacity_bid:
-                bid.accept_bid()
+                bid.accept_bid(segement_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
-                bid.partially_accept_bid(capacity_required)
+                bid.partially_accept_bid(segement_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
-                logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
-                bid.reject_bid()
+                bid.reject_bid(segment_hour=segement_hour)
 
 
 

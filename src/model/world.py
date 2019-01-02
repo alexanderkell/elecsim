@@ -56,7 +56,7 @@ class World(Model):
         self.schedule.step()
 
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
-        logger.debug("LDC Prices {}".format(self.PowerExchange.load_duration_curve_prices))
+        logger.debug("LDC Prices \n{}".format(self.PowerExchange.load_duration_curve_prices))
         self.year_number += 1
         self.step_number +=1
 

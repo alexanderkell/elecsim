@@ -31,33 +31,35 @@ class Bid:
         self.bid_rejected = False
         self.partly_accepted = False
 
-    def reject_bid(self):
+    def reject_bid(self, segment_hour):
         """
         Function to be called when bid is rejected
         :return: None
         """
-        self.plant.capacity_fulfilled = 0
+        self.plant.capacity_fulfilled[segment_hour] = 0
         self.bid_rejected=True
 
-    def accept_bid(self):
+    def accept_bid(self, segment_hour):
         """
         Function to be called when bid is accepted
         :return: None
         """
-
         # Update capacity of plant once bid is accepted
-        self.plant.capacity_fulfilled = self.plant.capacity_fulfilled + self.capacity_bid
+
+        # segment_hour = str(segment_hour)
+        self.plant.capacity_fulfilled[segment_hour] = self.capacity_bid
+
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
 
-    def partially_accept_bid(self, demand_fulfilled):
+    def partially_accept_bid(self, segment_hour, demand_fulfilled):
         """
         Function to be called when bid is partially accepted
         :param demand_fulfilled:
         :return: None
         """
         # Update capacity of plant once bid is partly accepted
-        self.plant.capacity_fulfilled += demand_fulfilled
+        self.plant.capacity_fulfilled[segment_hour] = demand_fulfilled
         self.partly_accepted = True
 
         # Update price based on electricity capacity sold on partly accepted bid

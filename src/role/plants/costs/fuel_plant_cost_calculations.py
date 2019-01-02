@@ -164,11 +164,15 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :param model: Model containing information such as current year
         :return: returns marginal cost to burn 1MWh of fuel.
         """
-        fuel_cost = self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1].value.iloc[0]
-        co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
-                   carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+        fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1].value.iloc[0])/self.efficiency
+
+        co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
 
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
+
+        logger.debug('fuel_price: {}, fuel_cost: {}, co2_cost: {}, variable cost: {}, marginal_cost: {}, plant: {}'.format(self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1], fuel_cost, co2_cost, self.variable_o_and_m_per_mwh, marginal_cost, self.plant_type))
+
+        logger.debug('self.variable_o_and_m_per_mwh: {}, co2 price: {}'.format(self.variable_o_and_m_per_mwh, carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]))
 
         if isnan(marginal_cost):
             logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))

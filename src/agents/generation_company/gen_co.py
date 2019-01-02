@@ -69,14 +69,17 @@ class GenCo(Agent):
 
         for plant in self.plants:
             price = plant.short_run_marginal_cost(self.model)
-            marked_up_price = price * 1.1
+            marked_up_price = price * 1.2
             if isinstance(plant, FuelPlant):
-                if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
+                if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                     bids.append(
-                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
+                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled[segment_hour], marked_up_price)
                     )
-            else:
-                Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price).accept_bid()
+            elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
+                capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
+                bids.append(
+                    Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                )
         return bids
 
 
@@ -103,8 +106,6 @@ class GenCo(Agent):
         #                 Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
         #             )
         # return bids
-
-    # def purchase_fuel(self):
 
     def invest(self):
         pass
