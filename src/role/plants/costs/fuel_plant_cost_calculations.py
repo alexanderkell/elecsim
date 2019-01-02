@@ -5,6 +5,8 @@ from src.role.plants.costs.plant_cost_calculation import PlantCostCalculations
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.scenario.scenario_data import carbon_cost
+from math import isnan
+
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +35,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
                          infrastructure=infrastructure, fixed_o_and_m_per_mw=fixed_o_and_m_per_mw,
                          variable_o_and_m_per_mwh=variable_o_and_m_per_mwh, insurance_cost_per_mw=insurance_cost_per_mw,
                          connection_cost_per_mw=connection_cost_per_mw)
+        self.plant_type = plant_type
         self.efficiency = efficiency
         # Finds fuel plant_type of power plant eg. CCGT power plant plant_type returns gas.
         fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
@@ -166,4 +169,8 @@ class FuelPlantCostCalculations(PlantCostCalculations):
                    carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
 
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
+
+        if isnan(marginal_cost):
+            logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
+
         return marginal_cost

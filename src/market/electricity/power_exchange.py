@@ -53,7 +53,9 @@ class PowerExchange:
 
             logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
-            highest_bid = accepted_bids[-1].price_per_mwh
+            # highest_bid = accepted_bids[-1].price_per_mwh
+            highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
+
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
@@ -97,7 +99,8 @@ class PowerExchange:
 
     @staticmethod
     def _accept_bids(accepted_bids):
-        highest_accepted_bid = accepted_bids[-1].price_per_mwh
+        # highest_accepted_bid = accepted_bids[-1].price_per_mwh
+        highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
             logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
@@ -129,7 +132,7 @@ class PowerExchange:
                 bid.accept_bid()
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-            elif bid.capacity_bid > capacity_required > 0:
+            elif capacity_required > bid.capacity_bid > 0:
                 bid.partially_accept_bid(capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
