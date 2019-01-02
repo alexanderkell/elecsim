@@ -73,7 +73,7 @@ class PowerPlant(ABC):
         # Bids
         self.accepted_bids = []
 
-        self.capacity_fulfilled = 0
+        self.capacity_fulfilled = {}
 
     # @property
     # def infrastructure(self):

@@ -122,25 +122,11 @@ class PowerExchange:
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
-        :param bids: Bid objects
-        :param capacity_required: Capacity required for this segment
-        :return:
+        :param bids: Bid objects.
+        :param capacity_required: Capacity required for this segment.
+        :return: Returns a list of bids which have been accepted.
         """
         accepted_bids = []
-        # for bid in bids:
-        #     if capacity_required > bid.capacity_bid:
-        #         bid.accept_bid()
-        #         capacity_required -= bid.capacity_bid
-        #         accepted_bids.append(bid)
-        #         logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
-        #     elif capacity_required > bid.capacity_bid > 0:
-        #         bid.partially_accept_bid(capacity_required)
-        #         capacity_required = 0
-        #         accepted_bids.append(bid)
-        #         logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
-        #     else:
-        #         bid.reject_bid()
-        #         logger.debug('bid REJECTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
 
         for bid in bids:
             # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
