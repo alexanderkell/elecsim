@@ -42,7 +42,7 @@ class GenCo(Agent):
 
     def step(self):
         logger.debug("Stepping generation company: {}".format(self.name))
-        self.dismantle_old_plants()
+        # self.dismantle_old_plants()
         self.operate_constructed_plants()
         self.invest()
         self.reset_contracts()
@@ -71,15 +71,15 @@ class GenCo(Agent):
             price = plant.short_run_marginal_cost(self.model)
             marked_up_price = price * 1.2
             if isinstance(plant, FuelPlant):
-                if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+                if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+                # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                     bids.append(
                         Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled[segment_hour], marked_up_price)
                     )
             elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-                bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
-                )
+                Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price).accept_bid(segment_hour=segment_hour)
+
         return bids
 
 
@@ -161,6 +161,6 @@ class GenCo(Agent):
         Function to reset the contracts of all plants
         :return: None
         """
-        for i in range(len(self.plants)):
-            self.plants[i].reset_plant_contract()
+        for plant in self.plants:
+            plant.reset_plant_contract()
 
