@@ -25,7 +25,7 @@ class LoadDurationPrices:
         years_for_regression = list(range((reference_year-look_back_years),(reference_year)))
         data = self.historical_load_duration_prices[self.historical_load_duration_prices['year'].isin(years_for_regression)]
 
-        logger.debug("\n {}".format(data))
+        # logger.debug("data for regression\n {}".format(data))
 
         # regressed_data = data.groupby('segment_hour').apply(self.model, new_value=reference_year)
         average_price = data.groupby('segment_hour')['accepted_price'].mean().sort_index(ascending=False)

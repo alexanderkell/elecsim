@@ -85,17 +85,18 @@ class GenCo(Agent):
         return bids
 
     def invest(self):
-        logger.debug("TESTING TESTING")
-        # load_duration_prices = LoadDurationPrices(model=self.model)
-        # load_duration_prices.get_load_curve_price_predictions(reference_year=self.model.year_number+1, look_back_years=5)
-        #
-        # logger.debug("Load duration prices: {}".format(load_duration_prices))
+        LOOK_BACK_YEARS = 4
 
-        # LOOK_BACK_YEARS = 4
-        #
-        # load_duration_price_predictor = LoadDurationPrices(model=self.model)
-        # load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
-        #                                                                                       self.model.year_number + 1)
+        # Forecast segment prices
+        load_duration_prices = LoadDurationPrices(model=self.model)
+        forecasted_segment_prices = load_duration_prices.get_load_curve_price_predictions(reference_year=self.model.year_number+1, look_back_years=LOOK_BACK_YEARS)
+
+        logger.debug("Load duration prices: {}".format(forecasted_segment_prices))
+
+        # Forecast marginal costs
+
+
+
         # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
 
