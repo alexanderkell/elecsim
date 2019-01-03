@@ -25,5 +25,5 @@ class TestWorld:
 
         for i in range(6):
             world.step()
-
+            
         assert 1 == 1
