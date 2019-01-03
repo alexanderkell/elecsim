@@ -69,7 +69,7 @@ class GenCo(Agent):
 
         for plant in self.plants:
             price = plant.short_run_marginal_cost(self.model)
-            marked_up_price = price * 1.2
+            marked_up_price = price * 1.1
             if isinstance(plant, FuelPlant):
                 if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                 # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
