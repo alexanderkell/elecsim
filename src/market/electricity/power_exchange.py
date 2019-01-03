@@ -48,7 +48,11 @@ class PowerExchange:
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
             sorted_bids = self._sort_bids(bids)
+<<<<<<< HEAD
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
+=======
+            accepted_bids = self._respond_to_bids(sorted_bids, segment_demand)
+>>>>>>> master
 
             logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
@@ -102,8 +106,12 @@ class PowerExchange:
         highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
         logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
+<<<<<<< HEAD
 
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
+=======
+            logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
+>>>>>>> master
             bids.price_per_mwh = highest_accepted_bid
 
     @staticmethod
@@ -134,12 +142,22 @@ class PowerExchange:
                 bid.accept_bid(segement_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
+<<<<<<< HEAD
                 logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+=======
+                logger.debug("bid accepted: capacity_required: {}, plant name: {}, plant type: {}, bid price: {}".format(capacity_required, bid.plant.name, bid.plant.plant_type, bid.price_per_mwh))
+
+>>>>>>> master
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segement_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
+<<<<<<< HEAD
                 logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+=======
+                logger.debug("partially accepted: capacity_required: {}, plant name: {}, plant type: {}, bid price: {}".format(capacity_required, bid.plant.name, bid.plant.plant_type, bid.price_per_mwh))
+
+>>>>>>> master
             else:
                 bid.reject_bid(segment_hour=segement_hour)
                 logger.debug('bid REJECTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))

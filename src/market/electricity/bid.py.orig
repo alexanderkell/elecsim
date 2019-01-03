@@ -27,6 +27,7 @@ class Bid:
         self.capacity_bid = capacity_bid
         self.price_per_mwh = price_per_mwh
 
+
         self.bid_accepted = False
         self.bid_rejected = False
         self.partly_accepted = False
@@ -61,8 +62,12 @@ class Bid:
         :return: None
         """
         # Update capacity of plant once bid is partly accepted
+<<<<<<< HEAD
+        self.plant.capacity_fulfilled[segment_hour] = demand_fulfilled
+=======
         self.plant.capacity_fulfilled += demand_fulfilled
         self.plant.percentage_fulfilled = False
+>>>>>>> master
         self.partly_accepted = True
 
         # Update price based on electricity capacity sold on partly accepted bid
