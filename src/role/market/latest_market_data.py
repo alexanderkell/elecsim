@@ -2,7 +2,7 @@ import logging
 from src.data_manipulation.data_modifications.linear_regression import linear_regression
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel, fuel_registry
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-
+from src.plants.plant_registry import PlantRegistry
 
 import src.scenario.scenario_data as scenario
 logger = logging.getLogger(__name__)
@@ -25,7 +25,34 @@ class LatestMarketData:
         self.model = model
         self.demand = self.model.demand
 
-    def agent_forecast_value(self, value_required, years_to_look_back):
+
+    def get_predicted_marginal_cost(self, plant_type, capacity, look_back_years):
+
+        fuel_type= plant_type_to_fuel(plant_type=plant_type)
+        fuel = fuel_registry(fuel_type)
+
+        plant_require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
+        power_plant = create_power_plant("estimate_variable", self.model.year_number, plant_type, capacity)
+        variable_o_m_cost = power_plant.variable_o_and_m_per_mwh
+
+        if plant_require_fuel:
+
+            co2_price = self._agent_forecast_value("co2", look_back_years)
+            fuel_price = self._agent_forecast_value(fuel_type, look_back_years)
+            demand_level = self._agent_forecast_value("demand", look_back_years)
+
+            co2_cost = fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
+            fuel_cost = fuel_price/power_plant.efficiency
+            logger.debug("predicted co2: {}, fuel price: {}, demand: {}".format(co2_price, fuel_price, demand_level))
+            logger.debug("co2_cost: {}, fuel_cost: {}, variable o_m cost: {}, efficiency: {}".format(co2_cost, fuel_cost, variable_o_m_cost, power_plant.efficiency))
+            short_run_marginal_cost = variable_o_m_cost + co2_cost + fuel_cost
+        else:
+            short_run_marginal_cost = variable_o_m_cost
+
+        return short_run_marginal_cost
+
+
+    def _agent_forecast_value(self, value_required, years_to_look_back):
         years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
         value_data = self._get_value_data(value_required)
         regression = self._get_yearly_demand_change_for_regression(value_data, years_for_regression)
@@ -35,34 +62,8 @@ class LatestMarketData:
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
 
-
-    def get_estimated_marginal_cost(self, plant_type, capacity, look_back_years):
-
-        fuel_type= plant_type_to_fuel(plant_type=plant_type)
-        fuel = fuel_registry(fuel_type)
-
-        co2_price = self.agent_forecast_value("co2", look_back_years)
-        fuel_price = self.agent_forecast_value(fuel_type, look_back_years)
-        demand_level = self.agent_forecast_value("demand", look_back_years)
-
-        logger.debug("predicted co2: {}, fuel price: {}, demand: {}".format(co2_price, fuel_price, demand_level))
-
-        # Get variable cost
-        power_plant = create_power_plant("estimate_variable", self.model.year_number, plant_type, capacity)
-        variable_o_m_cost = power_plant.variable_o_and_m_per_mwh
-
-        co2_cost = fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
-        fuel_cost = fuel_price/power_plant.efficiency
-
-        short_run_marginal_cost = variable_o_m_cost + co2_cost + fuel_cost
-
-        return short_run_marginal_cost
-
-
-
-
-
-    def _get_yearly_demand_change_for_regression(self, value_required, years_for_regression):
+    @staticmethod
+    def _get_yearly_demand_change_for_regression(value_required, years_for_regression):
         regression = [value_required[i] if i > 0 else value_required[0] for i in years_for_regression]
         return regression
 

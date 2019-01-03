@@ -78,8 +78,6 @@ modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_cos
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
 
-
-
 # Company financials
 company_financials = pd.read_csv('{}/data/processed/companies/company_financials.csv'.format(ROOT_DIR))
 

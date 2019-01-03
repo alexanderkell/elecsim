@@ -1,11 +1,12 @@
 import logging
-from unittest import mock
+from unittest.mock import Mock
 
 import pytest
 from pytest import approx
 
 from constants import KW_TO_MW
 from src.role.market.latest_market_data import LatestMarketData
+from src.plants.plant_registry import PlantRegistry
 
 logger = logging.getLogger(__name__)
 """
@@ -25,7 +26,7 @@ class TestLatestMarketData:
 
     @pytest.fixture(scope="function")
     def latest_market_data(self):
-        model = mock.Mock()
+        model = Mock()
         model.step_number = 5
         market_data = LatestMarketData(model)
         return market_data
@@ -41,7 +42,7 @@ class TestLatestMarketData:
     def test_demand_data(self, latest_market_data, value_required, years_to_look_back, expected_output):
 
         market_data = latest_market_data
-        assert market_data.agent_forecast_value(value_required, years_to_look_back) == expected_output
+        assert market_data._agent_forecast_value(value_required, years_to_look_back) == expected_output
 
 
 
@@ -82,3 +83,24 @@ class TestLatestMarketData:
             assert latest_market_data._get_value_data("sdfsf")
         with pytest.raises(ValueError):
             assert latest_market_data._get_value_data(-1)
+
+    @pytest.mark.parametrize("plant_type, capacity, look_back_years, expected_output",
+                             [
+                                 ("CCGT", 1200, 5, 46.011651),
+                                 ("Coal", 624, 5, 53.77050275),
+                                 ('Onshore', 20, 5, 5),
+                                 ('Offshore', 844, 5, 4),
+                                 ('Offshore', 321, 5, 3),
+                                 ('PV', 4, 5, 0),
+                                 ('PV', 1, 5, 3),
+                                 ('PV', 1, 5, 3),
+                                 ('Nuclear', 3300, 5, 8.9),
+                             ])
+    def test_get_predicted_marginal_cost(self, plant_type, capacity, look_back_years, expected_output):
+        model = Mock()
+        model.step_number = 5
+        model.year_number = 2018
+
+
+        latest_market_data = LatestMarketData(model)
+        assert latest_market_data.get_predicted_marginal_cost(plant_type, capacity, look_back_years) == approx(expected_output)

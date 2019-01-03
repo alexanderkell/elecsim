@@ -97,9 +97,9 @@ class GenCo(Agent):
         # Forecast marginal costs
         market_data = LatestMarketData(model=self.model)
 
-        short_run_marginal_cost = market_data.get_estimated_marginal_cost("Coal", 1200, LOOK_BACK_YEARS)
+        short_run_marginal_cost = market_data.get_predicted_marginal_cost("Coal", 1200, LOOK_BACK_YEARS)
 
-        logger.debug("srmc: {}".format(short_run_marginal_cost))
+        logger.debug("short run marginal cost: {}".format(short_run_marginal_cost))
 
         # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
