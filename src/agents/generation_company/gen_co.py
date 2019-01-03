@@ -94,8 +94,15 @@ class GenCo(Agent):
         logger.debug("Load duration prices: {}".format(forecasted_segment_prices))
 
         # Forecast marginal costs
+        market_data = LatestMarketData(model=self.model)
 
 
+
+        co2_price = market_data.agent_forecast_value("co2", LOOK_BACK_YEARS)
+        gas_price = market_data.agent_forecast_value("gas", LOOK_BACK_YEARS)
+        demand_price = market_data.agent_forecast_value("demand", LOOK_BACK_YEARS)
+
+        logger.debug("predicted co2: {}, gas co2: {}, demand: {}".format(co2_price, gas_price, demand_price))
 
         # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 

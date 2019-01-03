@@ -27,12 +27,10 @@ class LatestMarketData:
         value_data = self._get_value_data(value_required)
         regression = self._get_yearly_demand_change_for_regression(value_data, years_for_regression)
 
-
         logger.debug(regression)
 
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
-
 
     def _get_yearly_demand_change_for_regression(self, value_required, years_for_regression):
         regression = [value_required[i] if i > 0 else value_required[0] for i in years_for_regression]

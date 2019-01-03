@@ -85,6 +85,7 @@ class TestGenCo:
     def test_genco_investment(self):
         model = Mock()
         model.year_number = 2021
+        model.step_number = 5
         model.PowerExchange.load_duration_curve_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_prices.csv'.format(ROOT_DIR))
 
 
