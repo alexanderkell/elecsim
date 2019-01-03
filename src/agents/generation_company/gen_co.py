@@ -10,6 +10,7 @@ from src.role.investment.calculate_npv import CalculateNPV
 from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 
+
 logger = logging.getLogger(__name__)
 
 """gen_co.py: Agent which represents a generation company"""
@@ -96,13 +97,9 @@ class GenCo(Agent):
         # Forecast marginal costs
         market_data = LatestMarketData(model=self.model)
 
+        short_run_marginal_cost = market_data.get_estimated_marginal_cost("Coal", 1200, LOOK_BACK_YEARS)
 
-
-        co2_price = market_data.agent_forecast_value("co2", LOOK_BACK_YEARS)
-        gas_price = market_data.agent_forecast_value("gas", LOOK_BACK_YEARS)
-        demand_price = market_data.agent_forecast_value("demand", LOOK_BACK_YEARS)
-
-        logger.debug("predicted co2: {}, gas co2: {}, demand: {}".format(co2_price, gas_price, demand_price))
+        logger.debug("srmc: {}".format(short_run_marginal_cost))
 
         # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
