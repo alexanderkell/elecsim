@@ -84,42 +84,18 @@ class GenCo(Agent):
 
         return bids
 
-
-
-        # Commented out as automatically assume that offshore, onshore and PV plants are used.
-        # bids = []
-        # for plant in self.plants:
-        #     no_fuel_required = False
-        #     if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
-        #         no_fuel_required = True
-        #     if plant.min_running <= segment_hour and plant.capacity_fulfilled < plant.capacity_mw:
-        #         price = plant.short_run_marginal_cost(self.model)
-        #         marked_up_price = price * 1.1
-        #         if no_fuel_required:
-        #             capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-        #             bids.append(
-        #                 Bid(
-        #                     self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled),
-        #                     marked_up_price
-        #                 )
-        #             )
-        #         else:
-        #             bids.append(
-        #                 Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled, marked_up_price)
-        #             )
-        # return bids
-
     def invest(self):
-        pass
+        logger.debug("TESTING TESTING")
         # load_duration_prices = LoadDurationPrices(model=self.model)
-        # load_duration_prices.get_load_curve_price_predictions(2020, 5)
+        # load_duration_prices.get_load_curve_price_predictions(reference_year=self.model.year_number+1, look_back_years=5)
+        #
+        # logger.debug("Load duration prices: {}".format(load_duration_prices))
+
         # LOOK_BACK_YEARS = 4
         #
         # load_duration_price_predictor = LoadDurationPrices(model=self.model)
         # load_duration_prices = load_duration_price_predictor.get_load_curve_price_predictions(LOOK_BACK_YEARS,
         #                                                                                       self.model.year_number + 1)
-        #
-        #
         # CalculateNPV(self.model, self.discount_rate, self.model.year_number, 5, 70).get_expected_load_factor(load_duration_prices)
 
 

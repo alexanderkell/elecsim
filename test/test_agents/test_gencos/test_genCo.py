@@ -1,5 +1,7 @@
 from src.agents.generation_company.gen_co import GenCo
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+import pandas as pd
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -43,7 +45,6 @@ class TestGenCo:
             assert plant.is_operating == expected_result
 
 
-
     @pytest.mark.parametrize("year_number, expected_name, expected_output",
                              [
                                  (2020, ["Plant_1", "Plant_2"], 2),
@@ -77,3 +78,34 @@ class TestGenCo:
         assert len(genco.plants)==expected_output
         for plant, name in zip(genco.plants, expected_name):
             assert plant.name == name
+
+
+    def test_genco_investment(self):
+        model = Mock()
+        model.year_number = 2018
+        model.PowerExchange.load_duration_curve_prices = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/test/test_investment/dummy_load_duration_curve.csv')
+
+
+        plant = Mock()
+        plant.name = "Plant_1"
+        plant.construction_year = 2015
+        plant.operating_period = 25
+        plant.construction_period = 1
+        plant.pre_dev_period = 1
+        plant.in_service = True
+
+        plant2 = Mock()
+        plant2.name = "Plant_2"
+        plant2.construction_year = 2015
+        plant2.operating_period = 18
+        plant2.construction_period = 1
+        plant2.pre_dev_period = 1
+        plant2.in_service = True
+
+        UNIQUE_ID = 1
+        DISCOUNT_RATE = 0.06
+        genco = GenCo(UNIQUE_ID, model, "test_genco", DISCOUNT_RATE, [plant, plant2])
+
+        genco.invest()
+
+
