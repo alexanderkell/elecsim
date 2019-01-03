@@ -164,7 +164,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :param model: Model containing information such as current year
         :return: returns marginal cost to burn 1MWh of fuel.
         """
-        fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1].value.iloc[0])/self.efficiency
+        fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0])/self.efficiency
 
         co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
 

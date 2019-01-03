@@ -78,7 +78,9 @@ class GenCo(Agent):
                     )
             elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-                Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price).accept_bid(segment_hour=segment_hour)
+                bids.append(
+                    Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                )
 
         return bids
 

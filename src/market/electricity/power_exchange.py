@@ -41,7 +41,7 @@ class PowerExchange:
         agent = self.model.schedule.agents
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
 
-        self.adjust_load_duration_curve_for_renewables()
+        # self.adjust_load_duration_curve_for_renewables()
 
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
