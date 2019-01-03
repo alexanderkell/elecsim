@@ -46,10 +46,12 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
                            columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
-fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2018'].columns))
+fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2078'].columns))
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 # Fill NA's with average of group
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
+
+
 
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
@@ -70,7 +72,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
-
+power_plants = power_plants[:500]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))

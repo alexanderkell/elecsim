@@ -27,9 +27,10 @@ class PowerExchange:
         """
         self.model = model
         self.hold_duration_curve_prices = []
+        self.counter = 0
         self.load_duration_curve_prices = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
 
-    def tender_bids(self, segment_hours, segment_demand):
+    def tender_bids(self, segment_hours):
         """
         Function which iterates through the generator companies, requests their bids, orders them in order of price,
         and accepts bids.
@@ -41,8 +42,8 @@ class PowerExchange:
         agent = self.model.schedule.agents
         generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
 
-        self.adjust_load_duration_curve_for_renewables()
-
+        segment_demand = self.adjust_load_duration_curve_for_renewables()
+        logger.debug("segment_demand adjusted: {}".format(segment_demand))
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
@@ -58,41 +59,61 @@ class PowerExchange:
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
-
     def adjust_load_duration_curve_for_renewables(self):
         """
         Function which adjusts the load duration curve
         :return:
         """
         onshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Onshore")
-        total_onshore_capacity = [sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants)]
+        total_onshore_capacity = int(sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants))
         onshore_capacity_factor = [get_capacity_factor("Onshore", hour) for hour in self.model.demand.segment_hours]
 
-
         offshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Offshore")
-        total_offshore_capacity = [sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants)]
+        total_offshore_capacity = int(sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants))
         offshore_capacity_factor = [get_capacity_factor("Offshore", hour) for hour in self.model.demand.segment_hours]
 
 
         pv_plants = WorldPlantCapacity(self.model).get_renewable_by_type("PV")
-        total_pv_capacity = [sum(pv_plant.capacity_mw for pv_plant in pv_plants)]
+        total_pv_capacity = int(sum(pv_plant.capacity_mw for pv_plant in pv_plants))
         pv_capacity_factor = [get_capacity_factor("PV", hour) for hour in self.model.demand.segment_hours]
 
 
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_onshore_capacity, onshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_offshore_capacity, offshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_pv_capacity, pv_capacity_factor)]
+        logger.debug("onshore adjusted: segment consumption: {}, total_onshore_capacity: {}, offshore capacity factor: {}".format(self.model.demand.segment_consumption, total_onshore_capacity, onshore_capacity_factor))
 
+        onshore_diff = [total_onshore_capacity * onshore_capacity_fact for onshore_capacity_fact in onshore_capacity_factor]
+        adjusted_segment_consumption = [(segment_consumption - onshore_capacity_factor) for segment_consumption, onshore_capacity_factor in zip(self.model.demand.segment_consumption, onshore_diff)]
+
+        logger.debug("adjusted_segment_consumption: {}".format(adjusted_segment_consumption))
+
+        logger.debug("offshore adjusted: segment consumption: {}, total_onshore_capacity: {}, offshore capacity factor: {}".format(adjusted_segment_consumption, total_offshore_capacity, offshore_capacity_factor))
+
+        offshore_diff = [total_offshore_capacity * onshore_capacity_fact for onshore_capacity_fact in offshore_capacity_factor]
+        adjusted_segment_consumption = [(segment_consumption - offshore_factor) for segment_consumption, offshore_factor in zip(adjusted_segment_consumption, offshore_diff)]
+
+        logger.debug("adjusted_segment_consumption: {}".format(adjusted_segment_consumption))
+
+
+        logger.debug("pv adjusted: segment consumption: {}, total_pv_capacity: {}, pv capacity factor: {}".format(adjusted_segment_consumption, total_pv_capacity, pv_capacity_factor))
+
+        pv_diff = [total_pv_capacity * pv_capacity_fact for pv_capacity_fact in pv_capacity_factor]
+        adjusted_segment_consumption = [(segment_consumption - pv_factor) for segment_consumption, pv_factor in zip(adjusted_segment_consumption, pv_diff)]
+
+        logger.debug("adjusted_segment_consumption: {}".format(adjusted_segment_consumption))
+
+
+        return adjusted_segment_consumption
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
+                'index': self.counter,
                 'year': self.model.year_number,
                 'segment_hour': segment_hour,
                 'segment_demand': segment_demand,
                 'accepted_price': accepted_price
             }
-
+        logger.debug(segment_price_data)
+        self.counter+=1
         self.hold_duration_curve_prices.append(segment_price_data)
 
 
@@ -134,15 +155,15 @@ class PowerExchange:
                 bid.accept_bid(segement_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.debug('bid ACCEPTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segement_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
-                logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.debug('bid PARTIALLY accepted: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
                 bid.reject_bid(segment_hour=segement_hour)
-                logger.debug('bid REJECTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.debug('bid REJECTED: price: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
 
 
 

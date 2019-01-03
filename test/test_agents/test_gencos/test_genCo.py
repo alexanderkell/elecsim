@@ -77,3 +77,15 @@ class TestGenCo:
         assert len(genco.plants)==expected_output
         for plant, name in zip(genco.plants, expected_name):
             assert plant.name == name
+
+    def test_investment_algorithm(self):
+        model = Mock()
+        model.year_number = 2018
+        # model.PowerExchange.load_duration_curve_prices =
+        plant1 = create_power_plant("plant1", 1990, "CCGT", 1200)
+        plant2 = create_power_plant("plant2", 2010, "Onshore", 60)
+        plant3 = create_power_plant("plant3", 1990, "Offshore", 120)
+        plant4 = create_power_plant("plant4", 1980, "Coal", 120)
+
+        genco = GenCo(1, model, "Test", 0.06, [plant1, plant2, plant3, plant4])
+        genco.invest()
