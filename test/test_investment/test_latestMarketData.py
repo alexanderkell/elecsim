@@ -7,6 +7,8 @@ from pytest import approx
 from constants import KW_TO_MW
 from src.role.market.latest_market_data import LatestMarketData
 from src.plants.plant_registry import PlantRegistry
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+
 
 logger = logging.getLogger(__name__)
 """
@@ -101,6 +103,8 @@ class TestLatestMarketData:
         model.step_number = 5
         model.year_number = 2018
 
+        power_plant = create_power_plant("estimate_variable", model.year_number, plant_type, capacity)
+
 
         latest_market_data = LatestMarketData(model)
-        assert latest_market_data.get_predicted_marginal_cost(plant_type, capacity, look_back_years) == approx(expected_output)
+        assert latest_market_data.get_predicted_marginal_cost(power_plant, look_back_years) == approx(expected_output)

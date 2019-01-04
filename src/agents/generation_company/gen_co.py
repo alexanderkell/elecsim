@@ -9,6 +9,8 @@ from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_cap
 from src.role.investment.calculate_npv import CalculateNPV
 from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
+from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 
 logger = logging.getLogger(__name__)
@@ -94,10 +96,14 @@ class GenCo(Agent):
 
         logger.debug("Load duration prices: {}".format(forecasted_segment_prices))
 
+
         # Forecast marginal costs
         market_data = LatestMarketData(model=self.model)
 
-        short_run_marginal_cost = market_data.get_predicted_marginal_cost("Coal", 1200, LOOK_BACK_YEARS)
+        power_plant = create_power_plant("estimate_variable", self.model.year_number, "CCGT", 1200)
+
+
+        short_run_marginal_cost = market_data.get_predicted_marginal_cost(power_plant, LOOK_BACK_YEARS)
 
         FuelPlantCostCalculations()
 
