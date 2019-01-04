@@ -37,7 +37,7 @@ class CalculateNPV:
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
-                dict = {"npv_per_mwh":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                dict = {"npv":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
                 cost_list.append(dict)
 
         npv_results = pd.DataFrame(cost_list)
