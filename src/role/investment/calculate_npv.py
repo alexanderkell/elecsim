@@ -1,6 +1,7 @@
 from logging import getLogger
 import pandas as pd
 from inspect import signature
+from functools import lru_cache
 
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.scenario.scenario_data import modern_plant_costs
@@ -33,19 +34,21 @@ class CalculateNPV:
 
     def compare_npv(self):
         cost_list = []
+
         for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV']:
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
-                dict = {"npv":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                dict = {"npv_per_mwh":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
                 cost_list.append(dict)
 
         npv_results = pd.DataFrame(cost_list)
 
-        sorted_npv = npv_results.sort_values(by='npv', ascending=False)
+        sorted_npv = npv_results.sort_values(by='npv_per_mwh', ascending=False)
         logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
+    @lru_cache(maxsize=256)
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
         forecasted_segment_prices = self._get_load_duration_price_predictions()
