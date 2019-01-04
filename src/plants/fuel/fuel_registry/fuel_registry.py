@@ -167,6 +167,10 @@ def plant_type_to_fuel(plant_type, construction_year=None):
         return None
     elif plant_type == "PV":
         return None
+    elif plant_type == "Pumped_storage":
+        return None
+    elif plant_type == "Hydro":
+        return None
 
     else:
         raise ValueError("No fuel data for {}".format(plant_type))
