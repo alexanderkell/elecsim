@@ -1,5 +1,6 @@
 import constants as constants
-
+import logging
+logger = logging.getLogger(__name__)
 """
 File name: calculate_lcoe
 Date created: 18/12/2018
@@ -159,3 +160,10 @@ class PlantCostCalculations:
         years_not_running = [0]*int(self.construction_period+self.pre_dev_period)
         expected_returns = years_not_running + returns
         return expected_returns
+
+    def calculate_yearly_capital_costs(self):
+        capital_cost = self.capacity_mw * (self.pre_dev_cost_per_mw + self.construction_cost_per_mw) + self.infrastructure
+        yearly_capital_cost = capital_cost / self.operating_period
+        yearly_fixed_costs = self.capacity_mw* (self.fixed_o_and_m_per_mw + self.insurance_cost_per_mw + self.connection_cost_per_mw)
+        negative_yearly_cash_flow = yearly_fixed_costs + yearly_capital_cost
+        return negative_yearly_cash_flow

@@ -178,3 +178,5 @@ class FuelPlantCostCalculations(PlantCostCalculations):
             logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
 
         return marginal_cost
+
+
