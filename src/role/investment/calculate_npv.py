@@ -1,23 +1,18 @@
-import logging
+from logging import getLogger
+import pandas as pd
 from inspect import signature
 
-import pandas as pd
-from numpy import npv
-
-from src.plants.plant_registry import PlantRegistry
 from src.scenario.scenario_data import modern_plant_costs
-
-logger = logging.getLogger(__name__)
-
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from src.role.plants.costs.non_fuel_cost_calculations import NonFuelCostCalculation
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
+logger = getLogger(__name__)
 
 """
 File name: calculate_npv
-Date created: 24/12/2018
+Date created: 04/01/2019
 Feature: # Contains functionality to assess options of investment and return lowest NPV for decision to be made.
 """
 
@@ -26,16 +21,14 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
+
 class CalculateNPV:
 
-    def __init__(self, model, discount_rate, year, look_back_years, expected_sell_price):
+    def __init__(self, model, discount_rate, year, look_back_years):
         self.model = model
         self.discount_rate = discount_rate
         self.year = year
         self.look_back_years = look_back_years
-        self.expected_sell_price = expected_sell_price
-
-        self.latest_market_data = LatestMarketData(model=self.model)
 
     def compare_npv(self):
         cost_list = []
@@ -51,39 +44,117 @@ class CalculateNPV:
         sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
         logger.debug("sorted_npv: {}".format(sorted_npv))
         return sorted_npv
-        # return npv_results[npv_results['npv']==npv_results['npv'].max()]
 
     def calculate_npv(self, plant_type, plant_size):
-        plant = create_power_plant("Test", self.year, plant_type, plant_size)
 
-        expected_cash_flow = self.calculate_expected_cash_flow(plant)
-        npv_value = npv(self.discount_rate, expected_cash_flow)
-        return npv_value
+        # Forecast segment prices
+        forecasted_segment_prices = self._get_load_duration_price_predictions()
 
-    def calculate_expected_cash_flow(self, plant):
-        fuel_required = PlantRegistry(plant.plant_type).check_if_fuel_required()
-        if fuel_required:
-            CostCalculation = FuelPlantCostCalculations
+        logger.debug("Load duration prices: {}".format(forecasted_segment_prices))
+
+        power_plant = create_power_plant("estimate_variable", self.model.year_number, plant_type, plant_size)
+
+        # Forecast marginal costs
+        short_run_marginal_cost = self._get_predicted_marginal_cost(power_plant)
+        logger.debug("short run marginal cost: {}".format(short_run_marginal_cost))
+
+        forecasted_segment_prices = self._clean_segment_prices(forecasted_segment_prices)
+        logger.debug("forecasted_segment_prices: \n {}".format(forecasted_segment_prices))
+
+        self._get_profit_per_mwh(forecasted_segment_prices, short_run_marginal_cost)
+
+        self._get_profit_per_segment(forecasted_segment_prices, power_plant=power_plant)
+
+        self._get_total_hours_to_run(forecasted_segment_prices)
+
+        self._get_total_yearly_income(forecasted_segment_prices, power_plant)
+
+        logger.debug("total_hours_predicted_to_run: \n {}".format(forecasted_segment_prices))
+
+        # total_profit_for_year = sum(forecasted_segment_prices['_total_profit_per_segment'])
+        total_running_hours = sum(forecasted_segment_prices['_total_running_hours'])
+        total_yearly_income = sum(forecasted_segment_prices['total_income'])
+
+        yearly_capital_cost = self._get_yearly_capital_cost(power_plant)
+
+        result = self._calculate_yearly_cash_flow(power_plant, short_run_marginal_cost, total_running_hours,
+                                                  total_yearly_income, yearly_capital_cost)
+
+        return result
+
+    def _calculate_yearly_cash_flow(self, power_plant, short_run_marginal_cost, total_running_hours, total_yearly_income,
+                                    yearly_capital_cost):
+        # logger.debug("total_profit_for_year: {}, total running hours: {}".format(total_profit_for_year, _total_running_hours))
+        total_costs = yearly_capital_cost + short_run_marginal_cost * total_running_hours * power_plant.capacity_mw
+        # logger.debug("yearly_capital_cost: {}".format(yearly_capital_cost))
+        # logger.debug("total yearly cost: {}, total yearly _income: {}".format(total_costs, total_yearly_income))
+        result = total_yearly_income - total_costs
+        logger.debug("result: {}".format(result))
+        return result
+
+    def _get_yearly_capital_cost(self, power_plant):
+        power_plant_vars = vars(power_plant)
+        logger.debug("power_plant_vars: {}".format(power_plant_vars))
+        func = FuelPlantCostCalculations
+        vars_required = signature(func)._parameters
+        logger.debug("vars_required: {}".format(vars_required))
+        power_plant_vars = {key: value for key, value in power_plant_vars.items() if key in vars_required}
+        yearly_capital_cost = FuelPlantCostCalculations(**power_plant_vars).calculate_yearly_capital_costs()
+        return yearly_capital_cost
+
+    def _get_total_yearly_income(self, forecasted_segment_prices, power_plant):
+        forecasted_segment_prices['total_income'] = forecasted_segment_prices.apply(
+            lambda x: self._income(x, power_plant.capacity_mw), axis=1)
+
+    def _get_total_hours_to_run(self, forecasted_segment_prices):
+        forecasted_segment_prices['_total_running_hours'] = forecasted_segment_prices.apply(
+            lambda x: self._total_running_hours(x), axis=1)
+
+    def _get_profit_per_segment(self, forecasted_segment_prices, power_plant):
+        forecasted_segment_prices['_total_profit_per_segment'] = forecasted_segment_prices.apply(
+            lambda x: self._total_profit_per_segment(x, power_plant.capacity_mw), axis=1)
+
+    def _get_profit_per_mwh(self, forecasted_segment_prices, short_run_marginal_cost):
+        forecasted_segment_prices['predicted_profit_per_mwh'] = forecasted_segment_prices[
+                                                                    'accepted_price'] - short_run_marginal_cost
+
+    def _clean_segment_prices(self, forecasted_segment_prices):
+        forecasted_segment_prices = forecasted_segment_prices.to_frame().reset_index()
+        forecasted_segment_prices['num_of_hours'] = abs(forecasted_segment_prices.segment_hour.diff())
+        forecasted_segment_prices = forecasted_segment_prices.dropna()
+        return forecasted_segment_prices
+
+    def _get_predicted_marginal_cost(self, power_plant):
+        market_data = LatestMarketData(model=self.model)
+        short_run_marginal_cost = market_data.get_predicted_marginal_cost(power_plant, self.look_back_years)
+        return short_run_marginal_cost
+
+    def _get_load_duration_price_predictions(self):
+        load_duration_prices = LoadDurationPrices(model=self.model)
+        forecasted_segment_prices = load_duration_prices.get_load_curve_price_predictions(
+            reference_year=self.model.year_number + 1, look_back_years=self.look_back_years)
+        return forecasted_segment_prices
+
+    @staticmethod
+    def _total_profit_per_segment(row, capacity):
+        if row['predicted_profit_per_mwh'] > 0:
+            total_profit = row['num_of_hours']*row['predicted_profit_per_mwh']*capacity
         else:
-            CostCalculation = NonFuelCostCalculation
+            total_profit = 0
+        return total_profit
 
-        plant_dict = vars(plant)
-        func = CostCalculation
-        args_to_use = signature(func)._parameters
-        dict_to_use = {key: plant_dict[key] for key in plant_dict if key in args_to_use}
-        cost_calc = CostCalculation(**dict_to_use)
-        total_costs = cost_calc.calculate_total_costs()[1]
-        total_income = cost_calc.total_income(self.expected_sell_price)
-        expected_cash_flow = [income - cost for income, cost in zip(total_income, total_costs)]
-        return expected_cash_flow
+    @staticmethod
+    def _total_running_hours(row):
+        if row['predicted_profit_per_mwh'] > 0:
+            running_hours = row['num_of_hours']
+        else:
+            running_hours = 0
+        return running_hours
 
-    def get_expected_load_factor(self, load_duration_prices, expected_marginal_cost):
-        logger.debug(load_duration_prices)
-
-        total_hours = 8760
-
-        for index, value in load_duration_prices.iteritems():
-            if expected_marginal_cost < value and total_hours > 0:
-                total_hours -= index
-                logger.debug("total_hours: {}".format(total_hours))
-
+    @staticmethod
+    def _income(row, capacity):
+        if row['predicted_profit_per_mwh'] > 0:
+            running_hours = row['num_of_hours']*row['accepted_price']*capacity
+        else:
+            running_hours = 0
+        return running_hours

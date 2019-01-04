@@ -5,11 +5,13 @@ from mesa import Agent
 from src.plants.plant_type.fuel_plant import FuelPlant
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.role.investment.calculate_npv import CalculateNPV
+from src.role.investment.calculate_npv_2 import CalculateNPV
 from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from inspect import signature
+
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +100,7 @@ class GenCo(Agent):
         # Forecast marginal costs
         market_data = LatestMarketData(model=self.model)
 
-        power_plant = create_power_plant("estimate_variable", self.model.year_number, "CCGT", 1200)
+        power_plant = create_power_plant("estimate_variable", self.model.year_number, "Coal", 1200)
 
 
         short_run_marginal_cost = market_data.get_predicted_marginal_cost(power_plant, LOOK_BACK_YEARS)
@@ -132,25 +134,25 @@ class GenCo(Agent):
                 running_hours = 0
             return running_hours
 
-        forecasted_segment_prices['total_profit_per_segment'] = forecasted_segment_prices.apply(lambda x: total_profit_per_segment(x, power_plant.capacity_mw), axis=1)
-        forecasted_segment_prices['total_running_hours'] = forecasted_segment_prices.apply(lambda x: total_running_hours(x), axis=1)
+        forecasted_segment_prices['_total_profit_per_segment'] = forecasted_segment_prices.apply(lambda x: total_profit_per_segment(x, power_plant.capacity_mw), axis=1)
+        forecasted_segment_prices['_total_running_hours'] = forecasted_segment_prices.apply(lambda x: total_running_hours(x), axis=1)
         forecasted_segment_prices['total_income'] = forecasted_segment_prices.apply(lambda x: income(x, power_plant.capacity_mw), axis=1)
 
         logger.debug("total_hours_predicted_to_run: \n {}".format(forecasted_segment_prices))
 
-        total_profit_for_year = sum(forecasted_segment_prices['total_profit_per_segment'])
-        total_running_hours = sum(forecasted_segment_prices['total_running_hours'])
+        total_profit_for_year = sum(forecasted_segment_prices['_total_profit_per_segment'])
+        total_running_hours = sum(forecasted_segment_prices['_total_running_hours'])
         total_yearly_income = sum(forecasted_segment_prices['total_income'])
 
 
 
         power_plant_vars = vars(power_plant)
         logger.debug("power_plant_vars: {}".format(power_plant_vars))
-        vars_required = ['plant_type', 'capacity_mw', 'construction_year', 'average_load_factor', 'efficiency',
-                         'pre_dev_period',
-                         'construction_period', 'operating_period', 'pre_dev_spend_years', 'construction_spend_years',
-                         'pre_dev_cost_per_mw', 'construction_cost_per_mw', 'infrastructure', 'fixed_o_and_m_per_mw',
-                         'variable_o_and_m_per_mwh', 'insurance_cost_per_mw', 'connection_cost_per_mw']
+
+        func = FuelPlantCostCalculations
+        vars_required = signature(func)._parameters
+
+
         logger.debug("vars_required: {}".format(vars_required))
 
         power_plant_vars = {key:value for key, value in power_plant_vars.items() if key in vars_required}
@@ -164,7 +166,7 @@ class GenCo(Agent):
         total_costs = yearly_capital_cost + short_run_marginal_cost*total_running_hours*power_plant.capacity_mw
         logger.debug("yearly_capital_cost: {}".format(yearly_capital_cost))
 
-        logger.debug("total yearly cost: {}, total yearly income: {}".format(total_costs, total_yearly_income))
+        logger.debug("total yearly cost: {}, total yearly _income: {}".format(total_costs, total_yearly_income))
 
         result = total_yearly_income - total_costs
 
