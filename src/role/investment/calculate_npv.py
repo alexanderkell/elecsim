@@ -2,6 +2,8 @@ from logging import getLogger
 import pandas as pd
 from inspect import signature
 from functools import lru_cache
+from numpy import npv
+
 
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.scenario.scenario_data import modern_plant_costs
@@ -10,7 +12,7 @@ from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.plants.plant_type.fuel_plant import FuelPlant
-
+from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
 logger = getLogger(__name__)
 
 """
@@ -27,15 +29,18 @@ __email__ = "alexander@kell.es"
 
 class CalculateNPV:
 
-    def __init__(self, model, discount_rate, look_back_years):
+    def __init__(self, model, discount_rate, weighted_average_cost_capital, look_back_years):
         self.model = model
         self.discount_rate = discount_rate
+        self.weighted_average_cost_capital = weighted_average_cost_capital
         self.look_back_years = look_back_years
 
     def compare_npv(self):
         cost_list = []
 
         for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV']:
+        # for plant_type in ['Nuclear']:
+
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
@@ -77,38 +82,56 @@ class CalculateNPV:
         # total_profit_for_year = sum(forecasted_segment_prices['_total_profit_per_segment'])
         total_running_hours = sum(forecasted_segment_prices['_total_running_hours'])
         total_yearly_income = sum(forecasted_segment_prices['total_income'])
+        logger.debug("total_yearly_income: {}".format(total_yearly_income))
+        yearly_capital_cost = self._get_capital_outflow(power_plant)
 
-        yearly_capital_cost = self._get_yearly_capital_cost(power_plant)
+        logger.debug("yearly_capital_cost: {}".format(yearly_capital_cost))
 
-        yearly_cash_flow = self._calculate_yearly_cash_flow(power_plant, short_run_marginal_cost, total_running_hours,
-                                                  total_yearly_income, yearly_capital_cost)
+        yearly_operating_cash_flow = self._calculate_yearly_operation_cashflow(power_plant, short_run_marginal_cost, total_running_hours,
+                                                                     total_yearly_income, yearly_capital_cost)
 
+        total_cash_flow = yearly_capital_cost + yearly_operating_cash_flow
 
+        logger.debug('total_cash_flow: {}'.format(total_cash_flow))
 
-        yearly_cash_flow_per_mwh = yearly_cash_flow/(total_running_hours*power_plant.capacity_mw)
-        # yearly_cash_flow_per_mwh = yearly_cash_flow/(power_plant.capacity_mw)
+        if power_plant.plant_type=="Nuclear":
+            self.weighted_average_cost_capital = nuclear_wacc
+        else:
+            self.weighted_average_cost_capital = non_nuclear_wacc
 
+        # for i in range(power_plant.pre_dev_period+power_plant.construction_period+power_plant.operating_period):
+        cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow)]
+
+        npv_power_plant = npv(self.discount_rate, cash_flow_wacc)
+        NPVp = npv_power_plant/power_plant.capacity_mw
+        return NPVp
+
+    def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):
+        yearly_cash_flow_per_mwh = yearly_cash_flow / (total_running_hours * power_plant.capacity_mw)
         return yearly_cash_flow_per_mwh
 
-    def _calculate_yearly_cash_flow(self, power_plant, short_run_marginal_cost, total_running_hours, total_yearly_income,
-                                    yearly_capital_cost):
+    def _calculate_yearly_operation_cashflow(self, power_plant, short_run_marginal_cost, total_running_hours, total_yearly_income,
+                                             yearly_capital_cost):
         # logger.debug("total_profit_for_year: {}, total running hours: {}".format(total_profit_for_year, _total_running_hours))
-        total_costs = yearly_capital_cost + short_run_marginal_cost * total_running_hours * power_plant.capacity_mw
+        operational_costs = short_run_marginal_cost * total_running_hours * power_plant.capacity_mw
         # logger.debug("yearly_capital_cost: {}".format(yearly_capital_cost))
-        # logger.debug("total yearly cost: {}, total yearly _income: {}".format(total_costs, total_yearly_income))
-        result = total_yearly_income - total_costs
-        logger.debug("result: {}".format(result))
+        # logger.debug("total yearly cost: {}, total yearly _income: {}".format(operational_costs, total_yearly_income))
+        result = [total_yearly_income - operational_costs] * int(power_plant.operating_period)
         return result
 
-    def _get_yearly_capital_cost(self, power_plant):
+    def _get_capital_outflow(self, power_plant):
         power_plant_vars = vars(power_plant)
         logger.debug("power_plant_vars: {}".format(power_plant_vars))
         func = FuelPlantCostCalculations
         vars_required = signature(func)._parameters
         logger.debug("vars_required: {}".format(vars_required))
         power_plant_vars = {key: value for key, value in power_plant_vars.items() if key in vars_required}
-        yearly_capital_cost = FuelPlantCostCalculations(**power_plant_vars).calculate_yearly_capital_costs()
-        return yearly_capital_cost
+        # yearly_outflow = FuelPlantCostCalculations(**power_plant_vars).calculate_yearly_outflow()
+
+        capital_costs = FuelPlantCostCalculations(**power_plant_vars)._capex()
+        logger.debug("capital_cost_outflow: {}".format(capital_costs))
+        capital_costs_outflow = [ -x for x in capital_costs]
+        return capital_costs_outflow
 
     def _get_total_yearly_income(self, forecasted_segment_prices, power_plant):
         forecasted_segment_prices['total_income'] = forecasted_segment_prices.apply(

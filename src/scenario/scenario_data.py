@@ -52,6 +52,11 @@ fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
 
 
+# Weighted Cost of Capital
+
+nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research-centres-and-groups/icept/Cost-estimates-for-nuclear-power-in-the-UK.pdf (page 20). # Post tax
+non_nuclear_wacc = 0.059  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
+
 
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
