@@ -38,8 +38,8 @@ class CalculateNPV:
     def compare_npv(self):
         cost_list = []
 
-        for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV']:
-        # for plant_type in ['Nuclear']:
+        # for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV']:
+        for plant_type in ['Nuclear']:
 
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
@@ -99,11 +99,19 @@ class CalculateNPV:
         else:
             self.weighted_average_cost_capital = non_nuclear_wacc
 
+        # self.weighted_average_cost_capital = 0
+
         # for i in range(power_plant.pre_dev_period+power_plant.construction_period+power_plant.operating_period):
-        cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow)]
+        cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow,1)]
+
+        logger.debug("cash_flow_wacc: {}".format(cash_flow_wacc))
+        logger.debug("discount rate: {}".format(self.discount_rate))
 
         npv_power_plant = npv(self.discount_rate, cash_flow_wacc)
-        NPVp = npv_power_plant/power_plant.capacity_mw
+
+        logger.debug("npv_power_plant: {}".format(npv_power_plant))
+
+        NPVp = npv_power_plant/(power_plant.capacity_mw)
         return NPVp
 
     def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):
