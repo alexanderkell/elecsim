@@ -1,4 +1,4 @@
-This repository contains the functionality for the Elecsim package. Using a scenario file, one can build an environment of electricity producers (GenCo's), electricity suppliers and an electricity market. 
+This repository contains the functionality for the ElecSIM package. Using a scenario file, one can build an environment of electricity producers (GenCo's), electricity suppliers and an electricity market. 
 
 The effect of different policy options and starting conditions can be explored using this electricity market model. 
 
