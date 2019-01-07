@@ -136,6 +136,10 @@ class PowerPlant(ABC):
     def reset_plant_contract(self):
         self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
 
+    def get_upfront_costs(self):
+        upfront_cost = self.capacity_mw*(self.pre_dev_cost_per_mw+self.construction_cost_per_mw) + self.infrastructure
+        return upfront_cost
+
     @abstractmethod
     def short_run_marginal_cost(self, model):
         pass

@@ -89,9 +89,19 @@ class GenCo(Agent):
         return bids
 
     def invest(self):
+        UPFRONT_INVESTMENT_COSTS = 0.25
         npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
-        power_plant_to_invest = npv_calculation.get_plant_with_max_npv()
-        self.plants.append(power_plant_to_invest)
+        potential_plant_data = npv_calculation.get_affordable_plant_generator()
+        for plant_data in potential_plant_data:
+            power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data.simplified_type, plant_data.capacity)
+            total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
+            if self.money > total_upfront_cost:
+                self.plants.append(power_plant_trial)
+                self.money -= total_upfront_cost
+                break
+            else:
+                pass
+        # self.plants.append(power_plant_to_invest)
 
     def dismantle_old_plants(self):
         """

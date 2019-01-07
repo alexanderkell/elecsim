@@ -47,6 +47,16 @@ class CalculateNPV:
         else:
             return None
 
+    def get_affordable_plant_generator(self):
+        npv_rows = self.get_positive_npv_plants()
+        for individual_plant_data in npv_rows.itertuples():
+            yield individual_plant_data.capacity, individual_plant_data.plant_type
+
+    def get_positive_npv_plants(self):
+        npv_data = self.compare_npv()
+        npv_positive = npv_data[npv_data.npv_per_mw > 0]
+        return npv_positive
+
 
     def compare_npv(self):
         cost_list = []
