@@ -4,7 +4,7 @@ The effect of different policy options and starting conditions can be explored u
 
 ## Installation
 
-If you're on MacOS, you can install the virtual environment and package manager for python "pipenv" using brew:
+If you're on MacOS, you can install the virtual environment and package manager for python "pipenv" using brew. If you are on linux, you can use Linuxbrew on linux using the same command:
 
 ```
 $ brew install pipenv
