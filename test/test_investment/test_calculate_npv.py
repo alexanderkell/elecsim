@@ -27,16 +27,13 @@ class TestCalculate_npv:
 
     @pytest.fixture(scope='function')
     def calculate_latest_NPV(self):
-        DISCOUNT_RATE = 0.06
-        START_YEAR = 2018
-        EXPECTED_PRICE = 70
-        INTEREST_RATE = 0.05
+        DISCOUNT_RATE = 0.001
         LOOK_BACK_YEARS = 4
         model = Mock()
         model.year_number=2018
         model.step_number=5
         model.PowerExchange.load_duration_curve_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_prices.csv'.format(ROOT_DIR))
-        npv_calculations = CalculateNPV(model, DISCOUNT_RATE, INTEREST_RATE, LOOK_BACK_YEARS)
+        npv_calculations = CalculateNPV(model, DISCOUNT_RATE, LOOK_BACK_YEARS)
         return npv_calculations
 
 
@@ -91,3 +88,8 @@ class TestCalculate_npv:
 
     def test_npv_calcualtion_comparison(self, calculate_latest_NPV):
         calculate_latest_NPV.compare_npv()
+
+    def test_get_max_npv(self, calculate_latest_NPV):
+        highest_npv = calculate_latest_NPV.get_plant_with_max_npv()
+        logger.debug("highest_npv: {}".format(highest_npv))
+        # logger.debug("highest_npv: {}".format(highest_npv.capacity, highest_npv.npv_per_mw, highest_npv.plant_type))

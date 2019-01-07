@@ -3,7 +3,7 @@ import pandas as pd
 from inspect import signature
 from functools import lru_cache
 from numpy import npv
-
+from random import randint
 
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.scenario.scenario_data import modern_plant_costs
@@ -29,27 +29,40 @@ __email__ = "alexander@kell.es"
 
 class CalculateNPV:
 
-    def __init__(self, model, discount_rate, weighted_average_cost_capital, look_back_years):
+    def __init__(self, model, difference_in_discount_rate, look_back_years):
         self.model = model
-        self.discount_rate = discount_rate
-        self.weighted_average_cost_capital = weighted_average_cost_capital
+        self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_years = look_back_years
+
+    def get_plant_with_max_npv(self):
+        npv_data = self.compare_npv()
+        # highest_npv = npv_data.itertuples()[0]
+        logger.debug("iloc 0 > 0: {}".format(npv_data['npv_per_mw'].iloc[0]>0))
+        if npv_data['npv_per_mw'].iloc[0] > 0:
+            capacity = npv_data['capacity'].iloc[0]
+            plant_type = npv_data['plant_type'].iloc[0]
+            power_plant_name = "{}-{}-{}".format(plant_type, self.model.year_number,randint(1,99999999))
+            power_plant = create_power_plant(name=power_plant_name, start_date=self.model.year_number, capacity=capacity, simplified_type=plant_type)
+            return power_plant
+        else:
+            return None
+
 
     def compare_npv(self):
         cost_list = []
 
         for plant_type in ['CCGT','Coal','Nuclear','Onshore', 'Offshore', 'PV']:
-        # for plant_type in ['Nuclear']:
+        # for plant_type in ['Nuclear','CCGT']:
 
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type==plant_type]
             for plant_row in plant_cost_data.itertuples():
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
-                dict = {"npv_per_mwh":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
+                dict = {"npv_per_mw":npv, "capacity":plant_row.Plant_Size, "plant_type":plant_row.Type}
                 cost_list.append(dict)
 
         npv_results = pd.DataFrame(cost_list)
 
-        sorted_npv = npv_results.sort_values(by='npv_per_mwh', ascending=False)
+        sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
         logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
@@ -95,25 +108,24 @@ class CalculateNPV:
         logger.debug('total_cash_flow: {}'.format(total_cash_flow))
 
         if power_plant.plant_type=="Nuclear":
-            self.weighted_average_cost_capital = nuclear_wacc
-            self.discount_rate = nuclear_wacc
+            self.weighted_average_cost_capital = nuclear_wacc + self.difference_in_discount_rate
         else:
-            self.weighted_average_cost_capital = non_nuclear_wacc
-            self.discount_rate = non_nuclear_wacc
-
-        self.weighted_average_cost_capital = 0
+            self.weighted_average_cost_capital = non_nuclear_wacc + self.difference_in_discount_rate
 
         # for i in range(power_plant.pre_dev_period+power_plant.construction_period+power_plant.operating_period):
-        cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow,1)]
+        # cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow,1)]
 
-        logger.debug("cash_flow_wacc: {}".format(cash_flow_wacc))
-        logger.debug("discount rate: {}".format(self.discount_rate))
+        # cash_flow_wacc = [cash_flow/(1+self.weighted_average_cost_capital)**counter for counter, cash_flow in enumerate(total_cash_flow,1)]
 
-        npv_power_plant = npv(self.discount_rate, cash_flow_wacc)
+
+        # logger.debug("cash_flow_wacc: {}".format(cash_flow_wacc))
+        logger.debug("discount rate: {}".format(self.weighted_average_cost_capital))
+
+        npv_power_plant = npv(self.weighted_average_cost_capital, total_cash_flow)
 
         logger.debug("npv_power_plant: {}".format(npv_power_plant))
 
-        NPVp = npv_power_plant/(power_plant.capacity_mw*365*24)
+        NPVp = npv_power_plant/(power_plant.capacity_mw)
         return NPVp
 
     def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):

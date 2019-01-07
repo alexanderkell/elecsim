@@ -144,7 +144,7 @@ class TestSelectCostEstimator:
         assert parameters['construction_spend_years'] == [1]
         assert parameters['pre_dev_spend_years'] == []
 
-    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, difference_in_discount_rate, expected_output",
                              [
                                  (1, "Hydro", 5, 0.075, 103.82602365344589),
                                  (2010, "Hydro", 5, 0.075, 103.82602365344589),
@@ -185,7 +185,7 @@ class TestSelectCostEstimator:
         lcoe = plant.calculate_lcoe(discount_rate)
         assert lcoe == approx(expected_output)
 
-    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, difference_in_discount_rate, expected_output",
                              [
                                  (1980, "CCGT", 1200, 0.05, 82.55488000000001),
                                  (1992, "CCGT", 1200, 0.05, 82.55488000000001),

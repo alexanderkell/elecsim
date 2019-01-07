@@ -31,12 +31,3 @@ class LoadDurationPrices:
         average_price = data.groupby('segment_hour')['accepted_price'].mean().sort_index(ascending=False)
         return average_price
 
-    # Linear regression model
-    # def model(self, dataframe, new_value):
-    #     y = dataframe['accepted_price']
-    #     x = dataframe['year']
-    #     logger.debug(x)
-    #     logger.debug(y)
-    #     m, c, _, _, _ = linregress(x, y)
-    #     result = m * new_value + c
-    #     return result

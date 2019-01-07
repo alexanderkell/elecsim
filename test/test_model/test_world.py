@@ -1,6 +1,7 @@
 from src.model.world import World
 from src.scenario import scenario_data
 import logging
+
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
 

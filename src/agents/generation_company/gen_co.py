@@ -9,6 +9,7 @@ from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.role.investment.calculate_npv import CalculateNPV
 from inspect import signature
 
 
@@ -23,7 +24,7 @@ __email__ = "Alexander@Kell.es"
 
 
 class GenCo(Agent):
-    def __init__(self, unique_id, model, name, discount_rate, plants=None, money=5000000):
+    def __init__(self, unique_id, model, name, discount_rate, look_back_period, plants=None, money=5000000):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -40,7 +41,8 @@ class GenCo(Agent):
         self.plants = plants
         self.money = money
 
-        self.discount_rate = discount_rate
+        self.difference_in_discount_rate = discount_rate
+        self.look_back_period = look_back_period
 
     def step(self):
         logger.debug("Stepping generation company: {}".format(self.name))
@@ -87,7 +89,9 @@ class GenCo(Agent):
         return bids
 
     def invest(self):
-        pass
+        npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
+        power_plant_to_invest = npv_calculation.get_plant_with_max_npv()
+        self.plants.append(power_plant_to_invest)
 
     def dismantle_old_plants(self):
         """

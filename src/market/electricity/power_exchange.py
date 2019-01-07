@@ -59,30 +59,30 @@ class PowerExchange:
 
         self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
 
-    def adjust_load_duration_curve_for_renewables(self):
-        """
-        Function which adjusts the load duration curve
-        :return:
-        """
-        onshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Onshore")
-        total_onshore_capacity = [sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants)]
-        onshore_capacity_factor = [get_capacity_factor("Onshore", hour) for hour in self.model.demand.segment_hours]
-
-
-        offshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Offshore")
-        total_offshore_capacity = [sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants)]
-        offshore_capacity_factor = [get_capacity_factor("Offshore", hour) for hour in self.model.demand.segment_hours]
-
-
-        pv_plants = WorldPlantCapacity(self.model).get_renewable_by_type("PV")
-        total_pv_capacity = [sum(pv_plant.capacity_mw for pv_plant in pv_plants)]
-        pv_capacity_factor = [get_capacity_factor("PV", hour) for hour in self.model.demand.segment_hours]
-
-
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_onshore_capacity, onshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_offshore_capacity, offshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_pv_capacity, pv_capacity_factor)]
-
+    # def adjust_load_duration_curve_for_renewables(self):
+    #     """
+    #     Function which adjusts the load duration curve
+    #     :return:
+    #     """
+    #     onshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Onshore")
+    #     total_onshore_capacity = [sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants)]
+    #     onshore_capacity_factor = [get_capacity_factor("Onshore", hour) for hour in self.model.demand.segment_hours]
+    #
+    #
+    #     offshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Offshore")
+    #     total_offshore_capacity = [sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants)]
+    #     offshore_capacity_factor = [get_capacity_factor("Offshore", hour) for hour in self.model.demand.segment_hours]
+    #
+    #
+    #     pv_plants = WorldPlantCapacity(self.model).get_renewable_by_type("PV")
+    #     total_pv_capacity = [sum(pv_plant.capacity_mw for pv_plant in pv_plants)]
+    #     pv_capacity_factor = [get_capacity_factor("PV", hour) for hour in self.model.demand.segment_hours]
+    #
+    #
+    #     self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_onshore_capacity, onshore_capacity_factor)]
+    #     self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_offshore_capacity, offshore_capacity_factor)]
+    #     self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_pv_capacity, pv_capacity_factor)]
+    #
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
