@@ -83,7 +83,7 @@ modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_cos
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
 # Historical power plant efficiency
-# historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')
+historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')  # https://www.eia.gov/electricity/annual/html/epa_08_01.html, U.S. Energy Information Administration, Form EIA-923, "Power Plant Operations Report," and predecessor form(s) including U.S. Energy Information Administration, Form EIA-906, "Power Plant Report;" and Form EIA-920, "Combined Heat and Power Plant Report;" Form EIA-860, "Annual Electric Generator Report."
 
 
 # Company financials

@@ -1,8 +1,11 @@
 import src.scenario.scenario_data as scenario
 from scipy.interpolate import interp1d
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
+
 import logging
 import math
+
 logger = logging.getLogger(__name__)
 
 from src.data_manipulation.data_modifications.value_estimations import closest_row
@@ -66,6 +69,12 @@ class PredictModernPlantParameters:
         parameters = {**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
 
         parameters = self.check_pre_dev_spend(parameters)
+
+        if self.plant_type in ['CCGT', 'Coal']:
+            fuel_used = plant_type_to_fuel(self.plant_type)
+            historical_efficiency_measure = scenario.historical_fuel_plant_efficiency[scenario.historical_fuel_plant_efficiency.fuel_type==fuel_used]
+            efficiency = ExtrapolateInterpolate(historical_efficiency_measure.Year, historical_efficiency_measure.efficiency).min_max_extrapolate(self.start_year)
+            parameters['efficiency'] = efficiency
 
         return parameters
 

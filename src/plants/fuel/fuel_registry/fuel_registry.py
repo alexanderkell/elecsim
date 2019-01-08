@@ -125,6 +125,8 @@ def plant_type_to_fuel(plant_type, construction_year=None):
     """
     if plant_type == "CCGT":
         return "Gas"
+    elif plant_type == "Recip_gas":
+        return "Gas"
     elif plant_type == "Meat":
         return "Meat"
     elif plant_type == "Wind (offshore)":
