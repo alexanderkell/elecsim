@@ -1,5 +1,4 @@
 import pandas as pd
-from random import gauss
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 from constants import ROOT_DIR, KW_TO_MW
@@ -28,7 +27,7 @@ historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/his
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
 # Future fuel prices
-gas_price = [KW_TO_MW * gauss(0.018977)] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
 oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
