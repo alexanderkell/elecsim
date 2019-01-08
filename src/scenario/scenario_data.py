@@ -1,4 +1,5 @@
 import pandas as pd
+from random import gauss
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 from constants import ROOT_DIR, KW_TO_MW
@@ -27,7 +28,7 @@ historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/his
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
 # Future fuel prices
-gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+gas_price = [KW_TO_MW * gauss(0.018977)] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
 oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
@@ -81,6 +82,9 @@ power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_po
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
+
+# Variable operation and maintenance costs random numbers for stochasticity (uniform distribution)
+o_and_m_multiplier = (0.3, 2)
 
 # Historical power plant efficiency
 historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')  # https://www.eia.gov/electricity/annual/html/epa_08_01.html, U.S. Energy Information Administration, Form EIA-923, "Power Plant Operations Report," and predecessor form(s) including U.S. Energy Information Administration, Form EIA-906, "Power Plant Report;" and Form EIA-920, "Combined Heat and Power Plant Report;" Form EIA-860, "Annual Electric Generator Report."
