@@ -6,8 +6,10 @@ import src.scenario.scenario_data as scenario
 from src.plants.plant_type.fuel_plant import FuelPlant
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
+from random import uniform
 
-logging.getLogger(__name__)
+
+logger = logging.getLogger(__name__)
 
 class FuelOldPlantCosts(OldPlantCosts):
 
@@ -25,6 +27,9 @@ class FuelOldPlantCosts(OldPlantCosts):
         """
 
         params_for_scaling = self.estimate_modern_parameters()
+
+        logger.debug("params_for_scaling: {}".format(params_for_scaling))
+
         parameter_values = list(params_for_scaling.values())
 
         linear_optimisation_results = self._linear_optimisation(parameter_values, self.estimated_historical_lcoe)
@@ -34,7 +39,9 @@ class FuelOldPlantCosts(OldPlantCosts):
                              zip(self.estimated_modern_plant_parameters, linear_optimisation_parameters)
                              if key not in self.params_to_ignore}
 
-
+        # logger.debug("scaled_params: {}".format(scaled_parameters))
+        # scaled_parameters['variable_o_and_m_per_mwh'] += uniform(-20,20)
+        scaled_parameters['variable_o_and_m_per_mwh'] *= uniform(0.3,2)
         scaled_parameters.update(self.dict_to_ignore)
         return scaled_parameters
 

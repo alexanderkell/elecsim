@@ -11,6 +11,7 @@ from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalc
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.role.investment.calculate_npv import CalculateNPV
 from inspect import signature
+from src.scenario.scenario_data import bid_mark_up
 
 
 logger = logging.getLogger(__name__)
@@ -73,7 +74,9 @@ class GenCo(Agent):
 
         for plant in self.plants:
             price = plant.short_run_marginal_cost(self.model)
-            marked_up_price = price * 1.1
+            # marked_up_price = price * 1.0
+            marked_up_price = price * bid_mark_up
+
             if isinstance(plant, FuelPlant):
                 if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                 # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
@@ -89,19 +92,20 @@ class GenCo(Agent):
         return bids
 
     def invest(self):
-        UPFRONT_INVESTMENT_COSTS = 0.25
-        npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
-        potential_plant_data = npv_calculation.get_affordable_plant_generator()
-        for plant_data in potential_plant_data:
-            power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data.simplified_type, plant_data.capacity)
-            total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
-            if self.money > total_upfront_cost:
-                self.plants.append(power_plant_trial)
-                self.money -= total_upfront_cost
-                break
-            else:
-                pass
-        # self.plants.append(power_plant_to_invest)
+        # UPFRONT_INVESTMENT_COSTS = 0.25
+        # npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
+        # potential_plant_data = npv_calculation.get_affordable_plant_generator()
+        # for plant_data in potential_plant_data:
+        #     power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data.simplified_type, plant_data.capacity)
+        #     total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
+        #     if self.money > total_upfront_cost:
+        #         self.plants.append(power_plant_trial)
+        #         self.money -= total_upfront_cost
+        #         break
+        #     else:
+        #         pass
+        # # self.plants.append(power_plant_to_invest)
+        pass
 
     def dismantle_old_plants(self):
         """

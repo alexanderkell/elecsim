@@ -22,9 +22,9 @@ logging.basicConfig(level=logging.DEBUG)
 class TestWorld:
     def test_world_initialization(self):
         # with PyCallGraph(output=GraphvizOutput()):
-        world = World(scenario=scenario_data, initialization_year=2016)
+        world = World(scenario=scenario_data, initialization_year=2018)
 
-        for i in range(6):
+        for i in range(1):
             world.step()
 
         assert 1 == 1

@@ -82,10 +82,15 @@ modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_cos
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
+# Historical power plant efficiency
+# historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')
+
 
 # Company financials
 company_financials = pd.read_csv('{}/data/processed/companies/company_financials.csv'.format(ROOT_DIR))
 
+# Bid mark-up price
+bid_mark_up = 1.0
 
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
