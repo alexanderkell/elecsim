@@ -74,7 +74,7 @@ class PredictModernPlantParameters:
         return parameters
 
     def _use_historical_efficiency_data(self, parameters):
-        if self.plant_type in ['CCGT', 'Coal']:
+        if self.plant_type in ['CCGT', 'Coal'] and self.start_year < 2018:
             fuel_used = plant_type_to_fuel(self.plant_type)
             historical_efficiency_measure = scenario.historical_fuel_plant_efficiency[
                 scenario.historical_fuel_plant_efficiency.fuel_type == fuel_used]

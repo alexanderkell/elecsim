@@ -42,13 +42,13 @@ class TestSelectCostEstimator:
                           capacity_mw=CAPACITY, construction_year=START_YEAR,
                           **parameters)
         assert plant.calculate_lcoe(0.05) == approx(82.55488)
-        assert parameters['construction_cost_per_mw'] == approx(500 * 1000 * 6.4047971336)
-        assert parameters['fixed_o_and_m_per_mw'] == approx(12200 * 6.4047971336)
-        assert parameters['infrastructure'] == approx(15100 * 6.4047971336)
-        assert parameters['insurance_cost_per_mw'] == approx(2100 * 6.4047971336)
-        assert parameters['pre_dev_cost_per_mw'] == approx(10 * 1000 * 6.4047971336)
-        assert parameters['variable_o_and_m_per_mwh'] == approx(3 * 6.4047971336)
-        assert parameters['connection_cost_per_mw'] == approx(3300 * 6.4047971336)
+        assert parameters['construction_cost_per_mw'] == approx(500 * 1000 * 4.7868450994)
+        assert parameters['fixed_o_and_m_per_mw'] == approx(12200 * 4.7868450994)
+        assert parameters['infrastructure'] == approx(15100 * 4.7868450994)
+        assert parameters['insurance_cost_per_mw'] == approx(2100 * 4.7868450994)
+        assert parameters['pre_dev_cost_per_mw'] == approx(10 * 1000 * 4.7868450994)
+        assert parameters['variable_o_and_m_per_mwh'] == approx(3 * 4.7868450994)
+        assert parameters['connection_cost_per_mw'] == approx(3300 * 4.7868450994)
         assert parameters['pre_dev_period'] == 3
         assert parameters['operating_period'] == 25
         assert parameters['construction_period'] == 3
@@ -144,7 +144,7 @@ class TestSelectCostEstimator:
         assert parameters['construction_spend_years'] == [1]
         assert parameters['pre_dev_spend_years'] == []
 
-    @pytest.mark.parametrize("year, plant_type, capacity, difference_in_discount_rate, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
                              [
                                  (1, "Hydro", 5, 0.075, 103.82602365344589),
                                  (2010, "Hydro", 5, 0.075, 103.82602365344589),
@@ -185,7 +185,7 @@ class TestSelectCostEstimator:
         lcoe = plant.calculate_lcoe(discount_rate)
         assert lcoe == approx(expected_output)
 
-    @pytest.mark.parametrize("year, plant_type, capacity, difference_in_discount_rate, expected_output",
+    @pytest.mark.parametrize("year, plant_type, capacity, discount_rate, expected_output",
                              [
                                  (1980, "CCGT", 1200, 0.05, 82.55488000000001),
                                  (1992, "CCGT", 1200, 0.05, 82.55488000000001),

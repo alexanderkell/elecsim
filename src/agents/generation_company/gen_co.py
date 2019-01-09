@@ -12,6 +12,7 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_pl
 from src.role.investment.calculate_npv import CalculateNPV
 from inspect import signature
 from src.scenario.scenario_data import bid_mark_up
+from random import gauss
 
 
 logger = logging.getLogger(__name__)
@@ -45,12 +46,16 @@ class GenCo(Agent):
         self.difference_in_discount_rate = discount_rate
         self.look_back_period = look_back_period
 
+        self.gas_price_modifier = 0
+        self.coal_price_modifier = 0
+
     def step(self):
         logger.debug("Stepping generation company: {}".format(self.name))
         # self.dismantle_old_plants()
         self.operate_constructed_plants()
         self.invest()
         self.reset_contracts()
+        self.purchase_fuel()
 
     # def calculate_non_fuel_bids(self, segment_hour):
     #     bids = []
@@ -73,13 +78,15 @@ class GenCo(Agent):
         bids = []
 
         for plant in self.plants:
-            price = plant.short_run_marginal_cost(self.model)
+            price = plant.short_run_marginal_cost(self.model, self)
             # marked_up_price = price * 1.0
             marked_up_price = price * bid_mark_up
 
             if isinstance(plant, FuelPlant):
                 if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                 # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+
+
                     bids.append(
                         Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled[segment_hour], marked_up_price)
                     )
@@ -150,3 +157,14 @@ class GenCo(Agent):
         for plant in self.plants:
             plant.reset_plant_contract()
 
+    def purchase_fuel(self):
+        if any(plant.plant_type=="CCGT" for plant in self.plants):
+            self.purchase_gas()
+        if any(plant.plant_type=="Coal" for plant in self.plants):
+            self.purchase_coal()
+
+    def purchase_gas(self):
+        self.gas_price_modifier = gauss(mu=0, sigma=0.9678)
+
+    def purchase_coal(self):
+        self.coal_price_modifier = gauss(mu=0, sigma=0.9678)
