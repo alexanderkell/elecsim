@@ -85,16 +85,16 @@ class GenCo(Agent):
             if isinstance(plant, FuelPlant):
                 if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                 # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-
-
                     bids.append(
-                        Bid(self, plant, segment_hour, plant.capacity_mw - plant.capacity_fulfilled[segment_hour], marked_up_price)
+                        Bid(self, plant, segment_hour, float(plant.average_load_factor)*0.93*(plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
                     )
             elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                 bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                    Bid(self, plant, segment_hour, capacity_factor * 0.97 * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
                 )
+
+
 
         return bids
 
