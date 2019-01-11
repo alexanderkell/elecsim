@@ -158,7 +158,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         return carbon_costs_total
 
-    def calculate_short_run_marginal_cost(self, model, genco):
+    def calculate_short_run_marginal_cost(self, model, genco, fuel_price = None, co2_price = None):
         """
         Calculates the short run marginal cost for a fuel power plant
         :param model: Model containing information such as current year
@@ -172,9 +172,15 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         elif self.plant_type == 'Coal':
             modifier = genco.coal_price_modifier
 
-        fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0]+modifier)/self.efficiency
+        if fuel_price is None:
+            fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0]+modifier)/self.efficiency
+        else:
+            fuel_cost = (fuel_price)/self.efficiency
 
-        co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+        if co2_price is None:
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+        else:
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
 
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
 

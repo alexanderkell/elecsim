@@ -1,10 +1,10 @@
 from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
-import numpy as np
 from logging import getLogger
-import logging
-logger = getLogger(__name__)
 from operator import itemgetter
 from pytest import approx
+
+import logging
+logger = getLogger(__name__)
 """
 File name: test_sample
 Date created: 10/01/2019
@@ -20,7 +20,7 @@ __email__ = "alexander@kell.es"
 logging.basicConfig(level=logging.DEBUG)
 
 class TestSample(TestCase):
-    def test_sample(self):
+    def test_sample_from_custom_distribution(self):
         division = [-2.67136237, -2.05612326, -1.44088415, -0.82564504, -0.21040593,
          0.40483318,  1.0200723 ,  1.63531141,  2.25055052,  2.86578963,
          3.48102874]
@@ -39,4 +39,23 @@ class TestSample(TestCase):
         assert sorted_dist[7][1] == approx(100000*0.23943662, abs=500)
         assert sorted_dist[8][1] == approx(100000*0.36619718, abs=500)
 
+    def test_sample_once_from_custom_distribution(self):
+        division = [-2.67136237, -2.05612326, -1.44088415, -0.82564504, -0.21040593,
+         0.40483318,  1.0200723 ,  1.63531141,  2.25055052,  2.86578963,
+         3.48102874]
+        count = [ 3,  1,  4, 17, 26, 14,  3,  2,  0,  1]
+        result = sample_from_custom_distribution(count, division, 1)
+        assert isinstance(result, float)
+        assert max(division) > result > min(division)
 
+    def test_sample_wih_more_bins_from_custom_distribution(self):
+        division = [-2.67136237, -2.36374281, -2.05612326, -1.7485037 , -1.44088415,
+        -1.13326459, -0.82564504, -0.51802548, -0.21040593,  0.09721363,
+         0.40483318,  0.71245274,  1.0200723 ,  1.32769185,  1.63531141,
+         1.94293096,  2.25055052,  2.55817007,  2.86578963,  3.17340918,
+         3.48102874]
+        count = [2,  1,  1,  0,  0,  4, 10,  7, 13, 13,  8,  6,  1,  2,  1,  1,  0,
+         0,  0,  1]
+        result = sample_from_custom_distribution(count, division, 1)
+        assert isinstance(result, float)
+        assert max(division) > result > min(division)

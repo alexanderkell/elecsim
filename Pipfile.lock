@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fbab654634a07d8eadac97cfc009952e72ed43c87f1de6282b8e6a3502df37fa"
+            "sha256": "117960096fa01e742b38d582eb211a757f3b217f5449e053fc770f928442a949"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6"
+            "python_version": "3.7"
         },
         "sources": [
             {
@@ -623,6 +623,13 @@
             ],
             "version": "==2.21.0"
         },
+        "ring": {
+            "hashes": [
+                "sha256:7e7c25d9d89a8a35a8570cceef210de007ffa5bc40b9ca7efda4678a748cf0f6"
+            ],
+            "index": "pypi",
+            "version": "==0.7.1"
+        },
         "scipy": {
             "hashes": [
                 "sha256:02cb79ea38114dc480e9b08d6b87095728e8fb39b9a49b449ee443d678001611",
@@ -773,6 +780,12 @@
                 "sha256:fa618be8435447a017fd1bf2c7ae922d0428056cfc7449f7a8641edf76b48265"
             ],
             "version": "==3.4.2"
+        },
+        "wirerope": {
+            "hashes": [
+                "sha256:78754f0237bfb6645d0db9a915567fb09db5548b57e5005de8f7e5e23b67b23f"
+            ],
+            "version": "==0.2.0"
         },
         "xlrd": {
             "hashes": [

@@ -44,7 +44,7 @@ class TestLatestMarketData:
     def test_demand_data(self, latest_market_data, value_required, years_to_look_back, expected_output):
 
         market_data = latest_market_data
-        assert market_data._agent_forecast_value(value_required, years_to_look_back) == expected_output
+        assert market_data.agent_forecast_value(value_required, years_to_look_back) == expected_output
 
 
 
@@ -65,8 +65,8 @@ class TestLatestMarketData:
         market_data = latest_market_data
         market_data.demand.years_from_start = years_from_start
         years_for_regression = list(range(market_data.demand.years_from_start-years_to_look_back-1,market_data.demand.years_from_start-1))
-        value_data = market_data._get_value_data(value_required)
-        assert market_data._get_yearly_demand_change_for_regression(value_data, years_for_regression) == approx(expected_output)
+        value_data = market_data._get_variable_data(value_required)
+        assert market_data._get_yearly_change_for_regression(value_data, years_for_regression) == approx(expected_output)
 
 
     @pytest.mark.parametrize("value_required, expected_output",
@@ -78,13 +78,13 @@ class TestLatestMarketData:
                                 ("co2", [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00])
                             ])
     def test_switch_statements_for_value_data(self, latest_market_data, value_required, expected_output):
-        assert latest_market_data._get_value_data(value_required) == expected_output
+        assert latest_market_data._get_variable_data(value_required) == expected_output
 
     def test_switch_statements_for_valueerror_for_value_data(self, latest_market_data):
         with pytest.raises(ValueError):
-            assert latest_market_data._get_value_data("sdfsf")
+            assert latest_market_data._get_variable_data("sdfsf")
         with pytest.raises(ValueError):
-            assert latest_market_data._get_value_data(-1)
+            assert latest_market_data._get_variable_data(-1)
 
     @pytest.mark.parametrize("plant_type, capacity, look_back_years, expected_output",
                              [

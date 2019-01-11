@@ -11,7 +11,12 @@ from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalc
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.role.investment.calculate_npv import CalculateNPV
 from inspect import signature
-from src.scenario.scenario_data import bid_mark_up
+from src.role.market.latest_market_data import LatestMarketData
+
+from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
+
+
+from src.scenario.scenario_data import bid_mark_up, non_fuel_plant_availability, fuel_plant_availability
 from random import gauss
 
 
@@ -66,7 +71,7 @@ class GenCo(Agent):
     #     return bids
 
 
-    def calculate_bids(self, segment_hour, segment_demand):
+    def calculate_bids(self, segment_hour, predict=False):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
         The bids submitted are the fixed costs divided by lifetime of plant plus yearly variable costs plus a 10% margin
@@ -78,20 +83,33 @@ class GenCo(Agent):
         bids = []
 
         for plant in self.plants:
-            price = plant.short_run_marginal_cost(self.model, self)
-            # marked_up_price = price * 1.0
+            if predict is True:
+                if isinstance(plant, FuelPlant):
+                    co2_price_predicted = self.forecast_co2_price()
+                    if plant.fuel == "Coal":
+                        fuel_price_predicted = self.forecast_coal_price()
+                    elif plant.fuel == "Gas":
+                        fuel_price_predicted = self.forecast_gas_price()
+                    elif plant.fuel == "Uranium":
+                        fuel_price_predicted = self.forecast_uranium_price()
+                    else:
+                        raise ValueError("Can only predict prices of coal, gas, or uranium based fuel plants")
+                    price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
+                else:
+                    price = plant.short_run_marginal_cost(self.model, self)
+            else:
+                price = plant.short_run_marginal_cost(self.model, self)
             marked_up_price = price * bid_mark_up
 
             if isinstance(plant, FuelPlant):
                 if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-                # if plant.min_running <= segment_hour and plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
                     bids.append(
-                        Bid(self, plant, segment_hour, float(plant.average_load_factor)*0.93*(plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                        Bid(self, plant, segment_hour, float(plant.average_load_factor) * fuel_plant_availability *(plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
                     )
             elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                 bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * 0.97 * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                    Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
                 )
 
 
@@ -99,20 +117,18 @@ class GenCo(Agent):
         return bids
 
     def invest(self):
-        # UPFRONT_INVESTMENT_COSTS = 0.25
-        # npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
-        # potential_plant_data = npv_calculation.get_affordable_plant_generator()
-        # for plant_data in potential_plant_data:
-        #     power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data.simplified_type, plant_data.capacity)
-        #     total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
-        #     if self.money > total_upfront_cost:
-        #         self.plants.append(power_plant_trial)
-        #         self.money -= total_upfront_cost
-        #         break
-        #     else:
-        #         pass
-        # # self.plants.append(power_plant_to_invest)
-        pass
+        UPFRONT_INVESTMENT_COSTS = 0.25
+        npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
+        potential_plant_data = npv_calculation.get_affordable_plant_generator()
+
+        for plant_data in potential_plant_data:
+            # logger.debug("plant_data: {}".format(plant_data.type))
+            power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])
+            total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
+            if self.money > total_upfront_cost:
+                self.plants.append(power_plant_trial)
+                self.money -= total_upfront_cost
+                break
 
     def dismantle_old_plants(self):
         """
@@ -165,6 +181,47 @@ class GenCo(Agent):
 
     def purchase_gas(self):
         self.gas_price_modifier = gauss(mu=0, sigma=0.9678)
+        # self.gas_price_modifier = sample_from_custom_distribution([2,  1,  1,  0,  0,  4, 10,  7, 13, 13,  8,  6,  1,  2,  1,  1,  0,
+        #  0,  0,  1], [[-2.67136237, -2.36374281, -2.05612326, -1.7485037 , -1.44088415,
+        # -1.13326459, -0.82564504, -0.51802548, -0.21040593,  0.09721363,
+        #  0.40483318,  0.71245274,  1.0200723 ,  1.32769185,  1.63531141,
+        #  1.94293096,  2.25055052,  2.55817007,  2.86578963,  3.17340918,
+        #  3.48102874]], 1)
+
+        # division = [-2.67136237, -2.36374281, -2.05612326, -1.7485037 , -1.44088415,
+        # -1.13326459, -0.82564504, -0.51802548, -0.21040593,  0.09721363,
+        #  0.40483318,  0.71245274,  1.0200723 ,  1.32769185,  1.63531141,
+        #  1.94293096,  2.25055052,  2.55817007,  2.86578963,  3.17340918,
+        #  3.48102874]
+        # count = [2,  1,  1,  0,  0,  4, 10,  7, 13, 13,  8,  6,  1,  2,  1,  1,  0,
+        #  0,  0,  1]
+        # self.gas_price_modifier = sample_from_custom_distribution(count, division, 1)
 
     def purchase_coal(self):
         self.coal_price_modifier = gauss(mu=0, sigma=0.9678)
+
+
+    def forecast_demand_change(self):
+        latest_market_data = LatestMarketData(self.model)
+        demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period)
+        return demand_change_predicted
+
+    def forecast_co2_price(self):
+        latest_market_data = LatestMarketData(self.model)
+        co2_price_predicted = latest_market_data.agent_forecast_value("co2", self.look_back_period)
+        return co2_price_predicted
+
+    def forecast_gas_price(self):
+        latest_market_data = LatestMarketData(self.model)
+        gas_price_predicted = latest_market_data.agent_forecast_value("gas", self.look_back_period)
+        return gas_price_predicted
+
+    def forecast_coal_price(self):
+        latest_market_data = LatestMarketData(self.model)
+        coal_price_predicted = latest_market_data.agent_forecast_value("coal", self.look_back_period)
+        return coal_price_predicted
+
+    def forecast_uranium_price(self):
+        latest_market_data = LatestMarketData(self.model)
+        uranium_price_predicted = latest_market_data.agent_forecast_value("uranium", self.look_back_period)
+        return uranium_price_predicted

@@ -53,9 +53,12 @@ fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: 
 
 
 # Weighted Cost of Capital
-
 nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research-centres-and-groups/icept/Cost-estimates-for-nuclear-power-in-the-UK.pdf (page 20). # Post tax
 non_nuclear_wacc = 0.059  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
+
+# Availability
+non_fuel_plant_availability = 0.97
+fuel_plant_availability = 0.93
 
 
 # Capacity factor data (from https://www.renewables.ninja/)
@@ -77,7 +80,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
-
+# power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))

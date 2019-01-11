@@ -22,4 +22,7 @@ def sample_from_custom_distribution(count, division, n_samples):
     division = np.array(division)
 
     generate_points = [division[np.argwhere(prob_sum == min(prob_sum[(prob_sum - r) > 0]))][0][0] for r in R]
-    return generate_points
+    if n_samples > 1:
+        return generate_points
+    elif n_samples == 1:
+        return generate_points[0]

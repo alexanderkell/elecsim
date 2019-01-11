@@ -141,7 +141,7 @@ class PowerPlant(ABC):
         return upfront_cost
 
     @abstractmethod
-    def short_run_marginal_cost(self, model, genco):
+    def short_run_marginal_cost(self, model, genco, fuel_price, co2_price):
         pass
 
     def __str__(self):

@@ -34,9 +34,9 @@ class LatestMarketData:
 
         if isinstance(power_plant, FuelPlant):
 
-            co2_price = self._agent_forecast_value("co2", look_back_years)
-            fuel_price = self._agent_forecast_value(power_plant.fuel.fuel_type, look_back_years)
-            demand_level = self._agent_forecast_value("demand", look_back_years)
+            co2_price = self.agent_forecast_value("co2", look_back_years)
+            fuel_price = self.agent_forecast_value(power_plant.fuel.fuel_type, look_back_years)
+            demand_level = self.agent_forecast_value("demand", look_back_years)
 
             co2_cost = power_plant.fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
             fuel_cost = fuel_price/power_plant.efficiency
@@ -51,10 +51,10 @@ class LatestMarketData:
 
 
 
-    def _agent_forecast_value(self, value_required, years_to_look_back):
+    def agent_forecast_value(self, value_required, years_to_look_back):
         years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
-        value_data = self._get_value_data(value_required)
-        regression = self._get_yearly_demand_change_for_regression(value_data, years_for_regression)
+        value_data = self._get_variable_data(value_required)
+        regression = self._get_yearly_change_for_regression(value_data, years_for_regression)
 
         logger.debug(regression)
 
@@ -62,13 +62,13 @@ class LatestMarketData:
         return next_value
 
     @staticmethod
-    def _get_yearly_demand_change_for_regression(value_required, years_for_regression):
+    def _get_yearly_change_for_regression(value_required, years_for_regression):
         regression = [value_required[i] if i > 0 else value_required[0] for i in years_for_regression]
         return regression
 
 
     @staticmethod
-    def _get_value_data(values_required):
+    def _get_variable_data(values_required):
         try:
             values_required = values_required.lower()
         except:
