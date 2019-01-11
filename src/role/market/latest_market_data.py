@@ -57,6 +57,7 @@ class LatestMarketData:
 
         regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
 
+        logger.debug("regression_for_{}: {}".format(value_required, regression))
 
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
@@ -86,7 +87,7 @@ class LatestMarketData:
             return scenario.poultry_litter_price
         elif values_required == "oil":
             return scenario.oil_price
-        elif values_required == "diesel" or "gas oil":
+        elif values_required == "diesel" or values_required == "gas oil":
             return scenario.diesel_price
         elif values_required == "straw":
             return scenario.straw_price
@@ -96,12 +97,6 @@ class LatestMarketData:
             return scenario.waste_price_post_2000
         elif values_required == "waste_pre_2000":
             return scenario.waste_price_pre_2000
-
-
-
-
-
-
         elif values_required == "co2":
             return scenario.carbon_price_scenario
         elif values_required == "demand":

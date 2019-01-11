@@ -105,8 +105,6 @@ class GenCo(Agent):
                     Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
                 )
 
-
-
         return bids
 
     def invest(self):

@@ -27,7 +27,7 @@ class PowerExchange:
         """
         self.model = model
         self.hold_duration_curve_prices = []
-        self.load_duration_curve_prices = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
+        self.price_duration_curve = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
 
     def tender_bids(self, segment_hours, segment_demand, predict=False):
         """
@@ -57,7 +57,7 @@ class PowerExchange:
 
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
-        self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
+        self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):

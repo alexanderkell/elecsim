@@ -51,7 +51,7 @@ class World(Model):
         self.PowerExchange = PowerExchange(self)
         self.running = True
 
-        # Tender first bids to initialize the "load_duration_curve_prices"
+        # Tender first bids to initialize the "price_duration_curve"
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
 
     def step(self):
