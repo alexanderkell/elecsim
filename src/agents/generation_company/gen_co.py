@@ -85,15 +85,8 @@ class GenCo(Agent):
         for plant in self.plants:
             if predict is True:
                 if isinstance(plant, FuelPlant):
-                    co2_price_predicted = self.forecast_co2_price()
-                    if plant.fuel == "Coal":
-                        fuel_price_predicted = self.forecast_coal_price()
-                    elif plant.fuel == "Gas":
-                        fuel_price_predicted = self.forecast_gas_price()
-                    elif plant.fuel == "Uranium":
-                        fuel_price_predicted = self.forecast_uranium_price()
-                    else:
-                        raise ValueError("Can only predict prices of coal, gas, or uranium based fuel plants")
+                    co2_price_predicted = self.forecast_attribute_price("co2")
+                    fuel_price_predicted = self.forecast_attribute_price(plant.fuel.fuel_type)
                     price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
                 else:
                     price = plant.short_run_marginal_cost(self.model, self)
@@ -206,22 +199,7 @@ class GenCo(Agent):
         demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period)
         return demand_change_predicted
 
-    def forecast_co2_price(self):
+    def forecast_attribute_price(self, fuel_type):
         latest_market_data = LatestMarketData(self.model)
-        co2_price_predicted = latest_market_data.agent_forecast_value("co2", self.look_back_period)
-        return co2_price_predicted
-
-    def forecast_gas_price(self):
-        latest_market_data = LatestMarketData(self.model)
-        gas_price_predicted = latest_market_data.agent_forecast_value("gas", self.look_back_period)
-        return gas_price_predicted
-
-    def forecast_coal_price(self):
-        latest_market_data = LatestMarketData(self.model)
-        coal_price_predicted = latest_market_data.agent_forecast_value("coal", self.look_back_period)
-        return coal_price_predicted
-
-    def forecast_uranium_price(self):
-        latest_market_data = LatestMarketData(self.model)
-        uranium_price_predicted = latest_market_data.agent_forecast_value("uranium", self.look_back_period)
+        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period)
         return uranium_price_predicted

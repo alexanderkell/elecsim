@@ -53,17 +53,18 @@ class LatestMarketData:
 
     def agent_forecast_value(self, value_required, years_to_look_back):
         years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
-        value_data = self._get_variable_data(value_required)
-        regression = self._get_yearly_change_for_regression(value_data, years_for_regression)
+        variable_data = self._get_variable_data(value_required)
 
-        logger.debug(regression)
+        regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
+
 
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
 
     @staticmethod
-    def _get_yearly_change_for_regression(value_required, years_for_regression):
-        regression = [value_required[i] if i > 0 else value_required[0] for i in years_for_regression]
+    def _get_yearly_change_for_regression(variable_data, years_for_regression):
+
+        regression = [variable_data[i] if i > 0 else variable_data[0] for i in years_for_regression]
         return regression
 
 
@@ -79,6 +80,28 @@ class LatestMarketData:
             return scenario.gas_price
         elif values_required == "uranium":
             return scenario.uranium_price
+        elif values_required == "biomass_wood":
+            return scenario.woodchip_price
+        elif values_required == "biomass_poultry_litter":
+            return scenario.poultry_litter_price
+        elif values_required == "oil":
+            return scenario.oil_price
+        elif values_required == "diesel" or "gas oil":
+            return scenario.diesel_price
+        elif values_required == "straw":
+            return scenario.straw_price
+        elif values_required == "meat":
+            return scenario.meat_price
+        elif values_required == "waste_post_2000":
+            return scenario.waste_price_post_2000
+        elif values_required == "waste_pre_2000":
+            return scenario.waste_price_pre_2000
+
+
+
+
+
+
         elif values_required == "co2":
             return scenario.carbon_price_scenario
         elif values_required == "demand":
