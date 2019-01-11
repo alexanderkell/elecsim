@@ -1,7 +1,5 @@
-from src.agents.generation_company.gen_co import GenCo
 from src.market.electricity.power_exchange import PowerExchange
-# from src.scenario.scenario_data import segment_demand, segment_time
-
+from src.role.market.latest_market_data import LatestMarketData
 
 
 import logging
@@ -25,11 +23,11 @@ class PredictPriceDurationCurve:
     def __init__(self, model):
         self.model = model
 
-    def predict_load_curve_price(self, demand_predicted):
-        predicted_consumption = [cons * demand_predicted for cons in self.model.Demand.segment_consumption]
+    def predict_price_duration_curve(self, look_back_period):
+        demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period)
+        predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
 
         power_ex = PowerExchange(self.model)
-        power_ex.tender_bids(self.model.Demand.segment_hours, predicted_consumption, predict=True)
+        power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
         predicted_price_duration_curve = power_ex.price_duration_curve
-        logger.debug("duration_curve_prices: {}".format(predicted_price_duration_curve))
         return predicted_price_duration_curve

@@ -52,7 +52,7 @@ class TestPredictLoadDuration:
         model.schedule.agents = [gen_co1, gen_co2]
 
         predict_price_duration_curve = PredictPriceDurationCurve(model=model)
-        predicted_price_duration_curve = predict_price_duration_curve.predict_load_curve_price(1.1)
+        predicted_price_duration_curve = predict_price_duration_curve.predict_price_duration_curve(1.1)
         assert predicted_price_duration_curve.accepted_price.iloc[0] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))
         assert predicted_price_duration_curve.accepted_price.iloc[1] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))
         assert predicted_price_duration_curve.accepted_price.iloc[2] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))

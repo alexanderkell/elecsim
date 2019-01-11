@@ -12,6 +12,7 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_pl
 from src.role.investment.calculate_npv import CalculateNPV
 from inspect import signature
 from src.role.market.latest_market_data import LatestMarketData
+from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
 
 from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
 
@@ -31,7 +32,7 @@ __email__ = "Alexander@Kell.es"
 
 
 class GenCo(Agent):
-    def __init__(self, unique_id, model, name, discount_rate, look_back_period, plants=None, money=5000000):
+    def __init__(self, unique_id, model, name, difference_in_discount_rate, look_back_period, plants=None, money=5000000):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -48,7 +49,7 @@ class GenCo(Agent):
         self.plants = plants
         self.money = money
 
-        self.difference_in_discount_rate = discount_rate
+        self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_period = look_back_period
 
         self.gas_price_modifier = 0
@@ -109,6 +110,9 @@ class GenCo(Agent):
 
     def invest(self):
         UPFRONT_INVESTMENT_COSTS = 0.25
+
+        price_duration_curve = PredictPriceDurationCurve(self.model).predict_price_duration_curve(self.look_back_period)
+
         npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
         potential_plant_data = npv_calculation.get_affordable_plant_generator()
 
@@ -201,3 +205,4 @@ class GenCo(Agent):
         latest_market_data = LatestMarketData(self.model)
         uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period)
         return uranium_price_predicted
+

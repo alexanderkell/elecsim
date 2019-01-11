@@ -76,7 +76,7 @@ class World(Model):
         logger.info("Initialising generation companies with their power plants.")
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
-            gen_co = GenCo(unique_id=gen_id, model=self, discount_rate=round(uniform(-0.03,0.03),3), look_back_period=randint(3,7),name=name, money=financials.cash_in_bank.iloc[0])
+            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator+=1
             # Add power plants to generation company portfolio
             for plant in data.itertuples():

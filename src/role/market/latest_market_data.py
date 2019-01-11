@@ -81,9 +81,9 @@ class LatestMarketData:
             return scenario.gas_price
         elif values_required == "uranium":
             return scenario.uranium_price
-        elif values_required == "biomass_wood":
+        elif values_required == "biomass_wood" or values_required == "woodchip":
             return scenario.woodchip_price
-        elif values_required == "biomass_poultry_litter":
+        elif values_required == "biomass_poultry_litter" or "poultry_litter":
             return scenario.poultry_litter_price
         elif values_required == "oil":
             return scenario.oil_price

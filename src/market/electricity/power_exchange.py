@@ -5,9 +5,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.agents.generation_company.gen_co import GenCo
-from src.role.market.world_plant_capacity import WorldPlantCapacity
+# from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
+# from src.agents.generation_company.gen_co import GenCo
+# from src.role.market.world_plant_capacity import WorldPlantCapacity
 
 
 
@@ -39,7 +39,8 @@ class PowerExchange:
         :return: None
         """
         agent = self.model.schedule.agents
-        generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
+        # generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
+        generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Select of generation company agents
 
         # self.adjust_load_duration_curve_for_renewables()
 
@@ -121,3 +122,4 @@ class PowerExchange:
 
 
         return accepted_bids
+
