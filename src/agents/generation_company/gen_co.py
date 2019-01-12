@@ -2,14 +2,16 @@ import logging
 
 from mesa import Agent
 
+from src.plants.plant_type.non_fuel_plant import NonFuelPlant
 from src.plants.plant_type.fuel_plant import FuelPlant
+# import src.plants.plant_type.fuel_plant
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.role.investment.calculate_npv import CalculateNPV
+from src.role.investment.calculate_npv import CalculateNPV, get_most_profitable_plants_by_npv
 from inspect import signature
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
@@ -56,9 +58,10 @@ class GenCo(Agent):
         self.coal_price_modifier = 0
 
     def step(self):
-        logger.debug("Stepping generation company: {}".format(self.name))
+        logger.info("Stepping generation company: {}".format(self.name))
         # self.dismantle_old_plants()
         self.operate_constructed_plants()
+        # self.collect_money()
         self.invest()
         self.reset_contracts()
         self.purchase_fuel()
@@ -95,31 +98,55 @@ class GenCo(Agent):
                 price = plant.short_run_marginal_cost(self.model, self)
             marked_up_price = price * bid_mark_up
 
-            if isinstance(plant, FuelPlant):
-                if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-                    bids.append(
-                        Bid(self, plant, segment_hour, float(plant.average_load_factor) * fuel_plant_availability *(plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
-                    )
-            elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
+
+
+            if plant.plant_type in ['Offshore', 'Onshore', 'PV']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
                 bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                    Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * plant.capacity_mw, marked_up_price)
                 )
+            elif isinstance(plant, FuelPlant):
+                if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+                    # capacity_to_bid = fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour])
+                    capacity_to_bid = fuel_plant_availability * plant.capacity_mw
+                    bids.append(
+                        Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price)
+                    )
+            else:
+                    bids.append(
+                        # Bid(self, plant, segment_hour, non_fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+                        Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price)
 
+                    )
+
+
+            #
+            # if isinstance(plant, FuelPlant):
+            #     if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+            #         bids.append(
+            #             Bid(self, plant, segment_hour, fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+            #         )
+            # elif plant.plant_type in ['Offshore', 'Onshore', 'PV']:
+            #     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
+            #     bids.append(
+            #         Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * (plant.capacity_mw - plant.capacity_fulfilled[segment_hour]), marked_up_price)
+            #     )
         return bids
 
     def invest(self):
         UPFRONT_INVESTMENT_COSTS = 0.25
+        total_upfront_cost = 0
+        logger.info("Investing")
+        # while self.money > total_upfront_cost:
+        logger.debug("self.money: {}, total_upfront_cost: {}".format(self.money, total_upfront_cost))
+        # potential_plant_data = npv_calculation.get_affordable_plant_generator()
+        potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate, self.look_back_period)
 
-        price_duration_curve = PredictPriceDurationCurve(self.model).predict_price_duration_curve(self.look_back_period)
-
-        npv_calculation = CalculateNPV(model=self.model, difference_in_discount_rate=self.difference_in_discount_rate, look_back_years=self.look_back_period)
-        potential_plant_data = npv_calculation.get_affordable_plant_generator()
 
         for plant_data in potential_plant_data:
-            # logger.debug("plant_data: {}".format(plant_data.type))
             power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])
             total_upfront_cost = power_plant_trial.get_upfront_costs()*UPFRONT_INVESTMENT_COSTS
+
             if self.money > total_upfront_cost:
                 self.plants.append(power_plant_trial)
                 self.money -= total_upfront_cost

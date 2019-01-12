@@ -40,8 +40,6 @@ class LatestMarketData:
 
             co2_cost = power_plant.fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
             fuel_cost = fuel_price/power_plant.efficiency
-            logger.debug("predicted co2: {}, fuel price: {}, demand: {}".format(co2_price, fuel_price, demand_level))
-            logger.debug("co2_cost: {}, fuel_cost: {}, variable o_m cost: {}, efficiency: {}".format(co2_cost, fuel_cost, variable_o_m_cost, power_plant.efficiency))
             short_run_marginal_cost = variable_o_m_cost + co2_cost + fuel_cost
         else:
             short_run_marginal_cost = variable_o_m_cost
@@ -56,8 +54,6 @@ class LatestMarketData:
         variable_data = self._get_variable_data(value_required)
 
         regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
-
-        logger.debug("regression_for_{}: {}".format(value_required, regression))
 
         next_value = linear_regression(regression, years_to_look_back)
         return next_value
@@ -83,7 +79,7 @@ class LatestMarketData:
             return scenario.uranium_price
         elif values_required == "biomass_wood" or values_required == "woodchip":
             return scenario.woodchip_price
-        elif values_required == "biomass_poultry_litter" or "poultry_litter":
+        elif values_required == "biomass_poultry_litter" or values_required == "poultry_litter":
             return scenario.poultry_litter_price
         elif values_required == "oil":
             return scenario.oil_price

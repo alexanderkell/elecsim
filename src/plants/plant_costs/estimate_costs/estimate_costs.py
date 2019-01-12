@@ -5,7 +5,7 @@ from src.plants.plant_registry import PlantRegistry
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
-
+from functools import lru_cache
 """
 File name: _select_cost_estimator
 Date created: 01/12/2018
@@ -21,7 +21,7 @@ __email__ = "alexander@kell.es"
 EARLIEST_MODERN_PLANT_YEAR = 2018
 
 
-
+@lru_cache(maxsize=1024)
 def create_power_plant(name, start_date, simplified_type, capacity):
     """
     Functionality that estimates the cost of a power plant based solely on year of construction, type of plant and capacity.

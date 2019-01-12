@@ -18,7 +18,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-@functools.lru_cache(maxsize=128)
+@functools.lru_cache(maxsize=512)
 def get_capacity_factor(renewable_type, demand_hour):
         historical_demand = historical_hourly_demand
         renewable_type = renewable_type.lower()

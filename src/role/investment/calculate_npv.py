@@ -1,6 +1,7 @@
 from logging import getLogger
 import pandas as pd
 from inspect import signature
+from functools import lru_cache
 
 from numpy import npv
 from random import randint
@@ -13,7 +14,7 @@ from src.role.market.latest_market_data import LatestMarketData
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.plants.plant_type.fuel_plant import FuelPlant
 from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
-from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
+from src.role.investment.predict_load_duration_prices import get_price_duration_curve
 
 logger = getLogger(__name__)
 
@@ -35,19 +36,19 @@ class CalculateNPV:
         self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_years = look_back_years
 
-    def get_plant_with_max_npv(self):
-        npv_data = self.compare_npv()
-        # highest_npv = npv_data.itertuples()[0]
-        logger.debug("iloc 0 > 0: {}".format(npv_data['npv_per_mw'].iloc[0] > 0))
-        if npv_data['npv_per_mw'].iloc[0] > 0:
-            capacity = npv_data['capacity'].iloc[0]
-            plant_type = npv_data['plant_type'].iloc[0]
-            power_plant_name = "{}-{}-{}".format(plant_type, self.model.year_number, randint(1, 99999999))
-            power_plant = create_power_plant(name=power_plant_name, start_date=self.model.year_number,
-                                             capacity=capacity, simplified_type=plant_type)
-            return power_plant
-        else:
-            return None
+    # def get_plant_with_max_npv(self):
+    #     npv_data = self.compare_npv()
+    #     # highest_npv = npv_data.itertuples()[0]
+    #     logger.debug("iloc 0 > 0: {}".format(npv_data['npv_per_mw'].iloc[0] > 0))
+    #     if npv_data['npv_per_mw'].iloc[0] > 0:
+    #         capacity = npv_data['capacity'].iloc[0]
+    #         plant_type = npv_data['plant_type'].iloc[0]
+    #         power_plant_name = "{}-{}-{}".format(plant_type, self.model.year_number, randint(1, 99999999))
+    #         power_plant = create_power_plant(name=power_plant_name, start_date=self.model.year_number,
+    #                                          capacity=capacity, simplified_type=plant_type)
+    #         return power_plant
+    #     else:
+    #         return None
 
     def get_affordable_plant_generator(self):
         npv_rows = self.get_positive_npv_plants()
@@ -57,6 +58,8 @@ class CalculateNPV:
 
     def get_positive_npv_plants(self):
         npv_data = self.compare_npv()
+        logger.debug("predicted npv data: \n {}".format(npv_data))
+
         npv_positive = npv_data[npv_data.npv_per_mw > 0]
         return npv_positive
 
@@ -72,6 +75,8 @@ class CalculateNPV:
                 dict = {"npv_per_mw": npv, "capacity": plant_row.Plant_Size, "plant_type": plant_row.Type}
                 cost_list.append(dict)
 
+
+
         npv_results = pd.DataFrame(cost_list)
 
         sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
@@ -82,7 +87,7 @@ class CalculateNPV:
         # Forecast segment prices
         forecasted_segment_prices = self._get_load_duration_price_predictions()
 
-        logger.debug("Load duration prices: {}".format(forecasted_segment_prices))
+        # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
 
         power_plant = create_power_plant("estimate_variable", self.model.year_number, plant_type, plant_size)
 
@@ -192,15 +197,11 @@ class CalculateNPV:
         return short_run_marginal_cost
 
     def _get_load_duration_price_predictions(self):
-        predicted_price_duration_curve = PredictPriceDurationCurve(self.model).predict_price_duration_curve(
-            look_back_period=self.look_back_years)
+        # predicted_price_duration_curve = PredictPriceDurationCurve(self.model).predict_price_duration_curve(
+        #     look_back_period=self.look_back_years)
+        predicted_price_duration_curve = get_price_duration_curve(self.model, self.look_back_years)
         return predicted_price_duration_curve
 
-
-        # load_duration_prices = LoadDurationPrices(model=self.model)
-        # forecasted_segment_prices = load_duration_prices.get_load_curve_price_predictions(
-        #     reference_year=self.model.year_number + 1, look_back_years=self.look_back_years)
-        # return forecasted_segment_prices
 
     @staticmethod
     def _total_profit_per_segment(row, capacity):
@@ -235,3 +236,11 @@ class CalculateNPV:
         else:
             running_hours = 0
         return running_hours
+
+@lru_cache(maxsize=1024)
+def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_back_period):
+    npv_calculation = CalculateNPV(model, difference_in_discount_rate, look_back_period)
+
+    potential_plant_data = npv_calculation.get_affordable_plant_generator()
+
+    return potential_plant_data

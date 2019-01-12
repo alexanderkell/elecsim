@@ -153,6 +153,8 @@ def plant_type_to_fuel(plant_type, construction_year=None):
         return None
     elif plant_type == "OCGT":
         return "Gas"
+    elif plant_type == "Recip_diesel":
+        return "Diesel"
     elif plant_type == "Gas oil":
         return "Diesel"
     elif plant_type == "EfW" and construction_year<=2000:

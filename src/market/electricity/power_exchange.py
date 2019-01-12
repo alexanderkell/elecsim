@@ -36,14 +36,14 @@ class PowerExchange:
         :param agents: All agents from simulation model.
         :param segment_hours: Value for number of hours particular electricity generation is required.
         :param segment_demand: Size of electricity consumption required.
+        :param predict: Boolean that states whether the bids being tendered are for predicting price duration curve or whether it is for real bids.
         :return: None
         """
         agent = self.model.schedule.agents
-        # generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
-        generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Select of generation company agents
+        # generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Selection of generation company agents
+        generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Selection of generation company agents
 
         # self.adjust_load_duration_curve_for_renewables()
-
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
@@ -59,6 +59,10 @@ class PowerExchange:
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
+        if predict:
+            logger.info("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
+        else:
+            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
@@ -109,7 +113,7 @@ class PowerExchange:
                 bid.accept_bid(segement_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segement_hour, capacity_required)
                 capacity_required = 0

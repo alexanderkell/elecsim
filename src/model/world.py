@@ -37,7 +37,6 @@ class World(Model):
 
         # Import company data including financials and plant data
         plant_data = scenario.power_plants
-        # plant_data = plant_data[:150]
         financial_data = scenario.company_financials
 
         # Initialize generation companies using financial and plant data
@@ -82,7 +81,7 @@ class World(Model):
             for plant in data.itertuples():
                 power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                 gen_co.plants.append(power_plant)
-            logger.debug('Adding generation company: {}'.format(gen_co.name))
+            logger.info('Adding generation company: {}'.format(gen_co.name))
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
 

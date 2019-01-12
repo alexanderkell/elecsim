@@ -86,10 +86,5 @@ class TestCalculate_npv:
 
 
 
-    def test_npv_calcualtion_comparison(self, calculate_latest_NPV):
+    def test_npv_calculation_comparison(self, calculate_latest_NPV):
         calculate_latest_NPV.compare_npv()
-
-    def test_get_max_npv(self, calculate_latest_NPV):
-        highest_npv = calculate_latest_NPV.get_plant_with_max_npv()
-        logger.debug("highest_npv: {}".format(highest_npv))
-        # logger.debug("highest_npv: {}".format(highest_npv.capacity, highest_npv.npv_per_mw, highest_npv.plant_type))
