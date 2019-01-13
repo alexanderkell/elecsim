@@ -53,8 +53,10 @@ class CalculateNPV:
     def get_affordable_plant_generator(self):
         npv_rows = self.get_positive_npv_plants()
         logger.debug("npv_rows: {}".format(npv_rows))
-        for individual_plant_data in npv_rows.itertuples():
-            yield individual_plant_data.capacity, individual_plant_data.plant_type
+        # for individual_plant_data in npv_rows.itertuples():
+        result = [(individual_plant_data.capacity, individual_plant_data.plant_type) for individual_plant_data in npv_rows.itertuples()]
+        return result
+            # yield individual_plant_data.capacity, individual_plant_data.plant_type
 
     def get_positive_npv_plants(self):
         npv_data = self.compare_npv()
