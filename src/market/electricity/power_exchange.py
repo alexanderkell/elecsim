@@ -53,7 +53,6 @@ class PowerExchange:
 
             logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
-            # highest_bid = accepted_bids[-1].price_per_mwh
             highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
 
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
@@ -97,7 +96,7 @@ class PowerExchange:
         return sorted_bids
 
     @staticmethod
-    def _respond_to_bids(bids, segement_hour, capacity_required):
+    def _respond_to_bids(bids, segment_hour, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
@@ -110,20 +109,18 @@ class PowerExchange:
         for bid in bids:
             # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
             if capacity_required > 0 and capacity_required > bid.capacity_bid:
-                bid.accept_bid(segement_hour)
+                bid.accept_bid(segment_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                # logger.info('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
+                logger.info('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
-                bid.partially_accept_bid(segement_hour, capacity_required)
+                bid.partially_accept_bid(segment_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
-                # logger.info('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.info('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
-                bid.reject_bid(segment_hour=segement_hour)
-                # logger.info('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
-
-
+                bid.reject_bid(segment_hour=segment_hour)
+                logger.info('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
 
         return accepted_bids
 

@@ -27,8 +27,8 @@ historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/his
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
 # Future fuel prices
-gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+gas_price = [KW_TO_MW * 0.01909] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+coal_price = [KW_TO_MW * 0.01106] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
 oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 diesel_price = [KW_TO_MW * 0.1] * 60  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
@@ -57,7 +57,7 @@ nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research
 non_nuclear_wacc = 0.059  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
 
 # Availability
-non_fuel_plant_availability = 0.97
+non_fuel_plant_availability = 0.98
 fuel_plant_availability = 0.93
 
 
@@ -66,6 +66,11 @@ fuel_plant_availability = 0.93
 wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
 # Solar
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
+# Hydro
+hydro_capacity_factor = 0.456 # http://www.osemosys.org/uploads/1/8/5/0/18504136/hydropower.pdf
+
+# Availability factors (from Source: AESO 2017 Annual Market Statistics)
+historical_availability_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/availability_factor/historical_availability_factor.csv')
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
@@ -101,6 +106,9 @@ bid_mark_up = 1.0
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
+EU_ETS_COST = 13.62
+carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
+
 # carbon_price_scenario = [150]*33
 
 

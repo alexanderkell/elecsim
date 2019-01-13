@@ -51,12 +51,13 @@ class World(Model):
         self.running = True
 
         # Tender first bids to initialize the "price_duration_curve"
-        self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        # self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
 
     def step(self):
         '''Advance model by one step'''
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
+        # self.dismantle_old_plants()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.year_number += 1
         self.step_number +=1
@@ -85,4 +86,22 @@ class World(Model):
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
 
+    def dismantle_old_plants(self):
+        """
+        Remove plants that are past their lifetime agent from each agent from their plant list
+        """
 
+        def get_running_plants(plants):
+            for plant in plants:
+                if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
+                    yield plant
+                else:
+                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                                                                                                        plant.construction_year))
+                    continue
+
+        gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
+
+        for genco in gencos:
+            plants_filtered = list(get_running_plants(genco.plants))
+            genco.plants = plants_filtered
