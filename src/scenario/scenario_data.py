@@ -57,8 +57,11 @@ nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research
 non_nuclear_wacc = 0.059  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
 
 # Availability
-non_fuel_plant_availability = 0.98
-fuel_plant_availability = 0.93
+non_fuel_plant_availability = 0.97
+pv_availability = 0.995 # https://ieeexplore.ieee.org/document/7355976
+offshore_availability = 0.95 # https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+onshore_availability = 0.97 # https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+fuel_plant_availability = 0.95 # Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
 
 
 # Capacity factor data (from https://www.renewables.ninja/)

@@ -58,6 +58,7 @@ class World(Model):
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
         # self.dismantle_old_plants()
+        self.operate_constructed_plants()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.year_number += 1
         self.step_number +=1
@@ -100,8 +101,21 @@ class World(Model):
                                                                                                         plant.construction_year))
                     continue
 
-        gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
+        gencos = self.get_gen_cos()
 
         for genco in gencos:
             plants_filtered = list(get_running_plants(genco.plants))
             genco.plants = plants_filtered
+
+    def operate_constructed_plants(self):
+
+        gencos = self.get_gen_cos()
+        for genco in gencos:
+            for plant in genco.plants:
+                if plant.is_operating is False and self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period:
+                    plant.is_operating = True
+
+
+    def get_gen_cos(self):
+        gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
+        return gencos

@@ -19,7 +19,10 @@ from src.plants.availability_factors.availability_factor_calculations import get
 
 from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
 
-from src.scenario.scenario_data import bid_mark_up, non_fuel_plant_availability, fuel_plant_availability
+from src.scenario.scenario_data import bid_mark_up, fuel_plant_availability, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
+
+
+
 from random import gauss
 
 logger = logging.getLogger(__name__)
@@ -99,8 +102,11 @@ class GenCo(Agent):
 
             if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
                 capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
+
+                availability = self.get_renewable_availability(plant)
+
                 bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * non_fuel_plant_availability * plant.capacity_mw,
+                    Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
                         marked_up_price)
                 )
             elif isinstance(plant, FuelPlant):
@@ -118,6 +124,17 @@ class GenCo(Agent):
 
                 )
         return bids
+
+    def get_renewable_availability(self, plant):
+        if plant.plant_type == "Offshore":
+            availability = offshore_availability
+        elif plant.plant_type == 'Onshore':
+            availability = onshore_availability
+        elif plant.plant_type == "PV":
+            availability = pv_availability
+        else:
+            availability = non_fuel_plant_availability
+        return availability
 
     def invest(self):
         UPFRONT_INVESTMENT_COSTS = 0.25
