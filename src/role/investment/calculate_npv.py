@@ -296,9 +296,12 @@ def get_yearly_payment(power_plant, interest_rate):
 
 def select_yearly_payback_payment_for_year(power_plant, interest, model):
     total_payments = get_yearly_payment(power_plant, interest)
-    logger.debug("total_payments: {}".format(total_payments))
     years_since_construction = model.year_number-power_plant.construction_year
-    logger.debug("years_since_construction: {}".format(years_since_construction))
-    payment_in_current_year = total_payments[years_since_construction]
-    logger.debug("payment_in_current_year: {}".format(payment_in_current_year))
+    if years_since_construction > power_plant.operating_period+power_plant.construction_period+power_plant.pre_dev_period:
+        payment_in_current_year=0
+    else:
+        try:
+            payment_in_current_year = total_payments[years_since_construction]
+        except IndexError:
+            payment_in_current_year=0
     return payment_in_current_year

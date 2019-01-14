@@ -63,7 +63,7 @@ class GenCo(Agent):
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
         self.invest()
-        self.reset_contracts()
+        # self.reset_contracts()
         self.purchase_fuel()
 
     # def calculate_non_fuel_bids(self, segment_hour):
@@ -198,13 +198,13 @@ class GenCo(Agent):
 
         self.money += cashflow
 
-    def reset_contracts(self):
-        """
-        Function to reset the contracts of all plants
-        :return: None
-        """
-        for plant in self.plants:
-            plant.reset_plant_contract()
+    # def reset_contracts(self):
+    #     """
+    #     Function to reset the contracts of all plants
+    #     :return: None
+    #     """
+    #     for plant in self.plants:
+    #         plant.reset_plant_contract()
 
     def purchase_fuel(self):
         if any(plant.plant_type == "CCGT" for plant in self.plants):
