@@ -16,8 +16,8 @@ from inspect import signature
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
 from src.plants.availability_factors.availability_factor_calculations import get_availability_factor
-
-from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
+from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
+from src.role.investment.calculate_npv import select_yearly_payback_payment_for_year
 
 from src.scenario.scenario_data import bid_mark_up, fuel_plant_availability, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
 
@@ -62,9 +62,7 @@ class GenCo(Agent):
 
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
-        self.operate_constructed_plants()
-        # self.collect_money()
-        # self.invest()
+        self.invest()
         self.reset_contracts()
         self.purchase_fuel()
 
@@ -100,29 +98,30 @@ class GenCo(Agent):
                 price = plant.short_run_marginal_cost(self.model, self)
             marked_up_price = price * bid_mark_up
 
-            if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
-                capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
+            if plant.is_operating:
+                if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
+                    capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
 
-                availability = self.get_renewable_availability(plant)
+                    availability = self.get_renewable_availability(plant)
 
-                bids.append(
-                    Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
-                        marked_up_price)
-                )
-            elif isinstance(plant, FuelPlant):
-                if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-                    availability_factor = get_availability_factor(plant_type=plant.plant_type, construction_year=plant.construction_year)
-                    capacity_to_bid = availability_factor * plant.capacity_mw
-
-                    # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
                     bids.append(
-                        Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price)
+                        Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
+                            marked_up_price)
                     )
-            elif plant.plant_type != 'Hydro_Store':
-                bids.append(
-                    Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price)
+                elif isinstance(plant, FuelPlant):
+                    if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+                        availability_factor = get_availability_factor(plant_type=plant.plant_type, construction_year=plant.construction_year)
+                        capacity_to_bid = availability_factor * plant.capacity_mw
 
-                )
+                        # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
+                        bids.append(
+                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price)
+                        )
+                elif plant.plant_type != 'Hydro_Store':
+                    bids.append(
+                        Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price)
+
+                    )
         return bids
 
     def get_renewable_availability(self, plant):
@@ -140,7 +139,7 @@ class GenCo(Agent):
         UPFRONT_INVESTMENT_COSTS = 0.25
         total_upfront_cost = 0
         while self.money > total_upfront_cost:
-            # potential_plant_data = npv_calculation.get_affordable_plant_generator()
+            # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
 
@@ -174,11 +173,6 @@ class GenCo(Agent):
         plants_filtered = list(get_running_plants(self.plants))
         self.plants = plants_filtered
 
-    def operate_constructed_plants(self):
-        for plant in self.plants:
-            if plant.is_operating is False and self.model.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period:
-                plant.is_operating = True
-
     def pay_money(self):
         # self.money -=
         # fixed_costs = sum(plant for plant in self.plants)
@@ -187,10 +181,22 @@ class GenCo(Agent):
         for plant in self.plants:
             pass
 
-    def collect_money(self):
-        income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.bids if
+    def settle_accounts(self):
+        income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.accepted_bids if
                      bid.partly_accepted or bid.bid_accepted)
-        self.money += income
+
+        short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
+                                              for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating==True))
+
+        interest = [ nuclear_wacc if plant.plant_type == "Nuclear" else non_nuclear_wacc for plant in self.plants]
+
+        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw)*-1 for plant in self.plants if plant.is_operating==True)
+
+        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
+
+        cashflow = income - short_run_marginal_expenditure - fixed_variable_costs - capital_loan_expenditure
+
+        self.money += cashflow
 
     def reset_contracts(self):
         """

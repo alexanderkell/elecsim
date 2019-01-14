@@ -2,8 +2,8 @@ from logging import getLogger
 import pandas as pd
 from inspect import signature
 from functools import lru_cache
-
-from numpy import npv
+from itertools import zip_longest
+from numpy import npv, pmt
 from random import randint
 
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
@@ -36,27 +36,12 @@ class CalculateNPV:
         self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_years = look_back_years
 
-    # def get_plant_with_max_npv(self):
-    #     npv_data = self.compare_npv()
-    #     # highest_npv = npv_data.itertuples()[0]
-    #     logger.debug("iloc 0 > 0: {}".format(npv_data['npv_per_mw'].iloc[0] > 0))
-    #     if npv_data['npv_per_mw'].iloc[0] > 0:
-    #         capacity = npv_data['capacity'].iloc[0]
-    #         plant_type = npv_data['plant_type'].iloc[0]
-    #         power_plant_name = "{}-{}-{}".format(plant_type, self.model.year_number, randint(1, 99999999))
-    #         power_plant = create_power_plant(name=power_plant_name, start_date=self.model.year_number,
-    #                                          capacity=capacity, simplified_type=plant_type)
-    #         return power_plant
-    #     else:
-    #         return None
-
-    def get_affordable_plant_generator(self):
+    def get_positive_npv_plants_list(self):
         npv_rows = self.get_positive_npv_plants()
         logger.debug("npv_rows: {}".format(npv_rows))
-        # for individual_plant_data in npv_rows.itertuples():
-        result = [(individual_plant_data.capacity, individual_plant_data.plant_type) for individual_plant_data in npv_rows.itertuples()]
+        result = [(individual_plant_data.capacity, individual_plant_data.plant_type) for individual_plant_data in
+                  npv_rows.itertuples()]
         return result
-            # yield individual_plant_data.capacity, individual_plant_data.plant_type
 
     def get_positive_npv_plants(self):
         npv_data = self.compare_npv()
@@ -77,8 +62,6 @@ class CalculateNPV:
                 dict = {"npv_per_mw": npv, "capacity": plant_row.Plant_Size, "plant_type": plant_row.Type}
                 cost_list.append(dict)
 
-
-
         npv_results = pd.DataFrame(cost_list)
 
         sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
@@ -91,7 +74,7 @@ class CalculateNPV:
 
         # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
 
-        power_plant = create_power_plant("estimate_variable", self.model.year_number, plant_type, plant_size)
+        power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
 
         # Forecast marginal costs
         short_run_marginal_cost = self._get_predicted_marginal_cost(power_plant)
@@ -204,7 +187,6 @@ class CalculateNPV:
         predicted_price_duration_curve = get_price_duration_curve(self.model, self.look_back_years)
         return predicted_price_duration_curve
 
-
     @staticmethod
     def _total_profit_per_segment(row, capacity):
         if row['predicted_profit_per_mwh'] > 0:
@@ -239,10 +221,84 @@ class CalculateNPV:
             running_hours = 0
         return running_hours
 
+
 @lru_cache(maxsize=1024)
 def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_back_period):
     npv_calculation = CalculateNPV(model, difference_in_discount_rate, look_back_period)
 
-    potential_plant_data = npv_calculation.get_affordable_plant_generator()
+    potential_plant_data = npv_calculation.get_positive_npv_plants_list()
 
     return potential_plant_data
+
+
+def get_yearly_payment(power_plant, interest_rate):
+    pre_dev_downpayments = [pre_dev_year * power_plant.pre_dev_cost_per_mw * power_plant.capacity_mw for pre_dev_year in
+                            power_plant.pre_dev_spend_years]
+
+    logger.debug("pre_dev_downpayments: {}".format(pre_dev_downpayments))
+
+    pre_dev_years_to_pay_back = [
+        12 * (power_plant.operating_period + power_plant.construction_period + downpayment_date) for
+        downpayment_date in list(reversed(range(1, len(pre_dev_downpayments) + 1)))]
+
+    # logger.debug("pre_dev_years_to_pay_back: {}".format(pre_dev_years_to_pay_back))
+
+    pre_dev_interest = [interest_rate / 12] * int(power_plant.pre_dev_period)
+
+    # logger.debug("pre_dev_interest: {}".format(pre_dev_interest))
+
+    construction_downpayments = [construction_year * power_plant.construction_cost_per_mw * power_plant.capacity_mw for
+                                 construction_year in power_plant.construction_spend_years]
+
+    construction_interest = [interest_rate / 12] * int(power_plant.construction_period)
+
+    construction_years_to_pay_back = [12 * (power_plant.operating_period + downpayment_date) for
+                                      downpayment_date in list(reversed(range(1, len(construction_downpayments) + 1)))]
+
+    pre_dev_repayments = pmt(rate=pre_dev_interest, nper=pre_dev_years_to_pay_back, pv=pre_dev_downpayments, fv=0,
+                             when=0)
+
+    total_years_to_pay_pre_dev = [power_plant.operating_period + power_plant.construction_period + downpayment_date for
+                          downpayment_date in list(reversed(range(1, len(pre_dev_downpayments) + 1)))]
+
+    pre_dev_lumpsums = []
+    for years_to_pay, pre_dev_downpayment in zip(total_years_to_pay_pre_dev, pre_dev_repayments):
+        # logger.debug('years_to_pay: {}'.format(years_to_pay))
+        pre_dev_payback = [pre_dev_downpayment] * int(years_to_pay)
+        pre_dev_lumpsums.append(pre_dev_payback)
+
+    # logger.debug("pre_dev_lumpsums: {}".format(pre_dev_lumpsums))
+    # logger.debug("len of lumpsums: {}, len of lumpsums[0]: {}, len of lumpsums[1]: {}, len of lumpsums[2]: {}".format(len(pre_dev_lumpsums), len(pre_dev_lumpsums[0]),len(pre_dev_lumpsums[1]), len(pre_dev_lumpsums[2])))
+
+    construction_repayments = pmt(rate=construction_interest, nper=construction_years_to_pay_back,
+                                  pv=construction_downpayments, fv=0, when=0)
+
+    construction_lumpsums = []
+    total_years_to_pay_construction = [(power_plant.operating_period + downpayment_date) for downpayment_date in list(reversed(range(1, len(construction_downpayments) + 1)))]
+    for years_to_pay, construction_downpayment in zip(total_years_to_pay_construction, construction_repayments):
+        construction_payback = [construction_downpayment] * int(years_to_pay)
+        construction_lumpsums.append(construction_payback)
+
+
+    total_pre_dev_payments = [sum(i) for i in zip_longest(*reversed(pre_dev_lumpsums), fillvalue=0)][::-1]
+    # logger.debug("total_pre_dev_payments:{}".format(total_pre_dev_payments))
+
+    # Join construction and pre-dev payments together
+    total_construction_payments = [sum(i) for i in zip_longest(*reversed(construction_lumpsums), fillvalue=0)][::-1]
+
+    # Add construction payments and pre-development payments together
+    total_payments = [a+b for a, b in zip_longest(reversed(total_pre_dev_payments), reversed(total_construction_payments), fillvalue=0)][::-1]
+
+    # repayments = pre_dev_repayments + construction_repayments
+
+    return total_payments
+
+
+def select_yearly_payback_payment_for_year(power_plant, interest, model):
+    total_payments = get_yearly_payment(power_plant, interest)
+    logger.debug("total_payments: {}".format(total_payments))
+    years_since_construction = model.year_number-power_plant.construction_year
+    logger.debug("years_since_construction: {}".format(years_since_construction))
+    payment_in_current_year = total_payments[years_since_construction]
+    logger.debug("payment_in_current_year: {}".format(payment_in_current_year))
+    return payment_in_current_year

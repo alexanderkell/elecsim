@@ -112,15 +112,15 @@ class PowerExchange:
                 bid.accept_bid(segment_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                logger.info('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
+                # logger.info('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segment_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
-                logger.info('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.info('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
                 bid.reject_bid(segment_hour=segment_hour)
-                logger.info('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                # logger.info('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
 
         return accepted_bids
 

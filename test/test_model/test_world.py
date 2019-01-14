@@ -27,7 +27,7 @@ class TestWorld:
 # with PyCallGraph(output=GraphvizOutput()):
         world = World(scenario=scenario_data, initialization_year=2018)
 
-        for i in range(1):
+        for i in range(5):
             world.step()
 
         assert 1 == 1
