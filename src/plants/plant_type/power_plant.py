@@ -1,7 +1,9 @@
 """power_plant.py: Class which represents a Power Plant"""
 
 from abc import ABC, abstractmethod
+import logging
 
+logger = logging.getLogger(__name__)
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
@@ -72,6 +74,7 @@ class PowerPlant(ABC):
 
         # Bids
         self.accepted_bids = []
+        self.historical_bids = []
 
         self.capacity_fulfilled = {
             0.08: 0,
@@ -137,7 +140,10 @@ class PowerPlant(ABC):
     #     self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
 
     def delete_old_plant_bids(self):
-        self.accepted_bids.clear()
+        logger.debug('self.accepted_bids: {}'.format(self.accepted_bids))
+        self.historical_bids.extend(self.accepted_bids)
+        logger.debug('self.historical_bids: {}'.format(self.historical_bids))
+        self.accepted_bids = []
 
     def get_upfront_costs(self):
         upfront_cost = self.capacity_mw*(self.pre_dev_cost_per_mw+self.construction_cost_per_mw) + self.infrastructure

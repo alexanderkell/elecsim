@@ -18,7 +18,7 @@ from src.role.investment.predict_load_duration_prices import PredictPriceDuratio
 from src.plants.availability_factors.availability_factor_calculations import get_availability_factor
 from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
 from src.role.investment.calculate_npv import select_yearly_payback_payment_for_year
-
+import math
 from src.scenario.scenario_data import bid_mark_up, fuel_plant_availability, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
 
 
@@ -107,7 +107,7 @@ class GenCo(Agent):
 
                     bids.append(
                         Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
-                            marked_up_price)
+                            marked_up_price, self.model.year_number)
                     )
                 elif isinstance(plant, FuelPlant):
                     if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
@@ -116,11 +116,11 @@ class GenCo(Agent):
 
                         # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
                         bids.append(
-                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price)
+                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
                         )
                 elif plant.plant_type != 'Hydro_Store':
                     bids.append(
-                        Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price)
+                        Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price, self.model.year_number)
 
                     )
         return bids
@@ -140,11 +140,15 @@ class GenCo(Agent):
         UPFRONT_INVESTMENT_COSTS = 0.25
         total_upfront_cost = 0
         while self.money > total_upfront_cost:
+            counter =0
+            if counter>3:
+                break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
-            
+
             for plant_data in potential_plant_data:
+                counter+=1
                 if not potential_plant_data:
                     break
                 power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])
@@ -195,8 +199,8 @@ class GenCo(Agent):
         capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
 
         cashflow = income - short_run_marginal_expenditure - fixed_variable_costs - capital_loan_expenditure
-
-        self.money += cashflow
+        if not math.isnan(cashflow):
+            self.money += cashflow
 
     # def reset_contracts(self):
     #     """

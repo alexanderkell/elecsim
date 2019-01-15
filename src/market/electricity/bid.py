@@ -12,7 +12,7 @@ __email__ = "Alexander@Kell.es"
 
 class Bid:
 
-    def __init__(self, gen_co, plant, segment_hours, capacity_bid, price_per_mwh):
+    def __init__(self, gen_co, plant, segment_hours, capacity_bid, price_per_mwh, year_of_bid):
         """
         Bid class that contains all the information related to the creation of bids
         :param gen_co: Generation company from which the bid originates from
@@ -26,6 +26,7 @@ class Bid:
         self.segment_hours = segment_hours
         self.capacity_bid = capacity_bid
         self.price_per_mwh = price_per_mwh
+        self.year_of_bid = year_of_bid
 
         self.bid_accepted = False
         self.bid_rejected = False
@@ -67,4 +68,4 @@ class Bid:
         # self.price_per_mwh = self.plant.calculate_lcoe(self.gen_co.difference_in_discount_rate)
 
     def __str__(self):
-        return "Plant type: " + self.plant.type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()
+        return "Plant type: " + self.plant.plant_type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()

@@ -56,11 +56,12 @@ class World(Model):
     def step(self):
         '''Advance model by one step'''
         self.operate_constructed_plants()
-        self.settle_gencos_financials()
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
         self.dismantle_old_plants()
+        self.dismantle_unprofitable_plant()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.settle_gencos_financials()
         self.year_number += 1
         self.step_number +=1
 
@@ -88,25 +89,55 @@ class World(Model):
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
 
+
+    def get_running_plants(self, plants):
+        for plant in plants:
+            if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
+                yield plant
+            else:
+                logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                                                                        plant.construction_year))
+                continue
+
+
     def dismantle_old_plants(self):
         """
         Remove plants that are past their lifetime agent from each agent from their plant list
         """
 
-        def get_running_plants(plants):
-            for plant in plants:
-                if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
-                    yield plant
-                else:
-                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
-                                                                                                        plant.construction_year))
-                    continue
+        gencos = self.get_gen_cos()
+
+        for genco in gencos:
+            plants_filtered = list(self.get_running_plants(genco.plants))
+            genco.plants = plants_filtered
+
+    def dismantle_unprofitable_plant(self):
 
         gencos = self.get_gen_cos()
 
         for genco in gencos:
-            plants_filtered = list(get_running_plants(genco.plants))
-            genco.plants = plants_filtered
+            profitable_plants = list(self.get_unprofitable_plants(genco.plants))
+            genco.plants = profitable_plants
+            logger.debug("genco: {}, has plants: {}".format(genco, genco.plants))
+
+    def get_unprofitable_plants(self, plants):
+            for plant in plants:
+                if self.step_number > 0:
+                    logger.debug("self.step_number: {}".format(self.step_number))
+                    historic_bids = plant.historical_bids
+                    logger.debug("1. historic_bids: {}".format(historic_bids))
+                    # for historic_bid in historic_bids:
+                    #     logger.debug("2. historic_bid: {}".format(historic_bid))
+                    years_to_look_into = list(range(self.year_number,self.year_number-5,-1))
+                    logger.debug("years_to_look_into: {}".format(years_to_look_into))
+                    bids_to_check = filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids)
+                    logger.debug("bids_to_check: {}".format(bids_to_check))
+                    total_income_in_last_five_years = sum(bid.price_per_mwh for bid in bids_to_check)
+                    logger.debug("total_income_in_last_five_years: {}".format(total_income_in_last_five_years))
+                    if total_income_in_last_five_years > 0:
+                        yield plant
+                else:
+                    yield plant
 
     def operate_constructed_plants(self):
 
