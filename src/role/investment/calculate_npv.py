@@ -205,9 +205,6 @@ class CalculateNPV:
         else:
             if row['predicted_profit_per_mwh'] > 0:
                 capacity_factor = get_capacity_factor(power_plant.plant_type, row.segment_hour)
-                logger.debug(
-                    "Capacity factor for {} of segment hour {} is {}".format(power_plant.plant_type, row.segment_hour,
-                                                                             capacity_factor))
                 running_hours = capacity_factor * row['num_of_hours']
             else:
                 running_hours = 0
@@ -234,8 +231,6 @@ def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_b
 def get_yearly_payment(power_plant, interest_rate):
     pre_dev_downpayments = [pre_dev_year * power_plant.pre_dev_cost_per_mw * power_plant.capacity_mw for pre_dev_year in
                             power_plant.pre_dev_spend_years]
-
-    logger.debug("pre_dev_downpayments: {}".format(pre_dev_downpayments))
 
     pre_dev_years_to_pay_back = [
         12 * (power_plant.operating_period + power_plant.construction_period + downpayment_date) for

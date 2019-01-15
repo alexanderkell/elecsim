@@ -136,6 +136,9 @@ class PowerPlant(ABC):
     # def reset_plant_contract(self):
     #     self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
 
+    def delete_old_plant_bids(self):
+        self.accepted_bids.clear()
+
     def get_upfront_costs(self):
         upfront_cost = self.capacity_mw*(self.pre_dev_cost_per_mw+self.construction_cost_per_mw) + self.infrastructure
         return upfront_cost
@@ -152,5 +155,5 @@ class PowerPlant(ABC):
         return ret
 
     def __repr__(self):
-        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
+        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self.infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
 

@@ -59,7 +59,7 @@ class World(Model):
         self.settle_gencos_financials()
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
-        # self.dismantle_old_plants()
+        self.dismantle_old_plants()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.year_number += 1
         self.step_number +=1
@@ -113,9 +113,9 @@ class World(Model):
         gencos = self.get_gen_cos()
         logger.debug("gencos: {}".format(gencos))
         for genco in gencos:
-            logger.debug("genco: {}".format(genco))
+            logger.debug("genco plants: {}".format(genco.plants))
             for plant in genco.plants:
-                logger.debug("plant: {}, year_number: {}, construction year+constructioon_period+predev: {}".format(plant, self.year_number, plant.construction_year + plant.construction_period + plant.pre_dev_period))
+                # logger.debug("plant: {}, year_number: {}, construction year+constructioon_period+predev: {}".format(plant, self.year_number, plant.construction_year + plant.construction_period + plant.pre_dev_period))
                 if (plant.is_operating is False) and (self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period):
                     plant.is_operating = True
 
@@ -123,6 +123,8 @@ class World(Model):
         gencos = self.get_gen_cos()
         for genco in gencos:
             genco.settle_accounts()
+            genco.delete_old_bids()
+
 
     def get_gen_cos(self):
         gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]

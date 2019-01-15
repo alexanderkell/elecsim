@@ -36,7 +36,6 @@ class LatestMarketData:
 
             co2_price = self.agent_forecast_value("co2", look_back_years)
             fuel_price = self.agent_forecast_value(power_plant.fuel.fuel_type, look_back_years)
-            demand_level = self.agent_forecast_value("demand", look_back_years)
 
             co2_cost = power_plant.fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
             fuel_cost = fuel_price/power_plant.efficiency

@@ -62,6 +62,7 @@ class GenCo(Agent):
 
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
+        self.delete_old_bids()
         self.invest()
         # self.reset_contracts()
         self.purchase_fuel()
@@ -142,13 +143,12 @@ class GenCo(Agent):
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
-
+            
             for plant_data in potential_plant_data:
                 if not potential_plant_data:
                     break
                 power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])
                 total_upfront_cost = power_plant_trial.get_upfront_costs() * UPFRONT_INVESTMENT_COSTS
-                logger.info("potential_plant_data: {}".format(potential_plant_data))
                 if self.money > total_upfront_cost:
                     logger.info(
                         "inside if: self.money: {}, total_upfront_cost: {}".format(self.money, total_upfront_cost))
@@ -205,6 +205,10 @@ class GenCo(Agent):
     #     """
     #     for plant in self.plants:
     #         plant.reset_plant_contract()
+
+    def delete_old_bids(self):
+        for plant in self.plants:
+            plant.delete_old_plant_bids()
 
     def purchase_fuel(self):
         if any(plant.plant_type == "CCGT" for plant in self.plants):
