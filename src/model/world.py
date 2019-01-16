@@ -1,6 +1,8 @@
 import logging
 from random import uniform, randint
 
+import numpy as np
+
 from mesa import Model
 from mesa.datacollection import DataCollector
 
@@ -73,12 +75,15 @@ class World(Model):
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
         # Initialising generator company data
+        financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
+        financial_data.cash_in_bank = financial_data.cash_in_bank.fillna(0)
         companies_groups = plant_data.groupby('Company')
         company_financials = financial_data.groupby('Company')
 
         logger.info("Initialising generation companies with their power plants.")
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
+            assert financials.Company.iloc[0] == name
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator+=1
             # Add power plants to generation company portfolio
@@ -92,7 +97,11 @@ class World(Model):
 
     def get_running_plants(self, plants):
         for plant in plants:
-            if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
+            if plant.construction_year<=1990:
+                # Reset old plants that have been modernised with new construction year
+                plant.construction_year = randint(self.year_number-15, self.year_number)
+                yield plant
+            elif plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
                 yield plant
             else:
                 logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
@@ -116,24 +125,19 @@ class World(Model):
         gencos = self.get_gen_cos()
 
         for genco in gencos:
-            profitable_plants = list(self.get_unprofitable_plants(genco.plants))
+            profitable_plants = list(self.get_profitable_plants(genco.plants))
             genco.plants = profitable_plants
             logger.debug("genco: {}, has plants: {}".format(genco, genco.plants))
 
-    def get_unprofitable_plants(self, plants):
+    def get_profitable_plants(self, plants):
             for plant in plants:
-                if self.step_number > 0:
-                    logger.debug("self.step_number: {}".format(self.step_number))
+                if self.step_number > 4 and plant.construction_period+plant.pre_dev_period+plant.construction_year+4>self.year_number:
                     historic_bids = plant.historical_bids
-                    logger.debug("1. historic_bids: {}".format(historic_bids))
                     # for historic_bid in historic_bids:
                     #     logger.debug("2. historic_bid: {}".format(historic_bid))
                     years_to_look_into = list(range(self.year_number,self.year_number-5,-1))
-                    logger.debug("years_to_look_into: {}".format(years_to_look_into))
-                    bids_to_check = filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids)
-                    logger.debug("bids_to_check: {}".format(bids_to_check))
+                    bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
                     total_income_in_last_five_years = sum(bid.price_per_mwh for bid in bids_to_check)
-                    logger.debug("total_income_in_last_five_years: {}".format(total_income_in_last_five_years))
                     if total_income_in_last_five_years > 0:
                         yield plant
                 else:
@@ -147,7 +151,9 @@ class World(Model):
             logger.debug("genco plants: {}".format(genco.plants))
             for plant in genco.plants:
                 # logger.debug("plant: {}, year_number: {}, construction year+constructioon_period+predev: {}".format(plant, self.year_number, plant.construction_year + plant.construction_period + plant.pre_dev_period))
-                if (plant.is_operating is False) and (self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period):
+                if plant.construction_year <= 2018:
+                    plant.is_operating = True
+                elif (plant.is_operating is False) and (self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period):
                     plant.is_operating = True
 
     def settle_gencos_financials(self):

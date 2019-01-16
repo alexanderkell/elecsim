@@ -7,7 +7,6 @@ from src.plants.plant_type.fuel_plant import FuelPlant
 # import src.plants.plant_type.fuel_plant
 from src.market.electricity.bid import Bid
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
@@ -63,7 +62,7 @@ class GenCo(Agent):
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
         self.delete_old_bids()
-        self.invest()
+        # self.invest()
         # self.reset_contracts()
         self.purchase_fuel()
 
@@ -139,16 +138,16 @@ class GenCo(Agent):
     def invest(self):
         UPFRONT_INVESTMENT_COSTS = 0.25
         total_upfront_cost = 0
+        # counter =0
         while self.money > total_upfront_cost:
-            counter =0
-            if counter>3:
-                break
+            # if counter>3:
+            #     break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
 
             for plant_data in potential_plant_data:
-                counter+=1
+                # counter+=1
                 if not potential_plant_data:
                     break
                 power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])

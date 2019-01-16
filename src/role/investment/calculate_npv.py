@@ -9,7 +9,6 @@ from random import randint
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from src.scenario.scenario_data import modern_plant_costs
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from src.role.investment.expected_load_duration_prices import LoadDurationPrices
 from src.role.market.latest_market_data import LatestMarketData
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.plants.plant_type.fuel_plant import FuelPlant
