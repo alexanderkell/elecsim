@@ -150,7 +150,7 @@ class GenCo(Agent):
                 # counter+=1
                 if not potential_plant_data:
                     break
-                power_plant_trial = create_power_plant("plant", self.model.year_number, plant_data[1], plant_data[0])
+                power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                 total_upfront_cost = power_plant_trial.get_upfront_costs() * UPFRONT_INVESTMENT_COSTS
                 if self.money > total_upfront_cost:
                     logger.info(

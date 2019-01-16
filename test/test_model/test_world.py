@@ -25,8 +25,8 @@ logging.basicConfig(level=logging.DEBUG)
 class TestWorld:
     def test_world_initialization(self):
 # with PyCallGraph(output=GraphvizOutput()):
-        world = World(scenario=scenario_data, initialization_year=2019)
+        world = World(scenario=scenario_data, initialization_year=2018)
 
-        for i in range(32):
+        for i in range(1):
             world.step()
 

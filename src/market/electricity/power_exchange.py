@@ -61,7 +61,7 @@ class PowerExchange:
         if predict:
             logger.info("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
-            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.info("actual self.price_duration_curve: \n {}".format(self.price_duration_curve))
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
