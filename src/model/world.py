@@ -106,6 +106,7 @@ class World(Model):
             else:
                 logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                         plant.construction_year))
+
                 continue
 
 
