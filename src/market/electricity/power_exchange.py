@@ -1,5 +1,8 @@
 from itertools import chain
 
+from src.scenario.scenario_data import lost_load
+from src.market.electricity.bid import Bid
+
 import pandas as pd
 import logging
 
@@ -61,7 +64,7 @@ class PowerExchange:
         if predict:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
-            logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
@@ -95,8 +98,7 @@ class PowerExchange:
         sorted_bids = sorted(bids, key=lambda x: x.price_per_mwh)
         return sorted_bids
 
-    @staticmethod
-    def _respond_to_bids(bids, segment_hour, capacity_required):
+    def _respond_to_bids(self, bids, segment_hour, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
@@ -123,6 +125,7 @@ class PowerExchange:
             else:
                 bid.reject_bid(segment_hour=segment_hour)
                 logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
-
+        if capacity_required > 0:
+            accepted_bids.append(Bid(None, None, segment_hour, 0, lost_load, self.model.year_number))
         return accepted_bids
 

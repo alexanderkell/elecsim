@@ -52,7 +52,7 @@ class CalculateNPV:
     def compare_npv(self):
         cost_list = []
 
-        for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV']:
+        for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
             # for plant_type in ['Nuclear','CCGT']:
 
             plant_cost_data = modern_plant_costs[modern_plant_costs.Type == plant_type]
@@ -69,7 +69,7 @@ class CalculateNPV:
 
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
-        forecasted_segment_prices = self._get_load_duration_price_predictions()
+        forecasted_segment_prices = self._get_price_duration_predictions()
 
         # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
 
@@ -180,9 +180,7 @@ class CalculateNPV:
         short_run_marginal_cost = market_data.get_predicted_marginal_cost(power_plant, self.look_back_years)
         return short_run_marginal_cost
 
-    def _get_load_duration_price_predictions(self):
-        # predicted_price_duration_curve = PredictPriceDurationCurve(self.model).predict_price_duration_curve(
-        #     look_back_period=self.look_back_years)
+    def _get_price_duration_predictions(self):
         predicted_price_duration_curve = get_price_duration_curve(self.model, self.look_back_years)
         return predicted_price_duration_curve
 
@@ -227,8 +225,9 @@ def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_b
     return potential_plant_data
 
 
-def get_yearly_payment(power_plant, interest_rate):
-    pre_dev_downpayments = [pre_dev_year * power_plant.pre_dev_cost_per_mw * power_plant.capacity_mw for pre_dev_year in
+def get_yearly_payment(power_plant, interest_rate, down_payment_perc):
+    loan_percentage = 1-down_payment_perc
+    pre_dev_downpayments = [pre_dev_year * power_plant.pre_dev_cost_per_mw * power_plant.capacity_mw * loan_percentage for pre_dev_year in
                             power_plant.pre_dev_spend_years]
 
     pre_dev_years_to_pay_back = [
@@ -241,7 +240,7 @@ def get_yearly_payment(power_plant, interest_rate):
 
     # logger.debug("pre_dev_interest: {}".format(pre_dev_interest))
 
-    construction_downpayments = [construction_year * power_plant.construction_cost_per_mw * power_plant.capacity_mw for
+    construction_downpayments = [construction_year * power_plant.construction_cost_per_mw * power_plant.capacity_mw * loan_percentage for
                                  construction_year in power_plant.construction_spend_years]
 
     construction_interest = [interest_rate / 12] * int(power_plant.construction_period)
@@ -288,8 +287,8 @@ def get_yearly_payment(power_plant, interest_rate):
     return total_payments
 
 
-def select_yearly_payback_payment_for_year(power_plant, interest, model):
-    total_payments = get_yearly_payment(power_plant, interest)
+def select_yearly_payback_payment_for_year(power_plant, interest, downpayment_percentage, model):
+    total_payments = get_yearly_payment(power_plant, interest, downpayment_percentage)
     years_since_construction = model.year_number-power_plant.construction_year
     if years_since_construction > power_plant.operating_period+power_plant.construction_period+power_plant.pre_dev_period:
         payment_in_current_year=0

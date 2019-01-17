@@ -15,7 +15,7 @@ from inspect import signature
 from src.role.market.latest_market_data import LatestMarketData
 from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
 from src.plants.availability_factors.availability_factor_calculations import get_availability_factor
-from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
+from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc, upfront_investment_costs, years_for_agents_to_predict_forward
 from src.role.investment.calculate_npv import select_yearly_payback_payment_for_year
 import math
 from src.scenario.scenario_data import bid_mark_up, fuel_plant_availability, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
@@ -61,6 +61,7 @@ class GenCo(Agent):
 
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
+        logger.info("Amount of money: {}".format(self.money))
         self.delete_old_bids()
         self.invest()
         # self.reset_contracts()
@@ -121,7 +122,7 @@ class GenCo(Agent):
 
                         # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
                         bids.append(
-                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
+                            Bid(self, plant, segment_hour, fuel_plant_availability * capacity_to_bid, marked_up_price, self.model.year_number)
                         )
                 elif plant.plant_type != 'Hydro_Store':
                     bids.append(
@@ -142,7 +143,6 @@ class GenCo(Agent):
         return availability
 
     def invest(self):
-        UPFRONT_INVESTMENT_COSTS = 0.25
         total_upfront_cost = 0
         # counter =0
         while self.money > total_upfront_cost:
@@ -151,15 +151,15 @@ class GenCo(Agent):
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
-
             for plant_data in potential_plant_data:
                 # counter+=1
                 if not potential_plant_data:
                     break
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
-                total_upfront_cost = power_plant_trial.get_upfront_costs() * UPFRONT_INVESTMENT_COSTS
+                total_upfront_cost = power_plant_trial.get_upfront_costs() * upfront_investment_costs
+                logger.info("total_upfront_cost: {}, total money: {}, upfront_investment_costs: {}".format(total_upfront_cost, self.money, upfront_investment_costs))
                 if self.money > total_upfront_cost:
-                    logger.debug("inside if: self.money: {}, total_upfront_cost: {}".format(self.money, total_upfront_cost))
+                    logger.info("inside if: self.money: {}, total_upfront_cost: {}".format(self.money, total_upfront_cost))
                     self.plants.append(power_plant_trial)
                     self.money -= total_upfront_cost
                     break
@@ -196,11 +196,11 @@ class GenCo(Agent):
         short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
                                               for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating==True))
 
-        interest = [ nuclear_wacc if plant.plant_type == "Nuclear" else non_nuclear_wacc for plant in self.plants]
+        interest = [nuclear_wacc if plant.plant_type == "Nuclear" else non_nuclear_wacc for plant in self.plants]
 
         fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw)*-1 for plant in self.plants if plant.is_operating==True)
 
-        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
+        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, upfront_investment_costs, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
 
         cashflow = income - short_run_marginal_expenditure - fixed_variable_costs - capital_loan_expenditure
         if not math.isnan(cashflow):
@@ -232,10 +232,10 @@ class GenCo(Agent):
 
     def forecast_demand_change(self):
         latest_market_data = LatestMarketData(self.model)
-        demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period)
+        demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period, years_for_agents_to_predict_forward)
         return demand_change_predicted
 
     def forecast_attribute_price(self, fuel_type):
         latest_market_data = LatestMarketData(self.model)
-        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period)
+        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, years_for_agents_to_predict_forward)
         return uranium_price_predicted

@@ -1,5 +1,6 @@
 from src.market.electricity.power_exchange import PowerExchange
 from src.role.market.latest_market_data import LatestMarketData
+from src.scenario.scenario_data import years_for_agents_to_predict_forward
 
 from functools import lru_cache
 
@@ -25,7 +26,7 @@ class PredictPriceDurationCurve:
         self.model = model
 
     def predict_price_duration_curve(self, look_back_period):
-        demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period)
+        demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period, years_for_agents_to_predict_forward)
         predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
 
         power_ex = PowerExchange(self.model)

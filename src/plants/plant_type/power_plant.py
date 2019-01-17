@@ -68,6 +68,7 @@ class PowerPlant(ABC):
 
         self.is_operating = False
 
+
         #
         # self.min_running = min_running
 
@@ -155,7 +156,7 @@ class PowerPlant(ABC):
         pass
 
     def check_if_operating_in_certain_year(self, current_year, year_difference_from_model_year):
-        year_operation_begins = self.construction_year + self.pre_dev_period + self.construction_period
+        year_operation_begins = self.get_year_of_operation()
         end_of_life = year_operation_begins + self.operating_period
         year_to_check = year_difference_from_model_year + current_year
         if year_operation_begins < year_to_check <= end_of_life:
@@ -163,6 +164,9 @@ class PowerPlant(ABC):
         else:
             return False
 
+    def get_year_of_operation(self):
+        year_operation_begins = self.construction_year + self.pre_dev_period + self.construction_period
+        return year_operation_begins
     def __str__(self):
         ret = "Name: {}. Type: {}. Capacity: {}.".format(self.name, self.plant_type, self.capacity_mw)
         return ret

@@ -18,7 +18,8 @@ segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315,
 segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
 # Change in load duration function by year
-yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
+# yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
+yearly_demand_change = [1.00]*100
 
 # Fuel prices (£/MWh)
 
@@ -88,6 +89,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+# power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
@@ -126,3 +128,6 @@ carbon_cost.year = pd.to_numeric(carbon_cost.year)
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
 lost_load = 6000
 
+upfront_investment_costs = 0.25
+
+years_for_agents_to_predict_forward = 7

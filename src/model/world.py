@@ -60,8 +60,8 @@ class World(Model):
         self.operate_constructed_plants()
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
-        logger.info("number of plants: {}".format(len([plant for gencos in self.get_gen_cos() for plant in gencos.plants])))
-        logger.info("number of operating gencos: {}".format(len([plant for gencos in self.get_gen_cos() for plant in gencos.plants if plant.is_operating == True])))
+        logger.info("number of plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants])))
+        logger.info("number of operating plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants if plant.is_operating == True])))
 
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plant()
@@ -117,7 +117,7 @@ class World(Model):
         Remove plants that are past their lifetime agent from each agent from their plant list
         """
 
-        gencos = self.get_gen_cos()
+        gencos = self.get_gencos()
 
         for genco in gencos:
             plants_filtered = list(self.get_running_plants(genco.plants))
@@ -125,7 +125,7 @@ class World(Model):
 
     def dismantle_unprofitable_plant(self):
 
-        gencos = self.get_gen_cos()
+        gencos = self.get_gencos()
 
         for genco in gencos:
             profitable_plants = list(self.get_profitable_plants(genco.plants))
@@ -134,7 +134,8 @@ class World(Model):
 
     def get_profitable_plants(self, plants):
             for plant in plants:
-                if self.step_number > 4 and plant.construction_period+plant.pre_dev_period+plant.construction_year+4>self.year_number:
+                if self.step_number > 4 and plant.get_year_of_operation() + 4 > self.year_number:
+                # if self.step_number > 4 and plant.construction_period+plant.pre_dev_period+plant.construction_year+4>self.year_number:
                     historic_bids = plant.historical_bids
                     # for historic_bid in historic_bids:
                     #     logger.debug("2. historic_bid: {}".format(historic_bid))
@@ -148,7 +149,7 @@ class World(Model):
 
     def operate_constructed_plants(self):
 
-        gencos = self.get_gen_cos()
+        gencos = self.get_gencos()
         logger.debug("gencos: {}".format(gencos))
         for genco in gencos:
             logger.debug("genco plants: {}".format(genco.plants))
@@ -160,12 +161,12 @@ class World(Model):
                     plant.is_operating = True
 
     def settle_gencos_financials(self):
-        gencos = self.get_gen_cos()
+        gencos = self.get_gencos()
         for genco in gencos:
             genco.settle_accounts()
             genco.delete_old_bids()
 
 
-    def get_gen_cos(self):
+    def get_gencos(self):
         gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
         return gencos
