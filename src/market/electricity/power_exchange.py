@@ -59,9 +59,9 @@ class PowerExchange:
 
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
         if predict:
-            logger.info("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
-            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
@@ -113,16 +113,16 @@ class PowerExchange:
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
                 bid.plant.accepted_bids.append(bid)
-                logger.info('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segment_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
                 bid.plant.accepted_bids.append(bid)
-                logger.info('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
             else:
                 bid.reject_bid(segment_hour=segment_hour)
-                logger.info('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
 
         return accepted_bids
 

@@ -60,6 +60,9 @@ class World(Model):
         self.operate_constructed_plants()
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
+        logger.info("number of plants: {}".format(len([plant for gencos in self.get_gen_cos() for plant in gencos.plants])))
+        logger.info("number of operating gencos: {}".format(len([plant for gencos in self.get_gen_cos() for plant in gencos.plants if plant.is_operating == True])))
+
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plant()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
@@ -97,7 +100,7 @@ class World(Model):
 
     def get_running_plants(self, plants):
         for plant in plants:
-            if plant.construction_year<=1990:
+            if plant.construction_year<=1990 and plant.name == "invested_plant":
                 # Reset old plants that have been modernised with new construction year
                 plant.construction_year = randint(self.year_number-15, self.year_number)
                 yield plant
@@ -106,7 +109,6 @@ class World(Model):
             else:
                 logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                         plant.construction_year))
-
                 continue
 
 
