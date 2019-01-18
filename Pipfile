@@ -6,13 +6,10 @@ name = "pypi"
 [packages]
 mesa = "*"
 pandas = "*"
-matplotlib = "*"
 scipy = "*"
 pytest = "*"
 sphinx = "*"
 ipykernel = "*"
-xlrd = "*"
-seaborn = "*"
 pycallgraph = "*"
 
 [dev-packages]
