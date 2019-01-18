@@ -100,7 +100,7 @@ class World(Model):
 
     def get_running_plants(self, plants):
         for plant in plants:
-            if plant.construction_year<=1990 and plant.name == "invested_plant":
+            if plant.construction_year<=1990 and plant.name != "invested_plant":
                 # Reset old plants that have been modernised with new construction year
                 plant.construction_year = randint(self.year_number-15, self.year_number)
                 yield plant

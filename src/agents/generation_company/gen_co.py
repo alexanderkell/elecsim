@@ -63,7 +63,7 @@ class GenCo(Agent):
         logger.info("Stepping generation company: {}".format(self.name))
         logger.info("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        # self.invest()
+        self.invest()
         # self.reset_contracts()
         self.purchase_fuel()
 
@@ -125,7 +125,7 @@ class GenCo(Agent):
 
                         # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
                         bids.append(
-                            Bid(self, plant, segment_hour, fuel_plant_availability * capacity_to_bid, marked_up_price, self.model.year_number)
+                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
                         )
                 elif plant.plant_type != 'Hydro_Store':
                     bids.append(
@@ -197,13 +197,13 @@ class GenCo(Agent):
         plants_filtered = list(get_running_plants(self.plants))
         self.plants = plants_filtered
 
-    def pay_money(self):
-        # self.money -=
-        # fixed_costs = sum(plant for plant in self.plants)
-        # expenditure = sum(bid for plant in self.plants for bid in plant.bids)
-
-        for plant in self.plants:
-            pass
+    # def pay_money(self):
+    #     # self.money -=
+    #     # fixed_costs = sum(plant for plant in self.plants)
+    #     # expenditure = sum(bid for plant in self.plants for bid in plant.bids)
+    #
+    #     for plant in self.plants:
+    #         pass
 
     def settle_accounts(self):
         income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.accepted_bids if

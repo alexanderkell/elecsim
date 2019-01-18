@@ -126,7 +126,8 @@ carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True
 carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
-lost_load = 6000
+# lost_load = 6000
+lost_load = 90
 
 upfront_investment_costs = 0.25
 

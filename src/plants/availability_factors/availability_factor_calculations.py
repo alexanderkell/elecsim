@@ -18,7 +18,6 @@ def get_availability_factor(plant_type, construction_year):
     if plant_type in ['CCGT', "OCGT", "Coal", 'CHP']:
         availability_factor_series = historical_availability_factor[(historical_availability_factor.plant_type==simplified_type)][['Year','capacity_factor']]
         availability_factor = ExtrapolateInterpolate(availability_factor_series.Year, availability_factor_series.capacity_factor)(construction_year)
-        availability_factor = fuel_plant_availability
     else:
         availability_factor = fuel_plant_availability
     return availability_factor

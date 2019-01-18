@@ -115,16 +115,16 @@ class PowerExchange:
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
                 bid.plant.accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
                 bid.partially_accept_bid(segment_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
                 bid.plant.accepted_bids.append(bid)
-                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             else:
                 bid.reject_bid(segment_hour=segment_hour)
-                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, genco: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.gen_co, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
         if capacity_required > 0:
             accepted_bids.append(Bid(None, None, segment_hour, 0, lost_load, self.model.year_number))
         return accepted_bids

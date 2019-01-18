@@ -54,8 +54,7 @@ class CalculateNPV:
 
         # for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
         # for plant_type in ['Nuclear','CCGT']:
-        for plant_type in ['Recip_diesel']:
-
+        for plant_type in ['Recip_gas']:
 
             plant_cost_data = modern_plant_costs[(modern_plant_costs.Type == plant_type) & (modern_plant_costs.Plant_Size>5)]
             for plant_row in plant_cost_data.itertuples():
