@@ -4,6 +4,8 @@ from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalc
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from src.plants.plant_type.power_plant import PowerPlant
 
+
+
 logger = logging.getLogger(__name__)
 
 """ fuel_plant.py: Child class of power plant which contains functions for a power plant which consumes fuel.
@@ -40,15 +42,13 @@ class FuelPlant(PowerPlant):
         lcoe = plant_cost_calculations.calculate_lcoe(discount_rate)
         return lcoe
 
-    def short_run_marginal_cost(self, model):
+    def short_run_marginal_cost(self, model, genco, fuel_price = None, co2_price = None):
         plant_cost_calculations = FuelPlantCostCalculations(plant_type=self.plant_type, capacity_mw=self.capacity_mw, construction_year=self.construction_year, average_load_factor=self.average_load_factor, efficiency=self.efficiency, pre_dev_period=self.pre_dev_period, construction_period=self.construction_period, operating_period=self.operating_period, pre_dev_spend_years=self.pre_dev_spend_years, construction_spend_years=self.construction_spend_years, pre_dev_cost_per_mw=self.pre_dev_cost_per_mw, construction_cost_per_mw=self.construction_cost_per_mw, infrastructure=self.infrastructure, fixed_o_and_m_per_mw=self.fixed_o_and_m_per_mw, variable_o_and_m_per_mwh=self.variable_o_and_m_per_mwh, insurance_cost_per_mw=self.insurance_cost_per_mw, connection_cost_per_mw=self.connection_cost_per_mw)
-        marginal_cost = plant_cost_calculations.calculate_short_run_marginal_cost(model)
-
-
+        marginal_cost = plant_cost_calculations.calculate_short_run_marginal_cost(model, genco, fuel_price, co2_price)
 
         return marginal_cost
 
     def __repr__(self):
-        return 'FuelPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
+        return 'FuelPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self.infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
 
 

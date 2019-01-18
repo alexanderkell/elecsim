@@ -53,6 +53,7 @@ class NonFuelCostCalculation(PlantCostCalculations):
     def calculate_short_run_marginal_cost(self, model):
         return self.variable_o_and_m_per_mwh
 
+
     def _total_costs(self, capex, opex):
         """
         Calculates total costs of plant by adding capital expenses plus operating expenses.

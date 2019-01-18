@@ -10,7 +10,6 @@ matplotlib = "*"
 scipy = "*"
 pytest = "*"
 sphinx = "*"
-gym = "*"
 ipykernel = "*"
 xlrd = "*"
 seaborn = "*"
@@ -19,4 +18,4 @@ pycallgraph = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

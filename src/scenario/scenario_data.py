@@ -18,7 +18,8 @@ segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315,
 segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
 # Change in load duration function by year
-yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1]
+# yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
+yearly_demand_change = [1.00]*100
 
 # Fuel prices (£/MWh)
 
@@ -27,8 +28,8 @@ historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/his
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
 # Future fuel prices
-gas_price = [KW_TO_MW * 0.018977] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-coal_price = [KW_TO_MW * 0.00906] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+gas_price = [KW_TO_MW * 0.01909] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+coal_price = [KW_TO_MW * 0.01106] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
 oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 diesel_price = [KW_TO_MW * 0.1] * 60  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
@@ -52,12 +53,28 @@ fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
 
 
+# Weighted Cost of Capital
+nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research-centres-and-groups/icept/Cost-estimates-for-nuclear-power-in-the-UK.pdf (page 20). # Post tax
+non_nuclear_wacc = 0.059  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
+
+# Availability
+non_fuel_plant_availability = 0.97
+pv_availability = 0.995 # https://ieeexplore.ieee.org/document/7355976
+offshore_availability = 0.95 # https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+onshore_availability = 0.97 # https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+fuel_plant_availability = 0.97 # Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+
 
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
 wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
 # Solar
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
+# Hydro
+hydro_capacity_factor = 0.456 # http://www.osemosys.org/uploads/1/8/5/0/18504136/hydropower.pdf
+
+# Availability factors (from Source: AESO 2017 Annual Market Statistics)
+historical_availability_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/availability_factor/historical_availability_factor.csv')
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
@@ -72,21 +89,35 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
-
+# power_plants = power_plants[:50]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
+# Variable operation and maintenance costs random numbers for stochasticity (uniform distribution)
+o_and_m_multiplier = (0.3, 2)
 
+# Historical power plant efficiency
+historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')  # https://www.eia.gov/electricity/annual/html/epa_08_01.html, U.S. Energy Information Administration, Form EIA-923, "Power Plant Operations Report," and predecessor form(s) including U.S. Energy Information Administration, Form EIA-906, "Power Plant Report;" and Form EIA-920, "Combined Heat and Power Plant Report;" Form EIA-860, "Annual Electric Generator Report."
 
 
 # Company financials
 company_financials = pd.read_csv('{}/data/processed/companies/company_financials.csv'.format(ROOT_DIR))
 
+# Bid mark-up price
+bid_mark_up = 1.0
 
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
-carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
+# carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
+carbon_price_scenario = [18]*100
+EU_ETS_COST = 13.62
+carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
+
+# carbon_price_scenario = [150]*33
+
+
+
 # Join historical and future carbon prices into dataframe for simulation purposes
 carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
 carbon_price_scenario_df = pd.DataFrame(carbon_data)
@@ -95,5 +126,9 @@ carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True
 carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
-lost_load = 6000
+# lost_load = 6000
+lost_load = 90
 
+upfront_investment_costs = 0.25
+
+years_for_agents_to_predict_forward = 7

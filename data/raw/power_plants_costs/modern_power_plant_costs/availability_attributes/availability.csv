@@ -1,0 +1,64 @@
+﻿plant_type,availability_factor,source
+Coal - CCS IGCC retro FOAK,,
+Coal - CCS ASC Oxy FOAK,,
+Coal - CCS ASC NH3 FOAK,,
+Coal - CCS IGCC FOAK,,
+Coal - CCS IGCC partial FOAK,,
+PV 1-5MW building,,
+EfW,,
+EfW CHP,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+AD,,
+AD CHP,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+ACT Standard,,
+ACT Advanced,,
+ACT CHP,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Offshore R2,0.95,https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+Offshore R3,0.95,https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+PV>5MW,0.995,https://ieeexplore.ieee.org/document/7355976
+PV 1-5MW ground,,
+Dedicated Biomass,,
+Conversions,,
+Biomass CHP,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Onshore UK>5MW,0.97,https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+Landfill gas,,
+Sewage gas,,
+Geothermal CHP,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Hydro Large Store,,
+Hydro 5-16MW,,
+Wave,,
+Tidal stream,,
+AD < 250kW,,
+Hydropower <100kW,,
+Hydropower 500-2000kW,,
+Solar 100-1000kW,,
+Solar <10kW,,
+Onshore <50kW,0.97,https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+Onshore 250-1000kW,0.97,https://pureportal.strath.ac.uk/files-asset/43185998/Carroll_etal_EWEA2015_availability_improvements_from_condition_monitoring_systems.pdf
+CCGT H Class,,
+CCGT F Class,0.926,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+CCGT CHP mode,0.93,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 600MW 500 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 600MW 2000 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 400MW 2000 hr,0.949,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 300MW 2000 hr,0.949,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 299MW 2000 hr,0.949,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 400MW 500 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 300MW 500 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 299MW 500 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 100MW 500 hr,0.964,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Gas - CCS CCGT Post FOAK,,
+Gas - CCS CCGT Retro Post FOAK,,
+Gas - CCS CCGT Pre FOAK,,
+Gas - CCS CCGT oxy FOAK,,
+Gas - CCS OCGT post FOAK,,
+Coal - CCS ASC Partial FOAK,,
+Coal - CCS ASC FOAK,,
+Coal - CCS ASC retrofit FOAK,,
+Recip Gas 2000 hr,0.943,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+RECIP GAS 500 hrs,0.947,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Nuclear - PWR FOAK,0.902,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Pumped storage,0.96,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+OCGT 100MW 2000 hr,0.949,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Recip Diesel 2000 hr,0.943,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Recip Diesel 500 hrs,0.947,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf
+Recip Diesel 90 hrs,0.947,Electricity Generation Costs and Hurdle Rates - Leigh_Fisher_Non-renewable_Generation_Cost.pdf

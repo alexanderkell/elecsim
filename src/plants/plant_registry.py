@@ -20,7 +20,7 @@ class PlantRegistry:
         :return: Object of type of power plant
         """
 
-        requires_fuel = self.check_if_fuel_required()
+        # requires_fuel = self.check_if_fuel_required()
 
         if not isinstance(requires_fuel, bool):
             # print("is not bool")
@@ -84,11 +84,11 @@ class PlantRegistry:
         elif plant_type == "nuclear":
             return True
         elif plant_type == "recip_gas":
-            return False
+            return True
         elif plant_type == "pumped_storage":
             return False
         elif plant_type == "recip_diesel":
-            return False
+            return True
         elif plant_type == "efw":
             return True
         else:

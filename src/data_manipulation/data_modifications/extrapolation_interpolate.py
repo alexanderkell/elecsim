@@ -36,3 +36,12 @@ class ExtrapolateInterpolate:
         else:
             interp = interp1d(self.x, self.y)
             return interp(point)
+
+    def min_max_extrapolate(self, point):
+        if point <= min(self.x):
+            return self.y.iloc[0]
+        elif point >= max(self.x):
+            return self.y.iloc[-1]
+        else:
+            index_position = self.x[self.x==point].index[0]
+            return self.y.iloc[index_position]

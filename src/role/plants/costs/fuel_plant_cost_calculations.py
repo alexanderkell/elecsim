@@ -158,23 +158,40 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         return carbon_costs_total
 
-    def calculate_short_run_marginal_cost(self, model):
+    def calculate_short_run_marginal_cost(self, model, genco, fuel_price = None, co2_price = None):
         """
         Calculates the short run marginal cost for a fuel power plant
         :param model: Model containing information such as current year
+        :param genco: Generation company object that requires short run marginal cost. Used to use genco price of fuel.
         :return: returns marginal cost to burn 1MWh of fuel.
         """
-        fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0])/self.efficiency
 
-        co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+        # logger.debug("Calculating short_run_marginal_cost")
 
+        modifier=0
+        if self.plant_type == 'CCGT':
+            modifier = genco.gas_price_modifier
+        elif self.plant_type == 'Coal':
+            modifier = genco.coal_price_modifier
+
+        if fuel_price is None:
+            # logger.debug("fuel_price_is_none calculating from data")
+            fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0]+modifier)/self.efficiency
+        else:
+            # logger.debug("fuel_price_is_given calculating from parenthesis")
+            fuel_cost = fuel_price/self.efficiency
+
+        if co2_price is None:
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+        else:
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
-
-        logger.debug('fuel_price: {}, fuel_cost: {}, co2_cost: {}, variable cost: {}, marginal_cost: {}, plant: {}'.format(self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1], fuel_cost, co2_cost, self.variable_o_and_m_per_mwh, marginal_cost, self.plant_type))
-
-        logger.debug('self.variable_o_and_m_per_mwh: {}, co2 price: {}'.format(self.variable_o_and_m_per_mwh, carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]))
-
+        # logger.debug('fuel_price: {}, fuel_cost: {}, co2_cost: {}, variable cost: {}, marginal_cost: {}, plant: {}'.format(self.fuel.fuel_price[self.fuel.fuel_price.Year - 1 == model.year_number - 1], fuel_cost, co2_cost, self.variable_o_and_m_per_mwh, marginal_cost, self.plant_type))
+        # logger.debug('self.variable_o_and_m_per_mwh: {}, co2 price: {}'.format(self.variable_o_and_m_per_mwh, carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]))
+        # logger.debug("calculating marginal cost")
         if isnan(marginal_cost):
             logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
-
+            raise ValueError()
         return marginal_cost
+
+

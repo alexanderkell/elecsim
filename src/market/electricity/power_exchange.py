@@ -1,13 +1,16 @@
 from itertools import chain
 
+from src.scenario.scenario_data import lost_load
+from src.market.electricity.bid import Bid
+
 import pandas as pd
 import logging
 
 logger = logging.getLogger(__name__)
 
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.agents.generation_company.gen_co import GenCo
-from src.role.market.world_plant_capacity import WorldPlantCapacity
+# from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
+# from src.agents.generation_company.gen_co import GenCo
+# from src.role.market.world_plant_capacity import WorldPlantCapacity
 
 
 
@@ -27,62 +30,41 @@ class PowerExchange:
         """
         self.model = model
         self.hold_duration_curve_prices = []
-        self.load_duration_curve_prices = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
+        self.price_duration_curve = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
 
-    def tender_bids(self, segment_hours, segment_demand):
+    def tender_bids(self, segment_hours, segment_demand, predict=False):
         """
         Function which iterates through the generator companies, requests their bids, orders them in order of price,
         and accepts bids.
         :param agents: All agents from simulation model.
         :param segment_hours: Value for number of hours particular electricity generation is required.
         :param segment_demand: Size of electricity consumption required.
+        :param predict: Boolean that states whether the bids being tendered are for predicting price duration curve or whether it is for real bids.
         :return: None
         """
         agent = self.model.schedule.agents
-        generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Select of generation company agents
+        # generator_companies = [x for x in agent if isinstance(x, GenCo)]  # Selection of generation company agents
+        generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Selection of generation company agents
 
         # self.adjust_load_duration_curve_for_renewables()
-
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
             for generation_company in generator_companies:
-                bids.append(generation_company.calculate_bids(segment_hour, segment_demand))
+                bids.append(generation_company.calculate_bids(segment_hour, predict))
             sorted_bids = self._sort_bids(bids)
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
             logger.debug("segment hour: {}".format(segment_hour))
             self._accept_bids(accepted_bids)
-            # highest_bid = accepted_bids[-1].price_per_mwh
             highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
 
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
-        self.load_duration_curve_prices = pd.DataFrame(self.hold_duration_curve_prices)
-
-    def adjust_load_duration_curve_for_renewables(self):
-        """
-        Function which adjusts the load duration curve
-        :return:
-        """
-        onshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Onshore")
-        total_onshore_capacity = [sum(onshore_plant.capacity_mw for onshore_plant in onshore_plants)]
-        onshore_capacity_factor = [get_capacity_factor("Onshore", hour) for hour in self.model.demand.segment_hours]
-
-
-        offshore_plants = WorldPlantCapacity(self.model).get_renewable_by_type("Offshore")
-        total_offshore_capacity = [sum(offshore_plant.capacity_mw for offshore_plant in offshore_plants)]
-        offshore_capacity_factor = [get_capacity_factor("Offshore", hour) for hour in self.model.demand.segment_hours]
-
-
-        pv_plants = WorldPlantCapacity(self.model).get_renewable_by_type("PV")
-        total_pv_capacity = [sum(pv_plant.capacity_mw for pv_plant in pv_plants)]
-        pv_capacity_factor = [get_capacity_factor("PV", hour) for hour in self.model.demand.segment_hours]
-
-
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_onshore_capacity, onshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_offshore_capacity, offshore_capacity_factor)]
-        self.model.demand.segment_consumption = [segment_consumption * onshore_capacity * onshore_capacity_factor for segment_consumption, onshore_capacity, onshore_capacity_factor in zip(self.model.demand.segment_consumption, total_pv_capacity, pv_capacity_factor)]
-
+        self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
+        if predict:
+            logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
+        else:
+            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
@@ -100,7 +82,6 @@ class PowerExchange:
     def _accept_bids(accepted_bids):
         # highest_accepted_bid = accepted_bids[-1].price_per_mwh
         highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
-        logger.info("Highest accepted bid price: {}".format(highest_accepted_bid))
         for bids in accepted_bids:
 
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
@@ -117,8 +98,7 @@ class PowerExchange:
         sorted_bids = sorted(bids, key=lambda x: x.price_per_mwh)
         return sorted_bids
 
-    @staticmethod
-    def _respond_to_bids(bids, segement_hour, capacity_required):
+    def _respond_to_bids(self, bids, segment_hour, capacity_required):
         """
         Response to bids based upon price and capacity required. Accepts bids in order of cheapest generator.
         Continues to accept bids until capacity is met for those hours.
@@ -131,19 +111,21 @@ class PowerExchange:
         for bid in bids:
             # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
             if capacity_required > 0 and capacity_required > bid.capacity_bid:
-                bid.accept_bid(segement_hour)
+                bid.accept_bid(segment_hour)
                 capacity_required -= bid.capacity_bid
                 accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                bid.plant.accepted_bids.append(bid)
+                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             elif bid.capacity_bid > capacity_required > 0:
-                bid.partially_accept_bid(segement_hour, capacity_required)
+                bid.partially_accept_bid(segment_hour, capacity_required)
                 capacity_required = 0
                 accepted_bids.append(bid)
-                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
+                bid.plant.accepted_bids.append(bid)
+                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
             else:
-                bid.reject_bid(segment_hour=segement_hour)
-                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.plant.plant_type,  bid.plant.name))
-
-
-
+                bid.reject_bid(segment_hour=segment_hour)
+                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
+        if capacity_required > 0:
+            accepted_bids.append(Bid(None, None, segment_hour, 0, lost_load, self.model.year_number))
         return accepted_bids
+

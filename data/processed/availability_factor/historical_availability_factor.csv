@@ -1,0 +1,16 @@
+,Year,plant_type,capacity_factor
+0,2013,Coal,0.79
+1,2014,Coal,0.89
+2,2015,Coal,0.85
+3,2016,Coal,0.87
+4,2017,Coal,0.85
+5,2013,CHP,0.69
+6,2014,CHP,0.68
+7,2015,CHP,0.66
+8,2016,CHP,0.55
+9,2017,CHP,0.56
+10,2013,combined_cycle,0.72
+11,2014,combined_cycle,
+12,2015,combined_cycle,0.64
+13,2016,combined_cycle,0.69
+14,2017,combined_cycle,0.77

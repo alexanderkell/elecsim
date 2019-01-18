@@ -9,7 +9,6 @@ File name: test_demandFactor
 Date created: 27/12/2018
 Feature: # Testing for demand factor calculations.
 """
-from unittest import TestCase
 logging.basicConfig(level=logging.DEBUG)
 
 
