@@ -1,7 +1,9 @@
 """power_plant.py: Class which represents a Power Plant"""
 
 from abc import ABC, abstractmethod
+import logging
 
+logger = logging.getLogger(__name__)
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
@@ -66,12 +68,14 @@ class PowerPlant(ABC):
 
         self.is_operating = False
 
+
         #
         # self.min_running = min_running
 
 
         # Bids
         self.accepted_bids = []
+        self.historical_bids = []
 
         self.capacity_fulfilled = {
             0.08: 0,
@@ -133,17 +137,40 @@ class PowerPlant(ABC):
     #     self.accepted_bids = []
 
 
-    def reset_plant_contract(self):
-        self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
+    # def reset_plant_contract(self):
+    #     self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
+
+    def delete_old_plant_bids(self):
+        self.historical_bids.extend(self.accepted_bids)
+        self.accepted_bids = []
+
+    def get_upfront_costs(self):
+        upfront_cost = self.capacity_mw*(self.pre_dev_cost_per_mw+self.construction_cost_per_mw) + self.infrastructure
+        return upfront_cost
 
     @abstractmethod
-    def short_run_marginal_cost(self, model):
+    def short_run_marginal_cost(self, model, genco, fuel_price, co2_price):
         pass
 
+    def get_fixed_annual_payments(self):
+        pass
+
+    def check_if_operating_in_certain_year(self, current_year, year_difference_from_model_year):
+        year_operation_begins = self.get_year_of_operation()
+        end_of_life = year_operation_begins + self.operating_period
+        year_to_check = year_difference_from_model_year + current_year
+        if year_operation_begins < year_to_check <= end_of_life:
+            return True
+        else:
+            return False
+
+    def get_year_of_operation(self):
+        year_operation_begins = self.construction_year + self.pre_dev_period + self.construction_period
+        return year_operation_begins
     def __str__(self):
         ret = "Name: {}. Type: {}. Capacity: {}.".format(self.name, self.plant_type, self.capacity_mw)
         return ret
 
     def __repr__(self):
-        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self._infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
+        return 'PowerPlant({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.name, self.plant_type, self.capacity_mw, self.construction_year, self.average_load_factor, self.pre_dev_period, self.construction_period, self.operating_period, self.pre_dev_spend_years, self.construction_spend_years, self.pre_dev_cost_per_mw, self.construction_cost_per_mw, self.infrastructure, self.fixed_o_and_m_per_mw, self.variable_o_and_m_per_mwh, self.insurance_cost_per_mw, self.connection_cost_per_mw)
 

@@ -1,5 +1,7 @@
 from src.agents.generation_company.gen_co import GenCo
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from constants import ROOT_DIR
+
 import pandas as pd
 
 
@@ -82,8 +84,9 @@ class TestGenCo:
 
     def test_genco_investment(self):
         model = Mock()
-        model.year_number = 2018
-        model.PowerExchange.load_duration_curve_prices = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/test/test_investment/dummy_load_duration_curve.csv')
+        model.year_number = 2021
+        model.step_number = 5
+        model.PowerExchange.load_duration_curve_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_prices.csv'.format(ROOT_DIR))
 
 
         plant = Mock()

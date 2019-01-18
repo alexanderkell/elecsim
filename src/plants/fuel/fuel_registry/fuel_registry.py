@@ -118,12 +118,14 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     #         raise ValueError("Both energy density and co2 density must be larger than 0")
 
 
-def plant_type_to_fuel(plant_type, construction_year):
+def plant_type_to_fuel(plant_type, construction_year=None):
     """
     Function which infers fuel type from plant plant_type.
     :return: String detailing fuel type
     """
     if plant_type == "CCGT":
+        return "Gas"
+    elif plant_type == "Recip_gas":
         return "Gas"
     elif plant_type == "Meat":
         return "Meat"
@@ -151,6 +153,8 @@ def plant_type_to_fuel(plant_type, construction_year):
         return None
     elif plant_type == "OCGT":
         return "Gas"
+    elif plant_type == "Recip_diesel":
+        return "Diesel"
     elif plant_type == "Gas oil":
         return "Diesel"
     elif plant_type == "EfW" and construction_year<=2000:
@@ -159,8 +163,19 @@ def plant_type_to_fuel(plant_type, construction_year):
         return "Waste_pre_2000"
     elif plant_type == "Pumped storage":
         return None
+    elif plant_type == "Onshore":
+        return None
+    elif plant_type == "Offshore":
+        return None
     elif plant_type == "Wind":
         return None
+    elif plant_type == "PV":
+        return None
+    elif plant_type == "Pumped_storage":
+        return None
+    elif plant_type == "Hydro":
+        return None
+
     else:
         raise ValueError("No fuel data for {}".format(plant_type))
 

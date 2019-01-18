@@ -1,5 +1,5 @@
 from src.scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand, \
-    segment_demand, load_duration_curve_diff
+    segment_demand, load_duration_curve_diff, hydro_capacity_factor
 import logging
 import pandas as pd
 
@@ -18,15 +18,17 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-@functools.lru_cache(maxsize=128)
+@functools.lru_cache(maxsize=512)
 def get_capacity_factor(renewable_type, demand_hour):
         historical_demand = historical_hourly_demand
         renewable_type = renewable_type.lower()
         capacity_data = get_capacity_data(renewable_type)
-
-        capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
-        capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,
+        if renewable_type in ['onshore', 'offshore', 'pv']:
+            capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
+            capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,
                                                                       renewable_type)
+        else:
+            capacity_factor_value = capacity_data
         return capacity_factor_value
 
 def get_capacity_data(renewable_type):
@@ -34,6 +36,8 @@ def get_capacity_data(renewable_type):
         capacity_data = wind_capacity_factor[['time', renewable_type]]
     elif renewable_type == "pv":
         capacity_data = solar_capacity_factor
+    elif renewable_type == 'hydro':
+        capacity_data = hydro_capacity_factor
     else:
         raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
     return capacity_data

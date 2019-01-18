@@ -25,7 +25,7 @@ class OrderedActivation(BaseScheduler):
         power_exchange = [agent for agent in self.agents if isinstance(agent, PowerExchange)]
 
         logging.info("Stepping agents")
-        for agent in chain(gen_cos, demand_agents, power_exchange):
+        for agent in chain(power_exchange, gen_cos, demand_agents):
             agent.step()
         self.steps += 1
         self.time += 1
