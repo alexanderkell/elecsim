@@ -6,6 +6,8 @@ from src.model.world import World
 from src.scenario import scenario_data
 import logging
 
+import pandas as pd
+
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
 
@@ -20,13 +22,15 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-logging.basicConfig(level=logging.INFO)
+pd.set_option('display.max_rows', 4000)
 
-# class TestWorld:
-#     def test_world_initialization(self):
+logging.basicConfig(level=logging.DEBUG)
+
+class TestWorld:
+    def test_world_initialization(self):
 # with PyCallGraph(output=GraphvizOutput()):
-world = World(scenario=scenario_data, initialization_year=2018)
+        world = World(scenario=scenario_data, initialization_year=2018)
 
-for i in range(32):
-    world.step()
+        for i in range(1):
+            world.step()
 

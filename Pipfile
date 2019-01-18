@@ -10,12 +10,10 @@ matplotlib = "*"
 scipy = "*"
 pytest = "*"
 sphinx = "*"
-gym = "*"
 ipykernel = "*"
 xlrd = "*"
 seaborn = "*"
 pycallgraph = "*"
-ring = "*"
 
 [dev-packages]
 

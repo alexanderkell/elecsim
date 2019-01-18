@@ -130,20 +130,21 @@ class World(Model):
         for genco in gencos:
             profitable_plants = list(self.get_profitable_plants(genco.plants))
             genco.plants = profitable_plants
-            logger.debug("genco: {}, has plants: {}".format(genco, genco.plants))
 
     def get_profitable_plants(self, plants):
             for plant in plants:
-                if self.step_number > 4 and plant.get_year_of_operation() + 4 > self.year_number:
+                if self.step_number > 7 and plant.get_year_of_operation() + 7 > self.year_number:
                 # if self.step_number > 4 and plant.construction_period+plant.pre_dev_period+plant.construction_year+4>self.year_number:
                     historic_bids = plant.historical_bids
                     # for historic_bid in historic_bids:
                     #     logger.debug("2. historic_bid: {}".format(historic_bid))
-                    years_to_look_into = list(range(self.year_number,self.year_number-5,-1))
+                    years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
                     bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
                     total_income_in_last_five_years = sum(bid.price_per_mwh for bid in bids_to_check)
                     if total_income_in_last_five_years > 0:
                         yield plant
+                    else:
+                        logger.debug("Taking plant: {} out of service.".format(plant.name))
                 else:
                     yield plant
 

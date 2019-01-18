@@ -44,7 +44,7 @@ class CalculateNPV:
 
     def get_positive_npv_plants(self):
         npv_data = self.compare_npv()
-        logger.debug("predicted npv data: \n {}".format(npv_data))
+        logger.info("predicted npv data: \n {}".format(npv_data))
 
         npv_positive = npv_data[npv_data.npv_per_mw > 0]
         return npv_positive
@@ -52,11 +52,14 @@ class CalculateNPV:
     def compare_npv(self):
         cost_list = []
 
-        for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
-            # for plant_type in ['Nuclear','CCGT']:
+        # for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
+        # for plant_type in ['Nuclear','CCGT']:
+        for plant_type in ['Recip_diesel']:
 
-            plant_cost_data = modern_plant_costs[modern_plant_costs.Type == plant_type]
+
+            plant_cost_data = modern_plant_costs[(modern_plant_costs.Type == plant_type) & (modern_plant_costs.Plant_Size>5)]
             for plant_row in plant_cost_data.itertuples():
+
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
                 dict = {"npv_per_mw": npv, "capacity": plant_row.Plant_Size, "plant_type": plant_row.Type}
                 cost_list.append(dict)
@@ -120,7 +123,7 @@ class CalculateNPV:
 
         logger.debug("npv_power_plant: {}".format(npv_power_plant))
 
-        NPVp = npv_power_plant / (power_plant.capacity_mw)
+        NPVp = npv_power_plant / (power_plant.capacity_mw * total_running_hours)
         return NPVp
 
     def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):

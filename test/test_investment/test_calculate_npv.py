@@ -38,13 +38,12 @@ class TestCalculate_npv:
         npv_calculations = CalculateNPV(model, DISCOUNT_RATE, LOOK_BACK_YEARS)
         return npv_calculations
 
-
     @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
                              [
-                                 (2018, "CCGT", 1200, 82.55488),
+                                 # (2018, "CCGT", 1200, 82.55488),
+                                 (2018, "Recip_gas", 20, 60)
                              ])
     def test_calculate_expected_cash_flow(self, calculate_latest_NPV, year, plant_type, capacity, expected_output):
-        load_duration_prices = pd.read_csv('{}/test/test_investment/dummy_load_duration_prices.csv'.format(ROOT_DIR))
 
         yearly_npv = calculate_latest_NPV.calculate_npv(plant_type, plant_size=capacity)
         logger.debug(yearly_npv)

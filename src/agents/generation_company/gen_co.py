@@ -63,7 +63,7 @@ class GenCo(Agent):
         logger.info("Stepping generation company: {}".format(self.name))
         logger.info("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        self.invest()
+        # self.invest()
         # self.reset_contracts()
         self.purchase_fuel()
 
@@ -98,13 +98,16 @@ class GenCo(Agent):
                         fuel_price_predicted = self.forecast_attribute_price(plant.fuel.fuel_type)
                         price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
                     else:
-                        price = plant.short_run_marginal_cost(self.model, self)
+                        # price = plant.short_run_marginal_cost(self.model, self)
+                        continue
+                else:
+                    price = plant.short_run_marginal_cost(self.model, self)
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
-            try:
-                marked_up_price = price * bid_mark_up
-            except:
-                marked_up_price = 99999999
+            # try:
+            marked_up_price = price * bid_mark_up
+            # except e:
+            #     marked_up_price = 99999999
             if plant.is_operating or future_plant_operating:
                 if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
@@ -143,23 +146,36 @@ class GenCo(Agent):
         return availability
 
     def invest(self):
+        lowest_upfront_cost = 0
         total_upfront_cost = 0
-        # counter =0
-        while self.money > total_upfront_cost:
+        counter =0
+        while self.money > lowest_upfront_cost:
+            counter += 1
             # if counter>3:
             #     break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
+            if counter == 1:
+                potential_plant_list = []
+                for plant_data in potential_plant_data:
+                    if not potential_plant_data:
+                        break
+                    power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
+                    potential_plant_list.append(power_plant_trial)
+                    if potential_plant_list:
+                        lowest_upfront_cost = min(plant.get_upfront_costs() * upfront_investment_costs for plant in potential_plant_list)
+                    else:
+                        break
             for plant_data in potential_plant_data:
                 # counter+=1
                 if not potential_plant_data:
                     break
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                 total_upfront_cost = power_plant_trial.get_upfront_costs() * upfront_investment_costs
-                logger.info("total_upfront_cost: {}, total money: {}, upfront_investment_costs: {}".format(total_upfront_cost, self.money, upfront_investment_costs))
+                # logger.info("total_upfront_cost: {}, total money: {}, upfront_investment_costs: {}".format(total_upfront_cost, self.money, upfront_investment_costs))
                 if self.money > total_upfront_cost:
-                    logger.info("inside if: self.money: {}, total_upfront_cost: {}".format(self.money, total_upfront_cost))
+                    # logger.info("investing in {} self.money: {}, total_upfront_cost: {}".format(power_plant_trial.name, self.money, total_upfront_cost))
                     self.plants.append(power_plant_trial)
                     self.money -= total_upfront_cost
                     break

@@ -32,6 +32,7 @@ class PredictPriceDurationCurve:
         power_ex = PowerExchange(self.model)
         power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
         predicted_price_duration_curve = power_ex.price_duration_curve
+        logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
         return predicted_price_duration_curve
 
 @lru_cache(1024)
