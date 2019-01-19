@@ -115,16 +115,13 @@ carbon_price_scenario = [10]*100
 EU_ETS_COST = 13.62
 carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
 
-# carbon_price_scenario = [150]*33
-
-
 
 # Join historical and future carbon prices into dataframe for simulation purposes
-carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
-carbon_price_scenario_df = pd.DataFrame(carbon_data)
-historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
-carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
-carbon_cost.year = pd.to_numeric(carbon_cost.year)
+# carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
+# carbon_price_scenario_df = pd.DataFrame(carbon_data)
+# historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+# carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+# carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
 # lost_load = 6000

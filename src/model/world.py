@@ -13,6 +13,7 @@ from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
+from src.scenario.scenario_data import yearly_demand_change, segment_demand_diff, segment_time, company_financials, power_plants
 import src.scenario.scenario_data
 
 
@@ -32,7 +33,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, scenario, initialization_year, carbon_price_scenario=None, demand_change=None):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
         # Set up model objects
         self.year_number = initialization_year
         self.step_number = 0
@@ -47,13 +48,13 @@ class World(Model):
         self.schedule = OrderedActivation(self)
 
         # Import company data including financials and plant data
-        plant_data = scenario.power_plants
-        financial_data = scenario.company_financials
+        plant_data = power_plants
+        financial_data = company_financials
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-        self.demand = Demand(self.unique_id_generator, scenario.segment_time, scenario.segment_demand_diff, scenario.yearly_demand_change)
+        self.demand = Demand(self.unique_id_generator, segment_time, segment_demand_diff, yearly_demand_change)
         self.unique_id_generator+=1
         self.schedule.add(self.demand)
 

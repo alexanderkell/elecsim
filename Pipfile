@@ -11,6 +11,7 @@ pytest = "*"
 sphinx = "*"
 ipykernel = "*"
 pycallgraph = "*"
+pathos = "*"
 
 [dev-packages]
 
