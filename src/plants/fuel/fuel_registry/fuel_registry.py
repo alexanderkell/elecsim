@@ -1,7 +1,7 @@
 from src.plants.fuel.fuel import Fuel
 import src.scenario.scenario_data as scenario
 from constants import GJ_TO_MW, KW_TO_MW, KG_TO_TONNES
-
+from functools import lru_cache
 
 """
 File name: fuel_registry
@@ -15,7 +15,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-
+@lru_cache()
 def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=None, mwh_to_co2e_conversion_factor=None):
     """
     Method which creates a Fuel object. Presets are defined for different fuels, and new fuels can be added

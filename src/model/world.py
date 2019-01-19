@@ -52,11 +52,22 @@ class World(Model):
         self.PowerExchange = PowerExchange(self)
         self.running = True
 
-        # Tender first bids to initialize the "price_duration_curve"
-        # self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.datacollector = DataCollector(
+            model_reporters={"CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
+                             "Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
+                             "Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
+                             "Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
+                             "PV": lambda m: self.get_capacity_of_plants(m, "PV"),
+                             "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
+                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas")
+                             }
+            # ,
+            # agent_reporters={'Money':"money"}
+        )
 
     def step(self):
         '''Advance model by one step'''
+        self.datacollector.collect(self)
         self.operate_constructed_plants()
         self.schedule.step()
         logger.info("Stepping year: {}".format(self.year_number))
@@ -68,7 +79,7 @@ class World(Model):
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.settle_gencos_financials()
         self.year_number += 1
-        self.step_number +=1
+        self.step_number += 1
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -134,14 +145,11 @@ class World(Model):
     def get_profitable_plants(self, plants):
             for plant in plants:
                 if self.step_number > 7 and plant.get_year_of_operation() + 7 > self.year_number:
-                # if self.step_number > 4 and plant.construction_period+plant.pre_dev_period+plant.construction_year+4>self.year_number:
                     historic_bids = plant.historical_bids
-                    # for historic_bid in historic_bids:
-                    #     logger.debug("2. historic_bid: {}".format(historic_bid))
                     years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
                     bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
-                    total_income_in_last_five_years = sum(bid.price_per_mwh for bid in bids_to_check)
-                    if total_income_in_last_five_years > 0:
+                    total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
+                    if total_income_in_previous_years > 0:
                         yield plant
                     else:
                         logger.debug("Taking plant: {} out of service.".format(plant.name))
@@ -171,3 +179,10 @@ class World(Model):
     def get_gencos(self):
         gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
         return gencos
+
+    @staticmethod
+    def get_capacity_of_plants(model, plant_type):
+        gencos = model.get_gencos()
+        plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
+        total_capacity = sum(plant.capacity_mw for plant in plants)
+        return total_capacity
