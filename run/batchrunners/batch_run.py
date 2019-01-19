@@ -20,3 +20,4 @@ batch_run = BatchRunner(World,
                         iterations=5,
                         max_steps=100,
                         model_reporters={"Gini": compute_gini})
+
