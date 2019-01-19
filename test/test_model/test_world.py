@@ -11,6 +11,9 @@ import pandas as pd
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
 
+import logging
+logger = logging.getLogger(__name__)
+
 """
 File name: test_world
 Date created: 01/12/2018
@@ -34,3 +37,5 @@ class TestWorld:
         for i in range(32):
             world.step()
 
+        data = world.datacollector.get_model_vars_dataframe()
+        logger.info("final data: \n {}".format(data))
