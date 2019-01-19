@@ -8,6 +8,8 @@ from src.plants.plant_registry import PlantRegistry
 from src.plants.plant_type.fuel_plant import FuelPlant
 
 import src.scenario.scenario_data as scenario
+import src.scenario.scenario_data
+
 from src.scenario.scenario_data import years_for_agents_to_predict_forward
 logger = logging.getLogger(__name__)
 
@@ -99,7 +101,7 @@ class LatestMarketData:
         elif values_required == "waste_pre_2000":
             return scenario.waste_price_pre_2000
         elif values_required == "co2":
-            return scenario.carbon_price_scenario
+            return src.scenario.scenario_data.carbon_price_scenario
         elif values_required == "demand":
             return scenario.yearly_demand_change
         else:

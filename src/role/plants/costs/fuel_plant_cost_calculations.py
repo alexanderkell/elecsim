@@ -4,9 +4,12 @@ from itertools import zip_longest
 from src.role.plants.costs.plant_cost_calculation import PlantCostCalculations
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
-from src.scenario.scenario_data import carbon_cost
+import src.scenario.scenario_data
 from math import isnan
 
+from constants import ROOT_DIR
+
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +142,8 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         if carbon_price is not None:
             carbon_taxation_years = carbon_price
         else:
+            carbon_cost = self.get_BEIS_carbon_price()
+
             year_of_beginning_operation = self.construction_year + self.pre_dev_period + self.construction_period
             carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(
                 year_of_beginning_operation + self.operating_period - 1))]
@@ -149,6 +154,8 @@ class FuelPlantCostCalculations(PlantCostCalculations):
                         zip(list(carbon_taxation_years.price), carbon_emitted)]
         return carbon_costs
 
+
+
     def _carbon_cost_total(self, carbon_costs):
         """
         Calculates the total cost of carbon over the lifetime of the power plant.
@@ -158,7 +165,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         return carbon_costs_total
 
-    def calculate_short_run_marginal_cost(self, model, genco, fuel_price = None, co2_price = None):
+    def calculate_short_run_marginal_cost(self, model, genco, fuel_price=None, co2_price=None):
         """
         Calculates the short run marginal cost for a fuel power plant
         :param model: Model containing information such as current year
@@ -166,9 +173,16 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :return: returns marginal cost to burn 1MWh of fuel.
         """
 
+        carbon_price_scenario = src.scenario.scenario_data.carbon_price_scenario
         # logger.debug("Calculating short_run_marginal_cost")
+        # Join historical and future carbon prices into dataframe for simulation purposes
+        carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
+        carbon_price_scenario_df = pd.DataFrame(carbon_data)
+        historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+        carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+        carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
-        modifier=0
+        modifier = 0
         if self.plant_type == 'CCGT':
             modifier = genco.gas_price_modifier
         elif self.plant_type == 'Coal':
@@ -176,13 +190,15 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         if fuel_price is None:
             # logger.debug("fuel_price_is_none calculating from data")
-            fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0]+modifier)/self.efficiency
+            fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[
+                             0] + modifier) / self.efficiency
         else:
             # logger.debug("fuel_price_is_given calculating from parenthesis")
-            fuel_cost = fuel_price/self.efficiency
+            fuel_cost = fuel_price / self.efficiency
 
         if co2_price is None:
-            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
+                       carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
         else:
             co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
@@ -190,8 +206,21 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         # logger.debug('self.variable_o_and_m_per_mwh: {}, co2 price: {}'.format(self.variable_o_and_m_per_mwh, carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]))
         # logger.debug("calculating marginal cost")
         if isnan(marginal_cost):
-            logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
+            logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(
+                self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
             raise ValueError()
         return marginal_cost
 
-
+    def get_BEIS_carbon_price(self):
+        carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58,
+                                 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50,
+                                 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75,
+                                 200.00]  # Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
+        carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))],
+                       'price': carbon_price_scenario}
+        carbon_price_scenario_df = pd.DataFrame(carbon_data)
+        historical_carbon_price = pd.read_csv(
+            ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+        carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+        carbon_cost.year = pd.to_numeric(carbon_cost.year)
+        return carbon_cost

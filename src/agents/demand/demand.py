@@ -1,5 +1,8 @@
 from mesa import Agent
 
+# from src.scenario.scenario_data import yearly_demand_change
+import src.scenario.scenario_data
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -14,7 +17,7 @@ __email__ = "Alexander@Kell.es"
 
 class Demand(Agent):
 
-    def __init__(self, unique_id, segment_hours, segment_consumption, yearly_demand_change):
+    def __init__(self, unique_id, segment_hours, segment_consumption, yearly_demand_change1):
         """
         An agent representing UK electricity demand
         :param segment_hours: A series representing the load duration curve
@@ -23,13 +26,13 @@ class Demand(Agent):
 
         self.segment_hours = segment_hours
         self.segment_consumption = segment_consumption
-        self.yearly_demand_change = yearly_demand_change
-
+        self.yearly_demand_change = src.scenario.scenario_data.yearly_demand_change
         self.years_from_start = 0
 
     def step(self):
         logger.debug("Stepping demand")
         self.segment_consumption = [i * self.yearly_demand_change[self.years_from_start] for i in self.segment_consumption]
         self.years_from_start += 1
+
         # load to change each year due to certain scenario
 
