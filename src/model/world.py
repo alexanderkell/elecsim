@@ -118,7 +118,7 @@ class World(Model):
             elif plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
                 yield plant
             else:
-                logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                         plant.construction_year))
                 continue
 
