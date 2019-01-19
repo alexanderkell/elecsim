@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "77f58553dbc98a603cd3678bdc9ccf40c76d687adfd8f48995f79dd13b311cdd"
+            "sha256": "9c47e388beea779d6ff86d4fc6594d4097013d6bccef76b4a99f067f78975369"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -120,6 +120,12 @@
                 "sha256:702a91ade2968a82beb0db1e0766a6a273f33d4616a6ce8cde475d8e09853b20"
             ],
             "version": "==0.5.0"
+        },
+        "dill": {
+            "hashes": [
+                "sha256:624dc244b94371bb2d6e7f40084228a2edfff02373fe20e018bef1ee92fdd5b3"
+            ],
+            "version": "==0.2.8.2"
         },
         "docutils": {
             "hashes": [
@@ -299,6 +305,12 @@
             ],
             "version": "==5.0.0"
         },
+        "multiprocess": {
+            "hashes": [
+                "sha256:985d2faa28def907e303b4222b01281d2dcd3baa0fe53a4a0178ac63be62e5c6"
+            ],
+            "version": "==0.70.6.1"
+        },
         "nbconvert": {
             "hashes": [
                 "sha256:08d21cf4203fabafd0d09bbd63f06131b411db8ebeede34b0fd4be4548351779",
@@ -400,6 +412,13 @@
             ],
             "version": "==0.3.1"
         },
+        "pathos": {
+            "hashes": [
+                "sha256:69486cfe8c9fbd028395df445e4205ea3001d7ca5608d8d0b67b67ce98bb8892"
+            ],
+            "index": "pypi",
+            "version": "==0.2.2.1"
+        },
         "pexpect": {
             "hashes": [
                 "sha256:2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba",
@@ -422,12 +441,24 @@
             ],
             "version": "==0.8.1"
         },
+        "pox": {
+            "hashes": [
+                "sha256:9c8955d9beed4f9fd509587d17820efe6bc9f9b4a1abe581642aeed9a41784ea"
+            ],
+            "version": "==0.2.4"
+        },
         "poyo": {
             "hashes": [
                 "sha256:c34a5413191210ed564640510e9c4a4ba3b698746d6b454d46eb5bfb30edcd1d",
                 "sha256:d1c317054145a6b1ca0608b5e676b943ddc3bfd671f886a2fe09288b98221edb"
             ],
             "version": "==0.4.2"
+        },
+        "ppft": {
+            "hashes": [
+                "sha256:7e1aa0d74f832f0528234890165f3e64d34b3103ec1db7c93c9e7f2ad8cc18d2"
+            ],
+            "version": "==1.6.4.8"
         },
         "prometheus-client": {
             "hashes": [
