@@ -13,6 +13,9 @@ from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
+import src.scenario.scenario_data
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,11 +32,17 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, scenario, initialization_year):
+    def __init__(self, scenario, initialization_year, carbon_price_scenario=None, demand_change=None):
         # Set up model objects
         self.year_number = initialization_year
         self.step_number = 0
         self.unique_id_generator = 0
+
+        if carbon_price_scenario:
+            src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario
+
+        if demand_change:
+            src.scenario.scenario_data.yearly_demand_change = demand_change
 
         self.schedule = OrderedActivation(self)
 
