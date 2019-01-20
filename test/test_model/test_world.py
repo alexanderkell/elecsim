@@ -32,7 +32,7 @@ logging.basicConfig(level=logging.INFO)
 class TestWorld:
     def test_world_initialization(self):
 # with PyCallGraph(output=GraphvizOutput()):
-        world = World(scenario=scenario_data, initialization_year=2018)
+        world = World(initialization_year=2018)
 
         for i in range(32):
             world.step()

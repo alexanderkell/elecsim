@@ -16,6 +16,7 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_pl
 from src.scenario.scenario_data import yearly_demand_change, segment_demand_diff, segment_time, company_financials, power_plants
 import src.scenario.scenario_data
 
+import datetime as dt
 
 logger = logging.getLogger(__name__)
 
@@ -33,17 +34,32 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
+    # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
+    def __init__(self, initialization_year, carbon_price_scenario, demand_change, number_of_steps=None):
+
         # Set up model objects
         self.year_number = initialization_year
         self.step_number = 0
         self.unique_id_generator = 0
 
+        self.max_number_of_steps = number_of_steps
+        # src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
+        # self.carbon_scenario_name = carbon_price_scenario[0]
+        #
+        # src.scenario.scenario_data.yearly_demand_change = demand_change[1:]
+        # self.demand_change_name = demand_change[0]
+
         if carbon_price_scenario:
-            src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario
+            src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
+            self.carbon_scenario_name = carbon_price_scenario[0]
+        else:
+            self.carbon_scenario_name = "none"
 
         if demand_change:
-            src.scenario.scenario_data.yearly_demand_change = demand_change
+            src.scenario.scenario_data.yearly_demand_change = demand_change[1:]
+            self.demand_change_name = demand_change[0]
+        else:
+            self.demand_change_name = "none"
 
         self.schedule = OrderedActivation(self)
 
@@ -77,12 +93,13 @@ class World(Model):
 
     def step(self):
         '''Advance model by one step'''
-        self.datacollector.collect(self)
         self.operate_constructed_plants()
         self.schedule.step()
+
+
         logger.info("Stepping year: {}".format(self.year_number))
-        logger.info("number of plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants])))
-        logger.info("number of operating plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants if plant.is_operating == True])))
+        # logger.info("number of plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants])))
+        # logger.info("number of operating plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants if plant.is_operating == True])))
 
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plant()
@@ -90,6 +107,12 @@ class World(Model):
         self.settle_gencos_financials()
         self.year_number += 1
         self.step_number += 1
+
+        self.datacollector.collect(self)
+
+        if self.step_number == self.max_number_of_steps:
+            self.datacollector.get_model_vars_dataframe().to_csv("demand_{}-carbon_{}-time_{}.csv".format(self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
+
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -196,3 +219,4 @@ class World(Model):
         plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
         total_capacity = sum(plant.capacity_mw for plant in plants)
         return total_capacity
+
