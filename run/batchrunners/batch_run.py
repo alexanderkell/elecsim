@@ -25,10 +25,8 @@ number_of_steps = 33
 
 fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
-variable_params = {"carbon_price_scenario": [[10]*50],
-                   # "demand_change": [[1.01] * 100, [0.99] * 100]
+variable_params = {"carbon_price_scenario": [[18]*50, [100]*50],
                   "demand_change": [[1.01]*50, [0.995]*50]
-
                    }
 
 batch_run = BatchRunnerMP(World,
