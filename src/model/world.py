@@ -6,6 +6,8 @@ import numpy as np
 from mesa import Model
 from mesa.datacollection import DataCollector
 
+from constants import ROOT_DIR
+
 from src.plants.plant_registry import PlantRegistry
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
@@ -51,13 +53,13 @@ class World(Model):
 
         if carbon_price_scenario:
             src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
-            self.carbon_scenario_name = carbon_price_scenario[0]
+            self.carbon_scenario_name = carbon_price_scenario[0].replace(".",'')
         else:
             self.carbon_scenario_name = "none"
 
         if demand_change:
             src.scenario.scenario_data.yearly_demand_change = demand_change[1:]
-            self.demand_change_name = demand_change[0]
+            self.demand_change_name = demand_change[0].replace(".",'')
         else:
             self.demand_change_name = "none"
 
@@ -111,8 +113,7 @@ class World(Model):
         self.datacollector.collect(self)
 
         if self.step_number == self.max_number_of_steps:
-            self.datacollector.get_model_vars_dataframe().to_csv("demand_{}-carbon_{}-time_{}.csv".format(self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
-
+            self.datacollector.get_model_vars_dataframe().to_csv("{}{}/demand_{}-carbon_{}-time_{}.csv".format(ROOT_DIR,"/run/batchrunners/scenarios/data",self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
 
     def initialize_gencos(self, financial_data, plant_data):
         """
