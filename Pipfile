@@ -12,6 +12,8 @@ sphinx = "*"
 ipykernel = "*"
 pycallgraph = "*"
 pathos = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [dev-packages]
 
