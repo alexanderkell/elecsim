@@ -74,7 +74,7 @@ solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/nin
 hydro_capacity_factor = 0.456 # http://www.osemosys.org/uploads/1/8/5/0/18504136/hydropower.pdf
 
 # Availability factors (from Source: AESO 2017 Annual Market Statistics)
-historical_availability_factor = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/availability_factor/historical_availability_factor.csv')
+historical_availability_factor = pd.read_csv('{}/data/processed/availability_factor/historical_availability_factor.csv'.format(ROOT_DIR))
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
@@ -89,7 +89,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
-power_plants = power_plants[:50]
+# power_plants = power_plants[:50]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
@@ -98,7 +98,7 @@ power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/
 o_and_m_multiplier = (0.3, 2)
 
 # Historical power plant efficiency
-historical_fuel_plant_efficiency = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv')  # https://www.eia.gov/electricity/annual/html/epa_08_01.html, U.S. Energy Information Administration, Form EIA-923, "Power Plant Operations Report," and predecessor form(s) including U.S. Energy Information Administration, Form EIA-906, "Power Plant Report;" and Form EIA-920, "Combined Heat and Power Plant Report;" Form EIA-860, "Annual Electric Generator Report."
+historical_fuel_plant_efficiency = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/efficiency/historical_fuel_plant_efficiency.csv'.format(ROOT_DIR))  # https://www.eia.gov/electricity/annual/html/epa_08_01.html, U.S. Energy Information Administration, Form EIA-923, "Power Plant Operations Report," and predecessor form(s) including U.S. Energy Information Administration, Form EIA-906, "Power Plant Report;" and Form EIA-920, "Combined Heat and Power Plant Report;" Form EIA-860, "Annual Electric Generator Report."
 
 
 # Company financials
