@@ -53,13 +53,13 @@ class World(Model):
 
         if carbon_price_scenario:
             src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
-            self.carbon_scenario_name = carbon_price_scenario[0].replace(".",'')
+            self.carbon_scenario_name = str(carbon_price_scenario[0]).replace(".",'')
         else:
             self.carbon_scenario_name = "none"
 
         if demand_change:
             src.scenario.scenario_data.yearly_demand_change = demand_change[1:]
-            self.demand_change_name = demand_change[0].replace(".",'')
+            self.demand_change_name = str(demand_change[0]).replace(".",'')
         else:
             self.demand_change_name = "none"
 
