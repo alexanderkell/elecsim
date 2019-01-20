@@ -1,3 +1,8 @@
+import os.path
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+
 from mesa.batchrunner import BatchRunnerMP
 from mesa.datacollection import DataCollector
 import pandas as pd
@@ -21,21 +26,25 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-number_of_steps = 33
 
-fixed_params = {"initialization_year": 2018,
+if __name__ == '__main__':
+
+    number_of_steps = 33
+
+    fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
-variable_params = {"carbon_price_scenario": [[18]*50, [100]*50],
+    variable_params = {"carbon_price_scenario": [[18]*50, [100]*50, [200]*50],
                   "demand_change": [[1.01]*50, [0.995]*50]
                    }
 
-batch_run = BatchRunnerMP(World,
+    batch_run = BatchRunnerMP(World,
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
                           iterations=1,
                           max_steps=number_of_steps, nr_processes=3)
 
-if __name__ == '__main__':
+
+
     batch_run.run_all()
     # br_df = batch_run.get_model_vars_dataframe()
     # br_step_data = pd.DataFrame()
