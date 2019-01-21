@@ -29,19 +29,19 @@ __email__ = "alexander@kell.es"
 
 if __name__ == '__main__':
 
-    number_of_steps = 33
+    number_of_steps = 40
 
     fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
-    variable_params = {"carbon_price_scenario": [[18]*50, [100]*50, [200]*50],
-                  "demand_change": [[1.01]*50, [0.995]*50]
+    variable_params = {"carbon_price_scenario": [[18]*50,[20]*50,[25]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50, [100]*50, [125]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
+                  "demand_change": [[1.01]*50, [0.990]*50]
                    }
 
     batch_run = BatchRunnerMP(World,
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
                           iterations=1,
-                          max_steps=number_of_steps, nr_processes=3)
+                          max_steps=number_of_steps, nr_processes=31)
 
 
 
