@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
-    variable_params = {"carbon_price_scenario": [[18]*50, [100]*50, [200]*50],
+    variable_params = {"carbon_price_scenario": [[18]*50, [100]*50, list(range(101, 18.5, -2.0625))],
                   "demand_change": [[1.01]*50]
                    }
 
