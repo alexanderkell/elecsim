@@ -1,9 +1,11 @@
 from src.market.electricity.power_exchange import PowerExchange
 from src.role.market.latest_market_data import LatestMarketData
-from src.scenario.scenario_data import years_for_agents_to_predict_forward
+from src.scenario.scenario_data import years_for_agents_to_predict_forward, lost_load
+
 
 from functools import lru_cache
 
+import numpy as np
 import logging
 logger = logging.getLogger(__name__)
 
@@ -32,6 +34,24 @@ class PredictPriceDurationCurve:
         power_ex = PowerExchange(self.model)
         power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
         predicted_price_duration_curve = power_ex.price_duration_curve
+
+        # # if predicted_price_duration_curve[(predicted_price_duration_curve.accepted_price==6000).any(axis=1)]:
+        # if all(predicted_price_duration_curve.accepted_price==lost_load):
+        #     return predicted_price_duration_curve
+        # if any(predicted_price_duration_curve.accepted_price==lost_load):
+        #     # training_data = predicted_price_duration_curve[predicted_price_duration_curve.accepted_price != lost_load]
+        #     # to_predict_data = predicted_price_duration_curve[predicted_price_duration_curve.accepted_price == lost_load]
+        #     # training_data.apply(lambda x: np.polyfit(x.Index, x.accepted_price, 3))
+        #     try:
+        #         predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(lost_load,np.nan)
+        #         predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=3)
+        #         logger.info("to_interpolate_price_curve: {}".format(predicted_price_duration_curve))
+        #         p = np.poly1d(np.polyfit(predicted_price_duration_curve.index, predicted_price_duration_curve.segment_demand,3))
+        #         extrapolated = p(predicted_price_duration_curve.index)
+        #         logger.info("extrapolated: {}".format(extrapolated))
+        #     except:
+        #         pass
+
         logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
         return predicted_price_duration_curve
 

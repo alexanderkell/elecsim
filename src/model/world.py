@@ -37,7 +37,7 @@ class World(Model):
     """
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario, demand_change, number_of_steps=None):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None):
 
         # Set up model objects
         self.year_number = initialization_year
@@ -113,7 +113,7 @@ class World(Model):
         self.datacollector.collect(self)
 
         if self.step_number == self.max_number_of_steps:
-            self.datacollector.get_model_vars_dataframe().to_csv("{}{}/demand_{}-carbon_{}-time_{}.csv".format(ROOT_DIR,"/run/batchrunners/scenarios/data",self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
+            self.datacollector.get_model_vars_dataframe().to_csv("{}{}/demand_{}-carbon_{}-datetime_{}.csv".format(ROOT_DIR,"/run/batchrunners/scenarios/data",self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
 
     def initialize_gencos(self, financial_data, plant_data):
         """
