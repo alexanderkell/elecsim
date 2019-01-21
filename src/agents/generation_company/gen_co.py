@@ -149,7 +149,7 @@ class GenCo(Agent):
         lowest_upfront_cost = 0
         total_upfront_cost = 0
         counter =0
-        while self.money > lowest_upfront_cost:
+        while 0.25 * self.money > lowest_upfront_cost:
             counter += 1
             # if counter>3:
             #     break
