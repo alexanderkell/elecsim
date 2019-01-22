@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # variable_params = {"carbon_price_scenario": [[20]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50,[95]*50, [100]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
     #               "demand_change": [[1.01]*50, [0.990]*50]
     #                }
-    variable_params = {"carbon_price_scenario": [[20]*50,[90]*50],
+    variable_params = {"carbon_price_scenario": [[90]*50],
                   "demand_change": [[1.01]*50]
                    }
 
@@ -49,10 +49,4 @@ if __name__ == '__main__':
 
 
     batch_run.run_all()
-    # br_df = batch_run.get_model_vars_dataframe()
-    # br_step_data = pd.DataFrame()
-    # for i in range(len(br_df["Data Collector"])):
-    #     if isinstance(br_df["Data Collector"][i], DataCollector):
-    #         i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
-    #         br_step_data = br_step_data.append(i_run_data, ignore_index=True)
-    # br_step_data.to_csv("BankReservesModel_Step_Data.csv")
+
