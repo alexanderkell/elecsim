@@ -173,7 +173,7 @@ class GenCo(Agent):
                 total_upfront_cost = power_plant_trial.get_upfront_costs() * upfront_investment_costs
                 # logger.info("total_upfront_cost: {}, total money: {}, upfront_investment_costs: {}".format(total_upfront_cost, self.money, upfront_investment_costs))
                 if self.money > total_upfront_cost:
-                    # logger.info("investing in {} self.money: {}, total_upfront_cost: {}".format(power_plant_trial.name, self.money, total_upfront_cost))
+                    logger.info("investing in {} self.money: {}, total_upfront_cost: {}".format(power_plant_trial.plant_type, self.money, total_upfront_cost))
                     self.plants.append(power_plant_trial)
                     self.money -= total_upfront_cost
                     break

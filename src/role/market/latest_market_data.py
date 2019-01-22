@@ -4,6 +4,12 @@ from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel, fuel
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.plants.plant_registry import PlantRegistry
 
+import warnings
+
+warnings.filterwarnings('error')
+
+import scipy.optimize
+import numpy as np
 
 from src.plants.plant_type.fuel_plant import FuelPlant
 
@@ -56,20 +62,20 @@ class LatestMarketData:
         years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
         variable_data = self._get_variable_data(value_required)
 
-        regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
-
-        next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
+        regression = _get_yearly_change_for_regression(variable_data, years_for_regression)
+        if value_required != "demand":
+            next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
+        else:
+            next_value = fit_exponential_function(regression, years_to_look_back, years_to_look_forward)
         return next_value
+
+
 
     # def agent_forecast_demand(self, years_to_look_back, years_to_predict_forward):
     #     years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
     #     scenario.yearly_demand_change
 
-    @staticmethod
-    def _get_yearly_change_for_regression(variable_data, years_for_regression):
 
-        regression = [variable_data[i] if i > 0 else variable_data[0] for i in years_for_regression]
-        return regression
 
 
     @staticmethod
@@ -108,4 +114,25 @@ class LatestMarketData:
             raise ValueError("Could not find {}".format(values_required))
 
 
+def _get_yearly_change_for_regression(variable_data, years_for_regression):
 
+    regression = [variable_data[i] if i > 0 else variable_data[0] for i in years_for_regression]
+    return regression
+
+def fit_exponential_function(regression, years_to_look_back, years_to_look_forward):
+    def exponential_func(x, a, b, c):
+        return a * np.exp(b * x) + c
+
+    regression = np.array(regression)
+
+
+    x = np.array(list(range(1,years_to_look_back+1)))
+    y = exponential_func(regression, 2.5, 1.3, 0.5)
+    try:
+        popt, pcov = scipy.optimize.curve_fit(exponential_func, x, regression)
+    except Warning:
+        logger.warning("OptimizeWarning: Covariance of the parameters could not be estimated, using linear regression instead")
+        regression = _get_yearly_change_for_regression("demand", years_to_look_back)
+        next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
+        return next_value
+    return exponential_func(np.array(years_to_look_forward), *popt)
