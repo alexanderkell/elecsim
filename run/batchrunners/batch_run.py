@@ -29,7 +29,7 @@ __email__ = "alexander@kell.es"
 
 if __name__ == '__main__':
 
-    number_of_steps = 40
+    number_of_steps = 35
 
     fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     batch_run = BatchRunnerMP(World,
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
-                          iterations=5,
+                          iterations=1,
                           max_steps=number_of_steps, nr_processes=2)
 
 

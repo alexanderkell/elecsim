@@ -146,7 +146,8 @@ class GenCo(Agent):
         lowest_upfront_cost = 0
         total_upfront_cost = 0
         counter =0
-        while 0.25 * self.money > lowest_upfront_cost:
+        total_capacity = 0
+        while self.money > lowest_upfront_cost and total_capacity < 1500:
             counter += 1
             # if counter>3:
             #     break
@@ -176,6 +177,7 @@ class GenCo(Agent):
                     self.plants.append(power_plant_trial)
                     self.money -= total_upfront_cost
                     break
+            total_capacity += power_plant_trial.capacity_mw
 
     def dismantle_old_plants(self):
         """
