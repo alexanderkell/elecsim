@@ -3,7 +3,9 @@ from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_pl
 from src.agents.generation_company.gen_co import GenCo
 import numpy as np
 from src.scenario.scenario_data import segment_demand, segment_time
-
+from src.role.investment.predict_load_duration_prices import estimate_lost_load_price
+import pandas as pd
+from src.scenario.scenario_data import lost_load
 """
 File name: test_predictLoadDuration
 Date created: 11/01/2019
@@ -63,3 +65,49 @@ class TestPredictLoadDuration:
         assert predicted_price_duration_curve.accepted_price.iloc[7] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))
         assert predicted_price_duration_curve.accepted_price.iloc[8] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))
         assert predicted_price_duration_curve.accepted_price.iloc[9] == pytest.approx(plant_with_highest_o_m.variable_o_and_m_per_mwh + 18.977/plant_with_highest_o_m.efficiency+25.085*plant_with_highest_o_m.fuel.mwh_to_co2e_conversion_factor*(1/plant_with_highest_o_m.efficiency))
+
+
+
+    def test_estimate_lost_load_price(self):
+        price_duration = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/test/test_investment/test_predicted_price_duration_curve_with_nan.csv')
+        price_duration = price_duration.replace(np.nan,lost_load)
+        print(price_duration.accepted_price)
+        print(price_duration.segment_demand)
+        half_nans = estimate_lost_load_price(price_duration)
+        assert half_nans.loc[9,"accepted_price"] == pytest.approx(78.0729)
+        assert half_nans.loc[10,"accepted_price"] == pytest.approx(79.8156)
+        assert half_nans.loc[11,"accepted_price"] == pytest.approx(81.3564)
+        assert half_nans.loc[19,"accepted_price"] == pytest.approx(122.22)
+        assert half_nans.loc[8,"accepted_price"] == pytest.approx(81.527233)
+
+
+    def test_estimate_lost_load_price_single_nan(self):
+        price_duration = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/test/test_investment/test_predicted_price_duration_curve_with_single_nan.csv')
+        price_duration = price_duration.replace(np.nan,lost_load)
+        print(price_duration.accepted_price)
+        print(price_duration.segment_demand)
+        half_nans = estimate_lost_load_price(price_duration)
+        print(half_nans)
+
+        assert half_nans.loc[9,"accepted_price"] == pytest.approx(55.818691)
+        assert half_nans.loc[10,"accepted_price"] == pytest.approx(55.818691)
+        assert half_nans.loc[11,"accepted_price"] == pytest.approx(55.818691)
+        assert half_nans.loc[19,"accepted_price"] == pytest.approx(55.818691)
+        assert half_nans.loc[0,"accepted_price"] == pytest.approx(55.818691)
+
+    def test_estimate_lost_load_price_all_nan(self):
+        price_duration = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/test/test_investment/test_predicted_price_duration_curve_with_all_nan.csv')
+        price_duration = price_duration.replace(np.nan,lost_load)
+        print(price_duration.accepted_price)
+        print(price_duration.segment_demand)
+        half_nans = estimate_lost_load_price(price_duration)
+        print(half_nans)
+
+        assert half_nans.loc[9,"accepted_price"] == pytest.approx(lost_load)
+        assert half_nans.loc[10,"accepted_price"] == pytest.approx(lost_load)
+        assert half_nans.loc[11,"accepted_price"] == pytest.approx(lost_load)
+        assert half_nans.loc[19,"accepted_price"] == pytest.approx(lost_load)
+        assert half_nans.loc[0,"accepted_price"] == pytest.approx(lost_load)
+
+
+
