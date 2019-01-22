@@ -46,7 +46,5 @@ if __name__ == '__main__':
                           iterations=1,
                           max_steps=number_of_steps, nr_processes=2)
 
-
-
     batch_run.run_all()
 
