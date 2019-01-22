@@ -104,10 +104,7 @@ class GenCo(Agent):
                     price = plant.short_run_marginal_cost(self.model, self)
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
-            # try:
             marked_up_price = price * bid_mark_up
-            # except e:
-            #     marked_up_price = 99999999
             if plant.is_operating or future_plant_operating:
                 if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
@@ -149,7 +146,7 @@ class GenCo(Agent):
         lowest_upfront_cost = 0
         total_upfront_cost = 0
         counter =0
-        while self.money > lowest_upfront_cost:
+        while 0.25 * self.money > lowest_upfront_cost:
             counter += 1
             # if counter>3:
             #     break
