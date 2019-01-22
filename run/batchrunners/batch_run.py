@@ -33,15 +33,18 @@ if __name__ == '__main__':
 
     fixed_params = {"initialization_year": 2018,
                 "number_of_steps": number_of_steps}
-    variable_params = {"carbon_price_scenario": [[20]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50,[95]*50, [100]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
-                  "demand_change": [[1.01]*50, [0.990]*50]
+    # variable_params = {"carbon_price_scenario": [[20]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50,[95]*50, [100]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
+    #               "demand_change": [[1.01]*50, [0.990]*50]
+    #                }
+    variable_params = {"carbon_price_scenario": [[20]*50,[90]*50],
+                  "demand_change": [[1.01]*50]
                    }
 
     batch_run = BatchRunnerMP(World,
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
                           iterations=5,
-                          max_steps=number_of_steps, nr_processes=62)
+                          max_steps=number_of_steps, nr_processes=2)
 
 
 
