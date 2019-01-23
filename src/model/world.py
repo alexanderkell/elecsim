@@ -88,7 +88,9 @@ class World(Model):
                              "Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
                              "PV": lambda m: self.get_capacity_of_plants(m, "PV"),
                              "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
-                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas")
+                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
+                             "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
+                             "total_genco_wealth:": lambda m: self.get_genco_wealth(m)
                              }
 
         )
@@ -113,7 +115,7 @@ class World(Model):
         self.datacollector.collect(self)
 
         if self.step_number == self.max_number_of_steps:
-            directory = "{}{}{}/".format(ROOT_DIR,"/run/batchrunners/scenarios/data",self.data_folder)
+            directory = "{}{}{}/".format(ROOT_DIR,"/run/batchrunners/scenarios/data/",self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
             self.datacollector.get_model_vars_dataframe().to_csv("{}/demand_{}-carbon_{}-datetime_{}.csv".format(directory, self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
@@ -230,3 +232,15 @@ class World(Model):
         total_capacity = sum(plant.capacity_mw for plant in plants)
         return total_capacity
 
+    @staticmethod
+    def get_current_carbon_tax(model):
+        carbon_tax = src.scenario.scenario_data.carbon_price_scenario[model.step_number]
+        return carbon_tax
+
+    @staticmethod
+    def get_genco_wealth(model):
+        gencos = model.get_gencos
+        total_wealth = 0
+        for genco in gencos:
+            total_wealth += genco.money
+        return total_wealth
