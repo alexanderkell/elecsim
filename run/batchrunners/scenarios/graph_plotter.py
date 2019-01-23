@@ -30,7 +30,7 @@ if __name__ == '__main__':
         scenario_results = pd.read_csv(file_name,dtype=np.float64)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
-        # logger.info("{} \n {}".format(file_name ,scenario_results))
+        logger.info("Plotting: {}".format(file_name))
         scenario_results_long = pd.melt(scenario_results, id_vars='Unnamed: 0', value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear',
        'Recip_gas'])
         plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=scenario_results_long).set_title(file_name)
