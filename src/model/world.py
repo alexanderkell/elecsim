@@ -89,8 +89,7 @@ class World(Model):
                              "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
                              "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas")
                              }
-            # ,
-            # agent_reporters={'Money':"money"}
+
         )
 
     def step(self):
@@ -104,7 +103,7 @@ class World(Model):
         # logger.info("number of operating plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants if plant.is_operating == True])))
 
         self.dismantle_old_plants()
-        self.dismantle_unprofitable_plant()
+        self.dismantle_unprofitable_plants()
         self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.settle_gencos_financials()
         self.year_number += 1
@@ -168,17 +167,17 @@ class World(Model):
             plants_filtered = list(self.get_running_plants(genco.plants))
             genco.plants = plants_filtered
 
-    def dismantle_unprofitable_plant(self):
+    def dismantle_unprofitable_plants(self):
 
         gencos = self.get_gencos()
 
         for genco in gencos:
-            profitable_plants = list(self.get_profitable_plants(genco.plants))
+            profitable_plants = list(self.get_plants_that_have_had_income(genco.plants))
             genco.plants = profitable_plants
 
-    def get_profitable_plants(self, plants):
+    def get_plants_that_have_had_income(self, plants):
             for plant in plants:
-                if self.step_number > 7 and plant.get_year_of_operation() + 7 > self.year_number:
+                if (self.step_number) > 7 and (plant.get_year_of_operation() + 7 < self.year_number):
                     historic_bids = plant.historical_bids
                     years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
                     bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
@@ -189,6 +188,12 @@ class World(Model):
                         logger.debug("Taking plant: {} out of service.".format(plant.name))
                 else:
                     yield plant
+
+    def get_profitable_plants(self, plants):
+        for plant in plants:
+            if self.step_number > 7 and plant.get_year_of_operation() + 7 > self.year_number:
+                historic_bids = plant.historical_bids
+                pass
 
     def operate_constructed_plants(self):
 

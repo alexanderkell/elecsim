@@ -108,31 +108,7 @@ class PowerPlant(ABC):
     # def infrastructure(self, value):
     #     self._infrastructure = value * constants.KW_TO_MW
 
-    # def __init__(self, name, constructionStartTime, min_running, lifetime, down_payment, ann_cost, depreciation, operating_cost, capacity, construction_time, carbon_emissions, efficiency):
-    #     # Fixed definitions
-    #
-    #     #
-    #     self.name = name
-    #
-    #     # Construction details
-    #     self.constructionStartTime = constructionStartTime
-    #
-    #
-    #     self.min_running = min_running
-    #     self.lifetime = lifetime
-    #     self.down_payment = down_payment
-    #     self.ann_cost = ann_cost
-    #     self.depreciation = depreciation
-    #     self.operating_cost = operating_cost
-    #     self.capacity = capacity
-    #     self.construction_time = construction_time
-    #     self.efficiency = efficiency
-    #
-    #
-    #     # Variable definitions
-    #     self.capacity_fulfilled = 0
-    #     self.CO2_emissions = carbon_emissions
-    #
+
     #     # Bids
     #     self.accepted_bids = []
 
