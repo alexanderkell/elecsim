@@ -239,7 +239,7 @@ class World(Model):
 
     @staticmethod
     def get_genco_wealth(model):
-        gencos = model.get_gencos
+        gencos = model.get_gencos()
         total_wealth = 0
         for genco in gencos:
             total_wealth += genco.money
