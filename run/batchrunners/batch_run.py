@@ -31,7 +31,7 @@ __email__ = "alexander@kell.es"
 
 
 if __name__ == '__main__':
-    data_folder = sys.argv[0]
+    data_folder = sys.argv[1]
     number_of_steps = 38
 
     fixed_params = {"initialization_year": 2013,
@@ -49,7 +49,7 @@ if __name__ == '__main__':
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
                           iterations=2,
-                          max_steps=number_of_steps, nr_processes=63)
+                          max_steps=number_of_steps, nr_processes=1)
 
     batch_run.run_all()
 
