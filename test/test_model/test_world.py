@@ -34,7 +34,7 @@ class TestWorld:
 # with PyCallGraph(output=GraphvizOutput()):
         world = World(initialization_year=2018)
 
-        for i in range(32):
+        for i in range(40):
             world.step()
 
         data = world.datacollector.get_model_vars_dataframe()

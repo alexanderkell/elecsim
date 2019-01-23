@@ -66,7 +66,7 @@ class CalculateNPV:
         npv_results = pd.DataFrame(cost_list)
 
         sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
-        logger.debug("sorted_npv: \n {}".format(sorted_npv))
+        logger.info("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
     def calculate_npv(self, plant_type, plant_size):
