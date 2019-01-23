@@ -89,7 +89,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
-power_plants = power_plants[:1000]
+# power_plants = power_plants[:900]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
@@ -124,8 +124,8 @@ carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenari
 # carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
-# lost_load = 6000
-lost_load = 200
+lost_load = 6000
+# lost_load = 200
 
 upfront_investment_costs = 0.25
 

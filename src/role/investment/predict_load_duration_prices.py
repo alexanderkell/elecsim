@@ -35,27 +35,33 @@ class PredictPriceDurationCurve:
         power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
         predicted_price_duration_curve = power_ex.price_duration_curve
 
-        # # if predicted_price_duration_curve[(predicted_price_duration_curve.accepted_price==6000).any(axis=1)]:
-        # if all(predicted_price_duration_curve.accepted_price==lost_load):
-        #     return predicted_price_duration_curve
-        # if any(predicted_price_duration_curve.accepted_price==lost_load):
-        #     # training_data = predicted_price_duration_curve[predicted_price_duration_curve.accepted_price != lost_load]
-        #     # to_predict_data = predicted_price_duration_curve[predicted_price_duration_curve.accepted_price == lost_load]
-        #     # training_data.apply(lambda x: np.polyfit(x.Index, x.accepted_price, 3))
-        #     try:
-        #         predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(lost_load,np.nan)
-        #         predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=3)
-        #         logger.info("to_interpolate_price_curve: {}".format(predicted_price_duration_curve))
-        #         p = np.poly1d(np.polyfit(predicted_price_duration_curve.index, predicted_price_duration_curve.segment_demand,3))
-        #         extrapolated = p(predicted_price_duration_curve.index)
-        #         logger.info("extrapolated: {}".format(extrapolated))
-        #     except:
-        #         pass
+        predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
 
-        logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
+        logger.info("predicted_price_duration_curve: \n {}".format(predicted_price_duration_curve))
         return predicted_price_duration_curve
 
+
+def estimate_lost_load_price(predicted_price_duration_curve):
+    if all(predicted_price_duration_curve.accepted_price==lost_load):
+        return predicted_price_duration_curve
+    if any(predicted_price_duration_curve.accepted_price==lost_load):
+        predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(lost_load,np.nan)
+        # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
+        if predicted_price_duration_curve.accepted_price.count() > 1:
+            predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
+
+            p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,1))
+            extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
+            logger.info("extrapolated: {}".format(extrapolated))
+            predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
+            return predicted_price_duration_curve
+        elif predicted_price_duration_curve.accepted_price.count() == 1:
+            predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.fillna(predicted_price_duration_curve.accepted_price.mean())
+            return predicted_price_duration_curve
+    else:
+        return predicted_price_duration_curve
 @lru_cache(1024)
 def get_price_duration_curve(model, look_back_period):
     predicted_price_duration_curve = PredictPriceDurationCurve(model).predict_price_duration_curve(look_back_period=look_back_period)
     return predicted_price_duration_curve
+
