@@ -21,6 +21,9 @@ Feature: # Enables world to be run multiple times based on different parameter s
 """
 logging.basicConfig(level=logging.INFO)
 
+# logging.basicConfig(level=logging.INFO, filename="logfile_no_dismantling", filemode="a+",
+#                         format="%(asctime)-15s %(levelname)-8s %(message)s")
+
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
@@ -36,7 +39,7 @@ if __name__ == '__main__':
     # variable_params = {"carbon_price_scenario": [[20]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50,[95]*50, [100]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
     #               "demand_change": [[1.01]*50, [0.990]*50]
     #                }
-    variable_params = {"carbon_price_scenario": [[90]*50],
+    variable_params = {"carbon_price_scenario": [[30]*50, [40]*50, [60]*50],
                   "demand_change": [[1.01]*50]
                    }
 
@@ -44,7 +47,7 @@ if __name__ == '__main__':
                           fixed_parameters=fixed_params,
                           variable_parameters=variable_params,
                           iterations=1,
-                          max_steps=number_of_steps, nr_processes=2)
+                          max_steps=number_of_steps, nr_processes=3)
 
     batch_run.run_all()
 
