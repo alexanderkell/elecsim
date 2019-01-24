@@ -144,39 +144,36 @@ class GenCo(Agent):
 
     def invest(self):
         lowest_upfront_cost = 0
-        total_upfront_cost = 0
+        down_payment = 0
         counter =0
         total_capacity = 0
-        while self.money > lowest_upfront_cost or total_capacity < 1500:
+        while self.money > lowest_upfront_cost and total_capacity < 1500:
             counter += 1
             # if counter>3:
             #     break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
-            if counter == 1:
+            if potential_plant_data:
                 potential_plant_list = []
                 for plant_data in potential_plant_data:
-                    if not potential_plant_data:
-                        break
                     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                     potential_plant_list.append(power_plant_trial)
-                    if potential_plant_list:
-                        lowest_upfront_cost = min(plant.get_upfront_costs() * upfront_investment_costs for plant in potential_plant_list)
-                    else:
-                        break
+                    lowest_upfront_cost = min(plant.get_upfront_costs() * upfront_investment_costs for plant in potential_plant_list)
+            else:
+                break
+
             for plant_data in potential_plant_data:
-                # counter+=1
-                if not potential_plant_data:
-                    break
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
-                total_upfront_cost = power_plant_trial.get_upfront_costs() * upfront_investment_costs
-                # logger.info("total_upfront_cost: {}, total money: {}, upfront_investment_costs: {}".format(total_upfront_cost, self.money, upfront_investment_costs))
-                if self.money > total_upfront_cost:
-                    logger.info("investing in {} self.money: {}, total_upfront_cost: {}".format(power_plant_trial.plant_type, self.money, total_upfront_cost))
+                down_payment = power_plant_trial.get_upfront_costs() * upfront_investment_costs
+                # logger.info("down_payment: {}, total money: {}, upfront_investment_costs: {}".format(down_payment, self.money, upfront_investment_costs))
+                if self.money > down_payment:
+                    logger.info("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
                     self.plants.append(power_plant_trial)
-                    self.money -= total_upfront_cost
+                    self.money -= down_payment
                     total_capacity += power_plant_trial.capacity_mw
+                    break
+                else:
                     break
 
     def dismantle_old_plants(self):
