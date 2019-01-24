@@ -32,7 +32,7 @@ __email__ = "alexander@kell.es"
 
 if __name__ == '__main__':
     data_folder = sys.argv[1]
-    number_of_steps = 38
+    number_of_steps = 45
 
     fixed_params = {"initialization_year": 2018,
                     "number_of_steps": number_of_steps,
