@@ -65,7 +65,8 @@ class PowerExchange:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
             logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
-
+            with open("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/data/intialisation_runs/price_duration_curve.csv", 'a') as f:
+                self.price_duration_curve.to_csv(f, mode='a', header=f.tell()==0)
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
