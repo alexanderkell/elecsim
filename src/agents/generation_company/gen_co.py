@@ -147,7 +147,7 @@ class GenCo(Agent):
         total_upfront_cost = 0
         counter =0
         total_capacity = 0
-        while self.money > lowest_upfront_cost and total_capacity < 1500:
+        while self.money > lowest_upfront_cost or total_capacity < 1500:
             counter += 1
             # if counter>3:
             #     break
