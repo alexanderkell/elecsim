@@ -176,8 +176,8 @@ class GenCo(Agent):
                     logger.info("investing in {} self.money: {}, total_upfront_cost: {}".format(power_plant_trial.plant_type, self.money, total_upfront_cost))
                     self.plants.append(power_plant_trial)
                     self.money -= total_upfront_cost
+                    total_capacity += power_plant_trial.capacity_mw
                     break
-            total_capacity += power_plant_trial.capacity_mw
 
     def dismantle_old_plants(self):
         """

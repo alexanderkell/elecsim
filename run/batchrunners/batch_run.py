@@ -31,19 +31,29 @@ __email__ = "alexander@kell.es"
 
 
 if __name__ == '__main__':
-    data_folder = sys.argv[1]
-    number_of_steps = 45
+    if len(sys.argv) == 1:
+        data_folder = "run"
+    else:
+        data_folder = sys.argv[1]
+    number_of_steps = 38
 
-    fixed_params = {"initialization_year": 2018,
+    fixed_params = {"initialization_year": 2013,
                     "number_of_steps": number_of_steps,
                     "data_folder": data_folder}
 
     # variable_params = {"carbon_price_scenario": [[20]*50,[30]*50, [40]*50, [45]*50 ,[50]*50, [55]*50,[65]*50, [75]*50, [85]*50,[95]*50, [100]*50, [200]*50, list(range(17, 177, 4)) , list(range(101, 21, -2))],
     #               "demand_change": [[1.01]*50, [0.990]*50]
     #                }
-    variable_params = {"carbon_price_scenario": [[0]*50, [10]*50 ,[20]*50, [30]*50, [40]*50, [50]*50, [60]*50, [70]*50, [80]*50,[90]*50, [100]*50, [150]*50,[200]*50 ,list(range(18, 174, 4)), list(range(174, 18, -4)) ],
-                  "demand_change": [[1.01]*50, [0.99]*50]
-                   }
+    # variable_params = {"carbon_price_scenario": [[0]*50, [10]*50 ,[20]*50, [30]*50, [40]*50, [50]*50, [60]*50, [70]*50, [80]*50,[90]*50, [100]*50, [150]*50,[200]*50 ,list(range(18, 174, 4)), list(range(174, 18, -4)) ],
+    #               "demand_change": [[1.01]*50, [0.99]*50]
+    #                }
+
+
+    variable_params = {"carbon_price_scenario": [[30] * 50],
+    "demand_change": [[1.01] * 50]
+    }
+
+
 
     batch_run = BatchRunnerMP(World,
                               fixed_parameters=fixed_params,
