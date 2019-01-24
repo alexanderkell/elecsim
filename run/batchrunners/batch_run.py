@@ -48,8 +48,8 @@ if __name__ == '__main__':
     batch_run = BatchRunnerMP(World,
                               fixed_parameters=fixed_params,
                               variable_parameters=variable_params,
-                              iterations=2,
-                              max_steps=number_of_steps, nr_processes=62)
+                              iterations=1,
+                              max_steps=number_of_steps, nr_processes=1)
 
     batch_run.run_all()
 
