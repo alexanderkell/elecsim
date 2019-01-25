@@ -37,7 +37,7 @@ if __name__ == '__main__':
         data_folder = sys.argv[1]
     number_of_steps = 38
 
-    fixed_params = {"initialization_year": 2013,
+    fixed_params = {"initialization_year": 2018,
                     "number_of_steps": number_of_steps,
                     "data_folder": data_folder}
 
