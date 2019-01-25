@@ -175,8 +175,7 @@ class GenCo(Agent):
                     self.money -= down_payment
                     total_capacity += power_plant_trial.capacity_mw
                     break
-                else:
-                    break
+
 
     def dismantle_old_plants(self):
         """
