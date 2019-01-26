@@ -130,7 +130,6 @@ class LatestMarketData:
         try:
             popt, pcov = curve_fit(exponential_func, x, regression)
         except Warning:
-            logger.warning("OptimizeWarning: Covariance of the parameters could not be estimated, using linear regression instead")
             return self.agent_forecast_value("demand", years_to_look_back, years_to_look_forward, demand_linear=True)
 
         return exponential_func(np.array(years_to_look_forward), *popt)
