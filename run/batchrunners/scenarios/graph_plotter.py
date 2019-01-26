@@ -25,8 +25,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 if __name__ == '__main__':
-    os.chdir("{}/run/batchrunners/scenarios/data/third_run_4_iterations_smaller_taxes/".format(ROOT_DIR))
-
+    os.chdir("{}/run/batchrunners/scenarios/data/fourth_run_8_iterations_lower_taxes_no_max_investment_2018/".format(ROOT_DIR))
     for file_name in glob.glob('*.csv'):
         scenario_results = pd.read_csv(file_name,dtype=np.float64)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
@@ -39,7 +38,7 @@ if __name__ == '__main__':
 
 
 
-        figure.savefig('{}/run/batchrunners/scenarios/figures/third_run_4_iterations_smaller_taxes/{}{}.png'.format(ROOT_DIR, file_name.split(".")[0],file_name.split(".")[1]))
+        figure.savefig('{}/run/batchrunners/scenarios/figures/fourth_run_8_iterations_lower_taxes_no_max_investment_2018/{}{}.png'.format(ROOT_DIR, file_name.split(".")[0],file_name.split(".")[1]))
         plt.close('all')
 
 
