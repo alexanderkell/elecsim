@@ -2,7 +2,7 @@ import logging
 from random import uniform, randint
 
 import numpy as np
-
+import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
 import os
@@ -37,7 +37,7 @@ class World(Model):
     """
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, data_folder=None):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, power_plants=None, data_folder=None):
 
         # Set up model objects
         self.year_number = initialization_year
@@ -45,11 +45,6 @@ class World(Model):
         self.unique_id_generator = 0
 
         self.max_number_of_steps = number_of_steps
-        # src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
-        # self.carbon_scenario_name = carbon_price_scenario[0]
-        #
-        # src.scenario.scenario_data.yearly_demand_change = demand_change[1:]
-        # self.demand_change_name = demand_change[0]
 
         if carbon_price_scenario:
             src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
@@ -63,16 +58,23 @@ class World(Model):
         else:
             self.demand_change_name = "none"
 
+        if power_plants is not None:
+            src.scenario.scenario_data.power_plants = power_plants
+            demand_modifier = (src.scenario.scenario_data.power_plants.Capacity.sum() / src.scenario.scenario_data.segment_demand_diff[-1])/1.6
+            logger.info("demand_modifier: {}".format(demand_modifier))
+            logger.info("total available capacity: {}".format(src.scenario.scenario_data.power_plants.Capacity.sum()))
+            src.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in src.scenario.scenario_data.segment_demand_diff]
+
         self.schedule = OrderedActivation(self)
 
         # Import company data including financials and plant data
-        plant_data = power_plants
+        plant_data = src.scenario.scenario_data.power_plants
         financial_data = company_financials
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-        self.demand = Demand(self.unique_id_generator, segment_time, segment_demand_diff, yearly_demand_change)
+        self.demand = Demand(self.unique_id_generator, segment_time, src.scenario.scenario_data.segment_demand_diff, yearly_demand_change)
         self.unique_id_generator+=1
         self.schedule.add(self.demand)
 
@@ -127,6 +129,15 @@ class World(Model):
         :param financial_data: Data containing information about generation company's financial status
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
+
+        # print(financial_data.columns)
+        # print(plant_data.head())
+
+
+        financial_data = pd.merge(financial_data, plant_data, on="Company")
+        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities',
+       'total_assets', 'turnover', 'net_assets']]
+
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
         financial_data.cash_in_bank = financial_data.cash_in_bank.fillna(0)
@@ -134,6 +145,7 @@ class World(Model):
         company_financials = financial_data.groupby('Company')
 
         logger.info("Initialising generation companies with their power plants.")
+
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
             assert financials.Company.iloc[0] == name

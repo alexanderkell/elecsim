@@ -19,7 +19,7 @@ File name: batch_run
 Date created: 19/01/2019
 Feature: # Enables world to be run multiple times based on different parameter sweeps.
 """
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 # logging.basicConfig(level=logging.INFO, filename="logfile_no_dismantling", filemode="a+",
 #                         format="%(asctime)-15s %(levelname)-8s %(message)s")
@@ -57,7 +57,7 @@ if __name__ == '__main__':
                               fixed_parameters=fixed_params,
                               variable_parameters=variable_params,
                               iterations=8,
-                              max_steps=number_of_steps, nr_processes=63)
+                              max_steps=number_of_steps, nr_processes=2)
 
     batch_run.run_all()
 
