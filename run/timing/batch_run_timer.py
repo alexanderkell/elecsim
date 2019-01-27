@@ -16,7 +16,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 """
 File name: batch_run_timer
@@ -53,7 +53,7 @@ class DemandTimer:
         }
 
         variable_params = {
-            "carbon_price_scenario": [[0]*50, [10]*50, [20]*50, [30] * 50, [40]*50, [100]*50],
+            "carbon_price_scenario": [[0]*50, [20]*50, [30] * 50, [40]*50, [100]*50],
             "power_plants": [
                 self.stratify_data(2772),
                 self.stratify_data(4881),
