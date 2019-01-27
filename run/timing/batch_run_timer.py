@@ -49,7 +49,8 @@ class DemandTimer:
             "initialization_year": 2018,
             "number_of_steps": number_of_steps,
             "demand_change": [1.0] * 50,
-            "data_folder": data_folder
+            "data_folder": data_folder,
+            "time_run":True
         }
 
         variable_params = {
