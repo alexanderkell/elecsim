@@ -39,14 +39,14 @@ class World(Model):
     """
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, power_plants=None, data_folder=None):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, power_plants=None, data_folder=None, time_run=False):
         self.start = perf_counter()
         logger.info("start: {}".format(self.start))
         # Set up model objects
         self.year_number = initialization_year
         self.step_number = 0
         self.unique_id_generator = 0
-
+        self.time_run = time_run
         self.max_number_of_steps = number_of_steps
 
         if carbon_price_scenario:
@@ -127,10 +127,11 @@ class World(Model):
             end = perf_counter()
             time_elapased = end - self.start
 
-            timings_data = pd.DataFrame({"time":[time_elapased], "carbon":[src.scenario.scenario_data.carbon_price_scenario[0]], 'installed_capacity':[src.scenario.scenario_data.power_plants.Capacity.sum()], 'datetime':[dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
+            if self.time_run:
+                timings_data = pd.DataFrame({"time":[time_elapased], "carbon":[src.scenario.scenario_data.carbon_price_scenario[0]], 'installed_capacity':[src.scenario.scenario_data.power_plants.Capacity.sum()], 'datetime':[dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
 
-            with open("{}/run/timing/results/timing_results.csv".format(ROOT_DIR, self.carbon_scenario_name), 'a') as f:
-                timings_data.to_csv(f, header=False)
+                with open("{}/run/timing/results/timing_results.csv".format(ROOT_DIR, self.carbon_scenario_name), 'a') as f:
+                    timings_data.to_csv(f, header=False)
 
 
             logger.info("end: {}".format(end))
