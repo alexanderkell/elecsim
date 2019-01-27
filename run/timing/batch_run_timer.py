@@ -3,8 +3,8 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-# from mesa.batchrunner import BatchRunnerMP
-from src.mesa_addons.BatchRunnerMP_timer import BatchRunnerMP
+from mesa.batchrunner import BatchRunnerMP
+# from src.mesa_addons.BatchRunnerMP_timer import BatchRunnerMP
 import pandas as pd
 
 from src.model.world import World
@@ -16,7 +16,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig(level=logging.INFO)
 
 """
 File name: batch_run_timer
@@ -53,30 +53,18 @@ class DemandTimer:
         }
 
         variable_params = {
-            # "carbon_price_scenario": [[0]*50, [10]*50, [20]*50, [30] * 50, [40]*50, [100]*50],
-            "carbon_price_scenario": [[0]*50],
+            "carbon_price_scenario": [[0]*50, [20]*50, [30] * 50, [40]*50, [100]*50],
             "power_plants": [
-                # self.stratify_data(2772),
-                # self.stratify_data(4881),
-                # self.stratify_data(18940),
-                # self.stratify_data(37320),
-                # self.stratify_data(65450),
-                # self.stratify_data(94640),
-                # self.stratify_data(150300),
-                # self.stratify_data(322200),
-                # self.stratify_data(1074000),
-                # self.stratify_data(1646000)
-
-                # self.stratify_data(277.2),
-                # self.stratify_data(488.1),
-                # self.stratify_data(1894.0),
-                # self.stratify_data(37320),
-                # self.stratify_data(65450),
-                # self.stratify_data(94640),
-                # self.stratify_data(150300),
-                # self.stratify_data(322200),
-                self.stratify_data(1070.4000),
-                self.stratify_data(1640.6000)
+                self.stratify_data(2772),
+                self.stratify_data(4881),
+                self.stratify_data(18940),
+                self.stratify_data(37320),
+                self.stratify_data(65450),
+                self.stratify_data(94640),
+                self.stratify_data(150300),
+                self.stratify_data(322200),
+                self.stratify_data(1074000),
+                self.stratify_data(1646000)
             ]
         }
 
@@ -85,8 +73,8 @@ class DemandTimer:
         batch_run = BatchRunnerMP(World,
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
-                                  iterations=1,
-                                  max_steps=number_of_steps, nr_processes=2)
+                                  iterations=5,
+                                  max_steps=number_of_steps, nr_processes=63)
 
         batch_run.run_all()
 

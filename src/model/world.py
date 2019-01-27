@@ -20,6 +20,8 @@ import src.scenario.scenario_data
 
 import datetime as dt
 
+from time import perf_counter
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,7 +40,8 @@ class World(Model):
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
     def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, power_plants=None, data_folder=None):
-
+        self.start = perf_counter()
+        logger.info("start: {}".format(self.start))
         # Set up model objects
         self.year_number = initialization_year
         self.step_number = 0
@@ -121,6 +124,18 @@ class World(Model):
             if not os.path.exists(directory):
                 os.makedirs(directory)
             self.datacollector.get_model_vars_dataframe().to_csv("{}/demand_{}-carbon_{}-datetime_{}.csv".format(directory, self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
+            end = perf_counter()
+            time_elapased = end - self.start
+
+            timings_data = pd.DataFrame({"time":[time_elapased], "carbon":[src.scenario.scenario_data.carbon_price_scenario[0]], 'installed_capacity':[src.scenario.scenario_data.power_plants.Capacity.sum()], 'datetime':[dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
+
+            with open("{}/run/timing/results/timing_results.csv".format(ROOT_DIR, self.carbon_scenario_name), 'a') as f:
+                timings_data.to_csv(f, header=False)
+
+
+            logger.info("end: {}".format(end))
+            logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, src.scenario.scenario_data.carbon_price_scenario[0], src.scenario.scenario_data.power_plants.Capacity.sum()))
+
 
     def initialize_gencos(self, financial_data, plant_data):
         """
