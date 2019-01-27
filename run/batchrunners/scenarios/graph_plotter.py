@@ -24,8 +24,9 @@ pd.set_option('display.max_columns', 500)
 logging.basicConfig(level=logging.INFO)
 
 
-if __name__ == '__main__':
-    os.chdir("{}/run/batchrunners/scenarios/data/fourth_run_8_iterations_lower_taxes_no_max_investment_2018/".format(ROOT_DIR))
+
+def single_plots(folder, folder_to_save):
+    os.chdir("{}/run/batchrunners/scenarios/data//".format(folder, ROOT_DIR))
     for file_name in glob.glob('*.csv'):
         scenario_results = pd.read_csv(file_name,dtype=np.float64)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
@@ -36,9 +37,62 @@ if __name__ == '__main__':
         plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=scenario_results_long).set_title(file_name)
         figure = plot.get_figure()
 
+        directory = '{}/run/batchrunners/scenarios/figures/{}'.format(ROOT_DIR, folder_to_save)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-
-        figure.savefig('{}/run/batchrunners/scenarios/figures/fourth_run_8_iterations_lower_taxes_no_max_investment_2018/{}{}.png'.format(ROOT_DIR, file_name.split(".")[0],file_name.split(".")[1]))
+        figure.savefig('{}/run/batchrunners/scenarios/figures/{}/{}{}.png'.format(ROOT_DIR, folder_to_save, file_name.split(".")[0],file_name.split(".")[1]))
         plt.close('all')
 
 
+def variance_plots(folder, folder_to_save):
+    os.chdir("{}/run/batchrunners/scenarios/data/{}".format(ROOT_DIR, folder))
+    all_data = []
+    for file_name in glob.glob('*.csv'):
+
+        scenario_results = pd.read_csv(file_name,dtype=np.float64, index_col=None, header=0)
+        scenario = file_name.split("_")[0]+file_name.split("_")[1]+file_name.split("_")[2]
+        scenario_results['scenario'] = [scenario]*len(scenario_results)
+        scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
+        scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
+
+        # print(scenario_results)
+        all_data.append(scenario_results)
+    frame = pd.concat(all_data, axis=0, ignore_index=True)
+    frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario'], value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip_gas'])
+
+    scenario_group = frame_long.groupby('scenario')
+
+    directory = '{}/run/batchrunners/scenarios/figures/{}'.format(ROOT_DIR, folder_to_save)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    for name, group in scenario_group:
+        plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=group).set_title(name)
+        # figure = plot.get_figure()
+        # plt.show()
+        figure = plot.get_figure()
+
+
+        print("Saving figure: {}".format(name))
+        figure.savefig('{}/{}.png'.format(directory,name))
+        plt.close('all')
+
+
+    # print(frame_long.head())
+    # g = sns.FacetGrid(data=frame_long, row='scenario', hue="variable")
+    # g.map(plt.scatter, x='Unnamed: 0', y='value')
+    # plt.show()
+       #  scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
+       #  scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
+       #  logger.info("Plotting: {}".format(file_name))
+       #  scenario_results_long = pd.melt(scenario_results, id_vars='Unnamed: 0', value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear',
+       # 'Recip_gas'])
+       #  print(scenario_results_long.columns)
+       #
+
+
+
+if __name__ == '__main__':
+    # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
+    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
