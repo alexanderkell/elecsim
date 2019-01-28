@@ -44,7 +44,7 @@ class CalculateNPV:
 
     def get_positive_npv_plants(self):
         npv_data = self.compare_npv()
-        logger.info("predicted npv data: \n {}".format(npv_data))
+        logger.debug("predicted npv data: \n {}".format(npv_data))
 
         npv_positive = npv_data[npv_data.npv_per_mw > 0]
         return npv_positive
@@ -66,7 +66,7 @@ class CalculateNPV:
         npv_results = pd.DataFrame(cost_list)
 
         sorted_npv = npv_results.sort_values(by='npv_per_mw', ascending=False)
-        logger.info("sorted_npv: \n {}".format(sorted_npv))
+        logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
     def calculate_npv(self, plant_type, plant_size):

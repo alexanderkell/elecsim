@@ -59,7 +59,7 @@ def variance_plots(folder, folder_to_save):
         # print(scenario_results)
         all_data.append(scenario_results)
     frame = pd.concat(all_data, axis=0, ignore_index=True)
-    frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario'], value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip_gas'])
+    frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario','Carbon_tax'], value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip_gas'])
 
     scenario_group = frame_long.groupby('scenario')
 
@@ -69,8 +69,9 @@ def variance_plots(folder, folder_to_save):
 
     for name, group in scenario_group:
         plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=group).set_title(name)
-        # figure = plot.get_figure()
-        # plt.show()
+        # ax2 = plt.twinx()
+        # sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2,size=40)
+        # ax2.set_ylim(-10,200)
         figure = plot.get_figure()
 
 
