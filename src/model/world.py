@@ -209,7 +209,7 @@ class World(Model):
 
     def filter_plants_with_no_income(self, plants):
             for plant in plants:
-                if (self.step_number > 1) and (plant.get_year_of_operation() + 1 < self.year_number):
+                if (self.step_number > 7) and (plant.get_year_of_operation() + 7 < self.year_number):
                     historic_bids = plant.historical_bids
                     # logger.info("historic_bids {}".format(historic_bids))
                     # years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
