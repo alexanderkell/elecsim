@@ -1,0 +1,4 @@
+Figure,Nord Pool,ElecSIM,Non-Stochastic
+Avg. Price (\textsterling/MWh),57.49,57.52,53.39
+MAE (\textsterling/MWh),-,3.97,8.35
+RMSE (\textsterling/MWh),-,4.41,10.2
