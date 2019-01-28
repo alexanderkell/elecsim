@@ -52,32 +52,61 @@ def variance_plots(folder, folder_to_save):
 
         scenario_results = pd.read_csv(file_name,dtype=np.float64, index_col=None, header=0)
         scenario = file_name.split("_")[0]+file_name.split("_")[1]+file_name.split("_")[2]
+        scenario_results['Unnamed: 0'] += 2013
+        scenario_results = scenario_results.iloc[6:]
         scenario_results['scenario'] = [scenario]*len(scenario_results)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
-        scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
+        scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total/100, axis=0)
 
         # print(scenario_results)
         all_data.append(scenario_results)
     frame = pd.concat(all_data, axis=0, ignore_index=True)
-    frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario','Carbon_tax'], value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip_gas'])
-
+    frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario','Carbon_tax'],value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip_gas'])
+    frame_long = frame_long.rename(index=str, columns={'variable':"Variables"})
     scenario_group = frame_long.groupby('scenario')
 
     directory = '{}/run/batchrunners/scenarios/figures/{}'.format(ROOT_DIR, folder_to_save)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if_no_directory_create(directory)
+
+    publishable = '{}/run/batchrunners/scenarios/figures/to_publish/{}'.format(ROOT_DIR, folder_to_save)
+    if_no_directory_create(directory)
+
+    # for name, group in scenario_group:
+    #     plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=group).set_title(name)
+    #     ax2 = plt.twinx()
+    #     sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2)
+    #     ax2.set_ylim(-10,200)
+    #     figure = plot.get_figure()
+    #
+    #
+    #     print("Saving figure: {}".format(name))
+    #     figure.savefig('{}/{}.png'.format(directory,name))
+    #     plt.close('all')
 
     for name, group in scenario_group:
-        plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=group).set_title(name)
-        # ax2 = plt.twinx()
-        # sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2,size=40)
-        # ax2.set_ylim(-10,200)
-        figure = plot.get_figure()
+        plot = sns.lineplot(x="Unnamed: 0", y="value", hue='Variables', data=group)
+        plt.xlabel('Year')
+        plt.ylabel('Share of Energy Mix (%)')
+        ax2 = plt.twinx()
+        sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2, linewidth=3, label="Carbon Price")
+        ax2.set_ylim(-10,200)
+        ax2.set_ylabel("Carbon Tax (£/tonne)")
 
 
+
+        h1, l1 = plot.get_legend_handles_labels()
+        h2, l2 = ax2.get_legend_handles_labels()
+        plot.legend(h1+h2, l1+l2, loc=2)
+        ax2.get_legend().remove()
+        # plt.show()
         print("Saving figure: {}".format(name))
-        figure.savefig('{}/{}.png'.format(directory,name))
+        figure = plot.get_figure()
+        figure.savefig('{}/{}.png'.format(publishable,name))
         plt.close('all')
+
+
+
+
 
 
     # print(frame_long.head())
@@ -93,9 +122,12 @@ def variance_plots(folder, folder_to_save):
        #
 
 
+def if_no_directory_create(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
-    # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
-    variance_plots('5th_run_testing_2013_start','2013_start_variance_results')
+    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
 
