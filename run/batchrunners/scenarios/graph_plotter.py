@@ -96,4 +96,6 @@ def variance_plots(folder, folder_to_save):
 
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
-    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    variance_plots('5th_run_testing_2013_start','2013_start_variance_results')
+
