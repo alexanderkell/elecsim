@@ -43,7 +43,7 @@ class DemandTimer:
     def run_world_with_demand_and_power_plants(self):
 
         number_of_steps = 40
-        data_folder = "timings"
+        data_folder = "timings_post-optimisation1"
 
         fixed_params = {
             "initialization_year": 2018,
@@ -75,7 +75,7 @@ class DemandTimer:
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
                                   iterations=5,
-                                  max_steps=number_of_steps, nr_processes=63)
+                                  max_steps=number_of_steps, nr_processes=41)
 
         batch_run.run_all()
 
