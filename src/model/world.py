@@ -107,8 +107,6 @@ class World(Model):
 
 
         logger.info("Stepping year: {}".format(self.year_number))
-        # logger.info("number of plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants])))
-        # logger.info("number of operating plants: {}".format(len([plant for gencos in self.get_gencos() for plant in gencos.plants if plant.is_operating == True])))
 
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plants()
@@ -130,7 +128,7 @@ class World(Model):
             if self.time_run:
                 timings_data = pd.DataFrame({"time":[time_elapased], "carbon":[src.scenario.scenario_data.carbon_price_scenario[0]], 'installed_capacity':[src.scenario.scenario_data.power_plants.Capacity.sum()], 'datetime':[dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
 
-                with open("{}/run/timing/results/timing_results.csv".format(ROOT_DIR, self.carbon_scenario_name), 'a') as f:
+                with open("{}/run/timing/results/{}.csv".format(ROOT_DIR,self.data_folder), 'a') as f:
                     timings_data.to_csv(f, header=False)
 
 
@@ -206,20 +204,35 @@ class World(Model):
         gencos = self.get_gencos()
 
         for genco in gencos:
-            profitable_plants = list(self.get_plants_that_have_had_income(genco.plants))
+            profitable_plants = list(self.filter_plants_with_no_income(genco.plants))
             genco.plants = profitable_plants
 
-    def get_plants_that_have_had_income(self, plants):
+    def filter_plants_with_no_income(self, plants):
             for plant in plants:
-                if (self.step_number) > 7 and (plant.get_year_of_operation() + 7 < self.year_number):
+                if (self.step_number > 7) and (plant.get_year_of_operation() + 7 < self.year_number):
                     historic_bids = plant.historical_bids
-                    years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
-                    bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
-                    total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
-                    if total_income_in_previous_years > 0:
-                        yield plant
+                    # logger.info("historic_bids {}".format(historic_bids))
+                    # years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
+
+                    seven_years_previous = self.year_number-7
+                    if historic_bids:
+                        if historic_bids[-1].year_of_bid > seven_years_previous:
+                            yield plant
+                        else:
+                            logger.info("Plant {}, type {} is unprofitable. Last accepted bid: {}".format(plant.name, plant.plant_type, historic_bids[-1].year_of_bid))
                     else:
-                        logger.debug("Taking plant: {} out of service.".format(plant.name))
+                        logger.info("Plant {}, type {} is unprofitable.".format(plant.name, plant.plant_type))
+
+                    # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
+                    # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
+                    logger.info("historic_bids len: {}".format(len(historic_bids)))
+                    # for bids in reversed(historic_bids):
+                    #     logger.info("bids.year_of_bid: {}".format(bids.year_of_bid))
+
+                    # if total_income_in_previous_years > 0:
+                    #     yield plant
+                    # else:
+                    #     logger.debug("Taking plant: {} out of service.".format(plant.name))
                 else:
                     yield plant
 
