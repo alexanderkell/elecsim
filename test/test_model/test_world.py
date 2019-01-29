@@ -27,17 +27,15 @@ __email__ = "alexander@kell.es"
 
 pd.set_option('display.max_rows', 4000)
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 class TestWorld:
     def test_world_initialization(self):
 # with PyCallGraph(output=GraphvizOutput()):
-        for j in range(38):
-            world = World(initialization_year=2018)
+        world = World(initialization_year=2018)
 
-            for i in range(1):
-                logger.info("Iteration: {}".format(j))
-                world.step()
+        for i in range(10):
+            world.step()
 
         # data = world.datacollector.get_model_vars_dataframe()
         # logger.info("final data: \n {}".format(data))
