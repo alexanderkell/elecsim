@@ -54,7 +54,7 @@ class DemandTimer:
         }
 
         variable_params = {
-            "carbon_price_scenario": [[0]*50, [20]*50, [30] * 50, [40]*50, [100]*50],
+            "carbon_price_scenario": [[0]*50, [20]*50, [40]*50, [70]*50],
             "power_plants": [
                 self.stratify_data(2772),
                 self.stratify_data(4881),
@@ -75,7 +75,7 @@ class DemandTimer:
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
                                   iterations=5,
-                                  max_steps=number_of_steps, nr_processes=41)
+                                  max_steps=number_of_steps, nr_processes=62)
 
         batch_run.run_all()
 
