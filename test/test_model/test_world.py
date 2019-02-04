@@ -29,9 +29,9 @@ pd.set_option('display.max_rows', 4000)
 
 logging.basicConfig(level=logging.INFO)
 
-class TestWorld:
-    def test_world_initialization(self):
-# with PyCallGraph(output=GraphvizOutput()):
+# class TestWorld:
+#     def test_world_initialization(self):
+with PyCallGraph(output=GraphvizOutput()):
         world = World(initialization_year=2018)
 
         for i in range(10):
