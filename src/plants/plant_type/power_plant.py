@@ -1,7 +1,7 @@
 """power_plant.py: Class which represents a Power Plant"""
 
-from abc import ABC, abstractmethod
 import logging
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 __author__ = "Alexander Kell"

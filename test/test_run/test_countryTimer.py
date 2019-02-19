@@ -1,10 +1,10 @@
-from run.timing.batch_run_timer import DemandTimer
-
-from src.scenario.scenario_data import power_plants
-
-from pytest import approx
-import pytest
 import logging
+
+import pytest
+from pytest import approx
+
+from run.timing.batch_run_timer import DemandTimer
+from src.scenario.scenario_data import power_plants
 logger = logging.getLogger(__name__)
 
 """

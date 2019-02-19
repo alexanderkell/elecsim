@@ -3,11 +3,9 @@ import logging
 from scipy.optimize import minimize
 
 import src.scenario.scenario_data as scenario
-from src.plants.plant_type.fuel_plant import FuelPlant
 from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
-from random import uniform
-
+from src.plants.plant_type.fuel_plant import FuelPlant
 
 logger = logging.getLogger(__name__)
 

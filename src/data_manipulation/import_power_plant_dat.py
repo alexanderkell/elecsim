@@ -1,10 +1,10 @@
-import pandas as pd
-from itertools import count, islice, cycle
-from functools import reduce
 import os
-import numpy as np
-from pandas.api.types import is_string_dtype
+from functools import reduce
+from itertools import count, islice, cycle
 
+import numpy as np
+import pandas as pd
+from pandas.api.types import is_string_dtype
 
 pd.set_option('display.max_columns', 70)
 pd.set_option('display.max_rows', 200)

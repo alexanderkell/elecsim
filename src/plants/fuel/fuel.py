@@ -1,10 +1,5 @@
 """fuel.py: Class which specifies the properties of a fuel"""
 
-import src.scenario.scenario_data as scenario
-from constants import GJ_TO_MW, KW_TO_MW, KG_TO_TONNES
-
-
-
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"

@@ -4,10 +4,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from mesa.batchrunner import BatchRunnerMP
-from mesa.datacollection import DataCollector
-import pandas as pd
 
-from src.scenario import scenario_data
 from src.model.world import World
 
 import logging

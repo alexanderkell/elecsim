@@ -1,26 +1,23 @@
+import datetime as dt
 import logging
+import os
 from random import uniform, randint
+from time import perf_counter
 
 import numpy as np
 import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
-import os
-from constants import ROOT_DIR
 
-from src.plants.plant_registry import PlantRegistry
+import src.scenario.scenario_data
+from constants import ROOT_DIR
 from src.agents.demand.demand import Demand
 from src.agents.generation_company.gen_co import GenCo
 from src.market.electricity.power_exchange import PowerExchange
 from src.mesa_addons.scheduler_addon import OrderedActivation
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-
-from src.scenario.scenario_data import yearly_demand_change, segment_demand_diff, segment_time, company_financials, power_plants
-import src.scenario.scenario_data
-
-import datetime as dt
-
-from time import perf_counter
+from src.plants.plant_type.fuel_plant import FuelPlant
+from src.scenario.scenario_data import yearly_demand_change, segment_time, company_financials
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +45,8 @@ class World(Model):
         self.unique_id_generator = 0
         self.time_run = time_run
         self.max_number_of_steps = number_of_steps
+
+        self.average_electricity_price = 0
 
         if carbon_price_scenario:
             src.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
@@ -95,22 +94,25 @@ class World(Model):
                              "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
                              "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
                              "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
-                             "total_genco_wealth:": lambda m: self.get_genco_wealth(m)
+                             "total_genco_wealth:": lambda m: self.get_genco_wealth(m),
+                             "Electricity_cost:": lambda m: self.get_electricity_cost(m),
+                             "Carbon_emitted": lambda m: self.get_carbon_emitted(m)
                              }
 
         )
 
-    def step(self):
+    def step(self, carbon_price=None):
         '''Advance model by one step'''
         self.operate_constructed_plants()
         self.schedule.step()
 
+        src.scenario.scenario_data.carbon_price_scenario[self.step_number+1] = carbon_price
 
         logger.info("Stepping year: {}".format(self.year_number))
 
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plants()
-        self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.settle_gencos_financials()
         self.year_number += 1
         self.step_number += 1
@@ -135,6 +137,7 @@ class World(Model):
             logger.info("end: {}".format(end))
             logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, src.scenario.scenario_data.carbon_price_scenario[0], src.scenario.scenario_data.power_plants.Capacity.sum()))
 
+        return self.average_electricity_price, self.get_carbon_emitted(self)
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -285,3 +288,18 @@ class World(Model):
         for genco in gencos:
             total_wealth += genco.money
         return total_wealth
+
+    @staticmethod
+    def get_electricity_cost(model):
+        return model.average_electricity_price
+
+    @staticmethod
+    def get_carbon_emitted(model):
+        gencos = model.get_gencos()
+        bids = [accepted_bids for plant in gencos.plants for accepted_bids in plant.accepted_bids]
+
+        carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid, FuelPlant))
+
+        return carbon_emitted
+
+

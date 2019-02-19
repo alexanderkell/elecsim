@@ -1,5 +1,6 @@
-from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 import pandas as pd
+
+from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
 """
 File name: test_extrapolateInterpolate

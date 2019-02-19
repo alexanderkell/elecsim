@@ -1,9 +1,10 @@
-from src.market.electricity.power_exchange import PowerExchange
-from src.agents.generation_company.gen_co import GenCo
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from unittest.mock import Mock
 
 import pytest
-from unittest.mock import Mock
+
+from src.agents.generation_company.gen_co import GenCo
+from src.market.electricity.power_exchange import PowerExchange
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 """
 File name: test_powerExchange

@@ -3,15 +3,10 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from src.model.world import World
-from src.scenario import scenario_data
-import logging
 import tracemalloc
 
 import pandas as pd
 import linecache
-
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
 
 import logging
 logger = logging.getLogger(__name__)

@@ -1,7 +1,8 @@
+import pandas as pd
+
 from src.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator
 from src.scenario.scenario_data import modern_plant_costs
 
-import pandas as pd
 """
 File name: historical_fuel_cost_analysis
 Date created: 26/01/2019

@@ -1,12 +1,12 @@
+import logging
+from functools import lru_cache
+
+import numpy as np
+
 from src.market.electricity.power_exchange import PowerExchange
 from src.role.market.latest_market_data import LatestMarketData
 from src.scenario.scenario_data import years_for_agents_to_predict_forward, lost_load
 
-
-from functools import lru_cache
-
-import numpy as np
-import logging
 logger = logging.getLogger(__name__)
 
 """

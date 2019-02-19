@@ -1,9 +1,9 @@
 import pandas as pd
 
 import src.scenario.scenario_data as scenario
-from src.plants.plant_registry import PlantRegistry
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
+from src.plants.plant_registry import PlantRegistry
 from src.scenario.scenario_data import modern_plant_costs
 
 

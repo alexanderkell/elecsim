@@ -1,7 +1,7 @@
+import logging
+
 from src.agents.generation_company.gen_co import GenCo
 from src.plants.plant_type.non_fuel_plant import NonFuelPlant
-
-import logging
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,7 @@
-import constants as constants
 import logging
+
+import constants as constants
+
 logger = logging.getLogger(__name__)
 """
 File name: calculate_lcoe
