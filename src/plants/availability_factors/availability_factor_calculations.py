@@ -1,5 +1,5 @@
-from src.scenario.scenario_data import historical_availability_factor, fuel_plant_availability
 from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+from src.scenario.scenario_data import historical_availability_factor, fuel_plant_availability
 
 """
 File name: availability_factor_calculations

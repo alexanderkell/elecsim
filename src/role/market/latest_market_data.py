@@ -1,13 +1,10 @@
 import logging
-from src.data_manipulation.data_modifications.linear_regression import linear_regression
-from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel, fuel_registry
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.plants.plant_registry import PlantRegistry
-
 import warnings
 
-
 from scipy.optimize import curve_fit, OptimizeWarning
+
+from src.data_manipulation.data_modifications.linear_regression import linear_regression
+
 warnings.filterwarnings('error', category=OptimizeWarning)
 import numpy as np
 

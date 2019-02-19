@@ -1,12 +1,13 @@
-from constants import ROOT_DIR
+import glob
+import logging
+import os
+
 import matplotlib.pyplot as plt
-import seaborn as sns
-import glob, os
 import numpy as np
 import pandas as pd
-import logging
-from matplotlib.font_manager import FontProperties
+import seaborn as sns
 
+from constants import ROOT_DIR
 
 logger = logging.getLogger(__name__)
 """

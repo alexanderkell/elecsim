@@ -5,14 +5,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from mesa.batchrunner import BatchRunnerMP
 # from src.mesa_addons.BatchRunnerMP_timer import BatchRunnerMP
-import pandas as pd
 
 from src.model.world import World
 
 
 from src.scenario.scenario_data import power_plants
 import logging
-import pandas as pd
 
 logger = logging.getLogger(__name__)
 

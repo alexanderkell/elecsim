@@ -1,19 +1,19 @@
-from logging import getLogger
-import pandas as pd
-from inspect import signature
 from functools import lru_cache
+from inspect import signature
 from itertools import zip_longest
+from logging import getLogger
+
+import pandas as pd
 from numpy import npv, pmt
-from random import randint
 
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.scenario.scenario_data import modern_plant_costs
-from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from src.role.market.latest_market_data import LatestMarketData
 from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from src.plants.plant_type.fuel_plant import FuelPlant
-from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
 from src.role.investment.predict_load_duration_prices import get_price_duration_curve
+from src.role.market.latest_market_data import LatestMarketData
+from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from src.scenario.scenario_data import modern_plant_costs
+from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
 
 logger = getLogger(__name__)
 

@@ -1,7 +1,8 @@
-from src.plants.fuel.fuel import Fuel
-import src.scenario.scenario_data as scenario
-from constants import GJ_TO_MW, KW_TO_MW, KG_TO_TONNES
 from functools import lru_cache
+
+import src.scenario.scenario_data as scenario
+from constants import GJ_TO_MW
+from src.plants.fuel.fuel import Fuel
 
 """
 File name: fuel_registry

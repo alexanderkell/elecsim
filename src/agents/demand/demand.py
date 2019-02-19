@@ -1,9 +1,8 @@
+import logging
+
 from mesa import Agent
 
-# from src.scenario.scenario_data import yearly_demand_change
 import src.scenario.scenario_data
-
-import logging
 logger = logging.getLogger(__name__)
 
 

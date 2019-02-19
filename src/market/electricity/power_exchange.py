@@ -1,10 +1,10 @@
+import logging
 from itertools import chain
 
-from src.scenario.scenario_data import lost_load
-from src.market.electricity.bid import Bid
-
 import pandas as pd
-import logging
+
+from src.market.electricity.bid import Bid
+from src.scenario.scenario_data import lost_load
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,7 @@ class PowerExchange:
         else:
             logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
+        return self.price_duration_curve.accepted_price.mean()
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {

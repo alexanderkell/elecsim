@@ -3,10 +3,10 @@ File name: test_powerPlant
 Date created: 28/11/2018
 Feature: #Enter feature description here
 """
+import logging
 from unittest import TestCase
 
 from pytest import approx
-import logging
 logger = logging.getLogger(__name__)
 
 from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations

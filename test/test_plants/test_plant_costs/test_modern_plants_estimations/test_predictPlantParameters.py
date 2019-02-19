@@ -4,7 +4,7 @@ Date created: 27/11/2018
 Feature: #Enter feature description here
 '''
 from unittest import TestCase
-from pytest import approx, raises
+
 import pytest
 
 from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import \

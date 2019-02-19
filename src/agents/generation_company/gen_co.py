@@ -1,28 +1,19 @@
 import logging
+import math
+from random import gauss
 
 from mesa import Agent
 
-from src.plants.plant_type.non_fuel_plant import NonFuelPlant
-from src.plants.plant_type.fuel_plant import FuelPlant
-# import src.plants.plant_type.fuel_plant
 from src.market.electricity.bid import Bid
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from src.role.market.latest_market_data import LatestMarketData
-from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.role.investment.calculate_npv import CalculateNPV, get_most_profitable_plants_by_npv
-from inspect import signature
-from src.role.market.latest_market_data import LatestMarketData
-from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
 from src.plants.availability_factors.availability_factor_calculations import get_availability_factor
-from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc, upfront_investment_costs, years_for_agents_to_predict_forward
+from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.plants.plant_type.fuel_plant import FuelPlant
+from src.role.investment.calculate_npv import get_most_profitable_plants_by_npv
 from src.role.investment.calculate_npv import select_yearly_payback_payment_for_year
-import math
-from src.scenario.scenario_data import bid_mark_up, fuel_plant_availability, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
-
-
-
-from random import gauss
+from src.role.market.latest_market_data import LatestMarketData
+from src.scenario.scenario_data import bid_mark_up, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
+from src.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc, upfront_investment_costs, years_for_agents_to_predict_forward
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,9 @@
-from mesa.time import BaseScheduler
+import logging
 from itertools import chain
 from random import shuffle
-import logging
+
+from mesa.time import BaseScheduler
+
 logging.getLogger(__name__)
 
 from src.agents.generation_company.gen_co import GenCo

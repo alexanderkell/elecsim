@@ -1,10 +1,12 @@
-import src.scenario.scenario_data as scenario
-from scipy.interpolate import interp1d
-from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
-from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
-from random import uniform
 import logging
 import math
+from random import uniform
+
+from scipy.interpolate import interp1d
+
+import src.scenario.scenario_data as scenario
+from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+from src.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 
 logger = logging.getLogger(__name__)
 

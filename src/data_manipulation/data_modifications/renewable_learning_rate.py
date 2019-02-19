@@ -1,5 +1,5 @@
-from math import log
 import logging
+from math import log
 
 logger = logging.getLogger(__name__)
 

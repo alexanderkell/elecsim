@@ -3,8 +3,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 from src.model.world import World
+from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
 
 logger = logging.getLogger(__name__)
 

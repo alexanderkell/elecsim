@@ -1,10 +1,12 @@
-from src.role.market.world_plant_capacity import WorldPlantCapacity
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.agents.generation_company.gen_co import GenCo
-
-from unittest.mock import Mock
 import logging
+from unittest.mock import Mock
+
 import pytest
+
+from src.agents.generation_company.gen_co import GenCo
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.role.market.world_plant_capacity import WorldPlantCapacity
+
 logger = logging.getLogger(__name__)
 """
 File name: test_worldPlantCapacity

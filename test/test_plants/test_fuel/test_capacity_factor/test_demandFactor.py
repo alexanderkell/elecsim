@@ -1,8 +1,10 @@
+import logging
+
+import pytest
+
 from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor, get_capacity_data, segment_capacity_data_by_load_curve
 from src.scenario.scenario_data import historical_hourly_demand
 
-import pytest
-import logging
 logger = logging.getLogger(__name__)
 """
 File name: test_demandFactor

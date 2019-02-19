@@ -1,13 +1,14 @@
-from src.role.investment.calculate_npv import CalculateNPV, select_yearly_payback_payment_for_year
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from constants import ROOT_DIR
-from src.role.investment.calculate_npv import get_yearly_payment
+from logging import getLogger, basicConfig, DEBUG
+from unittest.mock import Mock
 
 import pandas as pd
 import pytest
-from unittest.mock import Mock
 
-from logging import getLogger, basicConfig, DEBUG
+from constants import ROOT_DIR
+from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from src.role.investment.calculate_npv import CalculateNPV, select_yearly_payback_payment_for_year
+from src.role.investment.calculate_npv import get_yearly_payment
+
 logger = getLogger(__name__)
 
 """

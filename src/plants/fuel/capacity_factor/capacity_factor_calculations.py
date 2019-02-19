@@ -1,9 +1,10 @@
-from src.scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand, \
-    segment_demand, load_duration_curve_diff, hydro_capacity_factor
+import functools
 import logging
+
 import pandas as pd
 
-import functools
+from src.scenario.scenario_data import wind_capacity_factor, solar_capacity_factor, historical_hourly_demand, \
+    segment_demand, load_duration_curve_diff, hydro_capacity_factor
 
 logger = logging.getLogger(__name__)
 """

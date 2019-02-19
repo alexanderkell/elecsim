@@ -1,7 +1,8 @@
-from src.role.investment.expected_load_duration_prices import LoadDurationPrices
-import pandas as pd
-import numpy as np
 import logging
+
+import pandas as pd
+from src.role.investment.expected_load_duration_prices import LoadDurationPrices
+
 from constants import ROOT_DIR
 
 pd.set_option('display.max_rows', 500)

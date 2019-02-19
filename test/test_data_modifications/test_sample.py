@@ -1,9 +1,11 @@
-from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
+import logging
 from logging import getLogger
 from operator import itemgetter
+
 from pytest import approx
 
-import logging
+from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
+
 logger = getLogger(__name__)
 """
 File name: test_sample
