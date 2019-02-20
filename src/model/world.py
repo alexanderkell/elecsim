@@ -36,7 +36,7 @@ class World(Model):
     """
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, power_plants=None, data_folder=None, time_run=False):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, total_demand=None, data_folder=None, time_run=False):
         self.start = perf_counter()
         logger.info("start: {}".format(self.start))
         # Set up model objects
@@ -60,8 +60,8 @@ class World(Model):
         else:
             self.demand_change_name = "none"
 
-        if power_plants is not None:
-            src.scenario.scenario_data.power_plants = power_plants
+        if total_demand is not None:
+            src.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
             demand_modifier = (src.scenario.scenario_data.power_plants.Capacity.sum() / src.scenario.scenario_data.segment_demand_diff[-1])/1.6
             logger.info("demand_modifier: {}".format(demand_modifier))
             logger.info("total available capacity: {}".format(src.scenario.scenario_data.power_plants.Capacity.sum()))
@@ -137,7 +137,8 @@ class World(Model):
             logger.info("end: {}".format(end))
             logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, src.scenario.scenario_data.carbon_price_scenario[0], src.scenario.scenario_data.power_plants.Capacity.sum()))
 
-        return self.average_electricity_price, self.get_carbon_emitted(self)
+        # return [self.average_electricity_price], self.get_carbon_emitted(self)
+        return self.average_electricity_price
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -296,10 +297,15 @@ class World(Model):
     @staticmethod
     def get_carbon_emitted(model):
         gencos = model.get_gencos()
-        bids = [accepted_bids for plant in gencos.plants for accepted_bids in plant.accepted_bids]
+        bids = [accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids]
 
         carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid, FuelPlant))
 
         return carbon_emitted
+
+    def stratify_data(self, demand):
+        frac_to_scale = demand/src.scenario.scenario_data.power_plants.Capacity.sum()
+        stratified_sample = self.power_plants.groupby(['Fuel']).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
+        return stratified_sample
 
 
