@@ -137,8 +137,7 @@ class World(Model):
             logger.info("end: {}".format(end))
             logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, src.scenario.scenario_data.carbon_price_scenario[0], src.scenario.scenario_data.power_plants.Capacity.sum()))
 
-        # return [self.average_electricity_price], self.get_carbon_emitted(self)
-        return self.average_electricity_price
+        return -(self.average_electricity_price + self.get_carbon_emitted(self))
 
     def initialize_gencos(self, financial_data, plant_data):
         """

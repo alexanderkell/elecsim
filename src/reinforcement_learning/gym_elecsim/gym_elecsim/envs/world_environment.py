@@ -25,7 +25,7 @@ class WorldEnvironment(gym.Env):
 
     def __init__(self):
         print("trying to init")
-        self.world = World(initialization_year=2018, total_demand=25)
+        self.world = World(initialization_year=2018, total_demand=20000)
         self.action_space = Box(
             0.0, 250.0, shape=(1, ), dtype=np.float32)
 
@@ -34,7 +34,7 @@ class WorldEnvironment(gym.Env):
 
     def reset(self):
         self.world = World(initialization_year=2018)
-        return np.array([17])
+        return 17
 
     def step(self, action):
         print("stepping number: {}".format(self.world.step_number))
