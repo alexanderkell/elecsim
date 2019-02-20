@@ -22,7 +22,6 @@ logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
 
-    # env = gym.make('MyEnv-v0')
     register_env("MyEnv-v0", lambda config: WorldEnvironment())
 
     ray.init(object_store_memory=2000000000)
