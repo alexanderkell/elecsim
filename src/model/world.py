@@ -304,8 +304,9 @@ class World(Model):
         return carbon_emitted
 
     def stratify_data(self, demand):
-        frac_to_scale = demand/src.scenario.scenario_data.power_plants.Capacity.sum()
-        stratified_sample = self.power_plants.groupby(['Fuel']).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
+        power_plants = src.scenario.scenario_data.power_plants
+        frac_to_scale = demand/power_plants.Capacity.sum()
+        stratified_sample = power_plants.groupby(['Fuel']).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
         return stratified_sample
 
 
