@@ -66,7 +66,7 @@ class PowerExchange:
         else:
             logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
-        return self.price_duration_curve.accepted_price.mean()
+        return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
@@ -77,7 +77,6 @@ class PowerExchange:
             }
 
         self.hold_duration_curve_prices.append(segment_price_data)
-
 
     @staticmethod
     def _accept_bids(accepted_bids):

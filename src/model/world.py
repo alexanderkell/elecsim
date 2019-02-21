@@ -36,7 +36,7 @@ class World(Model):
     """
 
     # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=None, total_demand=None, data_folder=None, time_run=False):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False):
         self.start = perf_counter()
         logger.info("start: {}".format(self.start))
         # Set up model objects
@@ -60,6 +60,7 @@ class World(Model):
         else:
             self.demand_change_name = "none"
 
+        self.total_demand = total_demand
         if total_demand is not None:
             src.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
             demand_modifier = (src.scenario.scenario_data.power_plants.Capacity.sum() / src.scenario.scenario_data.segment_demand_diff[-1])/1.6
@@ -123,7 +124,7 @@ class World(Model):
             directory = "{}{}{}/".format(ROOT_DIR,"/run/batchrunners/scenarios/data/",self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            self.datacollector.get_model_vars_dataframe().to_csv("{}/demand_{}-carbon_{}-datetime_{}.csv".format(directory, self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
+            self.datacollector.get_model_vars_dataframe().to_csv("{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), self.total_demand))
             end = perf_counter()
             time_elapased = end - self.start
 
@@ -133,10 +134,11 @@ class World(Model):
                 with open("{}/run/timing/results/{}.csv".format(ROOT_DIR,self.data_folder), 'a') as f:
                     timings_data.to_csv(f, header=False)
 
-
             logger.info("end: {}".format(end))
             logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, src.scenario.scenario_data.carbon_price_scenario[0], src.scenario.scenario_data.power_plants.Capacity.sum()))
 
+        if isinstance(self.average_electricity_price, np.ndarray):
+            self.average_electricity_price = self.average_electricity_price[0]
         return -(self.average_electricity_price + self.get_carbon_emitted(self))
 
     def initialize_gencos(self, financial_data, plant_data):
@@ -298,14 +300,16 @@ class World(Model):
         gencos = model.get_gencos()
         bids = [accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids]
 
-        carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid, FuelPlant))
+        carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid.plant, FuelPlant))
 
         return carbon_emitted
 
     def stratify_data(self, demand):
         power_plants = src.scenario.scenario_data.power_plants
+        # print(power_plants)
         frac_to_scale = demand/power_plants.Capacity.sum()
-        stratified_sample = power_plants.groupby(['Fuel']).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
+
+        stratified_sample = power_plants.groupby(['Fuel'], as_index=False).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
         return stratified_sample
 
 
