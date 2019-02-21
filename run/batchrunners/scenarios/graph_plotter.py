@@ -29,17 +29,28 @@ logging.basicConfig(level=logging.INFO)
 
 
 def single_plots(folder, folder_to_save):
-    os.chdir("{}/run/batchrunners/scenarios/data//".format(folder, ROOT_DIR))
+    os.chdir("{}/run/batchrunners/scenarios/data/{}".format(ROOT_DIR, folder))
     for file_name in glob.glob('*.csv'):
-        scenario_results = pd.read_csv(file_name,dtype=np.float64)
+        print(file_name)
+        scenario_results = pd.read_csv(file_name,encoding="ISO-8859-1")
         print(scenario_results)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
+        scenario_results = scenario_results.replace(r'\[|\]','',regex=True).astype(float)
+
         logger.info("Plotting: {}".format(file_name))
         scenario_results_long = pd.melt(scenario_results, id_vars='Unnamed: 0', value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear',
-       'Recip_gas'])
+       'Recip_gas', 'Carbon_tax'])
+
+
         plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=scenario_results_long).set_title(file_name)
         figure = plot.get_figure()
+
+        # ax2 = plt.twinx()
+        # sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2, linewidth=3, label="Carbon Price")
+        # ax2.set_ylim(-10,200)
+        # ax2.set_ylabel("Carbon Tax (£/tonne)")
+
 
         directory = '{}/run/batchrunners/scenarios/figures/{}'.format(ROOT_DIR, folder_to_save)
         if not os.path.exists(directory):
@@ -58,15 +69,12 @@ def variance_plots(folder, folder_to_save):
         scenario_results = scenario_results.rename(index=str, columns = {"Recip_gas":"Recip. Gas"})
         scenario = file_name.split("_")[0]+file_name.split("_")[1]+file_name.split("_")[2]
         scenario_results['Unnamed: 0'] += 2013
-        # print(scenario_results['Carbon_tax'])
         scenario_results['Carbon_tax'] = scenario_results['Carbon_tax'].shift(6)
-        # print(scenario_results['Carbon_tax'])
         scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']] = scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']].iloc[6:]
         scenario_results['scenario'] = [scenario]*len(scenario_results)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total/100, axis=0)
 
-        # print(scenario_results)
         all_data.append(scenario_results)
     frame = pd.concat(all_data, axis=0, ignore_index=True)
     frame_long = pd.melt(frame, id_vars=['Unnamed: 0','scenario','Carbon_tax'],value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear','Recip. Gas'])
@@ -152,5 +160,6 @@ def if_no_directory_create(directory):
 
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
-    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    single_plots("None", "first_rl_results")
 
