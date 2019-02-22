@@ -95,8 +95,8 @@ class World(Model):
                              "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
                              "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
                              "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
-                             "total_genco_wealth:": lambda m: self.get_genco_wealth(m),
-                             "Electricity_cost:": lambda m: self.get_electricity_cost(m),
+                             "total_genco_wealth": lambda m: self.get_genco_wealth(m),
+                             "Electricity_cost": lambda m: self.get_electricity_cost(m),
                              "Carbon_emitted": lambda m: self.get_carbon_emitted(m)
                              }
 
@@ -251,7 +251,6 @@ class World(Model):
                 pass
 
     def operate_constructed_plants(self):
-
         gencos = self.get_gencos()
         logger.debug("gencos: {}".format(gencos))
         for genco in gencos:
