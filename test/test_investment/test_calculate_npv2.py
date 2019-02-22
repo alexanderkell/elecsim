@@ -1,8 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
-from src.role.investment.calculate_npv_2 import CalculateNPV
+from elecsim.role.investment.calculate_npv_2 import CalculateNPV
 import pytest
 from unittest.mock import Mock
 import pandas as pd
