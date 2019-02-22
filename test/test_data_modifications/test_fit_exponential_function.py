@@ -1,4 +1,4 @@
-from src.role.market.latest_market_data import fit_exponential_function
+from elecsim.role.market.latest_market_data import fit_exponential_function
 
 """
 File name: test_fit_exponential_function

@@ -18,8 +18,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
-# sys.path.insert(0, os.path.abspath('./src'))
-sys.path.insert(0, "/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/src")
+# sys.path.insert(0, os.path.abspath('./elecsim'))
+sys.path.insert(0, "/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim")
 
 
 # -- General configuration ------------------------------------------------
@@ -153,7 +153,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'elecsim', 'ElecSIM Documentation',
+    (master_doc, '10. ELECSIM', 'ElecSIM Documentation',
      [author], 1)
 ]
 

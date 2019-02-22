@@ -3,8 +3,8 @@ import logging
 import pandas as pd
 
 from constants import ROOT_DIR
-from src.agents.generation_company.gen_co import GenCo
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.agents.generation_company.gen_co import GenCo
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 logger = logging.getLogger(__name__)
 

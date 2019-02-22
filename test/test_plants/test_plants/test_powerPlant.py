@@ -9,8 +9,8 @@ from unittest import TestCase
 from pytest import approx
 logger = logging.getLogger(__name__)
 
-from src.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 
 __author__ = "Alexander Kell"

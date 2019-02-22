@@ -5,7 +5,7 @@ Feature: # Tests for Non Fuel Old Plant Cost Estimation, using LCOE values, mapp
 '''
 from unittest import TestCase
 
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
+from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

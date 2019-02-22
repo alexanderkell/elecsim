@@ -5,9 +5,9 @@ import pandas as pd
 import pytest
 
 from constants import ROOT_DIR
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.role.investment.calculate_npv import CalculateNPV, select_yearly_payback_payment_for_year
-from src.role.investment.calculate_npv import get_yearly_payment
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.role.investment.calculate_npv import CalculateNPV, select_yearly_payback_payment_for_year
+from elecsim.role.investment.calculate_npv import get_yearly_payment
 
 logger = getLogger(__name__)
 
