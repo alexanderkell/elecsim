@@ -49,12 +49,16 @@ class DemandTimer:
 
         variable_params = {
             "total_demand": [
+                1000,
+                2000,
+                3000,
+                5000,
+                7500,
                 10000,
                 20000,
                 30000,
                 40000,
                 50000,
-                60000,
             ]
         }
 
