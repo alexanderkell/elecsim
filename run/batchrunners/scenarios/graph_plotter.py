@@ -161,5 +161,7 @@ def if_no_directory_create(directory):
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
     # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
-    single_plots("None", "first_rl_results")
+    # single_plots("None", "first_rl_results")
+    single_plots('minimum_sized_country','smallest_country_figs')
+
 

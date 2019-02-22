@@ -54,22 +54,18 @@ class DemandTimer:
 
         variable_params = {
             "total_demand": [
-                500,
-                750,
-                1000,
-                1250,
-                1500,
-                1750,
-                2000,
-                2500,
-                3000,
-                3500,
-                4000,
-                4500,
-                5000,
-                5500,
-                6000,
-                10000
+                10000,
+                20000,
+                30000,
+                40000,
+                50000,
+                60000,
+                70000,
+                80000,
+                90000,
+                100000,
+                150000,
+                200000
             ]
         }
 
@@ -78,7 +74,7 @@ class DemandTimer:
         batch_run = BatchRunnerMP(World,
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
-                                  iterations=5,
+                                  iterations=2,
                                   max_steps=number_of_steps, nr_processes=3)
 
         batch_run.run_all()
