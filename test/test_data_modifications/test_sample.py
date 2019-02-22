@@ -4,7 +4,7 @@ from operator import itemgetter
 
 from pytest import approx
 
-from src.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
+from elecsim.data_manipulation.data_modifications.inverse_transform_sampling import sample_from_custom_distribution
 
 logger = getLogger(__name__)
 """

@@ -1,4 +1,4 @@
-from src.data_manipulation.data_modifications.linear_regression import linear_regression
+from elecsim.data_manipulation.data_modifications.linear_regression import linear_regression
 
 """
 File name: test_linear_regression

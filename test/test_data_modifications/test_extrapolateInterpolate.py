@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
+from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 
 """
 File name: test_extrapolateInterpolate

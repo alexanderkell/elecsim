@@ -8,7 +8,7 @@ from ray.tune import register_env
 import ray
 from ray.tune import run_experiments
 
-from src.reinforcement_learning.gym_elecsim.gym_elecsim.envs import WorldEnvironment
+from elecsim.reinforcement_learning.gym_elecsim.gym_elecsim.envs import WorldEnvironment
 import gym
 
 __author__ = "Alexander Kell"
