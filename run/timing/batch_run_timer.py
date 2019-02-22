@@ -27,7 +27,6 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-
 class DemandTimer:
 
     def __init__(self):
