@@ -5,8 +5,8 @@ import pytest
 from pytest import approx
 
 from constants import KW_TO_MW
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.role.market.latest_market_data import LatestMarketData
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.role.market.latest_market_data import LatestMarketData
 
 logger = logging.getLogger(__name__)
 """

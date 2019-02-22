@@ -4,12 +4,11 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from mesa.batchrunner import BatchRunnerMP
-# from src.mesa_addons.BatchRunnerMP_timer import BatchRunnerMP
 
-from src.model.world import World
+from elecsim.model.world import World
 
 
-from src.scenario.scenario_data import power_plants
+from elecsim.scenario.scenario_data import power_plants
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,10 +25,6 @@ __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
-
-
-
-
 
 
 class DemandTimer:

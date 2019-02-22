@@ -2,7 +2,7 @@ import os.path
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-from src.model.world import World
+from elecsim.model.world import World
 import tracemalloc
 
 import pandas as pd

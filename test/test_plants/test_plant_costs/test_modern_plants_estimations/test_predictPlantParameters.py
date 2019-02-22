@@ -7,7 +7,7 @@ from unittest import TestCase
 
 import pytest
 
-from src.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import \
+from elecsim.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import \
     PredictModernPlantParameters
 
 __author__ = "Alexander Kell"

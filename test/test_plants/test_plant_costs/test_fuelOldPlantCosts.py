@@ -8,8 +8,8 @@ from unittest import TestCase
 
 from pytest import approx
 
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
-from src.plants.plant_type.fuel_plant import FuelPlant
+from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
+from elecsim.plants.plant_type.fuel_plant import FuelPlant
 
 logging.basicConfig(level=logging.DEBUG)
 
