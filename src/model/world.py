@@ -107,7 +107,10 @@ class World(Model):
         self.operate_constructed_plants()
         self.schedule.step()
 
-        src.scenario.scenario_data.carbon_price_scenario[self.step_number+1] = carbon_price
+        if carbon_price is not None:
+            src.scenario.scenario_data.carbon_price_scenario[self.step_number+1] = carbon_price
+        else:
+            src.scenario.scenario_data.carbon_price_scenario = src.scenario.scenario_data.carbon_price_scenario
 
         logger.info("Stepping year: {}".format(self.year_number))
 
