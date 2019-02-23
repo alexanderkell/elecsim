@@ -2,8 +2,8 @@ import logging
 
 import pytest
 
-from src.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor, get_capacity_data, segment_capacity_data_by_load_curve
-from src.scenario.scenario_data import historical_hourly_demand
+from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor, get_capacity_data, segment_capacity_data_by_load_curve
+from elecsim.scenario.scenario_data import historical_hourly_demand
 
 logger = logging.getLogger(__name__)
 """

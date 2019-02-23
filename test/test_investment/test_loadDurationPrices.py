@@ -1,7 +1,7 @@
 import logging
 
 import pandas as pd
-from src.role.investment.expected_load_duration_prices import LoadDurationPrices
+from elecsim.role.investment.expected_load_duration_prices import LoadDurationPrices
 
 from constants import ROOT_DIR
 

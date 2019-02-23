@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-from src.agents.generation_company.gen_co import GenCo
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
-from src.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
-from src.role.investment.predict_load_duration_prices import estimate_lost_load_price
-from src.scenario.scenario_data import lost_load
+from elecsim.agents.generation_company.gen_co import GenCo
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.role.investment.predict_load_duration_prices import PredictPriceDurationCurve
+from elecsim.role.investment.predict_load_duration_prices import estimate_lost_load_price
+from elecsim.scenario.scenario_data import lost_load
 
 """
 File name: test_predictLoadDuration

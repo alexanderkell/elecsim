@@ -3,8 +3,9 @@ import logging
 import pandas as pd
 
 from constants import ROOT_DIR
-from src.agents.generation_company.gen_co import GenCo
-from src.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.agents.generation_company.gen_co import GenCo
+from elecsim.model.world import World
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,9 @@ class TestGenCo:
         plant4 = create_power_plant("plant4", 1980, "Coal", 120)
 
         genco = GenCo(1, model, "Test", 0.06, [plant1, plant2, plant3, plant4])
+
+
+
         genco.operate_constructed_plants()
         for plant, expected_result in zip(genco.plants, expected_output):
             assert plant.is_operating == expected_result
