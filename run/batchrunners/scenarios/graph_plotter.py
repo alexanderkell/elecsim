@@ -33,7 +33,9 @@ def single_plots(folder, folder_to_save):
     for file_name in glob.glob('*.csv'):
         print(file_name)
         scenario_results = pd.read_csv(file_name,encoding="ISO-8859-1")
-        print(scenario_results)
+        print(scenario_results.Carbon_tax.head())
+        if scenario_results.Carbon_tax.isnull().any():
+            continue
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total, axis=0)
         scenario_results = scenario_results.replace(r'\[|\]','',regex=True).astype(float)
