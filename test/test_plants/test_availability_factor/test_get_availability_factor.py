@@ -1,4 +1,4 @@
-from src.plants.availability_factors.availability_factor_calculations import get_availability_factor
+from elecsim.plants.availability_factors.availability_factor_calculations import get_availability_factor
 
 """
 File name: test_get_availability_factor

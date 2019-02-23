@@ -6,11 +6,11 @@ Feature: # Testing estimation capabilities of seelct_cost_estimator. Asserting i
 import pytest
 from pytest import approx
 
-from src.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
-from src.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
-from src.plants.plant_type.fuel_plant import FuelPlant
-from src.plants.plant_type.non_fuel_plant import NonFuelPlant
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator
+from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
+from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
+from elecsim.plants.plant_type.fuel_plant import FuelPlant
+from elecsim.plants.plant_type.non_fuel_plant import NonFuelPlant
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

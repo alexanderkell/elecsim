@@ -40,7 +40,7 @@ def single_plots(folder, folder_to_save):
 
         logger.info("Plotting: {}".format(file_name))
         scenario_results_long = pd.melt(scenario_results, id_vars='Unnamed: 0', value_vars=['CCGT', 'Coal', 'Onshore', 'Offshore', 'PV', 'Nuclear',
-       'Recip_gas', 'Carbon_tax'])
+       'Recip_gas'])
 
 
         plot = sns.lineplot(x="Unnamed: 0", y="value", hue='variable', data=scenario_results_long).set_title(file_name)
