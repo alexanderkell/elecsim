@@ -36,13 +36,13 @@ class DemandTimer:
     def run_world_with_demand_and_power_plants(self):
 
         number_of_steps = 40
-        data_folder = "minimum_sized_country"
+        data_folder = "minimum_sized_country_2"
 
         fixed_params = {
             "initialization_year": 2018,
             "number_of_steps": number_of_steps,
             "demand_change": [1.0] * 50,
-            "carbon_price_scenario": [40]*50,
+            "carbon_price_scenario": [10]*50,
             "data_folder": data_folder,
             "time_run":True
         }
@@ -59,6 +59,8 @@ class DemandTimer:
                 30000,
                 40000,
                 50000,
+                75000,
+                100000
             ]
         }
 
@@ -67,7 +69,7 @@ class DemandTimer:
         batch_run = BatchRunnerMP(World,
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
-                                  iterations=10,
+                                  iterations=2,
                                   max_steps=number_of_steps, nr_processes=3)
 
         batch_run.run_all()
