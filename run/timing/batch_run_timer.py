@@ -13,7 +13,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 """
 File name: batch_run_timer
@@ -42,22 +42,22 @@ class DemandTimer:
             "initialization_year": 2018,
             "number_of_steps": number_of_steps,
             "demand_change": [1.0] * 50,
-            "carbon_price_scenario": [40]*50,
+            "carbon_price_scenario": [10]*50,
             "data_folder": data_folder,
             "time_run":True
         }
 
         variable_params = {
             "total_demand": [
-                1000,
-                2000,
-                3000,
-                5000,
-                7500,
-                10000,
-                20000,
-                30000,
-                40000,
+                # 1000,
+                # 2000,
+                # 3000,
+                # 5000,
+                # 7500,
+                # 10000,
+                # 20000,
+                # 30000,
+                # 40000,
                 50000,
 
             ]
@@ -68,7 +68,7 @@ class DemandTimer:
         batch_run = BatchRunnerMP(World,
                                   fixed_parameters=fixed_params,
                                   variable_parameters=variable_params,
-                                  iterations=10,
+                                  iterations=1,
                                   max_steps=number_of_steps, nr_processes=3)
 
         batch_run.run_all()
