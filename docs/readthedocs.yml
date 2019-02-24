@@ -1,5 +1,4 @@
 build:
-    image: latest
-
+    image: carbon_optimiser    
 python:
     version: 3.6
