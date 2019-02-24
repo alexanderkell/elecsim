@@ -13,7 +13,7 @@ Here is some text explaining some very complicated stuff.::
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   Modules <rst/modules.rst>
 
 
 Indices and tables
