@@ -1,6 +1,11 @@
-This repository contains the functionality for the ElecSIM package. Using a scenario file, one can build an environment of electricity producers (GenCo's), electricity suppliers and an electricity market. 
+## ElecSIM 
+[![Build Status](https://travis-ci.org/alexanderkell/elecsim.svg?branch=master)](https://travis-ci.org/alexanderkell/elecsim)
 
-The effect of different policy options and starting conditions can be explored using this electricity market model. 
+This prepository contains the functionality for the ElecSIM package. ElecSIM is an agent-based model of an electricity market. ElecSIM can be generalised to any country, with starting parameters set in a scenario file.
+
+Through the manipulation of a scenario file, one can build a custom environment of electricity producers with their respective power plants, and an electricity market which matches demand with supply.
+
+ElecSIM allows users to explore the effect of different policy options and starting conditions on electricity markets. 
 
 ## Installation
 
