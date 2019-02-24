@@ -14,7 +14,7 @@ Here is some text explaining some very complicated stuff.::
    :maxdepth: 6
    :caption: Contents
     
-   elecsim <../rst>  
+   elecsim <rst>  
 
 
 Indices and tables
