@@ -17,7 +17,7 @@ import mock
 import os
 import sys
 
-MOCK_MODULES = ['mesa','pandas','scipy','pytest','sphinx','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
+MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
