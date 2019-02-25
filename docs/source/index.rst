@@ -1,10 +1,14 @@
-Welcome to ElecSIM's documentation!
+Welcome to ElecSim's documentation!
 ===================================
 
-.. automodule:: plants.power_plant
+Guide
+=====
 
-.. autoclass:: PowerPlant
-    :members:
+Here is some text explaining some very complicated stuff.::
+	print 'hello'
+	>> hello
+
+
 
 .. toctree::
    :maxdepth: 2
