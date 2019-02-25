@@ -1,21 +1,16 @@
+.. ElecSim documentation master file, created by
+   sphinx-quickstart on Mon Feb 25 08:58:38 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
 Welcome to ElecSim's documentation!
 ===================================
 
-Guide
-=====
-
-Here is some text explaining some very complicated stuff.::
-	print 'hello'
-	>> hello
-
-
-
 .. toctree::
-   :maxdepth: 6
-   :caption: Contents
-    
-   elecsim <rst/modules>  
+   :maxdepth: 2
+   :caption: Contents:
 
+   API-Documentation <rst/modules>
 
 Indices and tables
 ==================
