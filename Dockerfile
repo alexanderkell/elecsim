@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 
 ENV NAME World
 
-CMD ["python", "carbon_optimiser.py"]
+CMD ["python", "/run/reinforcement_learning/carbon_optimiser.py"]
 
 
 
