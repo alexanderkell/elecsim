@@ -27,7 +27,9 @@ for mod_name in MOCK_MODULES:
 
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, "../")
-sys.path.insert(0, "../elecsim/")
+sys.path.insert(0, "../../elecsim/")
+sys.path.insert(0, "../../")
+sys.path.insert(0, "../..")
 
 
 # -- Project information -----------------------------------------------------
