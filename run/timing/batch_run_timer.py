@@ -44,7 +44,7 @@ class DemandTimer:
             "demand_change": [1.0] * 50,
             "carbon_price_scenario": [10]*50,
             "data_folder": data_folder,
-            "time_run":True
+            "time_run":False
         }
 
         variable_params = {
