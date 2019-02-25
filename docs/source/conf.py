@@ -13,17 +13,26 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 
-import mock
 import os
 import sys
 
+from mock import Mock as MagicMock
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
+
 MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+# MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = mock.Mock()
 
 
 
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../elecsim'))
 
 
