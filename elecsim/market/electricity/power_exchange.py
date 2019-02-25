@@ -19,9 +19,7 @@ __email__ = "Alexander@Kell.es"
 
 
 class PowerExchange:
-    """
-    Test to see if works.
-    """
+
     def __init__(self, model):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
