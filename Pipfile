@@ -15,6 +15,7 @@ pathos = "*"
 matplotlib = "*"
 seaborn = "*"
 ray = "*"
+mock = "*"
 
 [dev-packages]
 

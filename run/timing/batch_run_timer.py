@@ -36,7 +36,7 @@ class DemandTimer:
     def run_world_with_demand_and_power_plants(self):
 
         number_of_steps = 40
-        data_folder = "minimum_sized_country_2"
+        data_folder = "minimum_sized_country_3"
 
         fixed_params = {
             "initialization_year": 2018,
@@ -49,18 +49,18 @@ class DemandTimer:
 
         variable_params = {
             "total_demand": [
-                # 1000,
-                # 2000,
-                # 3000,
-                # 5000,
-                # 7500,
-                # 10000,
-                # 20000,
-                # 30000,
-                # 40000,
-                # 50000,
+                1000,
+                2000,
+                3000,
+                5000,
+                7500,
+                10000,
+                20000,
+                30000,
+                40000,
+                50000,
                 75000,
-                # 100000
+                100000
 
             ]
         }

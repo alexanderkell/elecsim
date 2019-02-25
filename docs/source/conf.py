@@ -14,7 +14,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../elecsim'))
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, "../elecsim")
 
 
 # -- Project information -----------------------------------------------------
@@ -40,6 +41,12 @@ release = '0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
 ]
 

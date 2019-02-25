@@ -13,8 +13,8 @@ __email__ = "Alexander@Kell.es"
 class Bid:
 
     def __init__(self, gen_co, plant, segment_hours, capacity_bid, price_per_mwh, year_of_bid):
-        """
-        Bid class that contains all the information related to the creation of bids
+        """Bid class that contains all the information related to the creation of bids
+
         :param gen_co: Generation company from which the bid originates from
         :param plant: Power plant from which the bid originates from
         :param segment_hours: Number of hours sent for bid
