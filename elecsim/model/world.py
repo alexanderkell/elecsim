@@ -233,7 +233,6 @@ class World(Model):
 
                     # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
                     # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
-                    logger.info("historic_bids len: {}".format(len(historic_bids)))
                     # for bids in reversed(historic_bids):
                     #     logger.info("bids.year_of_bid: {}".format(bids.year_of_bid))
 
