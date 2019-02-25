@@ -8,10 +8,6 @@ from elecsim.scenario.scenario_data import lost_load
 
 logger = logging.getLogger(__name__)
 
-# from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-# from elecsim.agents.generation_company.gen_co import GenCo
-# from elecsim.role.market.world_plant_capacity import WorldPlantCapacity
-
 
 
 """power_exchange.py: Functionality to run power exchange"""
@@ -23,6 +19,9 @@ __email__ = "Alexander@Kell.es"
 
 
 class PowerExchange:
+    """
+    Test to see if works.
+    """
     def __init__(self, model):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
