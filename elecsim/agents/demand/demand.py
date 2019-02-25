@@ -17,8 +17,8 @@ __email__ = "Alexander@Kell.es"
 class Demand(Agent):
 
     def __init__(self, unique_id, segment_hours, segment_consumption, yearly_demand_change1):
-        """
-        An agent representing UK electricity demand
+        """ An agent representing UK electricity demand
+
         :param segment_hours: A series representing the load duration curve
         """
         self.unique_id = unique_id
