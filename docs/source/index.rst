@@ -7,7 +7,6 @@ Welcome to ElecSim's documentation!
 ===================================
 
 .. toctree::
-   :hidden:
    :maxdepth: 6
    :caption: Contents:
    
