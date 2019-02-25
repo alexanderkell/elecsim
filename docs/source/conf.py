@@ -14,13 +14,15 @@
 #
 
 import mock
+import os
+import sys
 
 MOCK_MODULES = ['mesa','pandas','scipy','pytest','sphinx','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
-import os
-import sys
+
+
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../elecsim'))
 
