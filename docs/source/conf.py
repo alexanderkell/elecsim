@@ -12,28 +12,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-
 import os
 import sys
-
-from mock import Mock as MagicMock
-
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock()
-
-MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
-
-# MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
-# for mod_name in MOCK_MODULES:
-#     sys.modules[mod_name] = mock.Mock()
-
-
-
-sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../elecsim'))
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, "../elecsim")
 
 
 # -- Project information -----------------------------------------------------
@@ -59,7 +41,13 @@ release = '0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
     'sphinx.ext.coverage',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
