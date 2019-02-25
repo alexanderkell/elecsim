@@ -7,10 +7,11 @@ Welcome to ElecSim's documentation!
 ===================================
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
+   :maxdepth: 6
    :caption: Contents:
    
-   API-Documentation <rst/module>
+   API-Documentation <rst/modules>
 
 
 Indices and tables
