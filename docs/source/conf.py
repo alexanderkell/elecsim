@@ -17,19 +17,17 @@ import mock
 import os
 import sys
 
-if 'READTHEDOCS' not in os.environ:
-    import cython_generated_ext
+# if 'READTHEDOCS' not in os.environ:
+#     import cython_generated_ext
 
-MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+# MOCK_MODULES = ['mesa','pandas','scipy','pytest','ipykernel','pycallgraph','pathos','matplotlib','seaborn', 'ray']
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = mock.Mock()
 
 
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, "../")
-sys.path.insert(0, "../../elecsim/")
 sys.path.insert(0, "../../")
-sys.path.insert(0, "../..")
 
 
 # -- Project information -----------------------------------------------------
