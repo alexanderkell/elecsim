@@ -1,14 +1,19 @@
 FROM python:3.6
 
-WORKDIR /run/reinforcement_learning/
 
-ADD . /run/reinforcement_learning/
-
+COPY requirements.txt /
 RUN pip install -r requirements.txt
 
+ADD . /app
+COPY . /app
+
+WORKDIR /app
+	
 ENV NAME World
 
-CMD ["python", "/run/reinforcement_learning/carbon_optimiser.py"]
+ENV PYTHONPATH "${PYTHONPATH}:/elecsim"
+
+CMD ["python", "run/reinforcement_learning/carbon_optimiser.py"]
 
 
 

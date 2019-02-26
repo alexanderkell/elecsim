@@ -9,7 +9,6 @@ import ray
 from ray.tune import run_experiments
 
 from elecsim.reinforcement_learning.gym_elecsim.gym_elecsim.envs import WorldEnvironment
-import gym
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -34,7 +33,7 @@ if __name__ == "__main__":
             },
             "config":{
                 "lr": grid_search([1e-2, 1e-4, 1e-6]),
-                "num_workers": 3,
+                "num_workers": 1,
             }
         }
     })
