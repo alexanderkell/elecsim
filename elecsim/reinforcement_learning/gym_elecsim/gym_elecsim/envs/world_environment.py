@@ -19,8 +19,6 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 
 
-
-
 class WorldEnvironment(gym.Env):
 
     def __init__(self):

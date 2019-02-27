@@ -13,7 +13,9 @@ ENV NAME World
 
 ENV PYTHONPATH "${PYTHONPATH}:/elecsim"
 
-CMD ["python", "run/reinforcement_learning/carbon_optimiser.py"]
+ENTRYPOINT ["python"]
+
+CMD ["python", "run/timing/batch_run_timer.py"]
 
 
 

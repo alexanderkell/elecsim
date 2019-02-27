@@ -63,7 +63,7 @@ class LatestMarketData:
         if value_required != "demand"  or demand_linear:
             next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
         else:
-            next_value = self.fit_exponential_function(regression, years_to_look_back, years_to_look_forward, years_for_regression)
+            next_value = self.fit_exponential_function(regression, years_to_look_back, years_to_look_forward)
         return next_value
 
 
@@ -116,7 +116,7 @@ class LatestMarketData:
         regression = [variable_data[i] if i > 0 else variable_data[0] for i in years_for_regression]
         return regression
 
-    def fit_exponential_function(self, regression, years_to_look_back, years_to_look_forward, years_for_regression):
+    def fit_exponential_function(self, regression, years_to_look_back, years_to_look_forward):
         def exponential_func(x, a, b, c):
             return a * np.exp(b * x) + c
 
