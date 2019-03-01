@@ -13,7 +13,7 @@ ENV NAME World
 
 ENV PYTHONPATH "${PYTHONPATH}:/elecsim"
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["python", "run/timing/batch_run_timer.py"]
 
 CMD ["python", "run/timing/batch_run_timer.py"]
 

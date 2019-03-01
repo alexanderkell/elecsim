@@ -1,9 +1,8 @@
 import logging
 
 import pandas as pd
-# from elecsim.role.investment.expected_load_duration_prices import LoadDurationPrices
 
-from constants import ROOT_DIR
+from elecsim.constants import ROOT_DIR
 
 pd.set_option('display.max_rows', 500)
 

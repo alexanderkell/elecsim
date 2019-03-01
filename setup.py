@@ -1,8 +1,26 @@
 from distutils.core import setup
+from setuptools import find_packages
+
+import os
+
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join('..', path, filename))
+    return paths
+
+extra_files = package_files('elecsim/data/processed/')
+print(extra_files)
+
 setup(
-  name = 'ElecSIM',         # How you named your package folder (MyLib)
-  packages = ['ElecSIM'],   # Chose the same as "name"
-  version = '0.1',      # Start with a small number and increase it with every change you make
+  name = 'elecsim',         # How you named your package folder (MyLib)
+  packages = find_packages(exclude=['tests', 'tests.*']),   # Chose the same as "name"
+  package_data={'elecsim': extra_files},
+  # package_data={'elecsim': },
+  # include_package_data=True,
+  py_modules=['elecsim'],
+  version = '0.1.17',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Agent-based Model for Electricity Markets',   # Give a short description about your library
   author = 'Alexander Kell',                   # Type in your name

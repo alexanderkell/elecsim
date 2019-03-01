@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from constants import ROOT_DIR
+from elecsim.constants import ROOT_DIR
 
 logger = logging.getLogger(__name__)
 """

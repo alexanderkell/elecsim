@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 import elecsim.scenario.scenario_data as scenario
-from constants import GJ_TO_MW
+from elecsim.constants import GJ_TO_MW
 from elecsim.plants.fuel.fuel import Fuel
 
 """
