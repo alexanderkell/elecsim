@@ -35,4 +35,4 @@ if __name__ == "__main__":
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned off or changed to debug for further information.
 
-We then instantiate the model to include information for the year 2018. The for loop steps the model 20 times, which is equivalent to 20 years in the model.
+We then instantiate the model to include information for the year 2018. Here, the for loop steps the model 20 times, which is equivalent to 20 years in the model.
