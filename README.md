@@ -9,24 +9,27 @@ ElecSIM allows users to explore the effect of different policy options and start
 
 ## Installation
 
-If you're on MacOS, you can install the virtual environment and package manager for python "pipenv" using brew. If you are on linux, you can use Linuxbrew on linux using the same command:
-
+Install elecsim through the python repository pip with the following command
 ```
-$ brew install pipenv
-```
-
-if you're using Fedora 28:
-
-```
-$ sudo dnf install pipenv
-```
-or, if you're using windows, run the following in Power Shell:
-```
-pip install pipenv
+pip install elecsim
 ```
 
-Once pipenv is installed run the following commands in the folder of your choice to create a new virtual environment and install the dependencies required for this project:
+Or for the latest release:
+```
+pip install git+https://github.com/alexanderkell/elecsim
+```
+
+## Getting started
+
+To get started create a python file once elecsim is installed through pip and fill it with the following code:
 
 ```
-pipenv install 
+from elecsim.model.world import World
+import logging
+logging.basicConfig(level=logging.INFO) # Displays information of run
+
+if __name__ == "__main__":
+    world = World(2018) # Initiates world in the year 2018
+    for i in range(20): # Runs the simulation for 20 years
+        world.step() # Step for another year
 ```
