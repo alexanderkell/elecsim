@@ -1,23 +1,21 @@
-## ElecSim 
-[![Build Status](https://travis-ci.org/alexanderkell/elecsim.svg?branch=master)](https://travis-ci.org/alexanderkell/elecsim)
+# ElecSim
 
-This prepository contains the functionality for the ElecSim package. ElecSim is an agent-based model of an electricity market. ElecSim can be generalised to any country, with starting parameters set in a scenario file.
+[![Build Status](https://travis-ci.org/alexanderkell/elecsim.svg?branch=master)](https://travis-ci.org/alexanderkell/elecsim) [![Coverage Status](https://coveralls.io/repos/github/alexanderkell/elecsim-paper/badge.svg?branch=master)](https://coveralls.io/github/alexanderkell/elecsim-paper?branch=master)
+
+ElecSim is an agent-based model of an electricity market written in python. ElecSim can be generalised to any country, with the starting parameters set in a scenario file.
 
 Through the manipulation of a scenario file, one can build a custom environment of electricity producers with their respective power plants, and an electricity market which matches demand with supply.
 
-ElecSim allows users to explore the effect of different policy options and starting conditions on electricity markets. 
+ElecSim allows practitioners to explore the effect of different policy options and starting conditions on electricity markets. 
 
-## Installation
 
-Install ElecSim through the python repository pip with the following command
-```
-pip install elecsim
-```
+# Features
 
-Or for the latest release:
-```
-pip install git+https://github.com/alexanderkell/elecsim
-```
+* Generalisable to any country
+* Integration of major power plant types
+* Default parameter data included
+* Example model library
+
 
 ## Getting started
 
