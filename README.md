@@ -24,9 +24,9 @@ pip install git+https://github.com/alexanderkell/elecsim
 To get started create a python file once elecsim is installed through pip and fill it with the following code:
 
 ```
-from elecsim.model.world import World
+from elecsim.model.world import World # Import the world
 import logging
-logging.basicConfig(level=logging.INFO) # Displays information of run
+logging.basicConfig(level=logging.INFO) # Displays useful information of run
 
 if __name__ == "__main__":
     world = World(2018) # Initiates world in the year 2018
