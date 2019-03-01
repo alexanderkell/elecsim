@@ -21,17 +21,17 @@ pip install git+https://github.com/alexanderkell/elecsim
 
 ## Getting started
 
-To get started create a python file once elecsim is installed through pip and fill it with the following code:
+Once elecsim is installed, create a python file and fill it with the following code:
 
 ```
-from elecsim.model.world import World # Import the world
+from elecsim.model.world import World 
 import logging
-logging.basicConfig(level=logging.INFO) # Displays useful information of run
+logging.basicConfig(level=logging.INFO) 
 
 if __name__ == "__main__":
-    world = World(2018) # Initiates world in the year 2018
-    for i in range(20): # Runs the simulation for 20 years
-        world.step() # Step for another year
+    world = World(2018)
+    for i in range(20):
+        world.step()
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned off or changed to debug for further information.
 
