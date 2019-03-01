@@ -46,3 +46,16 @@ if __name__ == "__main__":
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned off or changed to debug for further information.
 
 We then instantiate the model to include information for the year 2018. Here, the for loop steps the model 20 times, which is equivalent to 20 years in the model.
+
+## Docker
+
+ElecSim is hosted on docker hub, so that anybody on any machine can quickly get running. 
+
+Run the following command to pull ElecSim from docker hub
+```
+docker pull alexkell/elecsim:latest
+```
+Once you have an ElecSim container run a particular file using the following command
+```
+docker run elecsim <path/to/file>
+```
