@@ -2,8 +2,8 @@ import logging
 
 import pandas as pd
 
-from constants import ROOT_DIR
 from elecsim.agents.generation_company.gen_co import GenCo
+from elecsim.constants import ROOT_DIR
 from elecsim.model.world import World
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 

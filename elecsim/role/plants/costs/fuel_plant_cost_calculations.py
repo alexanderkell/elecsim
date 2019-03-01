@@ -5,7 +5,7 @@ from math import isnan
 import pandas as pd
 
 import elecsim.scenario.scenario_data
-from constants import ROOT_DIR
+from elecsim.constants import ROOT_DIR
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from elecsim.plants.fuel.fuel_registry.fuel_registry import fuel_registry, plant_type_to_fuel
 from elecsim.role.plants.costs.plant_cost_calculation import PlantCostCalculations

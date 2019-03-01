@@ -1,7 +1,7 @@
 import pandas as pd
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
-from constants import ROOT_DIR, KW_TO_MW
+from elecsim.constants import ROOT_DIR, KW_TO_MW
 
 """scenario_data.py: Scenario file containing data for a single simulation run."""
 

@@ -10,9 +10,9 @@ from mesa import Model
 from mesa.datacollection import DataCollector
 
 import elecsim.scenario.scenario_data
-from constants import ROOT_DIR
 from elecsim.agents.demand.demand import Demand
 from elecsim.agents.generation_company.gen_co import GenCo
+from elecsim.constants import ROOT_DIR
 from elecsim.market.electricity.power_exchange import PowerExchange
 from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant

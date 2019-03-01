@@ -6,7 +6,7 @@ from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_powe
 import pytest
 from unittest.mock import Mock
 import pandas as pd
-from constants import ROOT_DIR
+from elecsim.constants import ROOT_DIR
 """
 File name: test_calculate_npv
 Date created: 24/12/2018

@@ -1,6 +1,6 @@
 import logging
 
-import constants as constants
+from elecsim import constants as constants
 
 logger = logging.getLogger(__name__)
 """
