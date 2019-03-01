@@ -17,6 +17,18 @@ ElecSim allows practitioners to explore the effect of different policy options a
 * Example model library
 
 
+## Installation
+
+Install ElecSim through the python repository pip with the following command
+```
+pip install elecsim
+```
+
+Or for the latest release:
+```
+pip install git+https://github.com/alexanderkell/elecsim
+```
+
 ## Getting started
 
 Once ElecSim is installed, create a python file and fill it with the following code:
