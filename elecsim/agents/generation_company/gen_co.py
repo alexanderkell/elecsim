@@ -12,8 +12,10 @@ from elecsim.plants.plant_type.fuel_plant import FuelPlant
 from elecsim.role.investment.calculate_npv import get_most_profitable_plants_by_npv
 from elecsim.role.investment.calculate_npv import select_yearly_payback_payment_for_year
 from elecsim.role.market.latest_market_data import LatestMarketData
-from elecsim.scenario.scenario_data import bid_mark_up, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
-from elecsim.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc, upfront_investment_costs, years_for_agents_to_predict_forward
+# from elecsim.scen_error.scenario_data import bid_mark_up, pv_availability, offshore_availability, onshore_availability, non_fuel_plant_availability
+# from elecsim.scen_error.scenario_data import nuclear_wacc, non_nuclear_wacc, upfront_investment_costs, years_for_agents_to_predict_forward
+
+import elecsim.scenario.scenario_data
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +97,7 @@ class GenCo(Agent):
                     price = plant.short_run_marginal_cost(self.model, self)
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
-            marked_up_price = price * bid_mark_up
+            marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
             if plant.is_operating or future_plant_operating:
                 if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
                     capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
@@ -117,20 +119,20 @@ class GenCo(Agent):
                         )
                 elif plant.plant_type != 'Hydro_Store':
                     bids.append(
-                        Bid(self, plant, segment_hour, non_fuel_plant_availability * plant.capacity_mw, marked_up_price, self.model.year_number)
+                        Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw, marked_up_price, self.model.year_number)
 
                     )
         return bids
 
     def get_renewable_availability(self, plant):
         if plant.plant_type == "Offshore":
-            availability = offshore_availability
+            availability = elecsim.scenario.scenario_data.offshore_availability
         elif plant.plant_type == 'Onshore':
-            availability = onshore_availability
+            availability = elecsim.scenario.scenario_data.onshore_availability
         elif plant.plant_type == "PV":
-            availability = pv_availability
+            availability = elecsim.scenario.scenario_data.pv_availability
         else:
-            availability = non_fuel_plant_availability
+            availability = elecsim.scenario.scenario_data.non_fuel_plant_availability
         return availability
 
     def invest(self):
@@ -152,13 +154,13 @@ class GenCo(Agent):
                 for plant_data in potential_plant_data:
                     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                     potential_plant_list.append(power_plant_trial)
-                    lowest_upfront_cost = min(plant.get_upfront_costs() * upfront_investment_costs for plant in potential_plant_list)
+                    lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
             else:
                 break
 
             for plant_data in potential_plant_data:
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
-                down_payment = power_plant_trial.get_upfront_costs() * upfront_investment_costs
+                down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
                 # logger.info("down_payment: {}, total money: {}, upfront_investment_costs: {}".format(down_payment, self.money, upfront_investment_costs))
                 if self.money > down_payment:
                     logger.info("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
@@ -200,11 +202,11 @@ class GenCo(Agent):
         short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
                                               for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating==True))
 
-        interest = [nuclear_wacc if plant.plant_type == "Nuclear" else non_nuclear_wacc for plant in self.plants]
+        interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
         fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw)*-1 for plant in self.plants if plant.is_operating==True)
 
-        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, upfront_investment_costs, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
+        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
 
         cashflow = income - short_run_marginal_expenditure - fixed_variable_costs - capital_loan_expenditure
         if not math.isnan(cashflow):
@@ -236,10 +238,10 @@ class GenCo(Agent):
 
     def forecast_demand_change(self):
         latest_market_data = LatestMarketData(self.model)
-        demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period, years_for_agents_to_predict_forward)
+        demand_change_predicted = latest_market_data.agent_forecast_value("demand", self.look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
         return demand_change_predicted
 
     def forecast_attribute_price(self, fuel_type):
         latest_market_data = LatestMarketData(self.model)
-        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, years_for_agents_to_predict_forward)
+        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
         return uranium_price_predicted

@@ -10,5 +10,5 @@ import logging
 
 if __name__ == "__main__":
     world = World(2018, log_level="info")
-    # for i in range(20):
-        # world.step()
+    for i in range(20):
+        world.step()

@@ -7,7 +7,7 @@ from gym.spaces import Box
 import numpy as np
 
 from elecsim.model.world import World
-from elecsim.scenario.scenario_data import lost_load
+from elecsim.scen_error.scenario_data import lost_load
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"

@@ -73,7 +73,7 @@ def variance_plots(folder, folder_to_save):
         scenario_results['Unnamed: 0'] += 2013
         scenario_results['Carbon_tax'] = scenario_results['Carbon_tax'].shift(6)
         scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']] = scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']].iloc[6:]
-        scenario_results['scenario'] = [scenario]*len(scenario_results)
+        scenario_results['scen_error'] = [scenario]*len(scenario_results)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total/100, axis=0)
 

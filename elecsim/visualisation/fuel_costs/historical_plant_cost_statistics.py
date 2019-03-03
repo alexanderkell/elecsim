@@ -1,7 +1,7 @@
 import pandas as pd
 
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator
-from elecsim.scenario.scenario_data import modern_plant_costs
+from elecsim.scen_error.scenario_data import modern_plant_costs
 
 """
 File name: historical_fuel_cost_analysis

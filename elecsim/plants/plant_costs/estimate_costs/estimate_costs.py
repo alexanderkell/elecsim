@@ -3,7 +3,7 @@ from functools import lru_cache
 from numpy import isnan
 from numpy import ndarray
 
-import elecsim.scenario.scenario_data as scenario
+import elecsim.scenario.scenario_data
 from elecsim.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
 from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fuel_plant_calculations.fuel_plants_old_params import FuelOldPlantCosts
 from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
@@ -50,7 +50,7 @@ def _select_cost_estimator(start_year, plant_type, capacity):
     _check_positive(start_year, "start_year")
     _check_positive(capacity, "start_year")
 
-    hist_costs = scenario.power_plant_historical_costs_long
+    hist_costs = elecsim.scenario.scenario_data.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology.map(lambda x: x in plant_type)].dropna()
 
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:

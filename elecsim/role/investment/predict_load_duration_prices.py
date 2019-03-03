@@ -5,7 +5,7 @@ import numpy as np
 
 from elecsim.market.electricity.power_exchange import PowerExchange
 from elecsim.role.market.latest_market_data import LatestMarketData
-from elecsim.scenario.scenario_data import years_for_agents_to_predict_forward, lost_load
+import elecsim.scenario.scenario_data
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class PredictPriceDurationCurve:
         self.model = model
 
     def predict_price_duration_curve(self, look_back_period):
-        demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period, years_for_agents_to_predict_forward)
+        demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
         predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
 
         power_ex = PowerExchange(self.model)
@@ -42,10 +42,10 @@ class PredictPriceDurationCurve:
 
 
 def estimate_lost_load_price(predicted_price_duration_curve):
-    if all(predicted_price_duration_curve.accepted_price==lost_load):
+    if all(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
         return predicted_price_duration_curve
-    if any(predicted_price_duration_curve.accepted_price==lost_load):
-        predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(lost_load,np.nan)
+    if any(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
+        predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
         # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
         if predicted_price_duration_curve.accepted_price.count() > 1:
             predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()

@@ -4,7 +4,7 @@ from itertools import chain
 import pandas as pd
 
 from elecsim.market.electricity.bid import Bid
-from elecsim.scenario.scenario_data import lost_load
+import elecsim.scenario.scenario_data
 
 logger = logging.getLogger(__name__)
 
@@ -123,6 +123,6 @@ class PowerExchange:
                 bid.reject_bid(segment_hour=segment_hour)
                 logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
         if capacity_required > 0:
-            accepted_bids.append(Bid(None, None, segment_hour, 0, lost_load, self.model.year_number))
+            accepted_bids.append(Bid(None, None, segment_hour, 0, elecsim.scenario.scenario_data.lost_load, self.model.year_number))
         return accepted_bids
 

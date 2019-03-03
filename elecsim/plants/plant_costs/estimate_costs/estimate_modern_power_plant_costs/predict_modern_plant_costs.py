@@ -4,7 +4,7 @@ from random import uniform
 
 from scipy.interpolate import interp1d
 
-import elecsim.scenario.scenario_data as scenario
+import elecsim.scenario.scenario_data
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from elecsim.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 
@@ -27,7 +27,7 @@ class PredictModernPlantParameters:
         self.start_year = float(start_year)
 
         # Import UK power plant cost data
-        self.cost_data = scenario.modern_plant_costs
+        self.cost_data = elecsim.scenario.scenario_data.modern_plant_costs
         # self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
         self.cost_data = self.cost_data[self.cost_data.apply(lambda x: x['Type'] in self.plant_type, axis=1)].sort_values('Plant_Size')
 
@@ -70,7 +70,7 @@ class PredictModernPlantParameters:
 
         parameters = {**parameters_of_plant, **durations_parameters, **yearly_cost_perc}
         parameters = self.check_pre_dev_spend(parameters)
-        parameters['variable_o_and_m_per_mwh'] *= uniform(scenario.o_and_m_multiplier[0], scenario.o_and_m_multiplier[1])
+        parameters['variable_o_and_m_per_mwh'] *= uniform(elecsim.scenario.scenario_data.o_and_m_multiplier[0], elecsim.scenario.scenario_data.o_and_m_multiplier[1])
         self._use_historical_efficiency_data(parameters)
 
         return parameters
@@ -78,8 +78,8 @@ class PredictModernPlantParameters:
     def _use_historical_efficiency_data(self, parameters):
         if self.plant_type in ['CCGT', 'Coal'] and self.start_year < 2018:
             fuel_used = plant_type_to_fuel(self.plant_type)
-            historical_efficiency_measure = scenario.historical_fuel_plant_efficiency[
-                scenario.historical_fuel_plant_efficiency.fuel_type == fuel_used]
+            historical_efficiency_measure = elecsim.scenario.scenario_data.historical_fuel_plant_efficiency[
+                elecsim.scenario.scenario_data.historical_fuel_plant_efficiency.fuel_type == fuel_used]
             efficiency = ExtrapolateInterpolate(historical_efficiency_measure.Year,
                                                 historical_efficiency_measure.efficiency).min_max_extrapolate(
                 self.start_year)

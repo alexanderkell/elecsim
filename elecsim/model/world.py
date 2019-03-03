@@ -9,7 +9,6 @@ import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
 
-import elecsim.scenario.scenario_data
 from elecsim.agents.demand.demand import Demand
 from elecsim.agents.generation_company.gen_co import GenCo
 from elecsim.constants import ROOT_DIR
@@ -17,7 +16,9 @@ from elecsim.market.electricity.power_exchange import PowerExchange
 from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
-from elecsim.scenario.scenario_data import yearly_demand_change, segment_time, company_financials
+# from elecsim.scenario.scenario_data import yearly_demand_change, segment_time, company_financials
+
+import elecsim.scenario.scenario_data
 
 logger = logging.getLogger(__name__)
 
@@ -70,12 +71,12 @@ class World(Model):
 
         # Import company data including financials and plant data
         plant_data = elecsim.scenario.scenario_data.power_plants
-        financial_data = company_financials
+        financial_data = elecsim.scenario.scenario_data.company_financials
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-        self.demand = Demand(self.unique_id_generator, segment_time, elecsim.scenario.scenario_data.segment_demand_diff, yearly_demand_change)
+        self.demand = Demand(self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff, elecsim.scenario.scenario_data.yearly_demand_change)
         self.unique_id_generator+=1
         self.schedule.add(self.demand)
 
@@ -322,7 +323,7 @@ class World(Model):
             logger.info(
                 "total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
             elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in
-                                                                  elecsim.scenario.scenario_data.segment_demand_diff]
+                                                                    elecsim.scenario.scenario_data.segment_demand_diff]
 
     def override_demand_change(self, demand_change):
         if demand_change:
