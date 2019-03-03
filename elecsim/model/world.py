@@ -35,8 +35,18 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    # def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None):
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False):
+    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False, log_level="warning"):
+        """
+        Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
+        :param int initialization_year: Year to begin simulation.
+        :param list: float carbon_price_scenario: Scenario containing carbon price for each year of simulation.
+        :param list: float demand_change: Scenario containing change in demand between each year of simulation.
+        :param int number_of_steps: Total number of years to run scenario.
+        :param int total_demand: Total size of country's demand.
+        :param str data_folder: Directory and folder to save run data to
+        :param bool time_run:
+        :param str log_level:
+        """
         self.start = perf_counter()
         logger.info("start: {}".format(self.start))
         # Set up model objects
@@ -48,25 +58,13 @@ class World(Model):
 
         self.average_electricity_price = 0
 
-        if carbon_price_scenario:
-            elecsim.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
-            self.carbon_scenario_name = str(carbon_price_scenario[0]).replace(".",'')
-        else:
-            self.carbon_scenario_name = "none"
+        self.set_log_level(log_level)
 
-        if demand_change:
-            elecsim.scenario.scenario_data.yearly_demand_change = demand_change[1:]
-            self.demand_change_name = str(demand_change[0]).replace(".",'')
-        else:
-            self.demand_change_name = "none"
+        self.override_carbon_scenario(carbon_price_scenario)
 
-        self.total_demand = total_demand
-        if total_demand is not None:
-            elecsim.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
-            demand_modifier = (elecsim.scenario.scenario_data.power_plants.Capacity.sum() / elecsim.scenario.scenario_data.segment_demand_diff[-1]) / 1.6
-            logger.info("demand_modifier: {}".format(demand_modifier))
-            logger.info("total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
-            elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in elecsim.scenario.scenario_data.segment_demand_diff]
+        self.override_demand_change(demand_change)
+
+        self.override_total_demand(total_demand)
 
         self.schedule = OrderedActivation(self)
 
@@ -85,22 +83,8 @@ class World(Model):
         self.PowerExchange = PowerExchange(self)
         self.running = True
 
-        self.data_folder = data_folder
-        self.datacollector = DataCollector(
-            model_reporters={"CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
-                             "Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
-                             "Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
-                             "Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
-                             "PV": lambda m: self.get_capacity_of_plants(m, "PV"),
-                             "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
-                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
-                             "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
-                             "total_genco_wealth": lambda m: self.get_genco_wealth(m),
-                             "Electricity_cost": lambda m: self.get_electricity_cost(m),
-                             "Carbon_emitted": lambda m: self.get_carbon_emitted(m)
-                             }
+        self.create_data_loggers(data_folder)
 
-        )
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
@@ -123,26 +107,12 @@ class World(Model):
 
         self.datacollector.collect(self)
 
-        if self.step_number == self.max_number_of_steps:
-            directory = "{}{}{}/".format(ROOT_DIR,"/run/batchrunners/scenarios/data/",self.data_folder)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            self.datacollector.get_model_vars_dataframe().to_csv("{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name, self.carbon_scenario_name, dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), self.total_demand))
-            end = perf_counter()
-            time_elapased = end - self.start
-
-            if self.time_run:
-                timings_data = pd.DataFrame({"time":[time_elapased], "carbon":[elecsim.scenario.scenario_data.carbon_price_scenario[0]], 'installed_capacity':[elecsim.scenario.scenario_data.power_plants.Capacity.sum()], 'datetime':[dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
-
-                with open("{}/run/timing/results/{}.csv".format(ROOT_DIR,self.data_folder), 'a') as f:
-                    timings_data.to_csv(f, header=False)
-
-            logger.info("end: {}".format(end))
-            logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased, elecsim.scenario.scenario_data.carbon_price_scenario[0], elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
+        self.write_scenario_data()
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
         return -(self.average_electricity_price + self.get_carbon_emitted(self))
+
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -314,3 +284,88 @@ class World(Model):
         return stratified_sample
 
 
+    def set_log_level(self, log_level):
+        if log_level.lower() == "warning":
+            logging.basicConfig(level=logging.WARNING)
+        elif log_level.lower() == "info":
+            logging.basicConfig(level=logging.INFO)
+        elif log_level.lower() == "debug":
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            raise ValueError("log_level must be warning, info or debug and not {}".format(log_level))
+
+    def create_data_loggers(self, data_folder):
+        self.data_folder = data_folder
+        self.datacollector = DataCollector(
+            model_reporters={"CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
+                             "Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
+                             "Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
+                             "Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
+                             "PV": lambda m: self.get_capacity_of_plants(m, "PV"),
+                             "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
+                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
+                             "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
+                             "total_genco_wealth": lambda m: self.get_genco_wealth(m),
+                             "Electricity_cost": lambda m: self.get_electricity_cost(m),
+                             "Carbon_emitted": lambda m: self.get_carbon_emitted(m)
+                             }
+
+        )
+
+    def override_total_demand(self, total_demand):
+        self.total_demand = total_demand
+        if total_demand is not None:
+            elecsim.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
+            demand_modifier = (elecsim.scenario.scenario_data.power_plants.Capacity.sum() /
+                               elecsim.scenario.scenario_data.segment_demand_diff[-1]) / 1.6
+            logger.info("demand_modifier: {}".format(demand_modifier))
+            logger.info(
+                "total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
+            elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in
+                                                                  elecsim.scenario.scenario_data.segment_demand_diff]
+
+    def override_demand_change(self, demand_change):
+        if demand_change:
+            elecsim.scenario.scenario_data.yearly_demand_change = demand_change[1:]
+            self.demand_change_name = str(demand_change[0]).replace(".", '')
+        else:
+            self.demand_change_name = "none"
+
+    def override_carbon_scenario(self, carbon_price_scenario):
+        if carbon_price_scenario:
+            elecsim.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
+            self.carbon_scenario_name = str(carbon_price_scenario[0]).replace(".", '')
+        else:
+            self.carbon_scenario_name = "none"
+
+    def write_scenario_data(self):
+        if self.step_number == self.max_number_of_steps:
+            directory = "{}{}{}/".format(ROOT_DIR, "/", self.data_folder)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            self.datacollector.get_model_vars_dataframe().to_csv(
+                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
+                                                                            self.carbon_scenario_name,
+                                                                            dt.datetime.now().strftime(
+                                                                                '%Y-%m-%d_%H-%M-%S'),
+                                                                            self.total_demand))
+
+            end = perf_counter()
+            time_elapased = end - self.start
+
+            self.write_timing_results(end, time_elapased)
+
+    def write_timing_results(self, end, time_elapased):
+        if self.time_run:
+            timings_data = pd.DataFrame(
+                {"time": [time_elapased], "carbon": [elecsim.scenario.scenario_data.carbon_price_scenario[0]],
+                 'installed_capacity': [elecsim.scenario.scenario_data.power_plants.Capacity.sum()],
+                 'datetime': [dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
+
+            with open("{}/run/timing/results/{}.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
+                timings_data.to_csv(f, header=False)
+        logger.info("end: {}".format(end))
+        logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
+                                                                    elecsim.scenario.scenario_data.carbon_price_scenario[
+                                                                        0],
+                                                                    elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
