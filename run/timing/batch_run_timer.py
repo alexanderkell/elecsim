@@ -8,7 +8,7 @@ from mesa.batchrunner import BatchRunnerMP
 from elecsim.model.world import World
 
 
-from elecsim.scenario.scenario_data import power_plants
+from elecsim.scen_error.scenario_data import power_plants
 import logging
 
 logger = logging.getLogger(__name__)

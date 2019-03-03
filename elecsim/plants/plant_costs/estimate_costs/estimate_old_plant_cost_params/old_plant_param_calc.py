@@ -1,10 +1,10 @@
 import pandas as pd
 
-import elecsim.scenario.scenario_data as scenario
+import elecsim.scenario.scenario_data
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 from elecsim.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
 from elecsim.plants.plant_registry import PlantRegistry
-from elecsim.scenario.scenario_data import modern_plant_costs
+# from elecsim.scen_error.scenario_data import modern_plant_costs
 
 
 class OldPlantCosts:
@@ -13,7 +13,7 @@ class OldPlantCosts:
     more detailed cost parameters using the same proportions as the BEIS Power Plant Cost Database.
     Specifically uses 2018 power plants from BEIS Power Plant Cost Database.
     """
-    hist_costs = scenario.power_plant_historical_costs_long
+    hist_costs = elecsim.scenario.scenario_data.power_plant_historical_costs_long
 
     def __init__(self, year, plant_type, capacity):
 
@@ -30,7 +30,7 @@ class OldPlantCosts:
         self.estimated_historical_lcoe = ExtrapolateInterpolate(self.hist_costs.Year, self.hist_costs.lcoe)(year)
         self.discount_rate = self.hist_costs.Discount_rate.iloc[0]
 
-        self.modern_costs = modern_plant_costs[modern_plant_costs['Type'].map(lambda x: x in plant_type)]
+        self.modern_costs = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs['Type'].map(lambda x: x in plant_type)]
         minimum_year = self.find_smallest_year_available()
 
         self.estimated_modern_plant_parameters = PredictModernPlantParameters(self.plant_type, self.capacity, minimum_year).parameter_estimation()
@@ -65,4 +65,3 @@ class OldPlantCosts:
                           self.estimated_modern_plant_parameters
                           if key in self.params_to_ignore}
 
-        self.dict_to_ignore

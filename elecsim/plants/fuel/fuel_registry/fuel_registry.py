@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-import elecsim.scenario.scenario_data as scenario
+import elecsim.scenario.scenario_data
 from elecsim.constants import GJ_TO_MW
 from elecsim.plants.fuel.fuel import Fuel
 
@@ -30,7 +30,7 @@ def fuel_registry(fuel_type, fuel_price=None, energy_density=None, co2_density=N
     :return: Returns a Fuel object with characteristics of the plant_type in question
     """
 
-    fuel_prices = scenario.fuel_prices
+    fuel_prices = elecsim.scenario.scenario_data.fuel_prices
 
     if energy_density is None and co2_density is None:
         if fuel_type == "Gas":

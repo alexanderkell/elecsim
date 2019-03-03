@@ -2,7 +2,7 @@ import logging
 
 from scipy.optimize import minimize
 
-import elecsim.scenario.scenario_data as scenario
+import elecsim.scenario.scenario_data
 from elecsim.plants.fuel.fuel_registry.fuel_registry import plant_type_to_fuel
 from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.old_plant_param_calc import OldPlantCosts
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class FuelOldPlantCosts(OldPlantCosts):
 
-    historic_fuel_price = scenario.historical_fuel_prices_long
+    historic_fuel_price = elecsim.scenario.scenario_data.historical_fuel_prices_long
 
     def __init__(self, year, plant_type, capacity):
         super().__init__(year=year, plant_type=plant_type, capacity=capacity)

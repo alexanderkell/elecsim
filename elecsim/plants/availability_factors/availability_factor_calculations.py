@@ -1,6 +1,7 @@
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
-from elecsim.scenario.scenario_data import historical_availability_factor, fuel_plant_availability
-
+import elecsim.scenario.scenario_data
+import elecsim.scenario.scenario_data
+import elecsim.scenario.scenario_data
 """
 File name: availability_factor_calculations
 Date created: 13/01/2019
@@ -16,10 +17,10 @@ __email__ = "alexander@kell.es"
 def get_availability_factor(plant_type, construction_year):
     simplified_type = get_plant_type_for_data(plant_type)
     if plant_type in ['CCGT', "OCGT", "Coal", 'CHP']:
-        availability_factor_series = historical_availability_factor[(historical_availability_factor.plant_type==simplified_type)][['Year','capacity_factor']]
+        availability_factor_series = elecsim.scenario.scenario_data.historical_availability_factor[(elecsim.scenario.scenario_data.historical_availability_factor.plant_type==simplified_type)][['Year','capacity_factor']]
         availability_factor = ExtrapolateInterpolate(availability_factor_series.Year, availability_factor_series.capacity_factor)(construction_year)
     else:
-        availability_factor = fuel_plant_availability
+        availability_factor = elecsim.scenario.scenario_data.fuel_plant_availability
     return availability_factor
 
 
@@ -33,6 +34,6 @@ def get_plant_type_for_data(plant_type):
     elif plant_type == "CHP":
         plant = "CHP"
     else:
-        return fuel_plant_availability
+        return elecsim.scenario.scenario_data.fuel_plant_availability
     return plant
 

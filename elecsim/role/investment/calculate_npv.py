@@ -12,9 +12,9 @@ from elecsim.plants.plant_type.fuel_plant import FuelPlant
 from elecsim.role.investment.predict_load_duration_prices import get_price_duration_curve
 from elecsim.role.market.latest_market_data import LatestMarketData
 from elecsim.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCostCalculations
-from elecsim.scenario.scenario_data import modern_plant_costs
-from elecsim.scenario.scenario_data import nuclear_wacc, non_nuclear_wacc
-
+# from elecsim.scen_error.scenario_data import modern_plant_costs
+# from elecsim.scen_error.scenario_data import nuclear_wacc, non_nuclear_wacc
+import elecsim.scenario.scenario_data
 logger = getLogger(__name__)
 
 """
@@ -56,7 +56,7 @@ class CalculateNPV:
         # for plant_type in ['Nuclear','CCGT']:
         # for plant_type in ['Recip_gas']:
 
-            plant_cost_data = modern_plant_costs[(modern_plant_costs.Type == plant_type) & (modern_plant_costs.Plant_Size>5)]
+            plant_cost_data = elecsim.scenario.scenario_data.modern_plant_costs[(elecsim.scenario.scenario_data.modern_plant_costs.Type == plant_type) & (elecsim.scenario.scenario_data.modern_plant_costs.Plant_Size>5)]
             for plant_row in plant_cost_data.itertuples():
 
                 npv = self.calculate_npv(plant_row.Type, plant_row.Plant_Size)
@@ -111,9 +111,9 @@ class CalculateNPV:
         logger.debug('total_cash_flow: {}'.format(total_cash_flow))
 
         if power_plant.plant_type == "Nuclear":
-            self.weighted_average_cost_capital = nuclear_wacc + self.difference_in_discount_rate
+            self.weighted_average_cost_capital = elecsim.scenario.scenario_data.nuclear_wacc + self.difference_in_discount_rate
         else:
-            self.weighted_average_cost_capital = non_nuclear_wacc + self.difference_in_discount_rate
+            self.weighted_average_cost_capital = elecsim.scenario.scenario_data.non_nuclear_wacc + self.difference_in_discount_rate
 
         # logger.debug("cash_flow_wacc: {}".format(cash_flow_wacc))
         logger.debug("discount rate: {}".format(self.weighted_average_cost_capital))

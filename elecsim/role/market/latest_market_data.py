@@ -10,10 +10,10 @@ import numpy as np
 
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
 
-import elecsim.scenario.scenario_data as scenario
+# import elecsim.scen_error.scenario_data as scenario
 import elecsim.scenario.scenario_data
 
-from elecsim.scenario.scenario_data import years_for_agents_to_predict_forward
+# from elecsim.scen_error.scenario_data import years_for_agents_to_predict_forward
 logger = logging.getLogger(__name__)
 
 """
@@ -41,8 +41,8 @@ class LatestMarketData:
 
         if isinstance(power_plant, FuelPlant):
 
-            co2_price = self.agent_forecast_value("co2", look_back_years, years_for_agents_to_predict_forward)
-            fuel_price = self.agent_forecast_value(power_plant.fuel.fuel_type, look_back_years, years_for_agents_to_predict_forward)
+            co2_price = self.agent_forecast_value("co2", look_back_years, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
+            fuel_price = self.agent_forecast_value(power_plant.fuel.fuel_type, look_back_years, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
 
             co2_cost = power_plant.fuel.mwh_to_co2e_conversion_factor * (1 / power_plant.efficiency) * co2_price
             fuel_cost = fuel_price/power_plant.efficiency
@@ -82,31 +82,31 @@ class LatestMarketData:
         except:
             raise ValueError("Price required must be a string, not a {}".format(type(values_required)))
         if values_required == "coal":
-            return scenario.coal_price
+            return elecsim.scenario.scenario_data.coal_price
         elif values_required == "gas":
-            return scenario.gas_price
+            return elecsim.scenario.scenario_data.gas_price
         elif values_required == "uranium":
-            return scenario.uranium_price
+            return elecsim.scenario.scenario_data.uranium_price
         elif values_required == "biomass_wood" or values_required == "woodchip":
-            return scenario.woodchip_price
+            return elecsim.scenario.scenario_data.woodchip_price
         elif values_required == "biomass_poultry_litter" or values_required == "poultry_litter":
-            return scenario.poultry_litter_price
+            return elecsim.scenario.scenario_data.poultry_litter_price
         elif values_required == "oil":
-            return scenario.oil_price
+            return elecsim.scenario.scenario_data.oil_price
         elif values_required == "diesel" or values_required == "gas oil":
-            return scenario.diesel_price
+            return elecsim.scenario.scenario_data.diesel_price
         elif values_required == "straw":
-            return scenario.straw_price
+            return elecsim.scenario.scenario_data.straw_price
         elif values_required == "meat":
-            return scenario.meat_price
+            return elecsim.scenario.scenario_data.meat_price
         elif values_required == "waste_post_2000":
-            return scenario.waste_price_post_2000
+            return elecsim.scenario.scenario_data.waste_price_post_2000
         elif values_required == "waste_pre_2000":
-            return scenario.waste_price_pre_2000
+            return elecsim.scenario.scenario_data.waste_price_pre_2000
         elif values_required == "co2":
             return elecsim.scenario.scenario_data.carbon_price_scenario
         elif values_required == "demand":
-            return scenario.yearly_demand_change
+            return elecsim.scenario.scenario_data.yearly_demand_change
         else:
             raise ValueError("Could not find {}".format(values_required))
 

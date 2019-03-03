@@ -20,7 +20,7 @@ setup(
   # package_data={'elecsim': },
   # include_package_data=True,
   py_modules=['elecsim'],
-  version = '0.1.17',      # Start with a small number and increase it with every change you make
+  version = '0.1.18',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Agent-based Model for Electricity Markets',   # Give a short description about your library
   author = 'Alexander Kell',                   # Type in your name
