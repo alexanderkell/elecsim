@@ -3,6 +3,8 @@ import logging
 import os
 from random import uniform, randint
 from time import perf_counter
+import importlib.util
+# from importlib.machinery import SourceFileLoader
 
 import numpy as np
 import pandas as pd
@@ -17,6 +19,7 @@ from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
 # from elecsim.scenario.scenario_data import yearly_demand_change, segment_time, company_financials
+import elecsim.data_manipulation.data_modifications.scenario_modifier as scen_mod
 
 import elecsim.scenario.scenario_data
 
@@ -36,7 +39,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -56,13 +59,13 @@ class World(Model):
         self.unique_id_generator = 0
         self.time_run = time_run
         self.max_number_of_steps = number_of_steps
-
         self.average_electricity_price = 0
 
         self.set_log_level(log_level)
 
-        self.override_carbon_scenario(carbon_price_scenario)
+        self.overwrite_scenario_file(scenario_file)
 
+        self.override_carbon_scenario(carbon_price_scenario)
         self.override_demand_change(demand_change)
 
         self.override_total_demand(total_demand)
@@ -85,6 +88,13 @@ class World(Model):
         self.running = True
 
         self.create_data_loggers(data_folder)
+
+    def overwrite_scenario_file(self, scenario_file):
+        if scenario_file:
+            spec = importlib.util.spec_from_file_location("scenario_scotland.py", scenario_file)
+            scenario_import = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(scenario_import)
+            scen_mod.overwrite_scenario_file(scenario_import)
 
 
     def step(self, carbon_price=None):
@@ -123,11 +133,7 @@ class World(Model):
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
 
-        # print(financial_data.columns)
-        # print(plant_data.head())
-
-
-        financial_data = pd.merge(financial_data, plant_data, on="Company")
+        financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
         financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities',
        'total_assets', 'turnover', 'net_assets']]
 
@@ -141,7 +147,8 @@ class World(Model):
 
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
-            assert financials.Company.iloc[0] == name
+            # if financials.Company.iloc[0] != name:
+                # raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator+=1
             # Add power plants to generation company portfolio
@@ -278,7 +285,6 @@ class World(Model):
 
     def stratify_data(self, demand):
         power_plants = elecsim.scenario.scenario_data.power_plants
-        # print(power_plants)
         frac_to_scale = demand/power_plants.Capacity.sum()
 
         stratified_sample = power_plants.groupby(['Fuel'], as_index=False).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
@@ -363,7 +369,7 @@ class World(Model):
                  'installed_capacity': [elecsim.scenario.scenario_data.power_plants.Capacity.sum()],
                  'datetime': [dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
 
-            with open("{}/run/timing/results/{}.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
+            with open("{}/{}_timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
                 timings_data.to_csv(f, header=False)
         logger.info("end: {}".format(end))
         logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
