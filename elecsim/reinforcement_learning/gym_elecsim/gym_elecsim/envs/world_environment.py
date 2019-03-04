@@ -7,7 +7,7 @@ from gym.spaces import Box
 import numpy as np
 
 from elecsim.model.world import World
-from elecsim.scen_error.scenario_data import lost_load
+from elecsim.scenario.scenario_data import lost_load
 
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
@@ -21,9 +21,9 @@ from gym.utils import seeding
 
 class WorldEnvironment(gym.Env):
 
-    def __init__(self):
+    def __init__(self, scenario_file=None):
         print("trying to init")
-        self.world = World(initialization_year=2018, total_demand=2000, data_folder="reinforcement_learning")
+        self.world = World(initialization_year=2018, scenario_file=scenario_file, data_folder="reinforcement_learning")
         self.action_space = Box(
             0.0, 250.0, shape=(1, ), dtype=np.float32)
 
@@ -43,7 +43,6 @@ class WorldEnvironment(gym.Env):
 
         return np.array(ob), reward, done, {}
         # return np.array([1]), reward, done, {}
-
 
     def render(self, mode='human', close=False):
         # print("num steps {}".format(self.number_of_steps))
