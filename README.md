@@ -47,11 +47,11 @@ We instantiate the model to start in the year 2018. The for loop steps the model
 
 ## Custom Scenario
 
-Whilst elecsim comes with a fully parametrised case study of the UK in 2018, you can update the data however you wish. Here we show you how to edit a scenario file for a model run.
+Whilst elecsim comes with a fully parametrised case study of the UK in 2018, you can update the scenario data however you wish. Here we show you how to edit a scenario file for a model run.
 
-Open the scenario file found [here](https://github.com/alexanderkell/elecsim/blob/master/elecsim/scenario/scenario_data.py) and make the changes you wish. 
+Open the scenario file found [here](https://github.com/alexanderkell/elecsim/blob/master/elecsim/scenario/scenario_data.py) and make the required changes. 
 
-For a Scotland scenario we change the following:
+For a scenario of the Scottish electricity market we make the following changes:
 ```
 segment_demand_diff = [17568, 21964, 23127, 24327, 25520, 26760, 27888, 28935, 29865, 30721, 31567, 32315, 33188, 34182, 35505, 37480, 39585, 42206, 45209, 52152]
 # Peak demand in Scotland is 9.5 times smaller than that of the UK as a whole
@@ -69,12 +69,12 @@ We then pass this new scenario file into the World class as shown below:
 from elecsim.model.world import World 
 
 if __name__ == "__main__":
-    world = World(initialisation_year = 2018, scenario_file='/path/to/scenario.py', log_level="info")
+    world = World(initialisation_year = 2018, scenario_file='/path/to/scenario.py', log_level="warning")
     for i in range(20):
         world.step()
 ```
 
-This will now run the new scenario.
+This will now run the Scottish scenario for 20 years.
 
 
 ## Docker
