@@ -39,11 +39,11 @@ import logging
 logging.basicConfig(level=logging.INFO) 
 
 if __name__ == "__main__":
-    world = World(2018)
+    world = World(initialisation_year = 2018, log_level="info")
     for i in range(20):
         world.step()
 ```
-This code imports the `World` class. We use logging to display useful information of the run. This can be turned off or changed to debug for further information.
+This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
 We then instantiate the model to include information for the year 2018. Here, the for loop steps the model 20 times, which is equivalent to 20 years in the model.
 
