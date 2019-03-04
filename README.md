@@ -26,7 +26,7 @@ pip install elecsim
 
 Or for the latest release:
 ```
-pip install git+https://github.com/alexanderkell/elecsim
+pip install -e git+https://github.com/alexanderkell/elecsim
 ```
 
 ## Getting started
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
-We then instantiate the model to include information for the year 2018. Here, the for loop steps the model 20 times, which is equivalent to 20 years in the model.
+We instantiate the model to start in the year 2018. The for loop steps the model 20 times, which is equivalent to 20 years in the model.
 
 ## Docker
 
