@@ -74,7 +74,7 @@ if __name__ == "__main__":
         world.step()
 ```
 
-This will now run the scottish scenario for 20 years.
+This will now run the Scottish scenario for 20 years.
 
 
 ## Docker
