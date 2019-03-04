@@ -49,7 +49,7 @@ We instantiate the model to start in the year 2018. The for loop steps the model
 
 Whilst elecsim comes with a fully parametrised case study of the UK in 2018, you can update the data however you wish. Here we show you how to edit a scenario file for a model run.
 
-Open the scenario file found at https://github.com/alexanderkell/elecsim/blob/master/elecsim/scenario/scenario_data.py and make the changes you wish. 
+Open the scenario file found [here](https://github.com/alexanderkell/elecsim/blob/master/elecsim/scenario/scenario_data.py) and make the changes you wish. 
 
 For a Scotland scenario we change the following:
 ```
