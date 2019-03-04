@@ -29,7 +29,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 def single_plots(folder, folder_to_save):
-    os.chdir("{}/run/batchrunners/scenarios/data/{}".format(ROOT_DIR, folder))
+    os.chdir("/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/data/{}".format(folder))
+
     for file_name in glob.glob('*.csv'):
         print(file_name)
         scenario_results = pd.read_csv(file_name,encoding="ISO-8859-1")
@@ -54,13 +55,14 @@ def single_plots(folder, folder_to_save):
         # ax2.set_ylabel("Carbon Tax (£/tonne)")
 
 
-        directory = '{}/run/batchrunners/scenarios/figures/{}'.format(ROOT_DIR, folder_to_save)
+        directory = '/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/figures/{}'.format(folder_to_save)
+
+
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        figure.savefig('{}/run/batchrunners/scenarios/figures/{}/{}{}.png'.format(ROOT_DIR, folder_to_save, file_name.split(".")[0],file_name.split(".")[1]))
+        figure.savefig('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/figures/{}/{}{}.png'.format(folder_to_save, file_name.split(".")[0],file_name.split(".")[1]))
         plt.close('all')
-
 
 def variance_plots(folder, folder_to_save):
     os.chdir("{}/run/batchrunners/scenarios/data/{}".format(ROOT_DIR, folder))
@@ -164,6 +166,6 @@ if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
     # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
     # single_plots("None", "first_rl_results")
-    single_plots('minimum_sized_country_3','smallest_country_figs_3')
+    single_plots('scottish_NI','scottish_NI_1')
 
 
