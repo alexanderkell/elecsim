@@ -205,7 +205,7 @@ obj/**
 tmp/**
 .python-version
 .vs/
-.vscode
+.vscode/
 
 
 
