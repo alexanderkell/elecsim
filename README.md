@@ -35,8 +35,6 @@ Once ElecSim is installed, create a python file and fill it with the following c
 
 ```
 from elecsim.model.world import World 
-import logging
-logging.basicConfig(level=logging.INFO) 
 
 if __name__ == "__main__":
     world = World(initialisation_year = 2018, log_level="info")
