@@ -18,7 +18,6 @@ from elecsim.market.electricity.power_exchange import PowerExchange
 from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
-# from elecsim.scenario.scenario_data import yearly_demand_change, segment_time, company_financials
 import elecsim.data_manipulation.data_modifications.scenario_modifier as scen_mod
 
 import elecsim.scenario.scenario_data
@@ -355,7 +354,7 @@ class World(Model):
                                                                             self.carbon_scenario_name,
                                                                             dt.datetime.now().strftime(
                                                                                 '%Y-%m-%d_%H-%M-%S'),
-                                                                            self.total_demand))
+                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]))
 
             end = perf_counter()
             time_elapased = end - self.start
