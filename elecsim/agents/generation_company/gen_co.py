@@ -243,5 +243,5 @@ class GenCo(Agent):
 
     def forecast_attribute_price(self, fuel_type):
         latest_market_data = LatestMarketData(self.model)
-        uranium_price_predicted = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
-        return uranium_price_predicted
+        predicted_fuel_price = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
+        return predicted_fuel_price
