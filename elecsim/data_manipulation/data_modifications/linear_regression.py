@@ -12,6 +12,8 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 def linear_regression(regression, years_to_look_back, years_to_look_ahead=None):
-    m, c, _, _, _ = linregress(list(range(years_to_look_back)), regression)
+    years_to_regress = list(range(years_to_look_back))
+    years_to_regress = [float(i) for i in years_to_regress]
+    m, c, _, _, _ = linregress(years_to_regress, regression)
     next_value = m * (years_to_look_back+years_to_look_ahead-1) + c
     return next_value
