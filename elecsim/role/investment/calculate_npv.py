@@ -4,7 +4,7 @@ from itertools import zip_longest
 from logging import getLogger
 
 import pandas as pd
-from numpy import npv, pmt
+from numpy import npv, pmt, divide
 
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
@@ -119,7 +119,8 @@ class CalculateNPV:
 
         logger.debug("npv_power_plant: {}".format(npv_power_plant))
 
-        NPVp = npv_power_plant / (power_plant.capacity_mw * total_running_hours)
+        # NPVp = npv_power_plant / (power_plant.capacity_mw * total_running_hours)
+        NPVp = divide(npv_power_plant, (power_plant.capacity_mw * total_running_hours))
         return NPVp
 
     def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):
