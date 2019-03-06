@@ -22,6 +22,9 @@ import elecsim.data_manipulation.data_modifications.scenario_modifier as scen_mo
 
 import elecsim.scenario.scenario_data
 
+import os
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,6 +53,7 @@ class World(Model):
         :param bool time_run:
         :param str log_level:
         """
+
         self.start = perf_counter()
         logger.info("start: {}".format(self.start))
         # Set up model objects
@@ -346,7 +350,9 @@ class World(Model):
 
     def write_scenario_data(self):
         if self.step_number == self.max_number_of_steps:
-            directory = "{}{}{}/".format(ROOT_DIR, "/", self.data_folder)
+            parent_directory = os.path.dirname(os.getcwd())
+
+            directory = "{}{}{}/".format(parent_directory, "/", self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
             self.datacollector.get_model_vars_dataframe().to_csv(
