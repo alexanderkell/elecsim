@@ -352,7 +352,7 @@ class World(Model):
         if self.step_number == self.max_number_of_steps:
             parent_directory = os.path.dirname(os.getcwd())
 
-            directory = "{}{}{}/".format(parent_directory, "/", self.data_folder)
+            directory = "{}/{}/".format(parent_directory, self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
             self.datacollector.get_model_vars_dataframe().to_csv(
@@ -373,6 +373,8 @@ class World(Model):
                 {"time": [time_elapased], "carbon": [elecsim.scenario.scenario_data.carbon_price_scenario[0]],
                  'installed_capacity': [elecsim.scenario.scenario_data.power_plants.Capacity.sum()],
                  'datetime': [dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
+
+            parent_directory = os.path.dirname(os.getcwd())
 
             with open("{}/{}/timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
                 timings_data.to_csv(f, header=False)
