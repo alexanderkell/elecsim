@@ -9,6 +9,10 @@ import numpy as np
 from elecsim.model.world import World
 from elecsim.scenario.scenario_data import lost_load
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 __author__ = "Alexander Kell"
 __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
@@ -22,7 +26,7 @@ from gym.utils import seeding
 class WorldEnvironment(gym.Env):
 
     def __init__(self, scenario_file=None):
-        print("trying to init")
+        logger.info("trying to init")
         self.world = World(initialization_year=2018, scenario_file=scenario_file, data_folder="reinforcement_learning")
         self.action_space = Box(
             0.0, 250.0, shape=(1, ), dtype=np.float32)
@@ -30,12 +34,17 @@ class WorldEnvironment(gym.Env):
         self.observation_space = Box(
             0.0, lost_load, shape=(1, ), dtype=np.float32)
 
+        self.number_of_steps = 0
+        self.action = None
+
     def reset(self):
         self.world = World(initialization_year=2018)
-        return [-1000]
+        return [0]
 
     def step(self, action):
-        print("stepping number: {}".format(self.world.step_number))
+        logger.info("stepping number: {}".format(self.world.step_number))
+        self.action = action
+        self.number_of_steps += 1
         ob = [self.world.step(action)]
         reward = ob[0]
 
@@ -45,7 +54,7 @@ class WorldEnvironment(gym.Env):
         # return np.array([1]), reward, done, {}
 
     def render(self, mode='human', close=False):
-        # print("num steps {}".format(self.number_of_steps))
-        # print("action")
+        print("num steps {}".format(self.number_of_steps))
+        print("action: {}".format(self.action))
 
         return False
