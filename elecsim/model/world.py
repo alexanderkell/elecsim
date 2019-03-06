@@ -368,7 +368,7 @@ class World(Model):
                  'installed_capacity': [elecsim.scenario.scenario_data.power_plants.Capacity.sum()],
                  'datetime': [dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
 
-            with open("{}/{}_timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
+            with open("{}/{}/timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
                 timings_data.to_csv(f, header=False)
         logger.info("end: {}".format(end))
         logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
