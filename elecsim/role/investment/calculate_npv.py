@@ -5,6 +5,7 @@ from logging import getLogger
 
 import pandas as pd
 from numpy import npv, pmt, divide
+np.seterr(divide='ignore', invalid='ignore')
 
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
