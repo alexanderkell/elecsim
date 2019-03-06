@@ -2,6 +2,7 @@ import os.path
 import sys
 
 from pycallgraph.output import GraphvizOutput
+from pycallgraph import PyCallGraph
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
@@ -55,18 +56,12 @@ logging.basicConfig(level=logging.WARNING)
 #     total = sum(stat.size for stat in top_stats)
 #     print("Total allocated size: %.1f KiB" % (total / 1024))
 #
-class TestWorld:
-    def test_world_initialization(self):
-        from pycallgraph import PyCallGraph
-        with PyCallGraph(output=GraphvizOutput()):
-            world = World(initialization_year=2018)
-            # tracemalloc.start()
+# class TestWorld:
+#     def test_world_initialization(self):
 
-            for i in range(10):
-                # snapshot = tracemalloc.take_snapshot()
-                # display_top(snapshot)
+with PyCallGraph(output=GraphvizOutput()):
+    world = World(initialization_year=2018)
 
-                world.step()
+    for i in range(10):
+        world.step()
 
-        # data = world.datacollector.get_model_vars_dataframe()
-        # logger.info("final data: \n {}".format(data))
