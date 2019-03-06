@@ -26,7 +26,7 @@ from gym.utils import seeding
 class WorldEnvironment(gym.Env):
 
     def __init__(self, scenario_file=None, data_folder="reinforcement_learning"):
-        logger.info("trying to init")
+        print("trying to init")
         self.world = World(initialization_year=2018, scenario_file=scenario_file, data_folder=data_folder)
         self.action_space = Box(
             0.0, 250.0, shape=(1, ), dtype=np.float32)
@@ -37,12 +37,14 @@ class WorldEnvironment(gym.Env):
         self.number_of_steps = 0
         self.action = None
 
+
+
     def reset(self):
         self.world = World(initialization_year=2018)
         return [0]
 
     def step(self, action):
-        logger.info("stepping number: {}".format(self.world.step_number))
+        print("stepping number: {}".format(self.world.step_number))
         self.action = action
         self.number_of_steps += 1
         ob = [self.world.step(action)]
