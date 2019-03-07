@@ -53,8 +53,8 @@ class GenCo(Agent):
         self.coal_price_modifier = 0
 
     def step(self):
-        logger.info("Stepping generation company: {}".format(self.name))
-        logger.info("Amount of money: {}".format(self.money))
+        logger.debug("Stepping generation company: {}".format(self.name))
+        logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
         self.invest()
         # self.reset_contracts()
@@ -161,9 +161,8 @@ class GenCo(Agent):
             for plant_data in potential_plant_data:
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                 down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
-                # logger.info("down_payment: {}, total money: {}, upfront_investment_costs: {}".format(down_payment, self.money, upfront_investment_costs))
                 if self.money > down_payment:
-                    logger.info("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
+                    logger.debug("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
                     self.plants.append(power_plant_trial)
                     self.money -= down_payment
                     total_capacity += power_plant_trial.capacity_mw
@@ -180,7 +179,7 @@ class GenCo(Agent):
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
                     yield plant
                 else:
-                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                    logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                                                         plant.construction_year))
                     continue
 

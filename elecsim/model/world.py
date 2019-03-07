@@ -94,7 +94,9 @@ class World(Model):
 
     def overwrite_scenario_file(self, scenario_file):
         if scenario_file:
-            spec = importlib.util.spec_from_file_location("scenario_scotland.py", scenario_file)
+            split_directory = scenario_file.split("/")
+            file_name = split_directory[-1]
+            spec = importlib.util.spec_from_file_location(file_name, scenario_file)
             scenario_import = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(scenario_import)
             scen_mod.overwrite_scenario_file(scenario_import)

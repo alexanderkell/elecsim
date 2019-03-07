@@ -37,7 +37,7 @@ class PredictPriceDurationCurve:
 
         predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
 
-        logger.info("predicted_price_duration_curve: \n {}".format(predicted_price_duration_curve))
+        logger.debug("predicted_price_duration_curve: \n {}".format(predicted_price_duration_curve))
         return predicted_price_duration_curve
 
 
@@ -52,7 +52,7 @@ def estimate_lost_load_price(predicted_price_duration_curve):
 
             p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,1))
             extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
-            logger.info("extrapolated: {}".format(extrapolated))
+            logger.debug("extrapolated: {}".format(extrapolated))
             predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
             return predicted_price_duration_curve
         elif predicted_price_duration_curve.accepted_price.count() == 1:
