@@ -57,11 +57,11 @@ logging.basicConfig(level=logging.WARNING)
 #     print("Total allocated size: %.1f KiB" % (total / 1024))
 #
 # class TestWorld:
-#     def test_world_initialization(self):
+    # def test_world_initialization(self):
 
-with PyCallGraph(output=GraphvizOutput()):
-    world = World(initialization_year=2018)
+# with PyCallGraph(output=GraphvizOutput()):
+world = World(initialization_year=2018)
 
-    for i in range(10):
-        world.step()
+for i in range(10):
+    world.step()
 
