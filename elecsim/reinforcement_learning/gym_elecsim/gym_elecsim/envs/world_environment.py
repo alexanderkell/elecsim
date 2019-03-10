@@ -28,6 +28,7 @@ class WorldEnvironment(gym.Env):
     # def __init__(self, scenario_file=None, max_number_of_steps=32, data_folder="reinforcement_learning"):
     def __init__(self, config):
         print("trying to init")
+        self.reward = 0
         self.step_number = 0
         self.action = None
         self.config = config
@@ -53,16 +54,16 @@ class WorldEnvironment(gym.Env):
         carbon_emitted = self.world.step(action)[1]
 
         ob = -abs(mean_electricity_price)-abs(carbon_emitted)
-        reward = ob
+        self.reward = ob+0.9*self.reward
 
         done = self.world.step_number > self.max_number_of_steps
         print("step: {}".format(self.step_number))
-        print("action: {}, reward: {}, mean_electricity_price: {}, carbon_emitted: {}".format(action, reward, mean_electricity_price, carbon_emitted))
+        print("action: {}, reward: {}, mean_electricity_price: {}, carbon_emitted: {}".format(action, self.reward, mean_electricity_price, carbon_emitted))
 
         ob = np.array([mean_electricity_price, carbon_emitted])
 
 
-        return ob, reward, done, {}
+        return ob, self.reward, done, {}
         # return ob.reshape(2,1), reward, done, {}
         # return np.expand_dims(np.array(ob), axis=0), reward, done, {}
         # return np.array(ob).reshape(2,1), reward, done, {}
