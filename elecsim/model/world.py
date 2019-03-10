@@ -127,7 +127,8 @@ class World(Model):
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
-        return -(self.average_electricity_price + self.get_carbon_emitted(self))
+        return (-abs(self.average_electricity_price), -abs(self.get_carbon_emitted(self)))
+        # return (-abs(self.average_electricity_price) + -abs(self.get_carbon_emitted(self)))
 
 
     def initialize_gencos(self, financial_data, plant_data):
