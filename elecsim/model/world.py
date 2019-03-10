@@ -117,6 +117,7 @@ class World(Model):
         self.dismantle_old_plants()
         self.dismantle_unprofitable_plants()
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        carbon_emitted = self.get_carbon_emitted(self)
         self.settle_gencos_financials()
         self.year_number += 1
         self.step_number += 1
@@ -127,7 +128,7 @@ class World(Model):
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
-        return (-abs(self.average_electricity_price), -abs(self.get_carbon_emitted(self)))
+        return (-abs(self.average_electricity_price), -abs(carbon_emitted))
         # return (-abs(self.average_electricity_price) + -abs(self.get_carbon_emitted(self)))
 
 
@@ -284,9 +285,7 @@ class World(Model):
     def get_carbon_emitted(model):
         gencos = model.get_gencos()
         bids = [accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids]
-
         carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid.plant, FuelPlant))
-
         return carbon_emitted
 
     def stratify_data(self, demand):
