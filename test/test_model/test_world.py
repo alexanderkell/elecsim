@@ -28,7 +28,7 @@ __email__ = "alexander@kell.es"
 
 pd.set_option('display.max_rows', 4000)
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.INFO)
 
 #
 # def display_top(snapshot, key_type='lineno', limit=3):
