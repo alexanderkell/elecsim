@@ -57,7 +57,7 @@ class WorldEnvironment(gym.Env):
         ob = -abs(mean_electricity_price)-abs(carbon_emitted)
         reward = ob
         done = self.world.step_number > self.max_number_of_steps
-        print("action: {}, reward: {}, mean_electricity_price: {}, carbon_emitted: {}".format(action, reward, mean_electricity_price, carbon_emitted))
+        print("step number: {}, action: {}, reward: {}, mean_electricity_price: {}, carbon_emitted: {}".format(self.world.step_number,action, reward, mean_electricity_price, carbon_emitted))
 
         ob = np.array([mean_electricity_price, carbon_emitted])
 
