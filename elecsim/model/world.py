@@ -284,7 +284,7 @@ class World(Model):
     @staticmethod
     def get_carbon_emitted(model):
         gencos = model.get_gencos()
-        bids = list(accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids)
+        bids = list(accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids if isinstance(plants, FuelPlant))
         
         carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid.plant, FuelPlant))
         return carbon_emitted
