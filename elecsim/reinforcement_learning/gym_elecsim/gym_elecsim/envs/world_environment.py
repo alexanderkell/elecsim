@@ -37,12 +37,19 @@ class WorldEnvironment(gym.Env):
             0.0, 250.0, shape=(1, ), dtype=np.float32)
 
         self.observation_space = Box(
-            0.0, lost_load, shape=(2, ), dtype=np.float32)
+            -10000.0, 0.0, shape=(2, ), dtype=np.float32)
 
     def reset(self):
         self.step_number_env=0
         self.world = World(initialization_year=2018, scenario_file=self.config['scenario_file'], data_folder=self.config['data_folder'], number_of_steps=self.max_number_of_steps)
-        obs = np.random.uniform(low=-100, high=1, size=(2,))
+        self.world.step_number -= 1
+        resultant_observation = self.world.step(17)
+        mean_electricity_price = resultant_observation[0]
+        carbon_emitted = resultant_observation[1]
+        obs = np.array([mean_electricity_price, carbon_emitted]) 
+        # obs = -abs(mean_electricity_price)-abs(carbon_emitted)
+
+        # obs = np.random.uniform(low=-100, high=1, size=(2,))
         obs = np.array(obs)
         # return np.expand_dims(obs, axis=0)
         return obs
@@ -64,7 +71,5 @@ class WorldEnvironment(gym.Env):
         return ob, reward, done, {}
 
     def render(self):
-        print("num steps {}".format(self.step_number))
-        print("action: {}".format(self.action))
 
-        return True
+        return False
