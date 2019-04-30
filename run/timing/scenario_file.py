@@ -21,6 +21,9 @@ segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 552
 # yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
 yearly_demand_change = [1.00]*100
 
+number_of_days = 8
+method_of_selection = "medoids"
+
 # Fuel prices (£/MWh)
 
 # Historical fuel prices of coal, oil and gas  Source: Average prices of fuels purchased by the major UK power producers, BEIS UK Government, table_321.xlsx

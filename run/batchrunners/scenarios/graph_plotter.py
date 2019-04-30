@@ -7,7 +7,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from elecsim.constants import ROOT_DIR
+# from elecsim.constants import ROOT_DIR
+ROOT_DIR = '/Users/b1017579/Documents/PhD/Projects/10. ELECSIM'
 
 logger = logging.getLogger(__name__)
 """
@@ -71,7 +72,7 @@ def variance_plots(folder, folder_to_save):
 
         scenario_results = pd.read_csv(file_name,dtype=np.float64, index_col=None, header=0)
         scenario_results = scenario_results.rename(index=str, columns = {"Recip_gas":"Recip. Gas"})
-        scenario = file_name.split("_")[0]+file_name.split("_")[1]+file_name.split("_")[2]
+        scenario = file_name.split("_")[0]+fil1e_name.split("_")[1]+file_name.split("_")[2]
         scenario_results['Unnamed: 0'] += 2013
         scenario_results['Carbon_tax'] = scenario_results['Carbon_tax'].shift(6)
         scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']] = scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']].iloc[6:]
@@ -119,7 +120,8 @@ def variance_plots(folder, folder_to_save):
         h2, l2 = ax2.get_legend_handles_labels()
         box = ax2.get_position()
         ax2.set_position([box.x0, box.y0,box.width, box.height * 0.9])
-        if (name == "demand099-carbon10-datetime") or (name =='demand099-carbon70-datetime'):
+        # if (name == "demand099-carbon10-datetime") or (name =='demand099-carbon70-datetime'):
+        if (name == "demand099-carbon18-datetime") or (name =='demand099-carbon70-datetime'):
 
             # ax2.set_position([box.x0, box.y0,box.width, box.height * 0.9])
 
@@ -164,8 +166,10 @@ def if_no_directory_create(directory):
 
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
-    # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
     # single_plots("None", "first_rl_results")
-    single_plots('scottish_NI','scottish_NI_1')
+    # single_plots('scottish_NI','scottish_NI_1')
 
 
+# fourth_run_8_iterations_lower_taxes_no_max_investment_2018
+# /Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/run/batchrunners/scenarios/data/fourth_run_8_iterations_lower_taxes_no_max_investment_2018

@@ -42,21 +42,24 @@ class PredictPriceDurationCurve:
 
 
 def estimate_lost_load_price(predicted_price_duration_curve):
-    if all(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
-        return predicted_price_duration_curve
-    if any(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
-        predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
-        # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
-        if predicted_price_duration_curve.accepted_price.count() > 1:
-            predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
-
-            p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,1))
-            extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
-            logger.debug("extrapolated: {}".format(extrapolated))
-            predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
+    if elecsim.scenario.scenario_data.lost_load_price_predictor:
+        if all(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
             return predicted_price_duration_curve
-        elif predicted_price_duration_curve.accepted_price.count() == 1:
-            predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.fillna(predicted_price_duration_curve.accepted_price.mean())
+        if any(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
+            predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
+            # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
+            if predicted_price_duration_curve.accepted_price.count() > 1:
+                predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
+
+                p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,1))
+                extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
+                logger.debug("extrapolated: {}".format(extrapolated))
+                predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
+                return predicted_price_duration_curve
+            elif predicted_price_duration_curve.accepted_price.count() == 1:
+                predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.fillna(predicted_price_duration_curve.accepted_price.mean())
+                return predicted_price_duration_curve
+        else:
             return predicted_price_duration_curve
     else:
         return predicted_price_duration_curve

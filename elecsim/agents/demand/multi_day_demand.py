@@ -1,8 +1,7 @@
 import logging
 
-from mesa import Agent
-
 import elecsim.scenario.scenario_data
+from elecsim.agents.demand.demand import Demand
 logger = logging.getLogger(__name__)
 
 
@@ -14,15 +13,14 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
+class MultiDayDemand(Demand):
 
-class Demand(Agent):
-
-    def __init__(self, unique_id, segment_hours=None, segment_consumption=None):
-        """ An agent representing UK electricity demand
+    def __init__(self, unique_id, segment_hours, segment_consumption):
+        """ An agent representing UK electricity demand by selecting representative days.
 
         :param segment_hours: A series representing the load duration curve
         """
-        self.unique_id = unique_id
+        super.__init__(unique_id= unique_id, )
 
         self.segment_hours = segment_hours
         self.segment_consumption = segment_consumption

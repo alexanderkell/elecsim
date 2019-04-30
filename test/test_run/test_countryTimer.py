@@ -4,7 +4,7 @@ import pytest
 from pytest import approx
 
 from run.timing.batch_run_timer import DemandTimer
-from elecsim.scen_error.scenario_data import power_plants
+from elecsim.scenario.scenario_data import power_plants
 logger = logging.getLogger(__name__)
 
 """

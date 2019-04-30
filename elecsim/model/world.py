@@ -4,7 +4,6 @@ import os
 from random import uniform, randint
 from time import perf_counter
 import importlib.util
-# from importlib.machinery import SourceFileLoader
 
 import numpy as np
 import pandas as pd
@@ -14,7 +13,8 @@ from mesa.datacollection import DataCollector
 from elecsim.agents.demand.demand import Demand
 from elecsim.agents.generation_company.gen_co import GenCo
 from elecsim.constants import ROOT_DIR
-from elecsim.market.electricity.power_exchange import PowerExchange
+# from elecsim.market.electricity.power_exchange import PowerExchange
+from elecsim.market.electricity.power_exchange import YearlyExchange, HighTemporalExchange
 from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
@@ -41,7 +41,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, data_folder=None, time_run=False, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -87,7 +87,12 @@ class World(Model):
         self.schedule.add(self.demand)
 
         # Create PowerExchange
-        self.PowerExchange = PowerExchange(self)
+        if market_time_splices==1:
+            self.PowerExchange = YearlyExchange(self)
+        elif market_time_splices>1:
+            self.PowerExchange = HighTemporalExchange(self)
+        else:
+            raise ValueError("market_time_splices must be equal to or larger than 1.")
         self.running = True
 
         self.create_data_loggers(data_folder)
@@ -115,7 +120,7 @@ class World(Model):
         logger.info("Stepping year: {}".format(self.year_number))
 
         self.dismantle_old_plants()
-        self.dismantle_unprofitable_plants()
+        # self.dismantle_unprofitable_plants()
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         carbon_emitted = self.get_carbon_emitted(self)
         self.settle_gencos_financials()
