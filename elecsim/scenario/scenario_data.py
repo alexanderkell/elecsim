@@ -131,6 +131,9 @@ upfront_investment_costs = 0.25
 years_for_agents_to_predict_forward = 7
 
 
-max_onshore_capacity = 34000 # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),
-max_offshore_capacity = 1 #
-max_pv_capacity = 85000 # 10W/m^2 (David McKay), cover 5% of the UK
+max_onshore_capacity = 34000  # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),
+max_offshore_capacity = 1  #
+max_pv_capacity = 85000  # 10W/m^2 (David McKay), cover 5% of the UK
+
+# Predict lost load through exponential and linear regression
+lost_load_price_predictor = True

@@ -138,7 +138,7 @@ class GenCo(Agent):
     def invest(self):
         lowest_upfront_cost = 0
         down_payment = 0
-        counter =0
+        counter = 0
         total_capacity = 0
         # while self.money > lowest_upfront_cost and total_capacity < 1500:
         while self.money > lowest_upfront_cost:

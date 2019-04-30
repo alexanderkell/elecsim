@@ -65,6 +65,15 @@ class PowerExchange:
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
+    def newmethod469(self, segment_hours, segment_demand, generator_companies, predict):
+        for segment_hour, segment_demand in zip(segment_hours, segment_demand):
+            bids = []
+            for generation_company in generator_companies:
+                bids.append(generation_company.calculate_bids(segment_hour, predict))
+            sorted_bids = self._sort_bids(bids)
+            accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
+        return segment_hour, accepted_bids, segment_demand
+
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
                 'year': self.model.year_number,
