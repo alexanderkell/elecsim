@@ -21,6 +21,8 @@ segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 552
 yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
 # yearly_demand_change = [1.00]*100
 
+multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/8_medoids.csv'.format(ROOT_DIR))
+
 # Fuel prices (£/MWh)
 
 # Historical fuel prices of coal, oil and gas  Source: Average prices of fuels purchased by the major UK power producers, BEIS UK Government, table_321.xlsx
@@ -89,6 +91,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))

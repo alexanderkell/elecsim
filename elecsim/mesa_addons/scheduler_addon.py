@@ -8,7 +8,7 @@ logging.getLogger(__name__)
 
 from elecsim.agents.generation_company.gen_co import GenCo
 from elecsim.agents.demand.demand import Demand
-from elecsim.market.electricity.power_exchange import PowerExchange
+from elecsim.market.electricity.market.power_exchange import PowerExchange
 
 class OrderedActivation(BaseScheduler):
     """ A scheduler which activates each agent in the order that they are added to the scheduler

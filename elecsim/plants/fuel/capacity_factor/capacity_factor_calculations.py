@@ -22,16 +22,16 @@ __email__ = "alexander@kell.es"
 
 @functools.lru_cache(maxsize=512)
 def get_capacity_factor(renewable_type, demand_hour):
-        historical_demand = elecsim.scenario.scenario_data.historical_hourly_demand
-        renewable_type = renewable_type.lower()
-        capacity_data = get_capacity_data(renewable_type)
-        if renewable_type in ['onshore', 'offshore', 'pv']:
-            capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
-            capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,
-                                                                      renewable_type)
-        else:
-            capacity_factor_value = capacity_data
-        return capacity_factor_value
+    historical_demand = elecsim.scenario.scenario_data.historical_hourly_demand
+    renewable_type = renewable_type.lower()
+    capacity_data = get_capacity_data(renewable_type)
+    if renewable_type in ['onshore', 'offshore', 'pv']:
+        capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type)
+        capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour,renewable_type)
+    else:
+        capacity_factor_value = capacity_data
+    return capacity_factor_value
+
 
 def get_capacity_data(renewable_type):
     if renewable_type in ["onshore", 'offshore']:
@@ -44,6 +44,7 @@ def get_capacity_data(renewable_type):
         raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
     return capacity_data
 
+
 def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type):
     demand_capacity = capacity_data.join(historical_demand, how='inner').dropna()
     demand_capacity = demand_capacity[elecsim.scenario.scenario_data.segment_demand[-1] < demand_capacity.demand]
@@ -52,6 +53,7 @@ def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewa
     capacity_factor = capacity_factor.to_frame()
     capacity_factor['diff'] = elecsim.scenario.scenario_data.load_duration_curve_diff['hours'].sort_values(ascending=False).values
     return capacity_factor
+
 
 def get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type):
     subsetted_dataframe = capacity_factor[capacity_factor['diff'] >= demand_hour].tail(1)

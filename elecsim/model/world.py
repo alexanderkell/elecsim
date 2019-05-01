@@ -11,10 +11,10 @@ from mesa import Model
 from mesa.datacollection import DataCollector
 
 from elecsim.agents.demand.demand import Demand
+from elecsim.agents.demand.multi_day_demand import MultiDayDemand
 from elecsim.agents.generation_company.gen_co import GenCo
 from elecsim.constants import ROOT_DIR
-# from elecsim.market.electricity.power_exchange import PowerExchange
-from elecsim.market.electricity.power_exchange import YearlyExchange, HighTemporalExchange
+from elecsim.market.electricity.market.power_exchange import PowerExchange
 from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
@@ -63,6 +63,7 @@ class World(Model):
         self.time_run = time_run
         self.max_number_of_steps = number_of_steps
         self.average_electricity_price = 0
+        self.market_time_splices = market_time_splices
 
         self.set_log_level(log_level)
 
@@ -82,30 +83,23 @@ class World(Model):
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-        self.demand = Demand(self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff, elecsim.scenario.scenario_data.yearly_demand_change)
-        self.unique_id_generator+=1
-        self.schedule.add(self.demand)
 
         # Create PowerExchange
-        if market_time_splices==1:
-            self.PowerExchange = YearlyExchange(self)
-        elif market_time_splices>1:
-            self.PowerExchange = HighTemporalExchange(self)
+        if self.market_time_splices == 1:
+            self.PowerExchange = PowerExchange(self)
+            self.demand = Demand(self, self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff)
+        elif self.market_time_splices > 1:
+            self.PowerExchange = PowerExchange(self)
+            # self.PowerExchange = HighTemporalExchange(self)
+            self.demand = MultiDayDemand(self, self.unique_id_generator, elecsim.scenario.scenario_data.multi_year_data)
         else:
             raise ValueError("market_time_splices must be equal to or larger than 1.")
         self.running = True
 
+        
+        self.unique_id_generator += 1
+        self.schedule.add(self.demand)
         self.create_data_loggers(data_folder)
-
-    def overwrite_scenario_file(self, scenario_file):
-        if scenario_file:
-            split_directory = scenario_file.split("/")
-            file_name = split_directory[-1]
-            spec = importlib.util.spec_from_file_location(file_name, scenario_file)
-            scenario_import = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(scenario_import)
-            scen_mod.overwrite_scenario_file(scenario_import)
-
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
@@ -113,7 +107,7 @@ class World(Model):
         self.schedule.step()
 
         if carbon_price is not None:
-            elecsim.scenario.scenario_data.carbon_price_scenario[self.step_number + 1] = carbon_price
+            elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price
         else:
             elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
 
@@ -124,8 +118,9 @@ class World(Model):
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         carbon_emitted = self.get_carbon_emitted(self)
         self.settle_gencos_financials()
-        self.year_number += 1
         self.step_number += 1
+        if self.step_number % self.market_time_splices == 0:
+            self.year_number += 1
 
         self.datacollector.collect(self)
 
@@ -146,8 +141,7 @@ class World(Model):
         """
 
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
-        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities',
-       'total_assets', 'turnover', 'net_assets']]
+        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities','total_assets', 'turnover', 'net_assets']]
 
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
@@ -250,6 +244,16 @@ class World(Model):
                     plant.is_operating = True
                 elif (plant.is_operating is False) and (self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period):
                     plant.is_operating = True
+
+    def overwrite_scenario_file(self, scenario_file):
+        if scenario_file:
+            split_directory = scenario_file.split("/")
+            file_name = split_directory[-1]
+            spec = importlib.util.spec_from_file_location(file_name, scenario_file)
+            scenario_import = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(scenario_import)
+            scen_mod.overwrite_scenario_file(scenario_import)
+
 
     def settle_gencos_financials(self):
         gencos = self.get_gencos()
