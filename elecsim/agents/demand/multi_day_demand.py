@@ -14,22 +14,21 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 class MultiDayDemand(Demand):
+    """ An agent representing UK electricity demand by selecting representative days.
+    """
 
-    def __init__(self, unique_id, segment_hours, segment_consumption):
-        """ An agent representing UK electricity demand by selecting representative days.
+    def __init__(self, unique_id, multi_year_data):
+        super().__init__(unique_id=unique_id)
 
-        :param segment_hours: A series representing the load duration curve
-        """
-        super.__init__(unique_id= unique_id, )
-
-        self.segment_hours = segment_hours
-        self.segment_consumption = segment_consumption
         self.yearly_demand_change = elecsim.scenario.scenario_data.yearly_demand_change
+        self.demand = multi_year_data[multi_year_data.data_type == "load"]
+        self.demand_ldc = self.demand.groupby('cluster').apply(lambda x: x.sort_values('capacity_factor', ascending=True).reset_index())
+
         self.years_from_start = 0
 
     def step(self):
         logger.debug("Stepping demand")
-        self.segment_consumption = [i * self.yearly_demand_change[self.years_from_start] for i in self.segment_consumption]
+        self.demand_ldc.capacity_factor = self.demand_ldc.capacity_factor * self.yearly_demand_change[self.years_from_start]
         self.years_from_start += 1
 
         # load to change each year due to certain scenario
