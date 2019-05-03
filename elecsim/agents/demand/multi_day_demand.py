@@ -1,5 +1,5 @@
 import logging
-
+import pandas as pd
 import elecsim.scenario.scenario_data
 from elecsim.agents.demand.demand import Demand
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class MultiDayDemand(Demand):
 
         self.yearly_demand_change = elecsim.scenario.scenario_data.yearly_demand_change
         self.demand = multi_year_data[multi_year_data.data_type == "load"]
-        self.demand_ldc = self.demand.groupby('cluster').apply(lambda x: x.sort_values('capacity_factor', ascending=True).reset_index())
+        self.demand_ldc = self.demand.groupby('cluster').apply(lambda x: x.sort_values('capacity_factor', ascending=False).reset_index())
 
         self.segment_hours = 0
         self.segment_consumption = 0
@@ -38,13 +38,12 @@ class MultiDayDemand(Demand):
         if steps_since_year == 0:
             self.demand_ldc.capacity_factor = self.demand_ldc.capacity_factor * self.yearly_demand_change[self.years_from_start]
 
-        logger.info("self.demand_ldc: \n{}".format(self.demand_ldc))
         grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
 
         representative_day = grouped_days.get_group((list(grouped_days.groups)[steps_since_year]))
 
         self.segment_consumption = representative_day.capacity_factor.tolist()
-        self.segment_hours = representative_day.level_0.iloc[0] * representative_day.counts.tolist()
+        self.segment_hours = representative_day.counts.cumsum().tolist()
 
         # self.steps_from_start += 1
 
@@ -52,18 +51,28 @@ class MultiDayDemand(Demand):
 
     def get_demand_for_year(self):
 
-        grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
+        # grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
 
-        year_segment_consumption = []
-        year_segment_hours = []
+        demand_dataframe = self.demand_ldc.sort_values("capacity_factor", ascending=False)
 
-        logger.info("self.demand_ldc: {}".format(grouped_days))
+        demand_dataframe['hour'] = demand_dataframe.counts.cumsum()
 
-        for _, day in grouped_days:
-            year_segment_consumption.append(day.capacity_factor.tolist())
-            segment_hours = [hour * day.counts.iloc[0] for hour in range(24)]
-            year_segment_hours.append(segment_hours)
 
+
+        # year_segment_consumption = demand_dataframe.capacity_factor.tolist()
+        # year_segment_hours = demand_dataframe.hour.tolist()
+
+        year_segment_consumption = (pd.DataFrame(pd.cut(demand_dataframe.capacity_factor, 20).apply(lambda x: x.right)).groupby("capacity_factor").first()).index.tolist()
+        year_segment_hours = (pd.DataFrame(pd.cut(demand_dataframe.hour, 20).apply(lambda x: x.right)).groupby("hour").first()).index.tolist()
+
+        # final_day = 0
+        # for _, day in grouped_days:
+        #     year_segment_consumption.append(day.capacity_factor.tolist())
+        #     segment_hours = [final_day + hour * day.counts.iloc[0] for hour in range(1, 25)]
+        #     year_segment_hours.append(segment_hours)
+        #     final_day = 24 * day.counts.iloc[0]
+
+        # year_segment_consumption = demand_dataframe.
 
         return year_segment_hours, year_segment_consumption
 
