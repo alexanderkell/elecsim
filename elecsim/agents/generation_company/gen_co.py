@@ -56,7 +56,8 @@ class GenCo(Agent):
         logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        self.invest()
+        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0:
+            self.invest()
         # self.reset_contracts()
         self.purchase_fuel()
 

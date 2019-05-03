@@ -27,7 +27,7 @@ class PowerExchange:
         """
         self.model = model
         self.hold_duration_curve_prices = []
-        self.price_duration_curve = pd.DataFrame(columns = ["year", "segment_hour", "segment_demand", "accepted_price"])
+        self.price_duration_curve = pd.DataFrame(columns=["year", "segment_hour", "segment_demand", "accepted_price"])
 
     def tender_bids(self, segment_hours, segment_demand, predict=False):
         """
@@ -46,7 +46,6 @@ class PowerExchange:
             for plant in gen_co.plants:
                 plant.capacity_fulfilled = dict.fromkeys(segment_hours, 0)
 
-        logger.info("segment_hours: {}".format(segment_hours))
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
 
@@ -65,6 +64,7 @@ class PowerExchange:
         if predict:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
+            self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
             logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()

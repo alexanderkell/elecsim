@@ -58,6 +58,7 @@ class World(Model):
         logger.info("start: {}".format(self.start))
         # Set up model objects
         self.year_number = initialization_year
+        self.years_from_start = 0
         self.step_number = 0
         self.unique_id_generator = 0
         self.time_run = time_run
@@ -103,6 +104,9 @@ class World(Model):
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
+        if self.step_number % self.market_time_splices == 0 and self.step_number != 0:
+            self.year_number += 1
+            self.years_from_start += 1
         self.operate_constructed_plants()
         self.schedule.step()
 
@@ -116,15 +120,18 @@ class World(Model):
         self.dismantle_old_plants()
         # self.dismantle_unprofitable_plants()
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.PowerExchange.price_duration_curve = []
+
         carbon_emitted = self.get_carbon_emitted(self)
         self.settle_gencos_financials()
-        self.step_number += 1
-        if self.step_number % self.market_time_splices == 0:
-            self.year_number += 1
+
 
         self.datacollector.collect(self)
 
         self.write_scenario_data()
+
+        self.step_number += 1
+
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
