@@ -47,6 +47,7 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
                                  poultry_litter_price, straw_price, meat_price, waste_price_post_2000,
                                  waste_price_pre_2000],
                            columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
+
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
 fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2078'].columns))
@@ -70,6 +71,7 @@ fuel_plant_availability = 0.97 # Electricity Generation Costs and Hurdle Rates -
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
 wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
+# wind_capacity_factor.time = pd.to_datetime(wind_capacity_factor.time)
 # Solar
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
 # Hydro
@@ -80,7 +82,7 @@ historical_availability_factor = pd.read_csv('{}/data/processed/availability_fac
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
-
+# historical_hourly_demand = historical_hourly_demand.tail(2628)
 
 # Load duration curve:
 load_duration_curve = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve.csv'.format(ROOT_DIR))
@@ -118,6 +120,21 @@ EU_ETS_COST = 13.62
 carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
 
 
+def concatenate_carbon_price():
+      carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))],
+                    'price': carbon_price_scenario}
+      carbon_price_scenario_df = pd.DataFrame(carbon_data)
+      historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+      carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+      carbon_cost.year = pd.to_numeric(carbon_cost.year)
+      return carbon_cost
+
+
+carbon_price_all_years = concatenate_carbon_price()
+
+
+
+
 # Join historical and future carbon prices into dataframe for simulation purposes
 # carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
 # carbon_price_scenario_df = pd.DataFrame(carbon_data)
@@ -131,7 +148,7 @@ lost_load = 6000
 
 upfront_investment_costs = 0.25
 
-years_for_agents_to_predict_forward = 7
+years_for_agents_to_predict_forward = 10
 
 
 max_onshore_capacity = 34000  # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),

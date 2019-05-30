@@ -34,7 +34,6 @@ class LatestMarketData:
         self.model = model
         self.demand = self.model.demand
 
-
     def get_predicted_marginal_cost(self, power_plant, look_back_years):
 
         variable_o_m_cost = power_plant.variable_o_and_m_per_mwh

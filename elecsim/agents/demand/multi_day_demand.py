@@ -62,8 +62,8 @@ class MultiDayDemand(Demand):
         # year_segment_consumption = demand_dataframe.capacity_factor.tolist()
         # year_segment_hours = demand_dataframe.hour.tolist()
 
-        year_segment_consumption = (pd.DataFrame(pd.cut(demand_dataframe.capacity_factor, 20).apply(lambda x: x.right)).groupby("capacity_factor").first()).index.tolist()
-        year_segment_hours = (pd.DataFrame(pd.cut(demand_dataframe.hour, 20).apply(lambda x: x.right)).groupby("hour").first()).index.tolist()
+        year_segment_consumption = (pd.DataFrame(pd.cut(demand_dataframe.capacity_factor, 20*self.model.market_time_splices).apply(lambda x: x.right)).groupby("capacity_factor").first()).index.tolist()
+        year_segment_hours = (pd.DataFrame(pd.cut(demand_dataframe.hour, 20*self.model.market_time_splices).apply(lambda x: x.right)).groupby("hour").first()).index.tolist()
 
         # final_day = 0
         # for _, day in grouped_days:
