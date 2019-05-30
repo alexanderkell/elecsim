@@ -1,13 +1,14 @@
 import logging
 import math
 from random import gauss
+from functools import lru_cache
 
 from mesa import Agent
 
 from elecsim.market.electricity.bid import Bid
 from elecsim.plants.availability_factors.availability_factor_calculations import get_availability_factor
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
-from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant, create_power_plant_group
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
 from elecsim.role.investment.calculate_npv import get_most_profitable_plants_by_npv
 from elecsim.role.investment.calculate_npv import select_yearly_payback_payment_for_year
@@ -68,8 +69,7 @@ class GenCo(Agent):
     #         marked_up_price = plant.short_run_marginal_cost(self.model)*1.1
     #         bids.append(Bid(self, plant, segment_hour, plant.capacity_mw, marked_up_price))
     #     return bids
-
-
+    @lru_cache(maxsize=10000)
     def calculate_bids(self, segment_hour, predict=False):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
@@ -85,7 +85,7 @@ class GenCo(Agent):
             future_plant_operating = False
             if predict is True:
                 if isinstance(plant, FuelPlant):
-                    YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = 7
+                    YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
                     future_plant_operating = plant.check_if_operating_in_certain_year(self.model.year_number, YEARS_IN_FUTURE_TO_PREDICT_SUPPLY)
                     if future_plant_operating:
                         co2_price_predicted = self.forecast_attribute_price("co2")
@@ -96,15 +96,15 @@ class GenCo(Agent):
                         continue
                 else:
                     price = plant.short_run_marginal_cost(self.model, self)
+                    # logger.info(plant.short_run_marginal_cost.cache_info())
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
             marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
             if plant.is_operating or future_plant_operating:
                 if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
-                    capacity_factor = get_capacity_factor(plant.plant_type, segment_hour)
-
+                    capacity_factor = get_capacity_factor(self.model, plant.plant_type, segment_hour)
+                    # print(get_capacity_factor.cache_info())
                     availability = self.get_renewable_availability(plant)
-
                     bids.append(
                         Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
                             marked_up_price, self.model.year_number)
@@ -141,8 +141,10 @@ class GenCo(Agent):
         down_payment = 0
         counter = 0
         total_capacity = 0
+        number_of_plants_to_purchase = 1
         # while self.money > lowest_upfront_cost and total_capacity < 1500:
         while self.money > lowest_upfront_cost:
+        # while number_of_plants_to_purchase > 0:
 
             counter += 1
             # if counter>3:
@@ -150,24 +152,48 @@ class GenCo(Agent):
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
                                                                      self.look_back_period)
+
+            # logger.info("potential_plant_data: {}".format(potential_plant_data))
             if potential_plant_data:
                 potential_plant_list = []
                 for plant_data in potential_plant_data:
                     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
                     potential_plant_list.append(power_plant_trial)
-                    lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
+                lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
             else:
                 break
 
-            for plant_data in potential_plant_data:
-                power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
+            # for plant_data in potential_plant_data:
+            #     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
+            #     # logger.info(create_power_plant.cache_info())
+            #     down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
+            #     if self.money > down_payment:
+            #         # logger.info("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
+            #         self.plants.append(power_plant_trial)
+            #         self.money -= down_payment
+            #         total_capacity += power_plant_trial.capacity_mw
+            #         break
+
+            for plant_data in potential_plant_list:
+
+                # power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
+                power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data.plant_type, plant_data.capacity_mw)
                 down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
-                if self.money > down_payment:
-                    logger.debug("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
-                    self.plants.append(power_plant_trial)
-                    self.money -= down_payment
-                    total_capacity += power_plant_trial.capacity_mw
+                number_of_plants_to_purchase = int(self.money/down_payment)
+                # logger.info(number_of_plants_to_purchase)
+                # if number_of_plants_to_purchase < 1:
+                #     break
+                # power_plant_trial = create_power_plant_group("invested_plant_group", self.model.year_number, plant_data[1], plant_data[0], self.money)
+                power_plant_trial_group = create_power_plant_group(name="invested_plant_group", start_date=self.model.year_number, simplified_type=plant_data.plant_type, capacity=plant_data.capacity_mw, number_of_plants_to_purchase=number_of_plants_to_purchase)
+                down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
+                # logger.info(create_power_plant.cache_info())
+                if self.money > down_payment_of_plant_array and number_of_plants_to_purchase>=1:
+                    logger.info("investing in {}, investing in {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
+                    self.plants.append(power_plant_trial_group)
+                    self.money -= down_payment_of_plant_array
+                    total_capacity += power_plant_trial_group.capacity_mw
                     break
+
 
 
     def dismantle_old_plants(self):

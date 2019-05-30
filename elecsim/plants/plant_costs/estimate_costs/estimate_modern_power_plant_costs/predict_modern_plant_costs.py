@@ -1,6 +1,7 @@
 import logging
 import math
 from random import uniform
+from functools import lru_cache
 
 from scipy.interpolate import interp1d
 
@@ -62,7 +63,7 @@ class PredictModernPlantParameters:
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_non_interpolatable_parameters(dur) for dur in durations}
-
+        # logger.info(self._estimate_non_interpolatable_parameters.cache_info())
         yearly_cost_spread = ['Constr', 'Pre']
 
         yearly_cost_perc = {self._change_columns(spread): self._payment_spread_estimator(spread) for spread in
@@ -126,6 +127,7 @@ class PredictModernPlantParameters:
             raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
         return cost_parameter_variables
 
+    # @lru_cache(maxsize=10000)
     def _estimate_non_interpolatable_parameters(self, variable_wanted):
         """
         Estimates parameters time scale required for construction, pre-development and operating period.

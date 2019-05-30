@@ -3,6 +3,7 @@ from functools import lru_cache
 
 import numpy as np
 import pandas as pd
+import os, sys
 
 from elecsim.market.electricity.market.power_exchange import PowerExchange
 from elecsim.role.market.latest_market_data import LatestMarketData

@@ -61,9 +61,10 @@ logging.basicConfig(level=logging.INFO)
 
 # with PyCallGraph(output=GraphvizOutput()):
 MARKET_TIME_SPLICES = 8
-world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES)
+YEARS_TO_RUN = 40
+number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
+world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
 
-YEARS_TO_RUN = 10
-for i in range(YEARS_TO_RUN * MARKET_TIME_SPLICES):
+for i in range(number_of_steps):
     world.step()
 

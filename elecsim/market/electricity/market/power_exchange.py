@@ -51,6 +51,7 @@ class PowerExchange:
 
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, predict))
+                # logger.info(generation_company.calculate_bids.cache_info())
             sorted_bids = self._sort_bids(bids)
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
@@ -65,7 +66,7 @@ class PowerExchange:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
@@ -111,7 +112,6 @@ class PowerExchange:
         accepted_bids = []
 
         for bid in bids:
-            # logger.debug('bid: price: {}'.format(bid.price_per_mwh))
             if capacity_required > 0 and capacity_required > bid.capacity_bid:
                 bid.accept_bid(segment_hour)
                 capacity_required -= bid.capacity_bid

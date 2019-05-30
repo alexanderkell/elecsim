@@ -18,6 +18,8 @@ from elecsim.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCost
 # from elecsim.scen_error.scenario_data import modern_plant_costs
 # from elecsim.scen_error.scenario_data import nuclear_wacc, non_nuclear_wacc
 import elecsim.scenario.scenario_data
+from functools import lru_cache
+
 logger = getLogger(__name__)
 
 """
@@ -69,6 +71,7 @@ class CalculateNPV:
         logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
+    @lru_cache(maxsize=10000)
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
         forecasted_segment_prices = self._get_price_duration_predictions()
@@ -195,8 +198,7 @@ class CalculateNPV:
             total_profit = 0
         return total_profit
 
-    @staticmethod
-    def _total_running_hours(row, power_plant):
+    def _total_running_hours(self, row, power_plant):
         if isinstance(power_plant, FuelPlant):
             if row['predicted_profit_per_mwh'] > 0:
                 running_hours = row['num_of_hours']
@@ -204,7 +206,7 @@ class CalculateNPV:
                 running_hours = 0
         else:
             if row['predicted_profit_per_mwh'] > 0:
-                capacity_factor = get_capacity_factor(power_plant.plant_type, row.segment_hour)
+                capacity_factor = get_capacity_factor(self.model, power_plant.plant_type, row.segment_hour)
                 running_hours = capacity_factor * row['num_of_hours']
             else:
                 running_hours = 0

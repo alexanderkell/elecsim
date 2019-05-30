@@ -2,6 +2,9 @@ from functools import lru_cache
 
 from numpy import isnan
 from numpy import ndarray
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
 
 import elecsim.scenario.scenario_data
 from elecsim.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
@@ -24,7 +27,7 @@ __email__ = "alexander@kell.es"
 EARLIEST_MODERN_PLANT_YEAR = 2018
 
 
-@lru_cache(maxsize=1024)
+@lru_cache(maxsize=10000)
 def create_power_plant(name, start_date, simplified_type, capacity):
     """
     Functionality that estimates the cost of a power plant based solely on year of construction, type of plant and capacity.
@@ -43,12 +46,35 @@ def create_power_plant(name, start_date, simplified_type, capacity):
                                   **estimated_cost_parameters)
     return power_plant
 
+# def create_power_plant_group(name, money, start_date, simplified_type):
+def create_power_plant_group(name, start_date, simplified_type, capacity, number_of_plants_to_purchase):
+
+    # capacity = predict_capacity_from_money(money, simplified_type, capacity, start_date)
+    plant_object = create_power_plant(name, start_date=start_date, simplified_type=simplified_type, capacity=capacity*number_of_plants_to_purchase)
+
+    # plant_object = create_power_plant(name, start_date=start_date, simplified_type=simplified_type, capacity=capacity)
+    return plant_object
+
+
+
+
+# def predict_capacity_from_money(money, simplified_type, capacity, start_date):
+#     test_capacity = [capacity, capacity+0.5]
+#     plant_1 = create_power_plant("invested_plant", start_date, simplified_type, test_capacity[0])
+#     plant_2 = create_power_plant("invested_plant", start_date, simplified_type, test_capacity[1])
+#     y = np.array([plant_1.get_upfront_costs(), plant_2.get_upfront_costs()]).reshape(-1, 1)
+#     # test_capacity_array = np.array(test_capacity).reshape(-1, 1)
+#     test_capacity_array = test_capacity
+#     reg = LinearRegression().fit(y, test_capacity_array)
+#     size = reg.predict(np.array(money).reshape(-1, 1))
+#     return int(size)
+
 
 def _select_cost_estimator(start_year, plant_type, capacity):
     _check_digit(capacity, "capacity")
     _check_digit(start_year, "start_year")
     _check_positive(start_year, "start_year")
-    _check_positive(capacity, "start_year")
+    _check_positive(capacity, "capacity")
 
     hist_costs = elecsim.scenario.scenario_data.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology.map(lambda x: x in plant_type)].dropna()

@@ -4,11 +4,14 @@ import os
 from random import uniform, randint
 from time import perf_counter
 import importlib.util
+import time
 
 import numpy as np
 import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
+
+from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
 from elecsim.agents.demand.demand import Demand
 from elecsim.agents.demand.multi_day_demand import MultiDayDemand
@@ -104,10 +107,19 @@ class World(Model):
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
-        if self.step_number % self.market_time_splices == 0 and self.step_number != 0:
-            self.year_number += 1
-            self.years_from_start += 1
-        self.operate_constructed_plants()
+        beginning_of_year = False
+        if self.step_number % self.market_time_splices == 0:
+            self.start = time.clock()
+            if self.step_number != 0:
+                self.year_number += 1
+                self.years_from_start += 1
+                self.operate_constructed_plants()
+                beginning_of_year = True
+                # logger.info("year: {}".format(self.year_number))
+                print("{}:".format(self.year_number), end='', flush=True)
+            else:
+                print("{}:".format(self.year_number), end='', flush=True)
+
         self.schedule.step()
 
         if carbon_price is not None:
@@ -115,10 +127,11 @@ class World(Model):
         else:
             elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
 
-        logger.info("Stepping year: {}".format(self.year_number))
 
-        self.dismantle_old_plants()
-        # self.dismantle_unprofitable_plants()
+        if beginning_of_year:
+            self.dismantle_old_plants()
+            self.dismantle_unprofitable_plants()
+
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.PowerExchange.price_duration_curve = []
 
@@ -128,13 +141,21 @@ class World(Model):
 
         self.datacollector.collect(self)
 
-        self.write_scenario_data()
 
         self.step_number += 1
+        print(".", end='', flush=True)
 
+        self.write_scenario_data()
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
+
+        if self.step_number % self.market_time_splices == 0:
+            end = time.clock()
+            print("time taken: {}".format(end-self.start))
+            # get_capacity_factor.cache_clear()
+
+
         return (-abs(self.average_electricity_price), -abs(carbon_emitted))
         # return (-abs(self.average_electricity_price) + -abs(self.get_carbon_emitted(self)))
 
@@ -175,7 +196,7 @@ class World(Model):
 
     def get_running_plants(self, plants):
         for plant in plants:
-            if plant.construction_year<=1990 and plant.name != "invested_plant":
+            if plant.construction_year <= 1990 and plant.name != "invested_plant":
                 # Reset old plants that have been modernised with new construction year
                 plant.construction_year = randint(self.year_number-15, self.year_number)
                 yield plant
@@ -208,7 +229,7 @@ class World(Model):
 
     def filter_plants_with_no_income(self, plants):
             for plant in plants:
-                if (self.step_number > 7) and (plant.get_year_of_operation() + 7 < self.year_number):
+                if (self.year_number > 7) and (plant.get_year_of_operation() + 7 < self.year_number):
                     historic_bids = plant.historical_bids
                     # logger.info("historic_bids {}".format(historic_bids))
                     # years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
@@ -218,9 +239,9 @@ class World(Model):
                         if historic_bids[-1].year_of_bid > seven_years_previous:
                             yield plant
                         else:
-                            logger.info("Plant {}, type {} is unprofitable. Last accepted bid: {}".format(plant.name, plant.plant_type, historic_bids[-1].year_of_bid))
+                            logger.debug("Plant {}, type {} is unprofitable. Last accepted bid: {}".format(plant.name, plant.plant_type, historic_bids[-1].year_of_bid))
                     else:
-                        logger.info("Plant {}, type {} is unprofitable.".format(plant.name, plant.plant_type))
+                        logger.debug("Plant {}, type {} is unprofitable.".format(plant.name, plant.plant_type))
 
                     # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
                     # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
@@ -282,7 +303,7 @@ class World(Model):
 
     @staticmethod
     def get_current_carbon_tax(model):
-        carbon_tax = elecsim.scenario.scenario_data.carbon_price_scenario[model.step_number]
+        carbon_tax = elecsim.scenario.scenario_data.carbon_price_scenario[model.years_from_start]
         return carbon_tax
 
     @staticmethod
@@ -397,8 +418,8 @@ class World(Model):
 
             with open("{}/{}/timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
                 timings_data.to_csv(f, header=False)
-        logger.info("end: {}".format(end))
-        logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
+            logger.info("end: {}".format(end))
+            logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
                                                                     elecsim.scenario.scenario_data.carbon_price_scenario[
                                                                         0],
                                                                     elecsim.scenario.scenario_data.power_plants.Capacity.sum()))

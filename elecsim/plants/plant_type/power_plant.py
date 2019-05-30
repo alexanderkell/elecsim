@@ -117,7 +117,7 @@ class PowerPlant(ABC):
     #     self.capacity_fulfilled = {key: 0 for key in self.capacity_fulfilled}
 
     def delete_old_plant_bids(self):
-        self.historical_bids.extend(self.accepted_bids)
+        # self.historical_bids.extend(self.accepted_bids)
         self.accepted_bids = []
 
     def get_upfront_costs(self):
