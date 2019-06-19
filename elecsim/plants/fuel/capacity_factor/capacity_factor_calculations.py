@@ -37,15 +37,15 @@ def get_capacity_factor(model, renewable_type, demand_hour):
             capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, model)
             capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type)
         else:
-            capacity_factor = segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model)
-            capacity_factor_value = get_multi_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type)
+            # capacity_factor = segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model)
+            capacity_factor_value = get_multi_capacity_factor_value_for_segment(capacity_data, demand_hour)
     else:
         capacity_factor_value = capacity_data
     return capacity_factor_value
 
 
 def get_multiple_capacity_data(renewable_type):
-    capacity_factor_data = elecsim.scenario.scenario_data.multi_year_data
+    capacity_factor_data = elecsim.scenario.scenario_data.multi_year_data_scaled
     if renewable_type in ["onshore", 'offshore']:
         capacity_data = capacity_factor_data[capacity_factor_data.data_type == renewable_type]
     elif renewable_type == "pv":
@@ -88,10 +88,13 @@ def get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewabl
     return capacity_factor_value
 
 
-def get_multi_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type):
-    subsetted_dataframe = capacity_factor[capacity_factor['diff'] >= demand_hour].tail(1)
+def get_multi_capacity_factor_value_for_segment(capacity_factor, demand_hour):
+    capacity_factor_value = capacity_factor[capacity_factor['demand_hour'] >= demand_hour].capacity_factor.head(1)
+    capacity_factor_value = capacity_factor_value.values[0]
+
+    # subsetted_dataframe = capacity_factor[capacity_factor['diff'] >= demand_hour].tail(1)
     # capacity_factor_value = float(subsetted_dataframe['capacity_factor'].values)
-    capacity_factor_value = subsetted_dataframe['capacity_factor'].values.astype(float)
+    # capacity_factor_value = subsetted_dataframe['capacity_factor'].values.astype(float)
     return capacity_factor_value
 
 
@@ -116,6 +119,7 @@ def multi_year_data_to_ldc(capacity_factor_dat, renewable_type):
 
 functools.lru_cache(maxsize=512)
 def segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model):
+
     demand_capacity = capacity_data.join(historical_demand, how='inner').dropna()
     demand_capacity = demand_capacity[model.demand.segment_consumption[-1] < demand_capacity.demand]
     demand_capacity = demand_capacity[model.demand.segment_consumption[0] > demand_capacity.demand]

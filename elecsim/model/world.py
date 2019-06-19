@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
+import pickle
 
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
@@ -87,7 +88,6 @@ class World(Model):
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
-
         # Create PowerExchange
         if self.market_time_splices == 1:
             self.PowerExchange = PowerExchange(self)
@@ -126,7 +126,6 @@ class World(Model):
             elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price
         else:
             elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
-
 
         if beginning_of_year:
             self.dismantle_old_plants()
@@ -186,8 +185,14 @@ class World(Model):
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator+=1
             # Add power plants to generation company portfolio
+            parent_directory = os.path.dirname(os.getcwd())
+            pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(parent_directory)
             for plant in data.itertuples():
-                power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
+                try:
+                    power_plant = pickle.load(open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "rb"))
+                except (OSError, IOError) as e:
+                    power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
+                    pickle.dump(power_plant, open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "wb"))
                 gen_co.plants.append(power_plant)
             logger.info('Adding generation company: {}'.format(gen_co.name))
             self.schedule.add(gen_co)

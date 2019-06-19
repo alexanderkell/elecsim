@@ -42,8 +42,12 @@ class PredictPriceDurationCurve:
             price_duration_curve = []
             year_segment_hours, year_segment_consumption = self.model.demand.get_demand_for_year()
             # for segment_hours, segment_consumption in zip(year_segment_hours, year_segment_consumption):
+
             power_ex.tender_bids(year_segment_hours, year_segment_consumption, predict=True)
             predicted_price_duration_curve = power_ex.price_duration_curve
+
+            predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
+
             # predicted_price_duration_curve.segment_hour = predicted_price_duration_curve.segment_hour.cumsum()
             # price_duration_curve.append(predicted_price_duration_curve_day)
             # predicted_price_duration_curve = pd.concat(price_duration_curve)

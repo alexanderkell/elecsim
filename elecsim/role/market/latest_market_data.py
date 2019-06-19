@@ -51,9 +51,6 @@ class LatestMarketData:
 
         return short_run_marginal_cost
 
-
-
-
     def agent_forecast_value(self, value_required, years_to_look_back,years_to_look_forward=None, demand_linear=False):
         years_for_regression = list(range(self.model.years_from_start-years_to_look_back-1, self.model.years_from_start-1))
         variable_data = self._get_variable_data(value_required)
