@@ -22,7 +22,7 @@ yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.
 # yearly_demand_change = [1.00]*100
 
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/8_medoids.csv'.format(ROOT_DIR))
-
+multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/8_medoids_scaled.csv'.format(ROOT_DIR))
 # Fuel prices (£/MWh)
 
 # Historical fuel prices of coal, oil and gas  Source: Average prices of fuels purchased by the major UK power producers, BEIS UK Government, table_321.xlsx
@@ -114,7 +114,7 @@ bid_mark_up = 1.0
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 # carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
-carbon_price_scenario = [10]*100
+carbon_price_scenario = [10]*1000
 # carbon_price_scenario = [0]*100
 EU_ETS_COST = 13.62
 carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]

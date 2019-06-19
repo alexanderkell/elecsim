@@ -151,6 +151,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in
                         zip(list(carbon_taxation_years.price), carbon_emitted)]
+
         return carbon_costs
 
 
@@ -173,7 +174,6 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         """
 
         carbon_cost = calculate_year_carbon_price()
-
         modifier = 0
         if self.plant_type == 'CCGT':
             modifier = genco.gas_price_modifier
@@ -252,5 +252,4 @@ def get_carbon_cost_in_year(carbon_cost, model):
     # carbon_cost = carbon_cost[carbon_cost.year == year_number - 1].price.iloc[0]
 
     carbon_cost  = carbon_cost.loc[np.in1d(carbon_cost['year'], [model.year_number]), 'price'].iloc[0]
-
     return carbon_cost

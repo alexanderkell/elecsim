@@ -188,7 +188,7 @@ class GenCo(Agent):
                 down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
                 # logger.info(create_power_plant.cache_info())
                 if self.money > down_payment_of_plant_array and number_of_plants_to_purchase>=1:
-                    logger.info("investing in {}, investing in {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
+                    logger.debug("investing in {}, company: {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
                     self.plants.append(power_plant_trial_group)
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw

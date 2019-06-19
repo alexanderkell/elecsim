@@ -39,11 +39,10 @@ class MultiDayDemand(Demand):
             self.demand_ldc.capacity_factor = self.demand_ldc.capacity_factor * self.yearly_demand_change[self.years_from_start]
 
         grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
-
         representative_day = grouped_days.get_group((list(grouped_days.groups)[steps_since_year]))
 
         self.segment_consumption = representative_day.capacity_factor.tolist()
-        self.segment_hours = representative_day.counts.cumsum().tolist()
+        self.segment_hours = representative_day.cluster.cumsum().tolist()
 
         # self.steps_from_start += 1
 
@@ -55,7 +54,7 @@ class MultiDayDemand(Demand):
 
         demand_dataframe = self.demand_ldc.sort_values("capacity_factor", ascending=False)
 
-        demand_dataframe['hour'] = demand_dataframe.counts.cumsum()
+        demand_dataframe['hour'] = demand_dataframe.cluster.cumsum()
 
 
 
