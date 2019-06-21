@@ -1,6 +1,6 @@
 from scipy.stats import linregress
 import numpy as np
-
+from functools import lru_cache
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,10 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
+
+@lru_cache(1024)
 def linear_regression(regression, years_to_look_back, years_to_look_ahead=None):
+    regression = list(regression)
     years_to_regress = list(range(years_to_look_back))
     years_to_regress = np.array(years_to_regress).astype(float)
     try:

@@ -44,6 +44,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
         # Fuel object, containing information on fuel.
         self.fuel = fuel_registry(fuel_string)
+        self.fuel_string = fuel_string
 
     def calculate_lcoe(self, discount_rate):
         """
@@ -173,16 +174,14 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :return: returns marginal cost to burn 1MWh of fuel.
         """
 
-        carbon_cost = calculate_year_carbon_price()
         modifier = 0
         if self.plant_type == 'CCGT':
             modifier = genco.gas_price_modifier
         elif self.plant_type == 'Coal':
             modifier = genco.coal_price_modifier
 
-        fuel_cost = self.get_fuel_price(fuel_price, model, modifier)
-
-        co2_cost = self.get_co2_price(carbon_cost, co2_price, model)
+        fuel_cost = self.get_fuel_price(fuel_price, model.year_number, modifier)
+        co2_cost = self.get_co2_price(co2_price, model)
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
         if isnan(marginal_cost):
             logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(
@@ -192,17 +191,18 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         return marginal_cost
 
-    def get_co2_price(self, carbon_cost, co2_price, model):
+    def get_co2_price(self, co2_price, model):
         if co2_price is None:
             # co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
             #            carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+
             co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * get_carbon_cost_in_year(
-                carbon_cost, model)
+                model.year_number)
         else:
             co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
         return co2_cost
 
-    def get_fuel_price(self, fuel_price, model, modifier):
+    def get_fuel_price(self, fuel_price, year_number, modifier):
         if fuel_price is None:
             # logger.debug("fuel_price_is_none calculating from data")
             # fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[
@@ -210,7 +210,9 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
 
             # fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0] + modifier
-            fuel_price  = self.fuel.fuel_price.loc[np.in1d(self.fuel.fuel_price['Year'], [model.year_number]), 'value'].iloc[0] + modifier
+            fuel_price = _query_fuel_price_for_year(self.fuel_string, year_number) + modifier
+            logger.debug("_query_fuel_price_for_year: {}".format(_query_fuel_price_for_year.cache_info()))
+
             fuel_cost = fuel_price / self.efficiency
         else:
             # logger.debug("fuel_price_is_given calculating from parenthesis")
@@ -232,7 +234,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         return carbon_cost
 
 
-lru_cache(maxsize=128)
+# lru_cache(maxsize=128)
 def calculate_year_carbon_price():
     # carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
     # # logger.debug("Calculating short_run_marginal_cost")
@@ -247,9 +249,16 @@ def calculate_year_carbon_price():
     return carbon_cost
 
 
-lru_cache(maxsize=128)
-def get_carbon_cost_in_year(carbon_cost, model):
+@lru_cache(maxsize=1000)
+def get_carbon_cost_in_year(year_number):
     # carbon_cost = carbon_cost[carbon_cost.year == year_number - 1].price.iloc[0]
+    carbon_cost = elecsim.scenario.scenario_data.carbon_price_all_years
 
-    carbon_cost  = carbon_cost.loc[np.in1d(carbon_cost['year'], [model.year_number]), 'price'].iloc[0]
+    carbon_cost = carbon_cost.loc[np.in1d(carbon_cost['year'], [year_number]), 'price'].iloc[0]
     return carbon_cost
+
+@lru_cache(1024)
+def _query_fuel_price_for_year(fuel_string, year_number):
+    fuel = fuel_registry(fuel_string)
+    fuel_price = fuel.fuel_price.loc[np.in1d(fuel.fuel_price['Year'], [year_number]), 'value'].iloc[0]
+    return fuel_price

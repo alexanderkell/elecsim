@@ -1,9 +1,10 @@
 import logging
 import math
 from random import gauss
-from functools import lru_cache
 
+from functools import lru_cache
 from mesa import Agent
+# from linetimer import CodeTimer
 
 from elecsim.market.electricity.bid import Bid
 from elecsim.plants.availability_factors.availability_factor_calculations import get_availability_factor
@@ -54,7 +55,7 @@ class GenCo(Agent):
         self.coal_price_modifier = 0
 
     def step(self):
-        logger.debug("Stepping generation company: {}".format(self.name))
+        logger.info("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
         if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0:
@@ -69,7 +70,7 @@ class GenCo(Agent):
     #         marked_up_price = plant.short_run_marginal_cost(self.model)*1.1
     #         bids.append(Bid(self, plant, segment_hour, plant.capacity_mw, marked_up_price))
     #     return bids
-    @lru_cache(maxsize=10000)
+
     def calculate_bids(self, segment_hour, predict=False):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
@@ -88,36 +89,24 @@ class GenCo(Agent):
                     YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
                     future_plant_operating = plant.check_if_operating_in_certain_year(self.model.year_number, YEARS_IN_FUTURE_TO_PREDICT_SUPPLY)
                     if future_plant_operating:
-                        co2_price_predicted = self.forecast_attribute_price("co2")
-                        fuel_price_predicted = self.forecast_attribute_price(plant.fuel.fuel_type)
-                        price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
+                        price = self._get_predicted_short_run_marginal_cost(plant)
                     else:
                         # price = plant.short_run_marginal_cost(self.model, self)
                         continue
                 else:
                     price = plant.short_run_marginal_cost(self.model, self)
-                    # logger.info(plant.short_run_marginal_cost.cache_info())
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
             marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
             if plant.is_operating or future_plant_operating:
                 if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
-                    capacity_factor = get_capacity_factor(self.model, plant.plant_type, segment_hour)
-                    # print(get_capacity_factor.cache_info())
-                    availability = self.get_renewable_availability(plant)
-                    bids.append(
-                        Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw,
-                            marked_up_price, self.model.year_number)
-                    )
+                    capacity_factor, availability = _create_bid_for_capacity_factor_available_plants(self.model.market_time_splices, plant, segment_hour)
+                    # logger.info(_create_bid_for_capacity_factor_available_plants.cache_info())
+                    bids.append(Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw, marked_up_price, self.model.year_number)
+        )
                 elif isinstance(plant, FuelPlant):
                     if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-                        availability_factor = get_availability_factor(plant_type=plant.plant_type, construction_year=plant.construction_year)
-                        capacity_to_bid = availability_factor * plant.capacity_mw
-
-                        # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
-                        bids.append(
-                            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
-                        )
+                        self._create_bid_for_fuel_plant(bids, marked_up_price, plant, segment_hour)
                 elif plant.plant_type != 'Hydro_Store':
                     bids.append(
                         Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw, marked_up_price, self.model.year_number)
@@ -125,16 +114,22 @@ class GenCo(Agent):
                     )
         return bids
 
-    def get_renewable_availability(self, plant):
-        if plant.plant_type == "Offshore":
-            availability = elecsim.scenario.scenario_data.offshore_availability
-        elif plant.plant_type == 'Onshore':
-            availability = elecsim.scenario.scenario_data.onshore_availability
-        elif plant.plant_type == "PV":
-            availability = elecsim.scenario.scenario_data.pv_availability
-        else:
-            availability = elecsim.scenario.scenario_data.non_fuel_plant_availability
-        return availability
+    def _create_bid_for_fuel_plant(self, bids, marked_up_price, plant, segment_hour):
+        availability_factor = get_availability_factor(plant_type=plant.plant_type,
+                                                      construction_year=plant.construction_year)
+        capacity_to_bid = availability_factor * plant.capacity_mw
+        # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
+        bids.append(
+            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
+        )
+
+    def _get_predicted_short_run_marginal_cost(self, plant):
+        co2_price_predicted = self.forecast_attribute_price("co2")
+        fuel_price_predicted = self.forecast_attribute_price(plant.fuel.fuel_type)
+        price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
+        return price
+
+
 
     def invest(self):
         lowest_upfront_cost = 0
@@ -271,3 +266,22 @@ class GenCo(Agent):
         latest_market_data = LatestMarketData(self.model)
         predicted_fuel_price = latest_market_data.agent_forecast_value(fuel_type, self.look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
         return predicted_fuel_price
+
+
+@lru_cache(64)
+def get_renewable_availability(plant):
+    if plant.plant_type == "Offshore":
+        availability = elecsim.scenario.scenario_data.offshore_availability
+    elif plant.plant_type == 'Onshore':
+        availability = elecsim.scenario.scenario_data.onshore_availability
+    elif plant.plant_type == "PV":
+        availability = elecsim.scenario.scenario_data.pv_availability
+    else:
+        availability = elecsim.scenario.scenario_data.non_fuel_plant_availability
+    return availability
+
+@lru_cache(250000)
+def _create_bid_for_capacity_factor_available_plants(market_time_splices, plant, segment_hour):
+    capacity_factor = get_capacity_factor(market_time_splices, plant.plant_type, segment_hour)
+    availability = get_renewable_availability(plant)
+    return capacity_factor, availability

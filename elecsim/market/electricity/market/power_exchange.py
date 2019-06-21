@@ -1,4 +1,5 @@
 import logging
+from functools import lru_cache
 from itertools import chain
 
 import pandas as pd
@@ -49,10 +50,7 @@ class PowerExchange:
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
 
-            for generation_company in generator_companies:
-                bids.append(generation_company.calculate_bids(segment_hour, predict))
-                # logger.info(generation_company.calculate_bids.cache_info())
-            sorted_bids = self._sort_bids(bids)
+            sorted_bids = self._calculate_all_bids(bids, generator_companies, predict, segment_hour)
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
             logger.debug("segment hour: {}".format(segment_hour))
@@ -69,6 +67,14 @@ class PowerExchange:
             logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
+
+    def _calculate_all_bids(self, bids, generator_companies, predict, segment_hour):
+        for generation_company in generator_companies:
+            bids.append(generation_company.calculate_bids(segment_hour, predict))
+
+            # logger.info(generation_company.calculate_bids.cache_info())
+        sorted_bids = self._sort_bids(bids)
+        return sorted_bids
 
     def _create_load_duration_price_curve(self, segment_hour, segment_demand, accepted_price):
         segment_price_data = {
