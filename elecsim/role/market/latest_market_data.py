@@ -51,13 +51,14 @@ class LatestMarketData:
 
         return short_run_marginal_cost
 
-    def agent_forecast_value(self, value_required, years_to_look_back,years_to_look_forward=None, demand_linear=False):
+    def agent_forecast_value(self, value_required, years_to_look_back, years_to_look_forward=None, demand_linear=False):
         years_for_regression = list(range(self.model.years_from_start-years_to_look_back-1, self.model.years_from_start-1))
         variable_data = self._get_variable_data(value_required)
 
         regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
+        regression_tuple = tuple(regression)
         if value_required != "demand" or demand_linear:
-            next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
+            next_value = linear_regression(regression_tuple, years_to_look_back, years_to_look_forward)
         else:
             next_value = self.fit_exponential_function(regression, years_to_look_back, years_to_look_forward)
         return next_value

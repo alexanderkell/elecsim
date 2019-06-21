@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
 import elecsim.scenario.scenario_data
 import elecsim.scenario.scenario_data
@@ -14,6 +16,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
+@lru_cache(1024)
 def get_availability_factor(plant_type, construction_year):
     simplified_type = get_plant_type_for_data(plant_type)
     if plant_type in ['CCGT', "OCGT", "Coal", 'CHP']:

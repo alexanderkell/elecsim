@@ -40,10 +40,15 @@ class PredictPriceDurationCurve:
             predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
         else:
             price_duration_curve = []
-            year_segment_hours, year_segment_consumption = self.model.demand.get_demand_for_year()
+            # year_segment_hours, year_segment_consumption = self.model.demand.get_demand_for_year()
+            year_segment_hours = self.model.demand.year_segment_hours
+            year_segment_consumption = self.model.demand.year_segment_consumption
+
             # for segment_hours, segment_consumption in zip(year_segment_hours, year_segment_consumption):
 
-            power_ex.tender_bids(year_segment_hours, year_segment_consumption, predict=True)
+            year_segment_consumption_predicted = [cons * demand_change_predicted for cons in year_segment_consumption]
+
+            power_ex.tender_bids(year_segment_hours, year_segment_consumption_predicted, predict=True)
             predicted_price_duration_curve = power_ex.price_duration_curve
 
             predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
@@ -80,7 +85,7 @@ def estimate_lost_load_price(predicted_price_duration_curve):
         return predicted_price_duration_curve
 
 
-@lru_cache(1024)
+# @lru_cache(1024)
 def get_price_duration_curve(model, look_back_period):
     predicted_price_duration_curve = PredictPriceDurationCurve(model).predict_price_duration_curve(look_back_period=look_back_period)
     return predicted_price_duration_curve

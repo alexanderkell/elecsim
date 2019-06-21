@@ -71,7 +71,7 @@ class CalculateNPV:
         logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
-    @lru_cache(maxsize=10000)
+    # @lru_cache(maxsize=10000)
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
         forecasted_segment_prices = self._get_price_duration_predictions()
@@ -187,6 +187,7 @@ class CalculateNPV:
 
     def _get_price_duration_predictions(self):
         predicted_price_duration_curve = get_price_duration_curve(self.model, self.look_back_years)
+
         return predicted_price_duration_curve
 
     @staticmethod
@@ -205,7 +206,7 @@ class CalculateNPV:
                 running_hours = 0
         else:
             if row['predicted_profit_per_mwh'] > 0:
-                capacity_factor = get_capacity_factor(self.model, power_plant.plant_type, row.segment_hour)
+                capacity_factor = get_capacity_factor(self.model.market_time_splices, power_plant.plant_type, row.segment_hour)
                 running_hours = capacity_factor * row['num_of_hours']
             else:
                 running_hours = 0

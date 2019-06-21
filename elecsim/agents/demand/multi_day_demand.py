@@ -30,6 +30,9 @@ class MultiDayDemand(Demand):
 
         self.years_from_start = 0
         self.steps_from_start = 0
+        self.year_segment_hours = 0
+        self.year_segment_consumption = 0
+
 
     def step(self):
         logger.debug("Stepping demand")
@@ -37,6 +40,7 @@ class MultiDayDemand(Demand):
 
         if steps_since_year == 0:
             self.demand_ldc.capacity_factor = self.demand_ldc.capacity_factor * self.yearly_demand_change[self.years_from_start]
+            self.year_segment_hours, self.year_segment_consumption = self.set_demand_for_year()
 
         grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
         representative_day = grouped_days.get_group((list(grouped_days.groups)[steps_since_year]))
@@ -48,7 +52,7 @@ class MultiDayDemand(Demand):
 
         # load to change each year due to certain scenario
 
-    def get_demand_for_year(self):
+    def set_demand_for_year(self):
 
         # grouped_days = self.demand_ldc.reset_index(drop=True).groupby("cluster")
 

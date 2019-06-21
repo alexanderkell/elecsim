@@ -21,20 +21,20 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-@functools.lru_cache(maxsize=10000)
-def get_capacity_factor(model, renewable_type, demand_hour):
+@functools.lru_cache(maxsize=1024)
+def get_capacity_factor(market_time_splices, renewable_type, demand_hour):
     renewable_type = renewable_type.lower()
-    if model.market_time_splices == 1:
+    if market_time_splices == 1:
         historical_demand = elecsim.scenario.scenario_data.historical_hourly_demand
         capacity_data = get_capacity_data(renewable_type)
-    elif model.market_time_splices > 1:
+    elif market_time_splices > 1:
         historical_demand = elecsim.scenario.scenario_data.historical_hourly_demand
         capacity_data = get_multiple_capacity_data(renewable_type)
     else:
         raise ValueError("market_time_slices must be bigger than 1")
     if renewable_type in ['onshore', 'offshore', 'pv']:
-        if model.market_time_splices == 1:
-            capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, model)
+        if market_time_splices == 1:
+            capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, market_time_splices)
             capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type)
         else:
             # capacity_factor = segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model)
@@ -70,11 +70,11 @@ def get_capacity_data(renewable_type):
 
 
 functools.lru_cache(maxsize=512)
-def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, model):
+def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, market_time_splices):
     demand_capacity = capacity_data.join(historical_demand, how='inner').dropna()
     demand_capacity = demand_capacity[elecsim.scenario.scenario_data.segment_demand[-1] < demand_capacity.demand]
     demand_capacity = demand_capacity[elecsim.scenario.scenario_data.segment_demand[0] > demand_capacity.demand]
-    cut_demand = pd.cut(demand_capacity.demand, 20* model.market_time_splices)
+    cut_demand = pd.cut(demand_capacity.demand, 20* market_time_splices)
     capacity_factor_grouped = demand_capacity.groupby(cut_demand)[renewable_type]
     capacity_factor = capacity_factor_grouped.apply(np.mean)
     capacity_factor = capacity_factor.to_frame()
