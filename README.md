@@ -1,7 +1,5 @@
 # ElecSim
 
-[![Build Status](https://travis-ci.org/alexanderkell/elecsim.svg?branch=master)](https://travis-ci.org/alexanderkell/elecsim) [![Coverage Status](https://coveralls.io/repos/github/alexanderkell/elecsim-paper/badge.svg?branch=master)](https://coveralls.io/github/alexanderkell/elecsim-paper?branch=master)
-
 ElecSim is an agent-based model of an electricity market written in python. ElecSim can be generalised to any country, with the starting parameters set in a scenario file.
 
 Through the manipulation of a scenario file, one can build a custom environment of electricity producers with their respective power plants, and an electricity market which matches demand with supply.
