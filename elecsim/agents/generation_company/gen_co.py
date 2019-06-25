@@ -54,6 +54,7 @@ class GenCo(Agent):
         self.gas_price_modifier = 0
         self.coal_price_modifier = 0
 
+
     def step(self):
         logger.info("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
@@ -83,45 +84,50 @@ class GenCo(Agent):
         bids = []
 
         for plant in self.plants:
-            future_plant_operating = False
-            if predict is True:
-                if isinstance(plant, FuelPlant):
-                    YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
-                    future_plant_operating = plant.check_if_operating_in_certain_year(self.model.year_number, YEARS_IN_FUTURE_TO_PREDICT_SUPPLY)
-                    if future_plant_operating:
-                        price = self._get_predicted_short_run_marginal_cost(plant)
-                    else:
-                        # price = plant.short_run_marginal_cost(self.model, self)
-                        continue
-                else:
-                    price = plant.short_run_marginal_cost(self.model, self)
-            else:
-                price = plant.short_run_marginal_cost(self.model, self)
-            marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
-            if plant.is_operating or future_plant_operating:
-                if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
-                    capacity_factor, availability = _create_bid_for_capacity_factor_available_plants(self.model.market_time_splices, plant, segment_hour)
-                    # logger.info(_create_bid_for_capacity_factor_available_plants.cache_info())
-                    bids.append(Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw, marked_up_price, self.model.year_number)
-        )
-                elif isinstance(plant, FuelPlant):
-                    if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
-                        self._create_bid_for_fuel_plant(bids, marked_up_price, plant, segment_hour)
-                elif plant.plant_type != 'Hydro_Store':
-                    bids.append(
-                        Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw, marked_up_price, self.model.year_number)
-
-                    )
+            bid = self.create_bid(plant, predict, segment_hour)
+            if bid:
+                bids.append(bid)
         return bids
 
-    def _create_bid_for_fuel_plant(self, bids, marked_up_price, plant, segment_hour):
+    def create_bid(self, plant, predict, segment_hour):
+        future_plant_operating = False
+        if predict is True:
+            YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
+            future_plant_operating = plant.check_if_operating_in_certain_year(self.model.year_number, YEARS_IN_FUTURE_TO_PREDICT_SUPPLY)
+
+            if isinstance(plant, FuelPlant):
+                if future_plant_operating:
+                    price = self._get_predicted_short_run_marginal_cost(plant)
+                else:
+                #     price = plant.short_run_marginal_cost(self.model, self)
+                    return None
+            else:
+                price = plant.short_run_marginal_cost(self.model, self)
+        else:
+            price = plant.short_run_marginal_cost(self.model, self)
+        marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
+        if plant.is_operating or future_plant_operating:
+            if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
+                capacity_factor, availability = _create_bid_for_capacity_factor_available_plants(
+                    self.model.market_time_splices, plant, segment_hour)
+                # logger.info(_create_bid_for_capacity_factor_available_plants.cache_info())
+                return Bid(self, plant, segment_hour, capacity_factor * availability * plant.capacity_mw, marked_up_price,
+                        self.model.year_number)
+            elif isinstance(plant, FuelPlant):
+                if plant.capacity_fulfilled[segment_hour] < plant.capacity_mw:
+                    return self._create_bid_for_fuel_plant(marked_up_price, plant, segment_hour)
+            elif plant.plant_type != 'Hydro_Store':
+                return Bid(self, plant, segment_hour,
+                        elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw, marked_up_price,
+                        self.model.year_number)
+
+    def _create_bid_for_fuel_plant(self, marked_up_price, plant, segment_hour):
         availability_factor = get_availability_factor(plant_type=plant.plant_type,
                                                       construction_year=plant.construction_year)
         capacity_to_bid = availability_factor * plant.capacity_mw
         # logger.info("plant_type: {}, construction_year: {}, capacity_to_bid: {}, plant capacity: {}, availability factor: {}".format(plant.plant_type, plant.construction_year, capacity_to_bid, plant.capacity_mw, availability_factor))
-        bids.append(
-            Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
-        )
+        return Bid(self, plant, segment_hour, capacity_to_bid, marked_up_price, self.model.year_number)
+
 
     def _get_predicted_short_run_marginal_cost(self, plant):
         co2_price_predicted = self.forecast_attribute_price("co2")
@@ -183,10 +189,18 @@ class GenCo(Agent):
                 down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
                 # logger.info(create_power_plant.cache_info())
                 if self.money > down_payment_of_plant_array and number_of_plants_to_purchase>=1:
-                    logger.debug("investing in {}, company: {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
+                    logger.info("investing in {}, company: {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
                     self.plants.append(power_plant_trial_group)
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
+
+                    bids = {}
+                    for segment_hour in self.model.demand.year_segment_hours:
+                        power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
+                        bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour)
+                        bids[segment_hour] = bid
+
+                    self.model.last_added_plant_bids = bids
                     break
 
 
@@ -217,11 +231,24 @@ class GenCo(Agent):
     #         pass
 
     def settle_accounts(self):
-        income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.accepted_bids if
-                     bid.partly_accepted or bid.bid_accepted)
+        # income = sum((bid.price_per_mwh * bid.segment_hours) for plant in self.plants for bid in plant.accepted_bids if
+        #              bid.partly_accepted or bid.bid_accepted)
+        #
+        # short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
+        #                                       for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating == True))
 
-        short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
-                                              for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating==True))
+        income = 0
+        short_run_marginal_expenditure = 0
+        for plant in self.plants:
+            previous_segment_hour = 0
+            for bid in plant.accepted_bids:
+                if bid.partly_accepted or bid.bid_accepted:
+                    income += bid.price_per_mwh * (bid.segment_hours - previous_segment_hour)
+                    if plant.is_operating:
+                        short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
+                    previous_segment_hour = bid.segment_hours
+
+        logger.info("income: {} for {}".format(income, self.name))
 
         interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
