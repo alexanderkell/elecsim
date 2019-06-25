@@ -35,7 +35,7 @@ Once ElecSim is installed, create a python file and fill it with the following c
 from elecsim.model.world import World 
 
 if __name__ == "__main__":
-    world = World(initialisation_year = 2018, log_level="info")
+    world = World(initialization_year = 2018, log_level="info")
     for i in range(20):
         world.step()
 ```
@@ -67,7 +67,7 @@ We then pass this new scenario file into the World class as shown below:
 from elecsim.model.world import World 
 
 if __name__ == "__main__":
-    world = World(initialisation_year = 2018, scenario_file='/path/to/scenario.py', log_level="warning")
+    world = World(initialization_year = 2018, scenario_file='/path/to/scenario.py', log_level="warning")
     for i in range(20):
         world.step()
 ```
