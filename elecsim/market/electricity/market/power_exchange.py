@@ -30,6 +30,8 @@ class PowerExchange:
         self.hold_duration_curve_prices = []
         self.price_duration_curve = pd.DataFrame(columns=["year", "segment_hour", "segment_demand", "accepted_price"])
 
+        self.stored_bids = {}
+
     def tender_bids(self, segment_hours, segment_demand, predict=False):
         """
         Function which iterates through the generator companies, requests their bids, orders them in order of price,
@@ -50,7 +52,18 @@ class PowerExchange:
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
 
-            sorted_bids = self._calculate_all_bids(bids, generator_companies, predict, segment_hour)
+            if segment_hour not in self.stored_bids or predict == False:
+                sorted_bids = self._calculate_all_bids(bids, generator_companies, predict, segment_hour)
+                self.stored_bids[segment_hour] = sorted_bids
+                # logger.info(sorted_bids)
+            else:
+                sorted_bids = self.stored_bids[segment_hour]
+                if self.model.last_added_plant:
+                    # logger.info(self.model.last_added_plant_bids)
+
+                    sorted_bids.append(self.model.last_added_plant[segment_hour])  # TODO append additional bid from investment
+                # logger.info(sorted_bids)
+
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
             logger.debug("segment hour: {}".format(segment_hour))

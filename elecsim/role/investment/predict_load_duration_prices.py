@@ -23,7 +23,6 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-
 class PredictPriceDurationCurve:
 
     def __init__(self, model):
@@ -32,8 +31,9 @@ class PredictPriceDurationCurve:
     def predict_price_duration_curve(self, look_back_period):
         demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
 
-        power_ex = PowerExchange(self.model)
-        if self.model.market_time_splices == 1: 
+        # power_ex = PowerExchange(self.model)
+        power_ex = self.model.PowerExchange
+        if self.model.market_time_splices == 1:
             predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
             power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
             predicted_price_duration_curve = power_ex.price_duration_curve

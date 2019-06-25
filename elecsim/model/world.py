@@ -88,6 +88,8 @@ class World(Model):
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data)
 
+        self.last_added_plant = None
+
         # Create PowerExchange
         if self.market_time_splices == 1:
             self.PowerExchange = PowerExchange(self)
@@ -213,6 +215,7 @@ class World(Model):
                 continue
 
 
+
     def dismantle_old_plants(self):
         """
         Remove plants that are past their lifetime agent from each agent from their plant list
@@ -305,6 +308,14 @@ class World(Model):
         plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
         total_capacity = sum(plant.capacity_mw for plant in plants)
         return total_capacity
+
+
+    @staticmethod
+    def get_all_plants(model):
+        gencos = model.get_gencos()
+        plants = [plant for genco in gencos for plant in genco.plants]
+        return plants
+
 
     @staticmethod
     def get_current_carbon_tax(model):
