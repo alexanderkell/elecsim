@@ -34,11 +34,12 @@ def get_capacity_factor(market_time_splices, renewable_type, demand_hour):
         raise ValueError("market_time_slices must be bigger than 1")
     if renewable_type in ['onshore', 'offshore', 'pv']:
         if market_time_splices == 1:
-            capacity_factor = segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, market_time_splices)
+            capacity_factor = segment_capacity_data_by_load_curve(renewable_type, market_time_splices)
+            logger.info(segment_capacity_data_by_load_curve.cache_info())
             capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type)
         else:
             # capacity_factor = segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model)
-            capacity_factor_value = get_multi_capacity_factor_value_for_segment(capacity_data, demand_hour)
+            capacity_factor_value = get_multi_capacity_factor_value_for_segment(renewable_type, demand_hour)
     else:
         capacity_factor_value = capacity_data
     return capacity_factor_value
@@ -69,8 +70,11 @@ def get_capacity_data(renewable_type):
     return capacity_data
 
 
-functools.lru_cache(maxsize=512)
-def segment_capacity_data_by_load_curve(capacity_data, historical_demand, renewable_type, market_time_splices):
+@functools.lru_cache(maxsize=512)
+def segment_capacity_data_by_load_curve(renewable_type, market_time_splices):
+    historical_demand = elecsim.scenario.scenario_data.historical_hourly_demand
+    capacity_data = get_capacity_data(renewable_type)
+
     demand_capacity = capacity_data.join(historical_demand, how='inner').dropna()
     demand_capacity = demand_capacity[elecsim.scenario.scenario_data.segment_demand[-1] < demand_capacity.demand]
     demand_capacity = demand_capacity[elecsim.scenario.scenario_data.segment_demand[0] > demand_capacity.demand]
@@ -88,7 +92,9 @@ def get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewabl
     return capacity_factor_value
 
 
-def get_multi_capacity_factor_value_for_segment(capacity_factor, demand_hour):
+def get_multi_capacity_factor_value_for_segment(renewable_type, demand_hour):
+    capacity_factor = get_multiple_capacity_data(renewable_type)
+
     capacity_factor_value = capacity_factor[capacity_factor['demand_hour'] >= demand_hour].capacity_factor.head(1)
     capacity_factor_value = capacity_factor_value.values[0]
 

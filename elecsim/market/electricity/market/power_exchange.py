@@ -1,7 +1,7 @@
 import logging
 from functools import lru_cache
 from itertools import chain
-
+# from linetimer import CodeTimer
 import pandas as pd
 
 from elecsim.market.electricity.bid import Bid
@@ -31,6 +31,7 @@ class PowerExchange:
         self.price_duration_curve = pd.DataFrame(columns=["year", "segment_hour", "segment_demand", "accepted_price"])
 
         self.stored_bids = {}
+        self.stored_ordered_bids = {}
 
     def tender_bids(self, segment_hours, segment_demand, predict=False):
         """
@@ -45,9 +46,11 @@ class PowerExchange:
         agent = self.model.schedule.agents
         generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Selection of generation company agents
 
+        save=dict.fromkeys(segment_hours, 0)
         for gen_co in generator_companies:
             for plant in gen_co.plants:
-                plant.capacity_fulfilled = dict.fromkeys(segment_hours, 0)
+                # plant.capacity_fulfilled = dict.fromkeys(segment_hours, 0)
+                plant.capacity_fulfilled = save.copy()
 
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
             bids = []
@@ -55,21 +58,22 @@ class PowerExchange:
             if segment_hour not in self.stored_bids or predict == False:
                 sorted_bids = self._calculate_all_bids(bids, generator_companies, predict, segment_hour)
                 self.stored_bids[segment_hour] = sorted_bids
-                # logger.info(sorted_bids)
             else:
                 sorted_bids = self.stored_bids[segment_hour]
                 if self.model.last_added_plant:
                     # logger.info(self.model.last_added_plant_bids)
 
-                    sorted_bids.append(self.model.last_added_plant[segment_hour])  # TODO append additional bid from investment
-                # logger.info(sorted_bids)
+                    sorted_bids.append(self.model.last_added_plant[segment_hour])
 
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
-            logger.debug("segment hour: {}".format(segment_hour))
-            self._accept_bids(accepted_bids)
-            highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
+            self.stored_ordered_bids[segment_hour] = accepted_bids
 
+            logger.debug("segment hour: {}".format(segment_hour))
+
+            self._accept_bids(accepted_bids)
+            highest_bid = max(bid.price_per_mwh for bid in self.stored_ordered_bids[segment_hour] if bid.bid_accepted is True)
+            logger.info("highest_bid: {}".format(highest_bid))
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
@@ -77,14 +81,15 @@ class PowerExchange:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
     def _calculate_all_bids(self, bids, generator_companies, predict, segment_hour):
-        for generation_company in generator_companies:
-            bids.append(generation_company.calculate_bids(segment_hour, predict))
+        # for generation_company in generator_companies:
+        #     bids.append(generation_company.calculate_bids(segment_hour, predict))
 
+        bids = [generation_company.calculate_bids(segment_hour, predict) for generation_company in generator_companies]
             # logger.info(generation_company.calculate_bids.cache_info())
         sorted_bids = self._sort_bids(bids)
         return sorted_bids
@@ -104,10 +109,10 @@ class PowerExchange:
     def _accept_bids(accepted_bids):
         # highest_accepted_bid = accepted_bids[-1].price_per_mwh
         highest_accepted_bid = max(bid.price_per_mwh for bid in accepted_bids)
-        for bids in accepted_bids:
 
+        for bid in accepted_bids:
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
-            bids.price_per_mwh = highest_accepted_bid
+            bid.price_per_mwh = highest_accepted_bid
 
     @staticmethod
     def _sort_bids(bids):
@@ -128,25 +133,105 @@ class PowerExchange:
         :param capacity_required: Capacity required for this segment.
         :return: Returns a list of bids which have been accepted.
         """
-        accepted_bids = []
 
-        for bid in bids:
-            if capacity_required > 0 and capacity_required > bid.capacity_bid:
-                bid.accept_bid(segment_hour)
-                capacity_required -= bid.capacity_bid
-                accepted_bids.append(bid)
-                bid.plant.accepted_bids.append(bid)
-                logger.debug('bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
-            elif bid.capacity_bid > capacity_required > 0:
-                bid.partially_accept_bid(segment_hour, capacity_required)
-                capacity_required = 0
-                accepted_bids.append(bid)
-                bid.plant.accepted_bids.append(bid)
-                logger.debug('bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
-            else:
-                bid.reject_bid(segment_hour=segment_hour)
-                logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
-        if capacity_required > 0:
-            accepted_bids.append(Bid(None, None, segment_hour, 0, elecsim.scenario.scenario_data.lost_load, self.model.year_number))
+        if segment_hour not in self.stored_ordered_bids:
+            accepted_bids = NoHistoryBidResponder(bids, capacity_required, segment_hour).get_accepted_bids()
+        elif self.model.last_added_plant_bids is None:
+            accepted_bids = self.stored_ordered_bids[segment_hour]
+        elif segment_hour in self.stored_ordered_bids:
+            accepted_bids = HistoryBidResponder(self.stored_ordered_bids[segment_hour], capacity_required, segment_hour).get_accepted_bids(new_bid = self.model.last_added_plant_bids[segment_hour])
+        else:
+            accepted_bids = NoHistoryBidResponder(bids, capacity_required, segment_hour).get_accepted_bids()
+
         return accepted_bids
+
+
+class BidResponder:
+
+    def __init__(self, bids, capacity_required, segment_hour):
+        self.capacity_required = capacity_required
+        self.segment_hour = segment_hour
+        self.bids = bids
+
+
+class HistoryBidResponder(BidResponder):
+
+    def __init__(self, bids, capacity_required, segment_hour):
+        super().__init__(bids=bids, capacity_required=capacity_required, segment_hour=segment_hour)
+
+    def get_accepted_bids(self, new_bid):
+        # logger.info("accepted_price: {}".format(self.bids[0].price_per_mwh))
+        # logger.info("new_bid: {}".format(new_bid))
+
+        if new_bid.price_per_mwh < self.bids[0].price_per_mwh:
+            capacity_undercut = new_bid.capacity_bid
+            while capacity_undercut > 0:
+                PowerExchange._sort_bids([self.bids])
+                most_expensive_bid_capacity = self.bids[-1].capacity_bid
+
+                if self.bids[0].price_per_mwh == elecsim.scenario.scenario_data.lost_load:
+                    new_bid.accept_bid(self.segment_hour)
+                    self.bids.append(new_bid)
+                    capacity_undercut = 0
+                elif capacity_undercut > most_expensive_bid_capacity:
+                    del self.bids[-1]
+                    capacity_undercut = capacity_undercut - most_expensive_bid_capacity
+                    new_bid.accept_bid(self.segment_hour)
+                    self.bids.append(new_bid)
+                elif capacity_undercut < most_expensive_bid_capacity and capacity_undercut < new_bid.capacity_bid:
+                    self.bids[-1].capacity_bid = self.bids[-1].capacity_bid - capacity_undercut
+                    new_bid.partially_accept_bid(self.segment_hour, capacity_undercut)
+                    self.bids.append(new_bid)
+                    capacity_undercut = 0
+                else:
+                    new_bid.reject_bid(segment_hour=self.segment_hour)
+
+            if self.capacity_required > 0:
+                self.bids.append(Bid(None, None, self.segment_hour, 0, elecsim.scenario.scenario_data.lost_load, self.model.year_number))
+
+        return self.bids
+
+
+
+
+
+class NoHistoryBidResponder(BidResponder):
+
+    def __init__(self, bids, capacity_required, segment_hour):
+        super().__init__(bids=bids, capacity_required=capacity_required, segment_hour=segment_hour)
+
+    def get_accepted_bids(self):
+        accepted_bids = [bid for bid in (self.classify_bids(bid) for bid in self.bids) if bid is not None]
+        return accepted_bids
+
+    def classify_bids(self, bid):
+        if self.capacity_required > 0 and self.capacity_required > bid.capacity_bid:
+            bid.accept_bid(self.segment_hour)
+            self.capacity_required -= bid.capacity_bid
+            # accepted_bids.append(bid)
+            logger.debug(
+                'bid ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(
+                    bid.price_per_mwh, bid.plant.construction_year, self.capacity_required, bid.plant.capacity_mw,
+                    bid.capacity_bid, bid.plant.plant_type, bid.plant.name))
+            return bid
+        elif bid.capacity_bid > self.capacity_required > 0:
+            bid.partially_accept_bid(self.segment_hour, self.capacity_required)
+            self.capacity_required = 0
+            # accepted_bids.append(bid)
+            logger.info(
+                'bid PARTIALLY ACCEPTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(
+                    bid.price_per_mwh, bid.plant.construction_year, self.capacity_required, bid.plant.capacity_mw,
+                    bid.capacity_bid, bid.plant.plant_type, bid.plant.name))
+            return bid
+        else:
+            bid.reject_bid(segment_hour=self.segment_hour)
+            logger.info(
+                'bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(
+                    bid.price_per_mwh, bid.plant.construction_year, self.capacity_required, bid.plant.capacity_mw,
+                    bid.capacity_bid, bid.plant.plant_type, bid.plant.name))
+            return None
+        # return capacity_required
+
+
+
 

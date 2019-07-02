@@ -26,6 +26,10 @@ class Demand(Agent):
         self.model = model
         self.segment_hours = segment_hours
         self.segment_consumption = segment_consumption
+
+        self.year_segment_hours = segment_hours
+        self.year_segment_consumption = segment_consumption
+
         self.yearly_demand_change = elecsim.scenario.scenario_data.yearly_demand_change
         self.years_from_start = 0
 

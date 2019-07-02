@@ -38,7 +38,7 @@ class Bid:
         :return: None
         """
         self.plant.capacity_fulfilled[segment_hour] = 0
-        self.bid_rejected=True
+        self.bid_rejected = True
 
     def accept_bid(self, segment_hour):
         """
@@ -62,6 +62,7 @@ class Bid:
         # Update capacity of plant once bid is partly accepted
         self.plant.capacity_fulfilled[segment_hour] = demand_fulfilled
         self.partly_accepted = True
+        self.plant.accepted_bids.append(self)
 
         # Update price based on electricity capacity sold on partly accepted bid
         # self.price_per_mwh = ((self.plant.down_payment / self.plant.lifetime + self.plant.ann_cost + self.plant.operating_cost) / (demand_fulfilled * self.segment_hours)) * 1.1
