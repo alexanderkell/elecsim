@@ -56,7 +56,7 @@ class GenCo(Agent):
 
 
     def step(self):
-        logger.info("Stepping generation company: {}".format(self.name))
+        logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
         if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0:
@@ -188,7 +188,7 @@ class GenCo(Agent):
                 power_plant_trial_group = create_power_plant_group(name="invested_plant_group", start_date=self.model.year_number, simplified_type=plant_data.plant_type, capacity=plant_data.capacity_mw, number_of_plants_to_purchase=number_of_plants_to_purchase)
                 down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
                 # logger.info(create_power_plant.cache_info())
-                if self.money > down_payment_of_plant_array and number_of_plants_to_purchase>=1:
+                if self.money > down_payment_of_plant_array and number_of_plants_to_purchase >= 1:
                     logger.info("investing in {}, company: {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
                     self.plants.append(power_plant_trial_group)
                     self.money -= down_payment_of_plant_array
@@ -236,29 +236,30 @@ class GenCo(Agent):
         #
         # short_run_marginal_expenditure = sum((bid.segment_hours * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
         #                                       for plant in self.plants for bid in plant.accepted_bids if bid.partly_accepted or bid.bid_accepted if plant.is_operating == True))
-
+        net_income = 0
         income = 0
         short_run_marginal_expenditure = 0
         for plant in self.plants:
             previous_segment_hour = 0
-            for bid in plant.accepted_bids:
+            for bid in reversed(plant.accepted_bids):
                 if bid.partly_accepted or bid.bid_accepted:
-                    income += bid.price_per_mwh * (bid.segment_hours - previous_segment_hour)
+                    income += bid.price_per_mwh * (bid.segment_hours - previous_segment_hour) * bid.capacity_bid
                     if plant.is_operating:
-                        short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * plant.short_run_marginal_cost(model=self.model, genco=self)
+                        srmc = plant.short_run_marginal_cost(model=self.model, genco=self)
+                        short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * srmc
                     previous_segment_hour = bid.segment_hours
 
-        logger.info("income: {} for {}".format(income, self.name))
+            interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
-        interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
+            fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating==True)
 
-        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw)*-1 for plant in self.plants if plant.is_operating==True)
+            capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
 
-        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model)*-1 for plant, interest_rate in zip(self.plants, interest))
-
-        cashflow = income - short_run_marginal_expenditure - fixed_variable_costs - capital_loan_expenditure
-        if not math.isnan(cashflow):
-            self.money += cashflow
+            cashflow = income - short_run_marginal_expenditure - fixed_variable_costs + capital_loan_expenditure # TODO fix these calcs
+            net_income += cashflow
+        logger.info("cashflow: {} for {}".format(net_income, self.name))
+        if not math.isnan(net_income):
+            self.money += net_income
 
     # def reset_contracts(self):
     #     """

@@ -89,6 +89,7 @@ class World(Model):
         self.initialize_gencos(financial_data, plant_data)
 
         self.last_added_plant = None
+        self.last_added_plant_bids = None
 
         # Create PowerExchange
         if self.market_time_splices == 1:
@@ -100,6 +101,7 @@ class World(Model):
             self.demand = MultiDayDemand(self, self.unique_id_generator, elecsim.scenario.scenario_data.multi_year_data)
         else:
             raise ValueError("market_time_splices must be equal to or larger than 1.")
+
         self.running = True
 
         
@@ -112,10 +114,11 @@ class World(Model):
         beginning_of_year = False
         if self.step_number % self.market_time_splices == 0:
             self.start = time.clock()
+            self.operate_constructed_plants()
             if self.step_number != 0:
                 self.year_number += 1
                 self.years_from_start += 1
-                self.operate_constructed_plants()
+                # self.operate_constructed_plants()
                 beginning_of_year = True
                 # logger.info("year: {}".format(self.year_number))
                 print("{}:".format(self.year_number), end='', flush=True)
