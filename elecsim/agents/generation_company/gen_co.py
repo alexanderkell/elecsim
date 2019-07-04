@@ -84,12 +84,13 @@ class GenCo(Agent):
         bids = []
 
         for plant in self.plants:
-            bid = self.create_bid(plant, predict, segment_hour)
+            bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
             if bid:
                 bids.append(bid)
         return bids
 
-    def create_bid(self, plant, predict, segment_hour):
+    @lru_cache(100000)
+    def create_bid(self, plant, predict, segment_hour, step_number):
         future_plant_operating = False
         if predict is True:
             YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
@@ -197,7 +198,7 @@ class GenCo(Agent):
                     bids = {}
                     for segment_hour in self.model.demand.year_segment_hours:
                         power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
-                        bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour)
+                        bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
                         bids[segment_hour] = bid
 
                     self.model.last_added_plant_bids = bids

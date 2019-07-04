@@ -1,9 +1,6 @@
 import os.path
 import sys
 
-# from pycallgraph.output import GraphvizOutput
-# from pycallgraph import PyCallGraph
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from elecsim.model.world import World
