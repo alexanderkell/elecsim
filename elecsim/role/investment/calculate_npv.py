@@ -54,7 +54,7 @@ class CalculateNPV:
         npv_positive = npv_data[npv_data.npv_per_mw > 0]
         return npv_positive
 
-    def compare_npv(self):
+    def  compare_npv(self):
         cost_list = []
 
         for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
@@ -126,7 +126,6 @@ class CalculateNPV:
 
         logger.debug("npv_power_plant: {}".format(npv_power_plant))
 
-        # NPVp = npv_power_plant / (power_plant.capacity_mw * total_running_hours)
         NPVp = divide(npv_power_plant, (power_plant.capacity_mw * total_running_hours))
         return NPVp
 
