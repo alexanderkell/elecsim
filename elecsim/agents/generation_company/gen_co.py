@@ -217,7 +217,9 @@ class GenCo(Agent):
                 else:
                     logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                                                         plant.construction_year))
-                    continue
+                    for bid in self.model.PowerExchange.stored_ordered_bids:
+                        if bid.plant == plant:
+                            del bid
 
         plants_filtered = list(get_running_plants(self.plants))
         self.plants = plants_filtered
@@ -249,14 +251,14 @@ class GenCo(Agent):
                         short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * srmc
                     previous_segment_hour = bid.segment_hours
 
-            interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
+        interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
-            fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating==True)
+        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating==True)
 
-            capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
+        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
 
-            cashflow = income - short_run_marginal_expenditure - fixed_variable_costs + capital_loan_expenditure # TODO fix these calcs
-            net_income += cashflow
+        cashflow = income - short_run_marginal_expenditure - fixed_variable_costs + capital_loan_expenditure # TODO fix these calcs
+        net_income += cashflow
         logger.info("cashflow: {} for {}".format(net_income, self.name))
         if not math.isnan(net_income):
             self.money += net_income

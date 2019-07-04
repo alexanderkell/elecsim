@@ -103,7 +103,7 @@ class World(Model):
             raise ValueError("market_time_splices must be equal to or larger than 1.")
 
         self.running = True
-
+        self.beginning_of_year = False
         
         self.unique_id_generator += 1
         self.schedule.add(self.demand)
@@ -111,7 +111,7 @@ class World(Model):
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
-        beginning_of_year = False
+        self.beginning_of_year = False
         if self.step_number % self.market_time_splices == 0:
             self.start = time.clock()
             self.operate_constructed_plants()
@@ -119,7 +119,7 @@ class World(Model):
                 self.year_number += 1
                 self.years_from_start += 1
                 # self.operate_constructed_plants()
-                beginning_of_year = True
+                self.beginning_of_year = True
                 # logger.info("year: {}".format(self.year_number))
                 print("{}:".format(self.year_number), end='', flush=True)
             else:
@@ -132,7 +132,7 @@ class World(Model):
         else:
             elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
 
-        if beginning_of_year:
+        if self.beginning_of_year:
             self.dismantle_old_plants()
             self.dismantle_unprofitable_plants()
 
@@ -188,7 +188,7 @@ class World(Model):
             # if financials.Company.iloc[0] != name:
                 # raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
-            self.unique_id_generator+=1
+            self.unique_id_generator += 1
             # Add power plants to generation company portfolio
             parent_directory = os.path.dirname(os.getcwd())
             pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(parent_directory)
@@ -215,7 +215,6 @@ class World(Model):
             else:
                 logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                         plant.construction_year))
-                continue
 
 
 
@@ -251,9 +250,12 @@ class World(Model):
                             yield plant
                         else:
                             logger.debug("Plant {}, type {} is unprofitable. Last accepted bid: {}".format(plant.name, plant.plant_type, historic_bids[-1].year_of_bid))
+                            for bid in plant.accepted_bids:
+                                del bid
                     else:
                         logger.debug("Plant {}, type {} is unprofitable.".format(plant.name, plant.plant_type))
-
+                        for bid in plant.accepted_bids:
+                            del bid
                     # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
                     # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
                     # for bids in reversed(historic_bids):
