@@ -43,6 +43,9 @@ class PowerExchange:
         :param predict: Boolean that states whether the bids being tendered are for predicting price duration curve or whether it is for real bids.
         :return: None
         """
+
+        self.hold_duration_curve_prices = []
+
         agent = self.model.schedule.agents
         generator_companies = [x for x in agent if hasattr(x, 'plants')]  # Selection of generation company agents
 
@@ -60,8 +63,8 @@ class PowerExchange:
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
             logger.debug("segment hour: {}".format(segment_hour))
-            self._accept_bids(accepted_bids)
-            highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
+            highest_bid = self._accept_bids(accepted_bids)
+            # highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
 
             self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
 
@@ -71,7 +74,7 @@ class PowerExchange:
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.debug("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
@@ -155,12 +158,11 @@ class PowerExchange:
 
     @staticmethod
     def _accept_bids(accepted_bids):
-        # highest_accepted_bid = accepted_bids[-1].price_per_mwh
-        highest_accepted_bid = max(bid.price_bid for bid in accepted_bids)
-
+        highest_accepted_bid = accepted_bids[-1].price_per_mwh
         for bid in accepted_bids:
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
             bid.price_per_mwh = highest_accepted_bid
+        return highest_accepted_bid
 
     @staticmethod
     def _sort_bids(bids, attribute="price_per_mwh"):
