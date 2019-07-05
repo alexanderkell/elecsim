@@ -54,7 +54,7 @@ class CalculateNPV:
         npv_positive = npv_data[npv_data.npv_per_mw > 0]
         return npv_positive
 
-    def  compare_npv(self):
+    def compare_npv(self):
         cost_list = []
 
         for plant_type in ['CCGT', 'Coal', 'Nuclear', 'Onshore', 'Offshore', 'PV', 'Recip_gas', 'Recip_diesel']:
@@ -78,6 +78,7 @@ class CalculateNPV:
 
         forecasted_segment_prices = self._get_price_duration_predictions()
         # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
+
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
 

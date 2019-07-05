@@ -67,6 +67,7 @@ class PowerExchange:
 
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
         if predict:
+            self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
             logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]

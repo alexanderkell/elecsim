@@ -307,6 +307,11 @@ class World(Model):
         gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
         return gencos
 
+    def clear_all_bids(self):
+        gencos = self.get_gencos()
+        for genco in gencos:
+            genco.delete_old_bids()
+
     @staticmethod
     def get_capacity_of_plants(model, plant_type):
         gencos = model.get_gencos()

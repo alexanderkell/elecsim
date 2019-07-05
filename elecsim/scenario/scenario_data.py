@@ -19,7 +19,7 @@ segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 552
 
 # Change in load duration function by year
 # yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
-yearly_demand_change = [1.02]*100
+yearly_demand_change = [1.00]*100
 
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/8_medoids.csv'.format(ROOT_DIR))
 multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/8_medoids_scaled.csv'.format(ROOT_DIR))
@@ -143,8 +143,8 @@ carbon_price_all_years = concatenate_carbon_price()
 # carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
-lost_load = 6000
-# lost_load = 200
+# lost_load = 6000
+lost_load = 300
 
 upfront_investment_costs = 0.25
 
