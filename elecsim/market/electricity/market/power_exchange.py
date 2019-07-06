@@ -59,8 +59,17 @@ class PowerExchange:
             for generation_company in generator_companies:
                 bids.append(generation_company.calculate_bids(segment_hour, predict))
                 # logger.info(generation_company.calculate_bids.cache_info())
+
             sorted_bids = self._sort_bids(bids)
+            if predict is False:
+
+                logger.info("bids len: {}".format(len(sorted_bids)))
+                # logger.info("total capacity of bids: {}".format(sum(bid.capacity_bid for bid in sorted_bids)))
+
+
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
+
+
 
             logger.debug("segment hour: {}".format(segment_hour))
             highest_bid = self._accept_bids(accepted_bids)

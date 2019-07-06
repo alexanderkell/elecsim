@@ -87,6 +87,8 @@ class GenCo(Agent):
             bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
             if bid:
                 bids.append(bid)
+            # else:
+            #     logger.info("name: {}, start date: {}".format(plant.name, plant.construction_year))
         return bids
 
     @lru_cache(100000)
@@ -152,9 +154,7 @@ class GenCo(Agent):
             # if counter>3:
             #     break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
-            potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
-                                                                     self.look_back_period)
-
+            potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate, self.look_back_period)
             # logger.info("potential_plant_data: {}".format(potential_plant_data))
             if potential_plant_data:
                 potential_plant_list = []
@@ -192,16 +192,17 @@ class GenCo(Agent):
                 if self.money > down_payment_of_plant_array and number_of_plants_to_purchase >= 1:
                     logger.info("investing in {}, company: {}, size: {}, number: {}, self.money: {}".format(power_plant_trial_group.plant_type, self.name, power_plant_trial_group.capacity_mw, number_of_plants_to_purchase, self.money))
                     self.plants.append(power_plant_trial_group)
+                    self.model.number_of_plants += 1
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
 
-                    bids = {}
-                    for segment_hour in self.model.demand.year_segment_hours:
-                        power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
-                        bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
-                        bids[segment_hour] = bid
-
-                    self.model.last_added_plant_bids = bids
+                    # bids = {}
+                    # for segment_hour in self.model.demand.year_segment_hours:
+                    #     power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
+                    #     bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
+                    #     bids[segment_hour] = bid
+                    #
+                    # self.model.last_added_plant_bids = bids
                     break
 
 
@@ -216,7 +217,7 @@ class GenCo(Agent):
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
                     yield plant
                 else:
-                    logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
+                    logger.info("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
                                                                                                         plant.construction_year))
                     for bid in self.model.PowerExchange.stored_ordered_bids:
                         if bid.plant == plant:

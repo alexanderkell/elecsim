@@ -109,6 +109,8 @@ class World(Model):
         self.schedule.add(self.demand)
         self.create_data_loggers(data_folder)
 
+        self.number_of_plants = len(self.get_all_plants())
+
     def step(self, carbon_price=None):
         '''Advance model by one step'''
         self.beginning_of_year = False
@@ -134,7 +136,7 @@ class World(Model):
 
         if self.beginning_of_year:
             self.dismantle_old_plants()
-            self.dismantle_unprofitable_plants()
+            # self.dismantle_unprofitable_plants()
 
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.PowerExchange.price_duration_curve = []
@@ -320,9 +322,8 @@ class World(Model):
         return total_capacity
 
 
-    @staticmethod
-    def get_all_plants(model):
-        gencos = model.get_gencos()
+    def get_all_plants(self):
+        gencos = self.get_gencos()
         plants = [plant for genco in gencos for plant in genco.plants]
         return plants
 
