@@ -1,7 +1,7 @@
 import logging
 import math
 from random import gauss
-
+import numpy as np
 from functools import lru_cache
 from mesa import Agent
 # from linetimer import CodeTimer
@@ -197,13 +197,13 @@ class GenCo(Agent):
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
 
-                    bids = {}
-                    for segment_hour in self.model.demand.year_segment_hours:
-                        power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
-                        bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
-                        bids[segment_hour] = bid
-
-                    self.model.last_added_plant_bids = bids
+                    # bids = {}
+                    # for segment_hour in self.model.demand.year_segment_hours:
+                    #     power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
+                    #     bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
+                    #     bids[segment_hour] = bid
+                    #
+                    # self.model.last_added_plant_bids = bids
                     break
 
 
@@ -246,22 +246,26 @@ class GenCo(Agent):
         short_run_marginal_expenditure = 0
         for plant in self.plants:
             previous_segment_hour = 0
-            for bid in reversed(plant.accepted_bids):
+            for bid in plant.accepted_bids:
                 if bid.partly_accepted or bid.bid_accepted:
                     income += bid.price_per_mwh * (bid.segment_hours - previous_segment_hour) * bid.capacity_bid
                     if plant.is_operating:
                         srmc = plant.short_run_marginal_cost(model=self.model, genco=self)
                         short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * srmc
-                    previous_segment_hour = bid.segment_hours
+                previous_segment_hour = bid.segment_hours
+
+        percentage_of_time_of_year = self.model.demand.segment_hours[-1]/8760
+        logger.debug("percentage_of_time_of_year: {}".format(percentage_of_time_of_year))
 
         interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
-        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating==True)
+        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating is True)
 
         capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
 
-        cashflow = income - short_run_marginal_expenditure/self.model.market_time_splices - fixed_variable_costs/self.model.market_time_splices + capital_loan_expenditure/self.model.market_time_splices # TODO fix these calcs
+        cashflow = income - short_run_marginal_expenditure*percentage_of_time_of_year - fixed_variable_costs*percentage_of_time_of_year + capital_loan_expenditure*percentage_of_time_of_year  # TODO fix these calcs
         net_income += cashflow
+        # logger.debug("income: {}, outflow: {}".format(income, short_run_marginal_expenditure/percentage_of_time_of_year - fixed_variable_costs/percentage_of_time_of_year + capital_loan_expenditure/percentage_of_time_of_year))
         logger.info("cashflow: {} for {}".format(net_income, self.name))
         if not math.isnan(net_income):
             self.money += net_income

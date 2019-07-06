@@ -23,7 +23,7 @@ class MultiDayDemand(Demand):
 
         self.yearly_demand_change = elecsim.scenario.scenario_data.yearly_demand_change
         self.demand = multi_year_data[multi_year_data.data_type == "load"]
-        self.demand_ldc = self.demand.groupby('cluster').apply(lambda x: x.sort_values('capacity_factor', ascending=False).reset_index())
+        self.demand_ldc = self.demand.groupby('cluster').apply(lambda x: x.sort_values('capacity_factor', ascending=True).reset_index())
 
         self.segment_hours = 0
         self.segment_consumption = 0
