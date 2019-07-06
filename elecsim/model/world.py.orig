@@ -109,6 +109,11 @@ class World(Model):
         self.schedule.add(self.demand)
         self.create_data_loggers(data_folder)
 
+<<<<<<< HEAD
+        self.number_of_plants = len(self.get_all_plants())
+
+=======
+>>>>>>> 5f3c373861c398621fed06ebb3fe989ceb1733a9
     def step(self, carbon_price=None):
         '''Advance model by one step'''
         self.beginning_of_year = False
@@ -134,7 +139,11 @@ class World(Model):
 
         if self.beginning_of_year:
             self.dismantle_old_plants()
+<<<<<<< HEAD
+            # self.dismantle_unprofitable_plants()
+=======
             self.dismantle_unprofitable_plants()
+>>>>>>> 5f3c373861c398621fed06ebb3fe989ceb1733a9
 
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.PowerExchange.price_duration_curve = []
@@ -295,21 +304,26 @@ class World(Model):
             spec.loader.exec_module(scenario_import)
             scen_mod.overwrite_scenario_file(scenario_import)
 
+
     def settle_gencos_financials(self):
         gencos = self.get_gencos()
         for genco in gencos:
             genco.settle_accounts()
             genco.delete_old_bids()
 
+
     def get_gencos(self):
         gencos = [genco for genco in self.schedule.agents if isinstance(genco, GenCo)]
         return gencos
 
+<<<<<<< HEAD
     def clear_all_bids(self):
         gencos = self.get_gencos()
         for genco in gencos:
             genco.delete_old_bids()
 
+=======
+>>>>>>> 5f3c373861c398621fed06ebb3fe989ceb1733a9
     @staticmethod
     def get_capacity_of_plants(model, plant_type):
         gencos = model.get_gencos()
@@ -318,9 +332,14 @@ class World(Model):
         return total_capacity
 
 
+<<<<<<< HEAD
+    def get_all_plants(self):
+        gencos = self.get_gencos()
+=======
     @staticmethod
     def get_all_plants(model):
         gencos = model.get_gencos()
+>>>>>>> 5f3c373861c398621fed06ebb3fe989ceb1733a9
         plants = [plant for genco in gencos for plant in genco.plants]
         return plants
 
