@@ -104,6 +104,8 @@ class World(Model):
 
         self.running = True
         self.beginning_of_year = False
+
+        self.continue_investing = 0
         
         self.unique_id_generator += 1
         self.schedule.add(self.demand)
@@ -126,7 +128,7 @@ class World(Model):
                 print("{}:".format(self.year_number), end='', flush=True)
 
         self.schedule.step()
-
+        self.continue_investing = 0
         if carbon_price is not None:
             elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price
         else:

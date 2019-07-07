@@ -77,10 +77,10 @@ class PowerExchange:
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
         if predict:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.debug("predicted self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.debug("predicted self.price_duration_curve: \n{}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.info("actual self.price_duration_curve: {}".format(self.price_duration_curve))
+            logger.info("actual self.price_duration_curve: \n{}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
@@ -165,7 +165,6 @@ class PowerExchange:
     @staticmethod
     def _accept_bids(accepted_bids):
         highest_accepted_bid = accepted_bids[-1].price_per_mwh
-        # highest_accepted_bid = max(bid.price_bid for bid in accepted_bids)
 
         for bid in accepted_bids:
             # logger.debug("bid price: {}, plant name: {}, plant capacity: {}".format(bids.price_per_mwh, bids.plant.name, bids.plant.capacity_mw))
