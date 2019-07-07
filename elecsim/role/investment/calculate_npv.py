@@ -284,7 +284,6 @@ class CalculateNPV:
         #     running_hours = 0
         # return running_hours
 
-
 def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_back_period):
     npv_calculation = CalculateNPV(model, difference_in_discount_rate, look_back_period)
 

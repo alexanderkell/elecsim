@@ -59,8 +59,14 @@ class GenCo(Agent):
         logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0:
-            self.invest()
+        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 5:
+            continue_investing = self.invest()
+            if continue_investing == 1:
+                self.model.continue_investing += continue_investing
+                logger.info(self.model.continue_investing)
+            else:
+                self.model.continue_investing = 0
+
         # self.reset_contracts()
         self.purchase_fuel()
 
@@ -87,8 +93,6 @@ class GenCo(Agent):
             bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
             if bid:
                 bids.append(bid)
-            # else:
-            #     logger.info("name: {}, start date: {}".format(plant.name, plant.construction_year))
         return bids
 
     @lru_cache(100000)
@@ -165,7 +169,9 @@ class GenCo(Agent):
                     potential_plant_list.append(power_plant_trial)
                 lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
             else:
-                break
+                # break
+                return 1
+
 
             # for plant_data in potential_plant_data:
             #     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
@@ -218,8 +224,7 @@ class GenCo(Agent):
                 if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.model.year_number:
                     yield plant
                 else:
-                    logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
-                                                                                                        plant.construction_year))
+                    logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name, plant.construction_year))
                     for bid in self.model.PowerExchange.stored_ordered_bids:
                         if bid.plant == plant:
                             del bid
