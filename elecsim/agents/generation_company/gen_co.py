@@ -246,7 +246,11 @@ class GenCo(Agent):
         short_run_marginal_expenditure = 0
         for plant in self.plants:
             previous_segment_hour = 0
-            for bid in plant.accepted_bids:
+            if self.model.market_time_splices == 1:
+                bids_ordered = reversed(plant.accepted_bids)
+            else:
+                bids_ordered = plant.accepted_bids
+            for bid in bids_ordered:
                 if bid.partly_accepted or bid.bid_accepted:
                     income += bid.price_per_mwh * (bid.segment_hours - previous_segment_hour) * bid.capacity_bid
                     if plant.is_operating:
