@@ -37,7 +37,6 @@ class PredictPriceDurationCurve:
         if self.model.market_time_splices == 1:
             predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
             power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
-            # logger.info("bid length: {}".format(len(self.model.get_gencos()[0].plants[0].accepted_bids)))
 
             self.model.clear_all_bids()
 
