@@ -59,7 +59,7 @@ class GenCo(Agent):
         logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 5:
+        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3:
             continue_investing = self.invest()
             if continue_investing == 1:
                 self.model.continue_investing += continue_investing
@@ -263,16 +263,16 @@ class GenCo(Agent):
                         short_run_marginal_expenditure += (bid.segment_hours - previous_segment_hour) * bid.capacity_bid * srmc
                 previous_segment_hour = bid.segment_hours
 
-        percentage_of_time_of_year = self.model.demand.segment_hours[-1]/8760
-        logger.debug("percentage_of_time_of_year: {}".format(percentage_of_time_of_year))
+            percentage_of_time_of_year = self.model.demand.segment_hours[-1]/8760
+            logger.debug("percentage_of_time_of_year: {}".format(percentage_of_time_of_year))
 
-        interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
+            interest = [elecsim.scenario.scenario_data.nuclear_wacc if plant.plant_type == "Nuclear" else elecsim.scenario.scenario_data.non_nuclear_wacc for plant in self.plants]
 
-        fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating is True)
+            fixed_variable_costs = sum((plant.fixed_o_and_m_per_mw * plant.capacity_mw) for plant in self.plants if plant.is_operating is True)
 
-        capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
+            capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
 
-        cashflow = income - short_run_marginal_expenditure*percentage_of_time_of_year - fixed_variable_costs*percentage_of_time_of_year + capital_loan_expenditure*percentage_of_time_of_year  # TODO fix these calcs
+            cashflow = income - short_run_marginal_expenditure*percentage_of_time_of_year - fixed_variable_costs*percentage_of_time_of_year + capital_loan_expenditure*percentage_of_time_of_year
         net_income += cashflow
         # logger.debug("income: {}, outflow: {}".format(income, short_run_marginal_expenditure/percentage_of_time_of_year - fixed_variable_costs/percentage_of_time_of_year + capital_loan_expenditure/percentage_of_time_of_year))
         logger.info("cashflow: {} for {}".format(net_income, self.name))
