@@ -5,6 +5,7 @@ from numpy import ndarray
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
+import logging
 
 import elecsim.scenario.scenario_data
 from elecsim.plants.plant_costs.estimate_costs.estimate_modern_power_plant_costs.predict_modern_plant_costs import PredictModernPlantParameters
@@ -12,6 +13,7 @@ from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.fu
 from elecsim.plants.plant_costs.estimate_costs.estimate_old_plant_cost_params.non_fuel_plant_calculations.non_fuel_plants_old_params import NonFuelOldPlantCosts
 from elecsim.plants.plant_registry import PlantRegistry
 
+logger = logging.getLogger(__name__)
 """
 File name: _select_cost_estimator
 Date created: 01/12/2018
@@ -48,7 +50,6 @@ def create_power_plant(name, start_date, simplified_type, capacity):
 
 # def create_power_plant_group(name, money, start_date, simplified_type):
 def create_power_plant_group(name, start_date, simplified_type, capacity, number_of_plants_to_purchase):
-
     # capacity = predict_capacity_from_money(money, simplified_type, capacity, start_date)
     plant_object = create_power_plant(name, start_date=start_date, simplified_type=simplified_type, capacity=capacity*number_of_plants_to_purchase)
 
@@ -78,7 +79,6 @@ def _select_cost_estimator(start_year, plant_type, capacity):
 
     hist_costs = elecsim.scenario.scenario_data.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology.map(lambda x: x in plant_type)].dropna()
-
     if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
         cost_parameters = _estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
