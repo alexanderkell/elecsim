@@ -190,6 +190,8 @@ class GenCo(Agent):
                 down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
                 number_of_plants_to_purchase = int(self.money/down_payment)
 
+                logger.info("power_plant_trial.capacity_mw: {}".format(power_plant_trial.capacity_mw))
+
                 capacity_to_purchase = number_of_plants_to_purchase * power_plant_trial.capacity_mw
                 if capacity_to_purchase > 20000:
                     number_of_plants_to_purchase = int(20000/power_plant_trial.capacity_mw)

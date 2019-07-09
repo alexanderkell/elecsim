@@ -173,8 +173,11 @@ class World(Model):
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
 
+
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
-        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities', 'total_assets', 'turnover', 'net_assets']]
+        financial_data = financial_data[['Company', 'cash_in_bank']]
+
+
 
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
@@ -187,16 +190,19 @@ class World(Model):
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
             # if financials.Company.iloc[0] != name:
-                # raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
+
+
+            #     raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator += 1
             # Add power plants to generation company portfolio
-            parent_directory = os.path.dirname(os.getcwd())
-            pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(parent_directory)
+            # parent_directory = os.path.dirname(os.getcwd())
+            pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(ROOT_DIR)
             for plant in data.itertuples():
                 try:
                     power_plant = pickle.load(open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "rb"))
-                except (OSError, IOError) as e:
+                except (OSError, IOError, FileNotFoundError) as e:
+                    logger.info("plant: {}".format(plant))
                     power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                     pickle.dump(power_plant, open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "wb"))
                 gen_co.plants.append(power_plant)
@@ -412,6 +418,7 @@ class World(Model):
                              "contributed_PV": lambda m: self.get_accepted_bid_capacity(m, "PV"),
                              "contributed_Nuclear": lambda m: self.get_accepted_bid_capacity(m, "Nuclear"),
                              "contributed_Recip_gas": lambda m: self.get_accepted_bid_capacity(m, "Recip_gas"),
+                             "contributed_Biomass": lambda m: self.get_accepted_bid_capacity(m, "Biomass"),
                              # "hourly_accepted_bids": lambda m: self.get_accepted_bid_capacity_per_segment_hour(m),
                              "total_CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
                              "total_Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
