@@ -71,3 +71,10 @@ class Bid:
 
     def __str__(self):
         return "Plant type: " + self.plant.plant_type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Price Bid: "+str(self.price_bid)+", Plant: " + self.plant.__repr__()
+
+    def to_dict(self):
+        return {
+            'plant_type': self.plant.plant_type,
+            'segment_hours': self.segment_hours,
+            'capacity_bid': self.capacity_bid
+        }

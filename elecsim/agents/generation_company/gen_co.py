@@ -169,7 +169,6 @@ class GenCo(Agent):
                     potential_plant_list.append(power_plant_trial)
                 lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
             else:
-                # break
                 return 1
 
 
@@ -190,10 +189,11 @@ class GenCo(Agent):
                 power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data.plant_type, plant_data.capacity_mw)
                 down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
                 number_of_plants_to_purchase = int(self.money/down_payment)
-                # logger.info(number_of_plants_to_purchase)
-                # if number_of_plants_to_purchase < 1:
-                #     break
-                # power_plant_trial = create_power_plant_group("invested_plant_group", self.model.year_number, plant_data[1], plant_data[0], self.money)
+
+                capacity_to_purchase = number_of_plants_to_purchase * power_plant_trial.capacity_mw
+                if capacity_to_purchase > 20000:
+                    number_of_plants_to_purchase = int(20000/power_plant_trial.capacity_mw)
+
                 power_plant_trial_group = create_power_plant_group(name="invested_plant_group", start_date=self.model.year_number, simplified_type=plant_data.plant_type, capacity=plant_data.capacity_mw, number_of_plants_to_purchase=number_of_plants_to_purchase)
                 down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
                 # logger.info(create_power_plant.cache_info())
@@ -273,7 +273,7 @@ class GenCo(Agent):
             capital_loan_expenditure = sum(select_yearly_payback_payment_for_year(plant, interest_rate + self.difference_in_discount_rate, elecsim.scenario.scenario_data.upfront_investment_costs, self.model) for plant, interest_rate in zip(self.plants, interest))
 
             cashflow = income - short_run_marginal_expenditure*percentage_of_time_of_year - fixed_variable_costs*percentage_of_time_of_year + capital_loan_expenditure*percentage_of_time_of_year
-        net_income += cashflow
+            net_income += cashflow
         # logger.debug("income: {}, outflow: {}".format(income, short_run_marginal_expenditure/percentage_of_time_of_year - fixed_variable_costs/percentage_of_time_of_year + capital_loan_expenditure/percentage_of_time_of_year))
         logger.info("cashflow: {} for {}".format(net_income, self.name))
         if not math.isnan(net_income):
