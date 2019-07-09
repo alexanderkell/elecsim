@@ -123,7 +123,7 @@ class LatestMarketData:
         y = exponential_func(regression, 2.5, 1.3, 0.5)
         try:
             popt, pcov = curve_fit(exponential_func, x, regression)
-        except Warning:
+        except (Warning, RuntimeError):
             return self.agent_forecast_value("demand", years_to_look_back, years_to_look_forward, demand_linear=True)
 
         return exponential_func(np.array(years_to_look_forward), *popt)

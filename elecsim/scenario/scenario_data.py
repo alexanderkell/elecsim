@@ -21,6 +21,10 @@ segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 552
 # yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
 yearly_demand_change = [1.00]*100
 
+# First year maximum demand size (MW)
+initial_max_demand_size = 53400  # Electricity_since_1920.xls
+
+
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/4_medoids.csv'.format(ROOT_DIR))
 multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/4_medoids_scaled.csv'.format(ROOT_DIR))
 # Fuel prices (£/MWh)

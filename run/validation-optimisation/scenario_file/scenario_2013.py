@@ -1,3 +1,8 @@
+import pandas as pd
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+from elecsim.constants import ROOT_DIR, KW_TO_MW
+
 """
 File name: scenario_2013.py
 Date created: 09/07/2019
@@ -10,15 +15,19 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-# Demand per segment of load duration function
+# # Demand per segment of load duration function
 segment_demand_diff = [17568, 21964, 23127, 24327, 25520, 26760, 27888, 28935, 29865, 30721, 31567, 32315, 33188, 34182, 35505, 37480, 39585, 42206, 45209, 52152]
 segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315, 31567, 30721, 29865, 28935, 27888, 26760, 25520, 24327, 23127, 21964, 17568]
-# Time of load duration function
-segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
+# # Time of load duration function
+# segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
 # Change in load duration function by year
 # yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
-yearly_demand_change = [1.00]*100
+yearly_demand_change = [0.949620, 0.959511, 0.979181, 0.984285, 0.987209, 0.983118]
+
+# First year maximum demand size
+initial_max_demand_size = 53400
+
 
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/4_medoids.csv'.format(ROOT_DIR))
 multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/4_medoids_scaled.csv'.format(ROOT_DIR))
@@ -49,7 +58,7 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
 
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
-fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2078'].columns))
+fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:, '1990':'2078'].columns))
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 # Fill NA's with average of group
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
@@ -87,11 +96,12 @@ historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_
 load_duration_curve = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve.csv'.format(ROOT_DIR))
 load_duration_curve_diff = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve_difference.csv'.format(ROOT_DIR))
 
-# Learning rate for renewables
-learning_rate = 0.5
 
 # Generator Companies imported from Government data files
-power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+
+# 2013 power plants
+power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/plants_2013/uk_plants_2013.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+
 # power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
@@ -105,7 +115,7 @@ historical_fuel_plant_efficiency = pd.read_csv('{}/data/processed/power_plants/p
 
 
 # Company financials
-company_financials = pd.read_csv('{}/data/processed/companies/company_financials.csv'.format(ROOT_DIR))
+company_financials = pd.read_csv('{}/data/processed/companies/company_financials_2013.csv'.format(ROOT_DIR))
 
 # Bid mark-up price
 bid_mark_up = 1.0
@@ -149,10 +159,6 @@ upfront_investment_costs = 0.25
 
 years_for_agents_to_predict_forward = 10
 
-
-max_onshore_capacity = 34000  # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),
-max_offshore_capacity = 1  #
-max_pv_capacity = 85000  # 10W/m^2 (David McKay), cover 5% of the UK
 
 # Predict lost load through exponential and linear regression
 lost_load_price_predictor = True
