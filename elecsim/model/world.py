@@ -144,9 +144,8 @@ class World(Model):
         carbon_emitted = self.get_carbon_emitted(self)
         self.settle_gencos_financials()
 
-
         self.datacollector.collect(self)
-
+        self.delete_old_bids()
 
         self.step_number += 1
         print(".", end='', flush=True)
@@ -175,7 +174,7 @@ class World(Model):
         """
 
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
-        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities','total_assets', 'turnover', 'net_assets']]
+        financial_data = financial_data[['Company', 'cash_in_bank', 'total_liabilities', 'total_assets', 'turnover', 'net_assets']]
 
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
@@ -301,6 +300,11 @@ class World(Model):
         gencos = self.get_gencos()
         for genco in gencos:
             genco.settle_accounts()
+            # genco.delete_old_bids()
+
+    def delete_old_bids(self):
+        gencos = self.get_gencos()
+        for genco in gencos:
             genco.delete_old_bids()
 
     def get_gencos(self):
@@ -347,10 +351,38 @@ class World(Model):
     @staticmethod
     def get_carbon_emitted(model):
         gencos = model.get_gencos()
-        bids = list(accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids if isinstance(plants, FuelPlant))
+        bids = World.get_accepted_bids(gencos, FuelPlant)
         
         carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid.plant, FuelPlant))
         return carbon_emitted
+
+    @staticmethod
+    def get_accepted_bid_capacity(model, plant_type):
+        gencos = model.get_gencos()
+        plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
+        capacity_contributed = sum(bid.capacity_bid for plant in plants for bid in plant.accepted_bids)
+        return capacity_contributed
+
+    @staticmethod
+    def get_accepted_bid_capacity_per_segment_hour(model):
+        gencos = model.get_gencos()
+        plants = [plant for genco in gencos for plant in genco.plants if plant.is_operating]
+        # capacity_contributed = [ if bid.segment_hours==]
+        bids_dataframe = [bid.to_dict() for plant in plants for bid in plant.accepted_bids]
+        return bids_dataframe
+
+
+    @staticmethod
+    def get_accepted_bids(gencos, plant_type=None):
+        if plant_type:
+            bids = list(
+                accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids if
+                isinstance(plants, plant_type))
+        else:
+            bids = list(
+                accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids)
+
+        return bids
 
     def stratify_data(self, demand):
         power_plants = elecsim.scenario.scenario_data.power_plants
@@ -373,13 +405,21 @@ class World(Model):
     def create_data_loggers(self, data_folder):
         self.data_folder = data_folder
         self.datacollector = DataCollector(
-            model_reporters={"CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
-                             "Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
-                             "Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
-                             "Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
-                             "PV": lambda m: self.get_capacity_of_plants(m, "PV"),
-                             "Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
-                             "Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
+            model_reporters={"contributed_CCGT": lambda m: self.get_accepted_bid_capacity(m, "CCGT"),
+                             "contributed_Coal": lambda m: self.get_accepted_bid_capacity(m, "Coal"),
+                             "contributed_Onshore": lambda m: self.get_accepted_bid_capacity(m, "Onshore"),
+                             "contributed_Offshore": lambda m: self.get_accepted_bid_capacity(m, "Offshore"),
+                             "contributed_PV": lambda m: self.get_accepted_bid_capacity(m, "PV"),
+                             "contributed_Nuclear": lambda m: self.get_accepted_bid_capacity(m, "Nuclear"),
+                             "contributed_Recip_gas": lambda m: self.get_accepted_bid_capacity(m, "Recip_gas"),
+                             # "hourly_accepted_bids": lambda m: self.get_accepted_bid_capacity_per_segment_hour(m),
+                             "total_CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
+                             "total_Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
+                             "total_Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
+                             "total_Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
+                             "total_PV": lambda m: self.get_capacity_of_plants(m, "PV"),
+                             "total_Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
+                             "total_Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
                              "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
                              "total_genco_wealth": lambda m: self.get_genco_wealth(m),
                              "Electricity_cost": lambda m: self.get_electricity_cost(m),
@@ -415,19 +455,20 @@ class World(Model):
             self.carbon_scenario_name = "none"
 
     def write_scenario_data(self):
+        # if self.step_number == self.max_number_of_steps:
+        parent_directory = os.path.dirname(os.getcwd())
+
+        directory = "{}/{}/".format(parent_directory, self.data_folder)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        self.datacollector.get_model_vars_dataframe().to_csv(
+            "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
+                                                                        self.carbon_scenario_name,
+                                                                        dt.datetime.now().strftime(
+                                                                            '%Y-%m-%d_%H-%M-%S'),
+                                                                        elecsim.scenario.scenario_data.segment_demand_diff[-1]))
+
         if self.step_number == self.max_number_of_steps:
-            parent_directory = os.path.dirname(os.getcwd())
-
-            directory = "{}/{}/".format(parent_directory, self.data_folder)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            self.datacollector.get_model_vars_dataframe().to_csv(
-                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
-                                                                            self.carbon_scenario_name,
-                                                                            dt.datetime.now().strftime(
-                                                                                '%Y-%m-%d_%H-%M-%S'),
-                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]))
-
             end = perf_counter()
             time_elapased = end - self.start
 
