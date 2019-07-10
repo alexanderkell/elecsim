@@ -76,7 +76,8 @@ class CalculateNPV:
         # Forecast segment prices
 
         forecasted_segment_prices = self._get_price_duration_predictions()
-        # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
+        # logger.info("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
+
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
 
