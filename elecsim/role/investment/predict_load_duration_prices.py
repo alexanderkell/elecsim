@@ -7,8 +7,9 @@ import os, sys
 
 from elecsim.market.electricity.market.power_exchange import PowerExchange
 from elecsim.role.market.latest_market_data import LatestMarketData
+from elecsim.role.investment.curve_fitting_functions import logit
 import elecsim.scenario.scenario_data
-
+from scipy.optimize import curve_fit
 logger = logging.getLogger(__name__)
 
 """
@@ -58,7 +59,7 @@ class PredictPriceDurationCurve:
             predicted_price_duration_curve = power_ex.price_duration_curve
 
             predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
-
+            logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
             # predicted_price_duration_curve.segment_hour = predicted_price_duration_curve.segment_hour.cumsum()
             # price_duration_curve.append(predicted_price_duration_curve_day)
             # predicted_price_duration_curve = pd.concat(price_duration_curve)
@@ -75,11 +76,18 @@ def estimate_lost_load_price(predicted_price_duration_curve):
             predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
             # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
             if predicted_price_duration_curve.accepted_price.count() > 1:
+
                 predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
 
-                p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,3))
-                extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
-                logger.debug("extrapolated: {}".format(extrapolated))
+                logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
+
+                popt, pcov = curve_fit(logit, predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price, [1, 1, 1, 1, 90])
+                extrapolated = logit(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'], *popt)
+
+                # # Polynomial regression fitting
+                # p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,3))
+                # extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
+                # logger.debug("extrapolated: {}".format(extrapolated))
                 predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
                 return predicted_price_duration_curve
             elif predicted_price_duration_curve.accepted_price.count() == 1:
