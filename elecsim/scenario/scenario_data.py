@@ -18,9 +18,15 @@ segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315,
 segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
 # Change in load duration function by year
-yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
-# yearly_demand_change = [1.00]*100
+# yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
+yearly_demand_change = [1.00]*100
 
+# First year maximum demand size (MW)
+initial_max_demand_size = 53400  # Electricity_since_1920.xls
+
+
+multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/4_medoids.csv'.format(ROOT_DIR))
+multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/4_medoids_scaled.csv'.format(ROOT_DIR))
 # Fuel prices (£/MWh)
 
 # Historical fuel prices of coal, oil and gas  Source: Average prices of fuels purchased by the major UK power producers, BEIS UK Government, table_321.xlsx
@@ -45,6 +51,7 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
                                  poultry_litter_price, straw_price, meat_price, waste_price_post_2000,
                                  waste_price_pre_2000],
                            columns=[str(i) for i in range(2019, (2019+len(gas_price)))])
+
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
 fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2078'].columns))
@@ -68,6 +75,7 @@ fuel_plant_availability = 0.97 # Electricity Generation Costs and Hurdle Rates -
 # Capacity factor data (from https://www.renewables.ninja/)
 # Wind
 wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja_wind_country_GB_current-merra-2_corrected.csv'.format(ROOT_DIR))
+# wind_capacity_factor.time = pd.to_datetime(wind_capacity_factor.time)
 # Solar
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
 # Hydro
@@ -78,7 +86,7 @@ historical_availability_factor = pd.read_csv('{}/data/processed/availability_fac
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
-
+# historical_hourly_demand = historical_hourly_demand.tail(2628)
 
 # Load duration curve:
 load_duration_curve = pd.read_csv('{}/data/processed/load_duration_curve/load_duration_curve.csv'.format(ROOT_DIR))
@@ -89,6 +97,7 @@ learning_rate = 0.5
 
 # Generator Companies imported from Government data files
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/uk_power_plants.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+# power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
@@ -109,10 +118,25 @@ bid_mark_up = 1.0
 
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 # carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
-carbon_price_scenario = [10]*100
+carbon_price_scenario = [10]*1000
 # carbon_price_scenario = [0]*100
 EU_ETS_COST = 13.62
 carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
+
+
+def concatenate_carbon_price():
+      carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))],
+                    'price': carbon_price_scenario}
+      carbon_price_scenario_df = pd.DataFrame(carbon_data)
+      historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+      carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+      carbon_cost.year = pd.to_numeric(carbon_cost.year)
+      return carbon_cost
+
+
+carbon_price_all_years = concatenate_carbon_price()
+
+
 
 
 # Join historical and future carbon prices into dataframe for simulation purposes
@@ -123,14 +147,17 @@ carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenari
 # carbon_cost.year = pd.to_numeric(carbon_cost.year)
 
 # Lost load price - Set at £6000 MW/h as per the recommendations of the UK Government https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/267613/Annex_C_-_reliability_standard_methodology.pdf
-lost_load = 6000
-# lost_load = 200
+# lost_load = 6000
+lost_load = 300
 
 upfront_investment_costs = 0.25
 
-years_for_agents_to_predict_forward = 7
+years_for_agents_to_predict_forward = 10
 
 
-max_onshore_capacity = 34000 # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),
-max_offshore_capacity = 1 #
-max_pv_capacity = 85000 # 10W/m^2 (David McKay), cover 5% of the UK
+max_onshore_capacity = 34000  # 42 million acres (170,000 km^2) of agricultural land in UK, 10% dedicated to wind with average energy density of 2W/m^2 David McKay, http://www.withouthotair.com/cft.pdf),
+max_offshore_capacity = 1  #
+max_pv_capacity = 85000  # 10W/m^2 (David McKay), cover 5% of the UK
+
+# Predict lost load through exponential and linear regression
+lost_load_price_predictor = True

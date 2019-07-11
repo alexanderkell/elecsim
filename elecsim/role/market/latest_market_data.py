@@ -34,7 +34,6 @@ class LatestMarketData:
         self.model = model
         self.demand = self.model.demand
 
-
     def get_predicted_marginal_cost(self, power_plant, look_back_years):
 
         variable_o_m_cost = power_plant.variable_o_and_m_per_mwh
@@ -52,16 +51,14 @@ class LatestMarketData:
 
         return short_run_marginal_cost
 
-
-
-
-    def agent_forecast_value(self, value_required, years_to_look_back,years_to_look_forward=None, demand_linear=False):
-        years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
+    def agent_forecast_value(self, value_required, years_to_look_back, years_to_look_forward=None, demand_linear=False):
+        years_for_regression = list(range(self.model.years_from_start-years_to_look_back-1, self.model.years_from_start-1))
         variable_data = self._get_variable_data(value_required)
 
         regression = self._get_yearly_change_for_regression(variable_data, years_for_regression)
-        if value_required != "demand"  or demand_linear:
-            next_value = linear_regression(regression, years_to_look_back, years_to_look_forward)
+        regression_tuple = tuple(regression)
+        if value_required != "demand" or demand_linear:
+            next_value = linear_regression(regression_tuple, years_to_look_back, years_to_look_forward)
         else:
             next_value = self.fit_exponential_function(regression, years_to_look_back, years_to_look_forward)
         return next_value
@@ -126,7 +123,7 @@ class LatestMarketData:
         y = exponential_func(regression, 2.5, 1.3, 0.5)
         try:
             popt, pcov = curve_fit(exponential_func, x, regression)
-        except Warning:
+        except (Warning, RuntimeError):
             return self.agent_forecast_value("demand", years_to_look_back, years_to_look_forward, demand_linear=True)
 
         return exponential_func(np.array(years_to_look_forward), *popt)

@@ -1,9 +1,6 @@
 import os.path
 import sys
 
-from pycallgraph.output import GraphvizOutput
-from pycallgraph import PyCallGraph
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from elecsim.model.world import World
@@ -60,8 +57,11 @@ logging.basicConfig(level=logging.INFO)
     # def test_world_initialization(self):
 
 # with PyCallGraph(output=GraphvizOutput()):
-world = World(initialization_year=2018)
+MARKET_TIME_SPLICES = 10
+YEARS_TO_RUN = 10
+number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
+world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
 
-for i in range(10):
+for i in range(number_of_steps):
     world.step()
 

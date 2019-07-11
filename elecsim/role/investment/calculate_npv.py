@@ -18,6 +18,8 @@ from elecsim.role.plants.costs.fuel_plant_cost_calculations import FuelPlantCost
 # from elecsim.scen_error.scenario_data import modern_plant_costs
 # from elecsim.scen_error.scenario_data import nuclear_wacc, non_nuclear_wacc
 import elecsim.scenario.scenario_data
+from functools import lru_cache
+
 logger = getLogger(__name__)
 
 """
@@ -69,11 +71,13 @@ class CalculateNPV:
         logger.debug("sorted_npv: \n {}".format(sorted_npv))
         return sorted_npv
 
+    # @lru_cache(maxsize=10000)
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
-        forecasted_segment_prices = self._get_price_duration_predictions()
 
-        # logger.info("Forecasted price duration curve: {}".format(forecasted_segment_prices))
+        forecasted_segment_prices = self._get_price_duration_predictions()
+        # logger.info("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
+
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
 
@@ -122,7 +126,6 @@ class CalculateNPV:
 
         logger.debug("npv_power_plant: {}".format(npv_power_plant))
 
-        # NPVp = npv_power_plant / (power_plant.capacity_mw * total_running_hours)
         NPVp = divide(npv_power_plant, (power_plant.capacity_mw * total_running_hours))
         return NPVp
 
@@ -155,16 +158,34 @@ class CalculateNPV:
         return capital_costs_outflow
 
     def _get_total_yearly_income(self, forecasted_segment_prices, power_plant):
-        forecasted_segment_prices['total_income'] = forecasted_segment_prices.apply(
-            lambda x: self._income(x, power_plant.capacity_mw), axis=1)
+        # forecasted_segment_prices['total_income'] = forecasted_segment_prices.apply(
+        #     lambda x: self._income(x, power_plant.capacity_mw), axis=1)
+        vectorized_income = np.vectorize(self._income)
+        forecasted_segment_prices['total_income'] = vectorized_income(forecasted_segment_prices['predicted_profit_per_mwh'].values, forecasted_segment_prices['_total_running_hours'].values, forecasted_segment_prices['accepted_price'].values, power_plant.capacity_mw)
+
 
     def _get_total_hours_to_run(self, forecasted_segment_prices, power_plant):
-        forecasted_segment_prices['_total_running_hours'] = forecasted_segment_prices.apply(
-            lambda x: self._total_running_hours(x, power_plant), axis=1)
+        # forecasted_segment_prices['_total_running_hours'] = forecasted_segment_prices.apply(
+        #     lambda x: self._total_running_hours(x, power_plant), axis=1)
+
+        if isinstance(power_plant, FuelPlant):
+            vectorized_total_running_hours_fuel_plant = np.vectorize(self._total_running_hours_fuel_plant)
+
+            forecasted_segment_prices['_total_running_hours'] = vectorized_total_running_hours_fuel_plant(forecasted_segment_prices['predicted_profit_per_mwh'].values, forecasted_segment_prices['num_of_hours'].values)
+        else:
+            vectorized_total_running_hours_renewable_plant = np.vectorize(self._total_running_hours_renewable_plant)
+
+            forecasted_segment_prices['_total_running_hours'] = vectorized_total_running_hours_renewable_plant(forecasted_segment_prices['predicted_profit_per_mwh'].values, forecasted_segment_prices['num_of_hours'].values, forecasted_segment_prices['segment_hour'].values, power_plant)
+
+
 
     def _get_profit_per_segment(self, forecasted_segment_prices, power_plant):
-        forecasted_segment_prices['_total_profit_per_segment'] = forecasted_segment_prices.apply(
-            lambda x: self._total_profit_per_segment(x, power_plant.capacity_mw), axis=1)
+        # forecasted_segment_prices['_total_profit_per_segment'] = forecasted_segment_prices.apply(
+        #     lambda x: self._total_profit_per_segment(x, power_plant.capacity_mw), axis=1)
+
+        vectorized_total_profit_per_segment = np.vectorize(self._total_profit_per_segment)
+
+        forecasted_segment_prices['_total_profit_per_segment'] = vectorized_total_profit_per_segment(forecasted_segment_prices['predicted_profit_per_mwh'].values, forecasted_segment_prices['num_of_hours'].values, power_plant.capacity_mw)
 
     def _get_profit_per_mwh(self, forecasted_segment_prices, short_run_marginal_cost):
         forecasted_segment_prices['predicted_profit_per_mwh'] = forecasted_segment_prices[
@@ -185,41 +206,85 @@ class CalculateNPV:
 
     def _get_price_duration_predictions(self):
         predicted_price_duration_curve = get_price_duration_curve(self.model, self.look_back_years)
+
         return predicted_price_duration_curve
 
-    @staticmethod
-    def _total_profit_per_segment(row, capacity):
-        if row['predicted_profit_per_mwh'] > 0:
-            total_profit = row['num_of_hours'] * row['predicted_profit_per_mwh'] * capacity
-        else:
-            total_profit = 0
-        return total_profit
+    # @staticmethod
+    # def _total_profit_per_segment(row, capacity):
+    #     if row['predicted_profit_per_mwh'] > 0:
+    #         total_profit = row['num_of_hours'] * row['predicted_profit_per_mwh'] * capacity
+    #     else:
+    #         total_profit = 0
+    #     return total_profit
 
     @staticmethod
-    def _total_running_hours(row, power_plant):
-        if isinstance(power_plant, FuelPlant):
-            if row['predicted_profit_per_mwh'] > 0:
-                running_hours = row['num_of_hours']
-            else:
-                running_hours = 0
+    def _total_profit_per_segment(predicted_profit_per_mwh, num_of_hours, capacity):
+        if predicted_profit_per_mwh > 0:
+            return num_of_hours * predicted_profit_per_mwh * capacity
         else:
-            if row['predicted_profit_per_mwh'] > 0:
-                capacity_factor = get_capacity_factor(power_plant.plant_type, row.segment_hour)
-                running_hours = capacity_factor * row['num_of_hours']
-            else:
-                running_hours = 0
-        return running_hours
+            return 0
+
+
+
+
+
+
+
+
+    # def _total_running_hours(self, row, power_plant):
+    #     if isinstance(power_plant, FuelPlant):
+    #         if row['predicted_profit_per_mwh'] > 0:
+    #             running_hours = row['num_of_hours']
+    #         else:
+    #             running_hours = 0
+    #     else:
+    #         if row['predicted_profit_per_mwh'] > 0:
+    #             capacity_factor = get_capacity_factor(self.model.market_time_splices, power_plant.plant_type, row.segment_hour)
+    #             running_hours = capacity_factor * row['num_of_hours']
+    #         else:
+    #             running_hours = 0
+    #     return running_hours
+    #
+
+    def _total_running_hours_fuel_plant(self, predicted_profit_per_mwh, num_of_hours):
+
+        if predicted_profit_per_mwh > 0:
+            return num_of_hours
+        else:
+            return 0
+
+    def _total_running_hours_renewable_plant(self, predicted_profit_per_mwh, num_of_hours, segment_hour, power_plant):
+        if predicted_profit_per_mwh > 0:
+            capacity_factor = get_capacity_factor(self.model.market_time_splices, power_plant.plant_type, segment_hour)
+            return capacity_factor * num_of_hours
+        else:
+            return 0
+
+
+
+    # @staticmethod
+    # def _income(row, capacity):
+    #     if row['predicted_profit_per_mwh'] > 0:
+    #         running_hours = row['_total_running_hours'] * row['accepted_price'] * capacity
+    #     else:
+    #         running_hours = 0
+    #     return running_hours
 
     @staticmethod
-    def _income(row, capacity):
-        if row['predicted_profit_per_mwh'] > 0:
-            running_hours = row['_total_running_hours'] * row['accepted_price'] * capacity
+    def _income(predicted_profit_per_mwh, _total_running_hours, accepted_price, capacity):
+
+        if predicted_profit_per_mwh > 0:
+            return _total_running_hours * accepted_price * capacity
         else:
-            running_hours = 0
-        return running_hours
+            return 0
 
+        #
+        # if row['predicted_profit_per_mwh'] > 0:
+        #     running_hours = row['_total_running_hours'] * row['accepted_price'] * capacity
+        # else:
+        #     running_hours = 0
+        # return running_hours
 
-@lru_cache(maxsize=1024)
 def get_most_profitable_plants_by_npv(model, difference_in_discount_rate, look_back_period):
     npv_calculation = CalculateNPV(model, difference_in_discount_rate, look_back_period)
 

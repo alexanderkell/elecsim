@@ -1,9 +1,10 @@
 import logging
 from itertools import zip_longest
 from math import isnan
+from functools import lru_cache
 
 import pandas as pd
-
+import numpy as np
 import elecsim.scenario.scenario_data
 from elecsim.constants import ROOT_DIR
 from elecsim.data_manipulation.data_modifications.extrapolation_interpolate import ExtrapolateInterpolate
@@ -43,6 +44,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         fuel_string = plant_type_to_fuel(plant_type, self.construction_year)
         # Fuel object, containing information on fuel.
         self.fuel = fuel_registry(fuel_string)
+        self.fuel_string = fuel_string
 
     def calculate_lcoe(self, discount_rate):
         """
@@ -56,7 +58,6 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         # Calculations of capital expenditure, operating expenditure, total expected electricity expenditure and plant_type cost
         # This is used to estimate a LCOE price.
         elec_gen, total_costs = self.calculate_total_costs()
-
         # Costs discounted using discount_rate variable.
         disc_costs = self._discount_data(total_costs, discount_rate)
         disc_elec = self._discount_data(elec_gen, discount_rate)
@@ -151,6 +152,7 @@ class FuelPlantCostCalculations(PlantCostCalculations):
 
         carbon_costs = [carbon_tax * carb_emit for carbon_tax, carb_emit in
                         zip(list(carbon_taxation_years.price), carbon_emitted)]
+
         return carbon_costs
 
 
@@ -172,41 +174,50 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :return: returns marginal cost to burn 1MWh of fuel.
         """
 
-        carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
-        # logger.debug("Calculating short_run_marginal_cost")
-        # Join historical and future carbon prices into dataframe for simulation purposes
-        carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))], 'price': carbon_price_scenario}
-        carbon_price_scenario_df = pd.DataFrame(carbon_data)
-        historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
-        carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
-        carbon_cost.year = pd.to_numeric(carbon_cost.year)
-
         modifier = 0
         if self.plant_type == 'CCGT':
             modifier = genco.gas_price_modifier
         elif self.plant_type == 'Coal':
             modifier = genco.coal_price_modifier
 
-        if fuel_price is None:
-            # logger.debug("fuel_price_is_none calculating from data")
-            fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[
-                             0] + modifier) / self.efficiency
-        else:
-            # logger.debug("fuel_price_is_given calculating from parenthesis")
-            fuel_cost = fuel_price / self.efficiency
-
-        if co2_price is None:
-            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
-                       carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
-        else:
-            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
+        fuel_cost = self.get_fuel_price(fuel_price, model.year_number, modifier)
+        co2_cost = self.get_co2_price(co2_price, model)
         marginal_cost = self.variable_o_and_m_per_mwh + fuel_cost + co2_cost
         if isnan(marginal_cost):
             logger.debug("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(
                 self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
             raise ValueError("Marginal cost is nan. Variable cost: {}, Fuel cost: {}, CO2 Cost: {}, plant type: {}".format(
                 self.variable_o_and_m_per_mwh, fuel_cost, co2_cost, self.plant_type))
+
         return marginal_cost
+
+    def get_co2_price(self, co2_price, model):
+        if co2_price is None:
+            # co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * \
+            #            carbon_cost[carbon_cost.year == model.year_number - 1].price.iloc[0]
+
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * get_carbon_cost_in_year(
+                model.year_number)
+        else:
+            co2_cost = self.fuel.mwh_to_co2e_conversion_factor * (1 / self.efficiency) * co2_price
+        return co2_cost
+
+    def get_fuel_price(self, fuel_price, year_number, modifier):
+        if fuel_price is None:
+            # logger.debug("fuel_price_is_none calculating from data")
+            # fuel_cost = (self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[
+            #                  0] + modifier) / self.efficiency
+
+
+            # fuel_price = self.fuel.fuel_price[self.fuel.fuel_price.Year == model.year_number - 1].value.iloc[0] + modifier
+            fuel_price = _query_fuel_price_for_year(self.fuel_string, year_number) + modifier
+            logger.debug("_query_fuel_price_for_year: {}".format(_query_fuel_price_for_year.cache_info()))
+
+            fuel_cost = fuel_price / self.efficiency
+        else:
+            # logger.debug("fuel_price_is_given calculating from parenthesis")
+            fuel_cost = fuel_price / self.efficiency
+        return fuel_cost
 
     def get_BEIS_carbon_price(self):
         carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58,
@@ -221,3 +232,33 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
         carbon_cost.year = pd.to_numeric(carbon_cost.year)
         return carbon_cost
+
+
+# lru_cache(maxsize=128)
+def calculate_year_carbon_price():
+    # carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
+    # # logger.debug("Calculating short_run_marginal_cost")
+    # # Join historical and future carbon prices into dataframe for simulation purposes
+    # carbon_data = {'year': [str(i) for i in range(2019, (2019 + len(carbon_price_scenario)))],
+    #                 'price': carbon_price_scenario}
+    # carbon_price_scenario_df = pd.DataFrame(carbon_data)
+    # historical_carbon_price = pd.read_csv(ROOT_DIR + '/data/processed/carbon_price/uk_carbon_tax_historical.csv')
+    # carbon_cost = historical_carbon_price.append(carbon_price_scenario_df, sort=True)
+    # carbon_cost.year = pd.to_numeric(carbon_cost.year)
+    carbon_cost = elecsim.scenario.scenario_data.carbon_price_all_years
+    return carbon_cost
+
+
+@lru_cache(maxsize=1000)
+def get_carbon_cost_in_year(year_number):
+    # carbon_cost = carbon_cost[carbon_cost.year == year_number - 1].price.iloc[0]
+    carbon_cost = elecsim.scenario.scenario_data.carbon_price_all_years
+
+    carbon_cost = carbon_cost.loc[np.in1d(carbon_cost['year'], [year_number]), 'price'].iloc[0]
+    return carbon_cost
+
+@lru_cache(1024)
+def _query_fuel_price_for_year(fuel_string, year_number):
+    fuel = fuel_registry(fuel_string)
+    fuel_price = fuel.fuel_price.loc[np.in1d(fuel.fuel_price['Year'], [year_number]), 'value'].iloc[0]
+    return fuel_price

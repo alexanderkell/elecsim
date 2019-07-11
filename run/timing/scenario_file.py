@@ -17,9 +17,15 @@ segment_demand = [52152, 45209, 42206, 39585, 37480, 35505, 34182, 33188, 32315,
 # Time of load duration function
 segment_time = [8752.5, 8291.83, 7831.17, 7370.5, 6909.92, 6449.25, 5988.58, 5527.92, 5067.25, 4606.58, 4146, 3685.33, 3224.67, 2764, 2303.33, 1842.67, 1382.08, 921.42, 460.75, 0.08]
 
+multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/8_medoids.csv'.format(ROOT_DIR))
+
+
 # Change in load duration function by year
 # yearly_demand_change = [1.00, 1.01, 1.02, 1.01, 1.02, 1.02, 1.03, 1.02, 1.01, 1.02, 0.99, 1, 1, 1, 1.01, 1.02, 1.01, 1.01, 1, 1, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01, 1.01, 1, 1.01]
 yearly_demand_change = [1.00]*100
+
+number_of_days = 8
+method_of_selection = "medoids"
 
 # Fuel prices (£/MWh)
 

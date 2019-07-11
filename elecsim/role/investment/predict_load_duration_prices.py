@@ -2,11 +2,14 @@ import logging
 from functools import lru_cache
 
 import numpy as np
+import pandas as pd
+import os, sys
 
-from elecsim.market.electricity.power_exchange import PowerExchange
+from elecsim.market.electricity.market.power_exchange import PowerExchange
 from elecsim.role.market.latest_market_data import LatestMarketData
+from elecsim.role.investment.curve_fitting_functions import logit
 import elecsim.scenario.scenario_data
-
+from scipy.optimize import curve_fit
 logger = logging.getLogger(__name__)
 
 """
@@ -21,7 +24,6 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-
 class PredictPriceDurationCurve:
 
     def __init__(self, model):
@@ -29,38 +31,75 @@ class PredictPriceDurationCurve:
 
     def predict_price_duration_curve(self, look_back_period):
         demand_change_predicted = LatestMarketData(self.model).agent_forecast_value("demand", look_back_period, elecsim.scenario.scenario_data.years_for_agents_to_predict_forward)
-        predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
 
-        power_ex = PowerExchange(self.model)
-        power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
-        predicted_price_duration_curve = power_ex.price_duration_curve
+        # power_ex = PowerExchange(self.model)
+        power_ex = self.model.PowerExchange
+        power_ex.price_duration_curve = []
+        if self.model.market_time_splices == 1:
+            predicted_consumption = [cons * demand_change_predicted for cons in self.model.demand.segment_consumption]
+            power_ex.tender_bids(self.model.demand.segment_hours, predicted_consumption, predict=True)
 
-        predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
+            self.model.clear_all_bids()
 
-        logger.debug("predicted_price_duration_curve: \n {}".format(predicted_price_duration_curve))
+            predicted_price_duration_curve = power_ex.price_duration_curve
+            predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
+        else:
+            price_duration_curve = []
+            # year_segment_hours, year_segment_consumption = self.model.demand.get_demand_for_year()
+            year_segment_hours = self.model.demand.year_segment_hours
+            year_segment_consumption = self.model.demand.year_segment_consumption
+
+            # for segment_hours, segment_consumption in zip(year_segment_hours, year_segment_consumption):
+
+            year_segment_consumption_predicted = [cons * demand_change_predicted for cons in year_segment_consumption]
+
+            power_ex.tender_bids(year_segment_hours, year_segment_consumption_predicted, predict=True)
+            self.model.clear_all_bids()
+
+            predicted_price_duration_curve = power_ex.price_duration_curve
+
+            predicted_price_duration_curve = estimate_lost_load_price(predicted_price_duration_curve)
+            logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
+            # predicted_price_duration_curve.segment_hour = predicted_price_duration_curve.segment_hour.cumsum()
+            # price_duration_curve.append(predicted_price_duration_curve_day)
+            # predicted_price_duration_curve = pd.concat(price_duration_curve)
+            # predicted_price_duration_curve.sort_values("segment_demand", ascending=False, inplace=True)
+
         return predicted_price_duration_curve
 
 
 def estimate_lost_load_price(predicted_price_duration_curve):
-    if all(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
-        return predicted_price_duration_curve
-    if any(predicted_price_duration_curve.accepted_price==elecsim.scenario.scenario_data.lost_load):
-        predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
-        # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
-        if predicted_price_duration_curve.accepted_price.count() > 1:
-            predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
-
-            p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,1))
-            extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
-            logger.debug("extrapolated: {}".format(extrapolated))
-            predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
+    if elecsim.scenario.scenario_data.lost_load_price_predictor:
+        if all(predicted_price_duration_curve.accepted_price == elecsim.scenario.scenario_data.lost_load):
             return predicted_price_duration_curve
-        elif predicted_price_duration_curve.accepted_price.count() == 1:
-            predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.fillna(predicted_price_duration_curve.accepted_price.mean())
+        if any(predicted_price_duration_curve.accepted_price == elecsim.scenario.scenario_data.lost_load):
+            predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.replace(elecsim.scenario.scenario_data.lost_load,np.nan)
+            # predicted_price_duration_curve.accepted_price.interpolate(method="polynomial", order=1)
+            if predicted_price_duration_curve.accepted_price.count() > 1:
+
+                predicted_price_duration_curve_training = predicted_price_duration_curve.dropna()
+
+                logger.info("predicted_price_duration_curve: {}".format(predicted_price_duration_curve))
+
+                popt, pcov = curve_fit(logit, predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price, [1, 1, 1, 1, 90])
+                extrapolated = logit(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'], *popt)
+
+                # # Polynomial regression fitting
+                # p = np.poly1d(np.polyfit(predicted_price_duration_curve_training.segment_demand, predicted_price_duration_curve_training.accepted_price,3))
+                # extrapolated = p(predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), 'segment_demand'])
+                # logger.debug("extrapolated: {}".format(extrapolated))
+                predicted_price_duration_curve.loc[np.isnan(predicted_price_duration_curve.accepted_price), "accepted_price"] = extrapolated
+                return predicted_price_duration_curve
+            elif predicted_price_duration_curve.accepted_price.count() == 1:
+                predicted_price_duration_curve.accepted_price = predicted_price_duration_curve.accepted_price.fillna(predicted_price_duration_curve.accepted_price.mean())
+                return predicted_price_duration_curve
+        else:
             return predicted_price_duration_curve
     else:
         return predicted_price_duration_curve
-@lru_cache(1024)
+
+
+# @lru_cache(1024)
 def get_price_duration_curve(model, look_back_period):
     predicted_price_duration_curve = PredictPriceDurationCurve(model).predict_price_duration_curve(look_back_period=look_back_period)
     return predicted_price_duration_curve

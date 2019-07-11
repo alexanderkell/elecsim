@@ -143,6 +143,7 @@ class PowerPlant(ABC):
     def get_year_of_operation(self):
         year_operation_begins = self.construction_year + self.pre_dev_period + self.construction_period
         return year_operation_begins
+    
     def __str__(self):
         ret = "Name: {}. Type: {}. Capacity: {}.".format(self.name, self.plant_type, self.capacity_mw)
         return ret

@@ -1,0 +1,271 @@
+"",,Installed Year of commission Location,,
+"Scotland, Wales, Company Name Station Name",Fuel,Capacity or year generation Northern Ireland or,,
+"",,(MW) began English region,,
+AES Ballylumford C,CCGT,616 2003 Northern Ireland,,
+Kilroot,Coal / oil,520 1981 Northern Ireland,,
+Ballylumford B,Gas,540 1968 Northern Ireland,,
+Ballylumford B OCGT,Gas oil,116 1968 Northern Ireland,,
+Kilroot OCGT,Gas oil,142 1981 Northern Ireland,,
+British Energy (now part of EDF) Dungeness B,Nuclear,"1,050 1983 South East",,
+Hartlepool,Nuclear,"1,180 1984 North East",,
+Heysham 1,Nuclear,"1,155 1984 North West",,
+Heysham 2,Nuclear,"1,230 1988 North West",,
+Hinkley Point B,Nuclear,955 1976 South West,,
+Hunterston B,Nuclear,965 1976 Scotland,,
+Sizewell B,Nuclear,"1,198 1995 East",,
+Torness,Nuclear,"1,185 1988 Scotland",,
+British Solar Renewables Bradenstoke Solar Park,Solar,70 2015 South West,,
+Carrington Power Carrington,CCGT,900.0 2016 North West,,
+Centrica Barry,CCGT,235 1998 Wales,,(2)
+Glanford Brigg,CCGT,150 1993 Yorkshire and the Humber,,(2)
+Langage,CCGT,905 2010 South West,,
+Peterborough,CCGT,240 1993 East,,(2)
+South Humber Bank,CCGT,"1,310 1996 Yorkshire and the Humber",,
+Coolkeeragh ESB Ltd Coolkeeragh,CCGT,408 2005 Northern Ireland,,
+Coolkeeragh OCGT,Gas oil,53 2005 Northern Ireland,,
+Corby Power Ltd Corby,CCGT,401 1993 East Midlands,,
+Cubico Sustainable Investments Limited Broxted Solar Park,Solar,32 2015 East,,
+Owl's Hatch Solar Park,Solar,51.9 2016 South East,,
+Cumbria Wind Beckburn,Wind,31 2017 North West,,
+Burnfoot Hill,Wind,30 2010 Scotland,,
+Corriemoillie,Wind,48 2016 Scotland,,
+Fallago Rig,Wind,144 2013 Scotland,,
+Green Rigg,Wind,36 2012 North East,,
+Longpark,Wind,38 2009 Scotland,,
+Teesside,Wind (offshore),62 2014 North East,,
+Dong Energy Barrow,Wind (offshore),90 2006 North West,,
+Burbo Bank,Wind (offshore),90 2009 North West,,
+Gunfleet Sands 1,Wind (offshore),108 2010 South East,,
+Gunfleet Sands 2,Wind (offshore),65 2010 South East,,
+Lincs,Wind (offshore),270 2012 East,,
+Walney 1,Wind (offshore),184 2011 North West,,
+Walney 2,Wind (offshore),184 2011 North West,,
+West of Duddon Sands,Wind (offshore),389 2014 North West,,
+Westermost Rough,Wind (offshore),210 2015 South East,,
+Drax Power Ltd Drax - coal units,Coal,"1,980 1974 Yorkshire and the Humber",,
+Drax - biomass units,Biomass,"1,980 1974 Yorkshire and the Humber",,
+Drax GT,Gas oil,75 1971 Yorkshire and the Humber,,
+E.On UK Blackburn Meadows,Biomass,33 2015 Yorkshire and the Humber,,
+Steven's Croft *,Biomass,50 2007 Scotland,,
+Castleford,CCGT,56 2002 Yorkshire and the Humber,,
+Sandbach,CCGT,56 1999 North West,,
+Thornhill,CCGT,50 1998 Yorkshire and the Humber,,
+Camster,Wind,50 2012 Scotland,,
+Tween Bridge,Wind,44 2012 North East,,
+Humber Gateway,Wind (offshore),219 2015 North East,,
+London Array,Wind (offshore),630 2012 South East,,
+Robin Rigg East,Wind (offshore),90 2010 Scotland,,
+Robin Rigg West,Wind (offshore),90 2010 Scotland,,
+Scroby Sands,Wind (offshore),60 2004 East,,
+EDF Energy West Burton CCGT,CCGT,"1,332 2012 East Midlands",,
+EDF Energy Cottam,Coal,"2,008 1969 East Midlands",,
+EDF Energy West Burton,Coal,"2,012 1967 East Midlands",,
+EDF Energy Barkantine Heat & Power Company *,Gas,1 2000 London,,
+EDF Energy London Heat & Power Company *,Gas,9 2000 London,,
+EDF Energy West Burton GT,Gas oil,40 1967 East Midlands,,
+Eggborough Power Ltd Eggborough,Coal,"1,960.0 1967 Yorkshire and the Humber",,
+Eneco Wind UK Limited Lochluichart,Wind,69.0 2014 Scotland,,
+Moy,Wind,60.0 2016 Scotland,,
+"",,Installed Year of commission Location
+"Scotland, Wales, Company Name Station Name",Fuel,Capacity or year generation Northern Ireland or
+"",,(MW) began English region
+ENGIE Deeside,CCGT,515 1994 Wales
+Saltend *,CCGT,"1,200 2000 Yorkshire and the Humber"
+Indian Queens,Gas oil / kerosene,140 1996 South West
+Dinorwig,Pumped storage,"1,800 1983 Wales"
+Ffestiniog,Pumped storage,360 1961 Wales
+EPR Ely Limited Elean,Straw,38 2001 East
+EPR Eye Ltd Eye Suffolk,Biomass,14 1992 East
+EPR Glanford Ltd Glanford,Meat & bone meal,14 1993 East
+EPR Scotland Ltd Westfield,Biomass,13 2000 Scotland
+EPR Thetford Ltd Thetford,Biomass,42 1998 East
+Falck Renewables Wind Ltd Cambrian,Wind,38 2016 Wales
+Earlsburn,Wind,38 2007 Scotland
+Kilbraur,Wind,68 2008 Scotland
+Millennium,Wind,65 2008 Scotland
+West Browncastle,Wind,30 2014 Scotland
+Ferrybridge MFE Limited Ferrybridge Multi-fuel,Biomass,79 2015 Yorkshire and the Humber
+Foresight Group Shotwick,Solar,72 2017 England
+Fred Olsen Crystal Rig,Wind,63 2003 Scotland
+Crystal Rig 2,Wind,138 2010 Scotland
+Mid Hill,Wind,76 2014 Scotland
+Paul's Hill,Wind,64 2005 Scotland
+Rothes,Wind,51 2004 Scotland
+Rothes 2,Wind,41 2013 Scotland
+Greencoat Solar Coltishall 1,Solar,34 2016 England
+Eveley,Solar,49 2016 England
+Greencoat UK Wind Braes of Doune Wind Farm,Wind,72.0 2007 Scotland
+Infinis A'Chruach,Wind,43 2016 Scotland
+Dalswinton,Wind,31 2008 Scotland
+Galawhistle,Wind,66 2017 Scotland
+Minsca,Wind,37 2008 Scotland
+Slieve Divena,Wind,30 2009 N Ireland
+Intergen Coryton,CCGT,800 2001 East
+Rocksavage,CCGT,810 1998 North West
+Spalding,CCGT,880 2004 East Midlands
+Lightsource Crundale,Solar,43.7 2016 England
+Exning,Solar,30.3 2016 England
+Londonwaste Limited Edmonton,Waste,60.0 1970 South East
+Magnox Ltd Maentwrog,Hydro,35.3 1928 Wales
+Marchwood Power Limited Marchwood,CCGT,842.0 2009 South West
+MPF Operations Limited Baglan Bay CCGT,CCGT,520.0 2002 Wales
+MPF Operations Limited Severn Power,CCGT,850.0 2010 Wales
+MPF Operations Limited Sutton Bridge,CCGT,819.0 1999 East
+MPF Operations Limited Baglan Bay OCGT,OCGT,32.3 2002 Wales
+Peel Energy Ltd Frodsham Wind Farm Ltd,Wind,50.4 2017 North West
+Px Limited Fellside CHP *,Gas,180.0 1995 North West
+Renewable Energy Systems Ltd Hill of Towie,Wind,48.3 2012 Scotland
+Riverside Resource Recovery Limited Belvedere,Waste,80.0 2011 South East
+Rockfire Capital Swindon Solar Park,Solar,60.9 2017 England
+RWE Innogy UK Ltd Markinch CHP *,Biomass,65.0 2014 Scotland
+RWE Innogy UK Ltd (Part of RWE Npower) Carno,Wind,33.6 2016 Wales
+Causeymire,Wind,48.3 2004 Scotland
+Farr,Wind,92.0 2006 Scotland
+Ffynnon Oer,Wind,32.0 2006 Wales
+Goole Fields,Wind,33.0 2013 North East
+Goole Fields 2,Wind,34.9 2016 England
+Little Cheyne Court,Wind,59.8 2008 South East
+Middlemoor,Wind,54.0 2013 North East
+Novar 2,Wind,36.8 2012 Scotland
+Gwynt y Mor,Wind (offshore),576.0 2013 Wales
+North Hoyle,Wind (offshore),60.0 2003 Wales
+Rhyl Flats,Wind (offshore),90.0 2009 Wales
+"",,Installed Year of commission Location,,
+"Scotland, Wales, Company Name Station Name",Fuel,Capacity or year generation Northern Ireland or,,
+"",,(MW) began English region,,
+RWE Npower Plc Didcot B,CCGT,"1,470.0 1998 South East",,
+Great Yarmouth,CCGT,420.0 2001 East,,
+Little Barford,CCGT,720.0 1995 East,,
+Pembroke,CCGT,"2,180.0 2012 Wales",,
+Staythorpe C,CCGT,"1,772.0 2010 East Midlands",,
+Aberthaw B,Coal,"1,586.0 1971 Wales",,
+Aberthaw GT,Gas oil,51.0 1971 Wales,,
+Cowes,Gas oil,140.0 1982 South East,,
+Didcot GT,Gas oil,100.0 1972 South East,,
+Little Barford GT,Gas oil,17.0 2006 East,,
+Scottish and Southern: Hydro Schemes - Deanie,Hydro,38.0 1963 Scotland,,
+Affric/Beauly Fasnakyle,Hydro,69.0 1951 Scotland,,
+Scottish and Southern: Hydro Schemes -,,,,
+Breadalbane Lochay,Hydro,46.0 1958 Scotland,,
+Scottish and Southern: Hydro Schemes - Conon Luichart,Hydro,34.0 1954 Scotland,,
+Scottish and Southern: Hydro Schemes - Foyers Foyers,Hydro / pumped storage,300.0 1974 Scotland,,
+Scottish and Southern: Hydro Schemes - Great Glendoe,Hydro,100.0 2008 Scotland,,
+Glen Glenmoriston,Hydro,37.0 1957 Scotland,,
+Clachan,Hydro,40.0 1955 Scotland,,
+Scottish and Southern: Hydro Schemes - Sloy/Awe Sloy,Hydro,152.5 1950 Scotland,,
+Scottish and Southern: Hydro Schemes - Tummel Clunie,Hydro,61.2 1950 Scotland,,
+Errochty,Hydro,75.0 1955 Scotland,,
+Rannoch,Hydro,45.0 1930 Scotland,,
+Tummel,Hydro,34.0 1933 Scotland,,
+Scottish and Southern: Island Generation Arnish,Diesel,10.0 2001 Scotland,,
+Barra,Diesel,3.0 1990 Scotland,,
+Bowmore,Diesel,6.0 1946 Scotland,,
+Kirkwall,Diesel,16.0 1953 Scotland,,
+Lerwick,Diesel,67.0 1953 Scotland,,
+"Loch Carnan, South Uist",Diesel,9.0 1971 Scotland,,
+Stornoway,Diesel,24.0 1950 Scotland,,
+Tiree,Diesel,3.0 1945 Scotland,,
+Scottish and Southern: Thermal Keadby,CCGT,710.0 1994 Yorkshire and the Humber,,
+Medway,CCGT,700.0 1995 South East,,
+Peterhead,CCGT,"1,180.0 1980 Scotland",,(3)
+Fiddler’s Ferry,Coal / biomass,"1,961.0 1971 North West",,
+Slough *,Coal / biomass / gas / waste derived fue,35.0 1918 South East,,
+Chippenham,Gas,10.0 2002 South West,,
+Burghfield,Gas / oil,45.0 1998 South East,,
+Chickerell,Gas / oil,45.0 1998 South West,,
+Fiddler’s Ferry GT,Gas oil,34.0 1969 North West,,
+Keadby GT,Gas oil,25.0 1994 Yorkshire and the Humber,,
+Five Oaks,Light oil,8.7 1995 South East,,
+Thatcham,Light oil,8.7 1994 South East,,
+Scottish and Southern: Wind Achany,Wind,38.0 2010 Scotland,,
+Clyde Central,Wind,112.7 2011 Scotland,,
+Drumderg,Wind,36.8 2008 Scotland,,
+Dunmaglass,Wind,94.1 2017 Scotland,,
+Fairburn,Wind,40.0 2009 Scotland,,
+Gordonbush,Wind,70.0 2011 Scotland,,
+Griffin,Wind,188.6 2011 Scotland,,
+Hadyard Hill,Wind,119.6 2005 Scotland,,
+Keadby,Wind,68.0 2013 Yorkshire and the Humber,,
+Slieve Kirk,Wind,73.6 2011 Northern Ireland,,
+Strathy North,Wind,67.7 2015 Scotland,,
+Tievenameenta,Wind,34.5 2017 Northern Ireland,,
+Greater Gabbard,Wind (offshore),504.0 2011 East,,
+Clyde North,Wind,108.1 2012 Scotland,,
+Clyde South,Wind,128.8 2011 Scotland,,
+Scottish Power: Hydro schemes - Cruachan Cruachan,Pumped storage,440.0 1966 Scotland,,
+Scottish Power: Hydro schemes - Galloway Tongland,Hydro,33.0 1935 Scotland,,
+Scottish Power: Thermal Blackburn,CCGT,59.0 2011 North West,,
+Damhead Creek,CCGT,805.0 2000 South East,,
+Rye House,CCGT,715.0 1993 East,,
+Shoreham,CCGT,420.0 2000 South East,,
+Pilkington - Greengate *,Gas,10.0 1998 North West,,
+Scottish Power: Wind Arecleoch,Wind,120.0 2010 Scotland,,
+Beinn an Tuirc 2,Wind,43.7 2012 Scotland,,
+Black Law,Wind,124.2 2005 Scotland,,
+Black Law 2,Wind,55.4 2017 Scotland,,
+Harestanes,Wind,136.0 2013 Scotland,,
+Mark Hill,Wind,56.0 2011 Scotland,,
+Penryddian & Llidiartywaun,Wind,30.6 1992 Wales,,
+Whitelee,Wind,322.0 2007 Scotland,,
+Whitelee 2,Wind,217.0 2012 Scotland,,
+"",,Installed Year of commission Location
+"Scotland, Wales, Company Name Station Name",Fuel,Capacity or year generation Northern Ireland or
+"",,(MW) began English region
+Seabank Power Limited Seabank 1,CCGT,812.0 1998 South West
+Seabank 2,CCGT,410.0 2000 South West
+Sembcorp Utilities (UK) Ltd Wilton 10,Biomass,38.0 2007 North East
+Wilton GT1 *,Gas,42.0 1952 North East
+Wilton GT2,Gas,42.0 2005 North East
+SIMEC Uskmouth Power,Coal,230.0 1966 Wales
+South East London Combined Heat & Power Ltd SELCHP ERF *,Waste,32.0 1994 London
+Statkraft Energy Ltd Rheidol,Hydro,56.0 1961 Wales
+Statkraft Wind UK Ltd Andershaw,Wind,36.3 2016 Scotland
+Baillie,Wind,52.5 2013 Scotland
+Berry Burn,Wind,66.7 2013 Scotland
+Dudgeon BMU 2,Wind,90.0 2017 England
+Dudgeon BMU 3,Wind,102.0 2017 England
+Sheringham Shoal BMU 1 & 2,Wind,316.0 2012 England
+Third Energy Trading Ltd (Formerly RGS) Knapton,Gas,40.0 1994 Yorkshire and the Humber
+Uniper UK Limited Connahs Quay,CCGT,"1,380.0 1996 Wales"
+Cottam Development Centre,CCGT,395.0 1999 East Midlands
+Enfield,CCGT,408.0 1999 London
+Grain CHP *,CCGT,"1,404.0 2010 South East"
+Ratcliffe,Coal,"2,000.0 1968 East Midlands"
+Grain GT,Gas oil,56.0 1978 South East
+Ratcliffe GT,Gas oil,34.0 1966 East Midlands
+Taylor's Lane GT,Gas oil,144.0 1979 London
+Killingholme,OCGT,600.0 1993 Yorkshire and the Humber
+Vattenfall Wind Power Clashindarroch,Wind,36.9 2015 Scotland
+Edinbane,Wind,41.0 2010 Scotland
+Pen y Cymoedd,Wind,228.0 2016 Wales
+Ray,Wind,54.4 2017 England
+Kentish Flats,Wind (offshore),90.0 2005 South East
+Kentish Flats Extension,Wind (offshore),49.5 2015 South East
+Ormonde,Wind (offshore),150.0 2011 North West
+Thanet,Wind (offshore),300.0 2010 South East
+Viridor Waste Management Ardley EfW,Waste,26.0 2014 South East
+Bolton EfW,Waste,8.0 1971 North West
+Cardiff EfW,Waste,30.0 2014 South Wales
+Exeter EfW,Waste,3.5 2014 South West
+Lakeside EfW,Waste,37.0 2010 South West
+Peterborough EfW,Waste,7.3 2016 East Midlands
+Runcorn EfW,Waste,81.0 2014 North West
+VPI Immingham LLP VPI Immingham *,Gas,"1,240.0 2004 Yorkshire and the Humber"
+Wind Prospect Corriegarth,Wind,69.0 2017 Scotland
+Wind Prospect Scout Moor,Wind,65.0 2009 North West
+XceCo Ltd Inner Dowsing,Wind (offshore),97.0 2009 East Midlands
+Lynn,Wind (offshore),97.0 2009 East Midlands
+Total,,"74,373"
+For footnotes see page 150,,
+Other power stations,,
+Renewable sources and combustible wastes,Other MPP wind onshore,"2,115"
+"",Other MPP wind offshore,532
+"",Other generators wind,"3,388"
+"",Other generators landfill gas,"1,062"
+"",Other generators sewage gas,257
+"",Other generators biomass and waste,"1,738"
+"",Other MPP hydro,545
+"",Other generators hydro,206
+"",Other MPP Solar,"1,911"
+"",Other generators solar photovoltaics,
+"",and wave/tidal,"9,544"
