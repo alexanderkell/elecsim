@@ -6,8 +6,9 @@ Feature: # Test for Estimate costs. Takes a construction date, plant type and ca
 from unittest import TestCase
 
 from pytest import approx
-
-from elecsim.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator
+import matplotlib.pyplot as plt
+import seaborn as sns
+from elecsim.plants.plant_costs.estimate_costs.estimate_costs import _select_cost_estimator, create_power_plant_group
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
 
 __author__ = "Alexander Kell"
@@ -36,3 +37,6 @@ class TestEstimateCosts(TestCase):
         assert FuelPlant(name="Test", plant_type="CCGT", construction_year=2011, capacity_mw=1200,
                          **params_2011).calculate_lcoe(0.1) == approx(114.61207558392651)
 
+    def test_select_power_plant_group(self):
+        val = create_power_plant_group("group", 20000, 2019, "PV")
+        assert val == 15400000400

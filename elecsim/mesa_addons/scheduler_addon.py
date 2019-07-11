@@ -8,7 +8,7 @@ logging.getLogger(__name__)
 
 from elecsim.agents.generation_company.gen_co import GenCo
 from elecsim.agents.demand.demand import Demand
-from elecsim.market.electricity.power_exchange import PowerExchange
+from elecsim.market.electricity.market.power_exchange import PowerExchange
 
 class OrderedActivation(BaseScheduler):
     """ A scheduler which activates each agent in the order that they are added to the scheduler
@@ -24,10 +24,10 @@ class OrderedActivation(BaseScheduler):
         shuffle(gen_cos)
 
         demand_agents = [agent for agent in self.agents if isinstance(agent, Demand)]
-        power_exchange = [agent for agent in self.agents if isinstance(agent, PowerExchange)]
+        # power_exchange = [agent for agent in self.agents if isinstance(agent, PowerExchange)]
 
-        logging.info("Stepping agents")
-        for agent in chain(power_exchange, gen_cos, demand_agents):
+        # logging.info("Stepping agents")
+        for agent in chain(gen_cos, demand_agents):
             agent.step()
         self.steps += 1
         self.time += 1

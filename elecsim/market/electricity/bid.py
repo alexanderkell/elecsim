@@ -27,6 +27,7 @@ class Bid:
         self.capacity_bid = capacity_bid
         self.price_per_mwh = price_per_mwh
         self.year_of_bid = year_of_bid
+        self.price_bid = price_per_mwh
 
         self.bid_accepted = False
         self.bid_rejected = False
@@ -38,7 +39,7 @@ class Bid:
         :return: None
         """
         self.plant.capacity_fulfilled[segment_hour] = 0
-        self.bid_rejected=True
+        self.bid_rejected = True
 
     def accept_bid(self, segment_hour):
         """
@@ -62,10 +63,18 @@ class Bid:
         # Update capacity of plant once bid is partly accepted
         self.plant.capacity_fulfilled[segment_hour] = demand_fulfilled
         self.partly_accepted = True
+        self.plant.accepted_bids.append(self)
 
         # Update price based on electricity capacity sold on partly accepted bid
         # self.price_per_mwh = ((self.plant.down_payment / self.plant.lifetime + self.plant.ann_cost + self.plant.operating_cost) / (demand_fulfilled * self.segment_hours)) * 1.1
         # self.price_per_mwh = self.plant.calculate_lcoe(self.gen_co.difference_in_discount_rate)
 
     def __str__(self):
-        return "Plant type: " + self.plant.plant_type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Plant: " + self.plant.__repr__()
+        return "Plant type: " + self.plant.plant_type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Price Bid: "+str(self.price_bid)+", Plant: " + self.plant.__repr__()
+
+    def to_dict(self):
+        return {
+            'plant_type': self.plant.plant_type,
+            'segment_hours': self.segment_hours,
+            'capacity_bid': self.capacity_bid
+        }

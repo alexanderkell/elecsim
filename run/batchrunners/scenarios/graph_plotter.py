@@ -7,7 +7,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from elecsim.constants import ROOT_DIR
+# from elecsim.constants import ROOT_DIR
+ROOT_DIR = '/Users/b1017579/Documents/PhD/Projects/10. ELECSIM'
 
 logger = logging.getLogger(__name__)
 """
@@ -75,7 +76,7 @@ def variance_plots(folder, folder_to_save):
         scenario_results['Unnamed: 0'] += 2013
         scenario_results['Carbon_tax'] = scenario_results['Carbon_tax'].shift(6)
         scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']] = scenario_results[['CCGT','Coal','Onshore','Offshore','PV','Nuclear','Recip. Gas']].iloc[6:]
-        scenario_results['scen_error'] = [scenario]*len(scenario_results)
+        scenario_results['scenario'] = [scenario]*len(scenario_results)
         scenario_results['total'] = scenario_results.iloc[:,1:8].sum(axis=1)
         scenario_results.iloc[:,1:8] = scenario_results.iloc[:,1:8].div(scenario_results.total/100, axis=0)
 
@@ -110,21 +111,18 @@ def variance_plots(folder, folder_to_save):
         plt.ylabel('Share of Energy Mix (%)')
         ax2 = plt.twinx()
         sns.lineplot(x="Unnamed: 0", y="Carbon_tax", data=group, color="black", ax=ax2, linewidth=3, label="Carbon Price")
-        ax2.set_ylim(-10,200)
+        plot.set_ylim(0, 100)
+        ax2.set_ylim(-10, 200)
         ax2.set_ylabel("Carbon Tax (£/tonne)")
-
-
 
         h1, l1 = plot.get_legend_handles_labels()
         h2, l2 = ax2.get_legend_handles_labels()
         box = ax2.get_position()
-        ax2.set_position([box.x0, box.y0,box.width, box.height * 0.9])
-        if (name == "demand099-carbon10-datetime") or (name =='demand099-carbon70-datetime'):
-
+        ax2.set_position([box.x0, box.y0, box.width, box.height * 0.9])
+        # if (name == "demand099-carbon10-datetime") or (name =='demand099-carbon70-datetime'):
+        if (name == "demand099-carbon18-datetime") or (name == 'demand099-carbon10-datetime'):
             # ax2.set_position([box.x0, box.y0,box.width, box.height * 0.9])
-
-            ax2.legend(h1+h2, l1+l2, loc='upper center', bbox_to_anchor=(0.5, 1.2),fancybox=True, shadow=True, ncol=5, fontsize=17.5)
-
+            ax2.legend(h1 + h2, l1 + l2, loc='upper center', bbox_to_anchor=(0.5, 1.3), fancybox=True, shadow=True, ncol=3, fontsize=25)
 
         else:
             ax2.get_legend().remove()
@@ -136,7 +134,7 @@ def variance_plots(folder, folder_to_save):
         plt.rcParams.update({'font.size': 25})
         figure = plot.get_figure()
         # plt.show()
-        figure.savefig('{}/{}.png'.format(publishable,name))
+        figure.savefig('{}/{}.png'.format(publishable, name))
         plt.close('all')
 
 
@@ -164,8 +162,10 @@ def if_no_directory_create(directory):
 
 if __name__ == '__main__':
     # single_plots("fourth_run_8_iterations_lower_taxes_no_max_investment_2018", "fourth_run_8_iterations_lower_taxes_no_max_investment_2018")
-    # variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
+    variance_plots('fourth_run_8_iterations_lower_taxes_no_max_investment_2018','first_variance_results')
     # single_plots("None", "first_rl_results")
-    single_plots('scottish_NI','scottish_NI_1')
+    # single_plots('scottish_NI','scottish_NI_1')
 
 
+# fourth_run_8_iterations_lower_taxes_no_max_investment_2018
+# /Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/batchrunners/scenarios/run/batchrunners/scenarios/data/fourth_run_8_iterations_lower_taxes_no_max_investment_2018

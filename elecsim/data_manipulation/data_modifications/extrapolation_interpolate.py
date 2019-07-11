@@ -1,5 +1,5 @@
 from scipy.interpolate import interp1d
-
+from functools import lru_cache
 
 class ExtrapolateInterpolate:
 
