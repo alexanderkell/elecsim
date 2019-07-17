@@ -59,7 +59,7 @@ class GenCo(Agent):
         logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        if self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3:
+        if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3:
             continue_investing = self.invest()
             if continue_investing == 1:
                 self.model.continue_investing += continue_investing
@@ -145,6 +145,15 @@ class GenCo(Agent):
 
 
     def invest(self):
+        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
+            self._invest_by_RL()
+        else:
+            self.invest_by_npv()
+
+    def _invest_by_RL(self):
+        pass
+
+    def _invest_by_npv(self):
         lowest_upfront_cost = 0
         down_payment = 0
         counter = 0
