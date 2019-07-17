@@ -145,15 +145,7 @@ class GenCo(Agent):
 
 
     def invest(self):
-        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
-            self._invest_by_RL()
-        else:
-            self.invest_by_npv()
 
-    def _invest_by_RL(self):
-        pass
-
-    def _invest_by_npv(self):
         lowest_upfront_cost = 0
         down_payment = 0
         counter = 0
