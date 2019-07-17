@@ -462,18 +462,18 @@ class World(Model):
             self.carbon_scenario_name = "none"
 
     def write_scenario_data(self):
-        # if self.step_number == self.max_number_of_steps:
-        parent_directory = os.path.dirname(os.getcwd())
+        if self.step_number == self.max_number_of_steps:
+            parent_directory = os.path.dirname(os.getcwd())
 
-        directory = "{}/{}/".format(parent_directory, self.data_folder)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        self.datacollector.get_model_vars_dataframe().to_csv(
-            "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
-                                                                        self.carbon_scenario_name,
-                                                                        dt.datetime.now().strftime(
-                                                                            '%Y-%m-%d_%H-%M-%S'),
-                                                                        elecsim.scenario.scenario_data.segment_demand_diff[-1]))
+            directory = "{}/{}/".format(parent_directory, self.data_folder)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            self.datacollector.get_model_vars_dataframe().to_csv(
+                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
+                                                                            self.carbon_scenario_name,
+                                                                            dt.datetime.now().strftime(
+                                                                                '%Y-%m-%d_%H-%M-%S'),
+                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]))
 
         if self.step_number == self.max_number_of_steps:
             end = perf_counter()
