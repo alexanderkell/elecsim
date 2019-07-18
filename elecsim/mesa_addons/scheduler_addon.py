@@ -42,8 +42,8 @@ class OrderedActivation(BaseScheduler):
 
 
 
-        for agent in chain(gen_cos, demand_agents):
-            agent.step()
+        # for agent in chain(gen_cos, demand_agents):
+        #     agent.step()
 
         reward = {}
         for genco in self.model.get_gencos():
@@ -53,7 +53,4 @@ class OrderedActivation(BaseScheduler):
 
         self.steps += 1
         self.time += 1
-        try:
-            return obs
-        except:
-            pass
+
