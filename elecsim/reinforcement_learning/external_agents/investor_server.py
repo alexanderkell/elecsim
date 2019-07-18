@@ -31,6 +31,7 @@ from ray.rllib.env.external_multi_agent_env import ExternalMultiAgentEnv
 from ray.rllib.utils.policy_server import PolicyServer
 from ray.tune.logger import pretty_print
 from ray.tune.registry import register_env
+from gym.spaces import Tuple, Box, MultiDiscrete
 from ray import tune
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -42,9 +43,18 @@ CHECKPOINT_FILE = "last_checkpoint.out"
 class MarketServing(ExternalMultiAgentEnv):
 
     def __init__(self):
+
+        lower_bounds = [-1000]*30
+        lower_bounds.extend([-9999999999999])
+
+        upper_bounds = [10000]*30
+        upper_bounds.extend([9999999999999])
+
         ExternalMultiAgentEnv.__init__(
-            self, FooEnv.action_space,
-            FooEnv.observation_space)
+            self, MultiDiscrete([19,1000]),
+            # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
+            Box(np.array(lower_bounds), np.array(upper_bounds))
+        )
 
     def run(self):
         print("Starting policy server at {}:{}".format(SERVER_ADDRESS,
