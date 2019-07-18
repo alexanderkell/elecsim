@@ -78,7 +78,7 @@ if __name__ == "__main__":
             "evaluation_num_episodes": 1,
             "sample_batch_size": 100,
             "train_batch_size": 100,
-            "horizon": 40,
+            # "horizon": 40,
         })
 
     # Attempt to restore from checkpoint if possible.
