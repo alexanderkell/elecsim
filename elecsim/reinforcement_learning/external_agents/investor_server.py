@@ -76,7 +76,9 @@ if __name__ == "__main__":
             # Use a single process to avoid needing to set up a load balancer
             "num_workers": 0,
             "evaluation_num_episodes": 1,
-            "sample_batch_size": 78,
+            "sample_batch_size": 100,
+            "train_batch_size": 100,
+            "horizon": 40,
         })
 
     # Attempt to restore from checkpoint if possible.
