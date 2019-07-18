@@ -63,14 +63,9 @@ class LatestMarketData:
             next_value = self.fit_exponential_function(regression, years_to_look_back, years_to_look_forward)
         return next_value
 
-
-
     # def agent_forecast_demand(self, years_to_look_back, years_to_predict_forward):
     #     years_for_regression = list(range(self.model.step_number-years_to_look_back-1, self.model.step_number-1))
     #     scenario.yearly_demand_change
-
-
-
 
     @staticmethod
     def _get_variable_data(values_required):
@@ -127,3 +122,29 @@ class LatestMarketData:
             return self.agent_forecast_value("demand", years_to_look_back, years_to_look_forward, demand_linear=True)
 
         return exponential_func(np.array(years_to_look_forward), *popt)
+
+    def get_RL_investment_observations(self):
+
+        years_for_regression = list(range(self.model.years_from_start-5-1, self.model.years_from_start-1))
+
+        historical_co2 = self._get_yearly_change_for_regression(self._get_variable_data("co2"), years_for_regression)
+        historical_coal = self._get_yearly_change_for_regression(self._get_variable_data("coal"), years_for_regression)
+        historical_gas = self._get_yearly_change_for_regression(self._get_variable_data("gas"), years_for_regression)
+        historical_uraniaum = self._get_yearly_change_for_regression(self._get_variable_data("uranium"), years_for_regression)
+        historical_diesel = self._get_yearly_change_for_regression(self._get_variable_data("diesel"), years_for_regression)
+        historical_demand = self._get_yearly_change_for_regression(self._get_variable_data("demand"), years_for_regression)
+
+        # historical_coal = self._get_variable_data("coal")
+        # historical_gas = self._get_variable_data("gas")
+        # historical_uraniaum = self._get_variable_data("uranium")
+        # historical_diesel = self._get_variable_data("diesel")
+        # historical_demand = self._get_variable_data("demand")
+
+        obs = {genco.name: np.hstack([historical_co2, historical_coal, historical_gas, historical_uraniaum, historical_diesel, historical_demand, genco.money]).reshape(31,) for genco in self.model.get_gencos()}
+
+        return obs
+
+
+
+
+

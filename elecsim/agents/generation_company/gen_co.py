@@ -143,7 +143,6 @@ class GenCo(Agent):
         return price
 
 
-
     def invest(self):
 
         lowest_upfront_cost = 0
@@ -215,6 +214,17 @@ class GenCo(Agent):
                     # self.model.last_added_plant_bids = bids
                     break
 
+
+    def invest_RL(self, action):
+        plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
+
+        plant_string_to_invest = plant_list[action.item(0)]
+
+        plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.match(plant_string_to_invest)]
+
+        plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], action.item(1))
+
+        self.plants.append(plant_group)
 
 
     def dismantle_old_plants(self):

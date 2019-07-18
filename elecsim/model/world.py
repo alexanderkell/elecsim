@@ -12,6 +12,8 @@ from mesa import Model
 from mesa.datacollection import DataCollector
 import pickle
 
+from ray.rllib.utils.policy_client import PolicyClient
+
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
 from elecsim.agents.demand.demand import Demand
@@ -23,6 +25,7 @@ from elecsim.mesa_addons.scheduler_addon import OrderedActivation
 from elecsim.plants.plant_costs.estimate_costs.estimate_costs import create_power_plant
 from elecsim.plants.plant_type.fuel_plant import FuelPlant
 import elecsim.data_manipulation.data_modifications.scenario_modifier as scen_mod
+from elecsim.role.market.latest_market_data import LatestMarketData
 
 import elecsim.scenario.scenario_data
 
@@ -110,6 +113,11 @@ class World(Model):
         self.unique_id_generator += 1
         self.schedule.add(self.demand)
         self.create_data_loggers(data_folder)
+
+        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
+            self.client = PolicyClient("http://localhost:9900")
+            self.eid = self.client.start_episode(training_enabled=True)
+            self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
@@ -497,3 +505,4 @@ class World(Model):
                                                                     elecsim.scenario.scenario_data.carbon_price_scenario[
                                                                         0],
                                                                     elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
+

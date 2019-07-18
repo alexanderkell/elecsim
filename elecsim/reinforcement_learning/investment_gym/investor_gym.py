@@ -10,13 +10,13 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
-from gym.spaces import Tuple, Box
+from gym.spaces import Tuple, Box, MultiDiscrete
 
 import numpy as np
 
 class InvestorGym(MultiAgentEnv):
 
-    action_space = Box(low=-1, high=1000, shape=(1,), dtype=np.float)
+    action_space = MultiDiscrete([19,1000])
     observation_space = Box(low=-1, high=1000, shape=(1,), dtype=np.float)
 
     def __init__(self, gen_cos):
