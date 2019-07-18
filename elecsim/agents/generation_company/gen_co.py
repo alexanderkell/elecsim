@@ -288,7 +288,7 @@ class GenCo(Agent):
             cashflow = income - short_run_marginal_expenditure*percentage_of_time_of_year - fixed_variable_costs*percentage_of_time_of_year + capital_loan_expenditure*percentage_of_time_of_year
             net_income += cashflow
         # logger.debug("income: {}, outflow: {}".format(income, short_run_marginal_expenditure/percentage_of_time_of_year - fixed_variable_costs/percentage_of_time_of_year + capital_loan_expenditure/percentage_of_time_of_year))
-        logger.info("cashflow: {} for {}".format(net_income, self.name))
+        logger.debug("cashflow: {} for {}".format(net_income, self.name))
         if not math.isnan(net_income):
             self.money += net_income
 

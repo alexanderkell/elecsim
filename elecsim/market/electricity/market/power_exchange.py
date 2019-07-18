@@ -63,7 +63,7 @@ class PowerExchange:
             sorted_bids = self._sort_bids(bids)
             if predict is False:
 
-                logger.info("bids len: {}".format(len(sorted_bids)))
+                logger.debug("bids len: {}".format(len(sorted_bids)))
                 # logger.info("total capacity of bids: {}".format(sum(bid.capacity_bid for bid in sorted_bids)))
 
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
@@ -80,7 +80,7 @@ class PowerExchange:
             logger.debug("predicted self.price_duration_curve: \n{}".format(self.price_duration_curve))
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
-            logger.info("actual self.price_duration_curve: \n{}".format(self.price_duration_curve))
+            logger.debug("actual self.price_duration_curve: \n{}".format(self.price_duration_curve))
 
         return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
 
