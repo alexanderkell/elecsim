@@ -40,9 +40,20 @@ class OrderedActivation(BaseScheduler):
 
                 reward[gen_co_name] = gen_co_to_invest.money
 
-            self.model.client.log_returns(self.model.eid, reward=reward, info={})
+
 
         for agent in chain(gen_cos, demand_agents):
             agent.step()
+
+        reward = {}
+        for genco in self.model.get_gencos():
+            reward[genco.name] = genco.money
+
+        self.model.client.log_returns(self.model.eid, reward=reward, info={})
+
         self.steps += 1
         self.time += 1
+        try:
+            return obs
+        except:
+            pass

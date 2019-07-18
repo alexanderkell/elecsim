@@ -135,7 +135,7 @@ class World(Model):
             else:
                 print("{}:".format(self.year_number), end='', flush=True)
 
-        self.schedule.step()
+        obs = self.schedule.step()
         self.continue_investing = 0
         if carbon_price is not None:
             elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price
@@ -168,6 +168,8 @@ class World(Model):
             print("time taken: {}".format(end-self.start))
             # get_capacity_factor.cache_clear()
 
+        if self.step_number == self.max_number_of_steps:
+            self.client.end_episode(self.eid, observation=obs)
 
         return (-abs(self.average_electricity_price), -abs(carbon_emitted))
         # return (-abs(self.average_electricity_price) + -abs(self.get_carbon_emitted(self)))
