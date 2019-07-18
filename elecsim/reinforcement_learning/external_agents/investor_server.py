@@ -45,10 +45,10 @@ class MarketServing(ExternalMultiAgentEnv):
     def __init__(self):
 
         lower_bounds = [-1000]*30
-        lower_bounds.extend([-9999999999999])
+        lower_bounds.extend([-99999999999999999999999999])
 
         upper_bounds = [10000]*30
-        upper_bounds.extend([9999999999999])
+        upper_bounds.extend([99999999999999999999999999])
 
         ExternalMultiAgentEnv.__init__(
             self, MultiDiscrete([19,1000]),
@@ -75,18 +75,8 @@ if __name__ == "__main__":
         config={
             # Use a single process to avoid needing to set up a load balancer
             "num_workers": 0,
-            # "multiagent": {
-            #     # "grouping":
-            #     #     grouping,
-            #     "policies": {
-            #         # the first tuple value is None -> uses default policy
-            #         "function_1": (None, obs_space_1, action_space_1, {}),
-            #         "function_2": (None, obs_space_2, action_space_2, {})
-            #     },
-            #     "policy_mapping_fn":
-            #         # tune.function(lambda agent_id: "agent_{}".format(agent_id+1)),
-            #         tune.function(lambda agent_id: "function_1" if agent_id == "group_1" else "function_2"),
-            # },
+            "evaluation_num_episodes": 1,
+            "sample_batch_size": 78,
         })
 
     # Attempt to restore from checkpoint if possible.
