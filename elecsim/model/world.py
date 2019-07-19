@@ -142,19 +142,19 @@ class World(Model):
         else:
             elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
 
-        # if self.beginning_of_year:
-        #     self.dismantle_old_plants()
-        #     self.dismantle_unprofitable_plants()
-        #
-        # self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
-        # self.PowerExchange.price_duration_curve = []
-        #
+        if self.beginning_of_year:
+            self.dismantle_old_plants()
+            self.dismantle_unprofitable_plants()
+
+        self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.PowerExchange.price_duration_curve = []
+
         carbon_emitted = self.get_carbon_emitted(self)
-        # self.settle_gencos_financials()
-        #
-        # self.datacollector.collect(self)
-        # self.delete_old_bids()
-        #
+        self.settle_gencos_financials()
+
+        self.datacollector.collect(self)
+        self.delete_old_bids()
+
         self.step_number += 1
         print(".", end='', flush=True)
 

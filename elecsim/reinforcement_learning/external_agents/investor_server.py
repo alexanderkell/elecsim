@@ -51,7 +51,7 @@ class MarketServing(ExternalMultiAgentEnv):
         upper_bounds.extend([99999999999999999999999999])
 
         ExternalMultiAgentEnv.__init__(
-            self, MultiDiscrete([19,1000]),
+            self, MultiDiscrete([19, 10]),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
         )
@@ -76,8 +76,8 @@ if __name__ == "__main__":
             # Use a single process to avoid needing to set up a load balancer
             "num_workers": 0,
             "evaluation_num_episodes": 1,
-            "sample_batch_size": 100,
-            "train_batch_size": 100,
+            "sample_batch_size": 40,
+            "train_batch_size": 40,
             # "horizon": 40,
         })
 
