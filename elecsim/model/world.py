@@ -146,14 +146,14 @@ class World(Model):
             self.dismantle_old_plants()
             self.dismantle_unprofitable_plants()
 
-        # self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
-        # self.PowerExchange.price_duration_curve = []
-        #
-        # carbon_emitted = self.get_carbon_emitted(self)
-        # self.settle_gencos_financials()
-        #
-        # self.datacollector.collect(self)
-        # self.delete_old_bids()
+        self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        self.PowerExchange.price_duration_curve = []
+
+        carbon_emitted = self.get_carbon_emitted(self)
+        self.settle_gencos_financials()
+
+        self.datacollector.collect(self)
+        self.delete_old_bids()
 
         self.step_number += 1
         print(".", end='', flush=True)
