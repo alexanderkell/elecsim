@@ -24,14 +24,15 @@ from gym.spaces import Tuple, Box
 import numpy as np
 
 import ray
-# from ray.rllib.agents.dqn import DQNTrainer
+from ray.rllib.agents.dqn import DQNTrainer
+from ray.rllib.agents.ppo import PPOTrainer
 from ray.rllib.agents.pg import PGTrainer
 # from ray.rllib.env.external_env import ExternalEnv
 from ray.rllib.env.external_multi_agent_env import ExternalMultiAgentEnv
 from ray.rllib.utils.policy_server import PolicyServer
 from ray.tune.logger import pretty_print
 from ray.tune.registry import register_env
-from gym.spaces import Tuple, Box, MultiDiscrete
+from gym.spaces import Tuple, Box, MultiDiscrete, Discrete
 from ray import tune
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -51,7 +52,9 @@ class MarketServing(ExternalMultiAgentEnv):
         upper_bounds.extend([99999999999999999999999999])
 
         ExternalMultiAgentEnv.__init__(
-            self, MultiDiscrete([19, 10]),
+            self,
+            MultiDiscrete([19, 10]),
+            # Discrete(29, shape=(1, 2)),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
         )
@@ -76,8 +79,8 @@ if __name__ == "__main__":
             # Use a single process to avoid needing to set up a load balancer
             "num_workers": 0,
             "evaluation_num_episodes": 1,
-            "sample_batch_size": 40,
-            "train_batch_size": 40,
+            # "sample_batch_size": 40,
+            # "train_batch_size": 40,
             # "horizon": 40,
         })
 

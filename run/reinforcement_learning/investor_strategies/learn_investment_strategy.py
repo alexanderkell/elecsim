@@ -9,7 +9,10 @@ import tracemalloc
 import pandas as pd
 import linecache
 
+# from multiprocessing import Pool, Process
 import logging
+import ray
+import psutil
 
 try:
     # Capirca uses Google's abseil-py library, which uses a Google-specific
@@ -44,47 +47,26 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-pd.set_option('display.max_rows', 4000)
-
 logging.basicConfig(level=logging.INFO)
 
-#
-# def display_top(snapshot, key_type='lineno', limit=3):
-#     snapshot = snapshot.filter_traces((
-#         tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
-#         tracemalloc.Filter(False, "<unknown>"),
-#     ))
-#     top_stats = snapshot.statistics(key_type)
-#
-#     print("Top %s lines" % limit)
-#     for index, stat in enumerate(top_stats[:limit], 1):
-#         frame = stat.traceback[0]
-#         # replace "/path/to/module/file.py" with "module/file.py"
-#         filename = os.sep.join(frame.filename.split(os.sep)[-2:])
-#         print("#%s: %s:%s: %.1f KiB"
-#               % (index, filename, frame.lineno, stat.size / 1024))
-#         line = linecache.getline(frame.filename, frame.lineno).strip()
-#         if line:
-#             print('    %s' % line)
-#
-#     other = top_stats[limit:]
-#     if other:
-#         size = sum(stat.size for stat in other)
-#         print("%s other: %.1f KiB" % (len(other), size / 1024))
-#     total = sum(stat.size for stat in top_stats)
-#     print("Total allocated size: %.1f KiB" % (total / 1024))
-#
-# class TestWorld:
-    # def test_world_initialization(self):
-
-# with PyCallGraph(output=GraphvizOutput()):
 MARKET_TIME_SPLICES = 8
 YEARS_TO_RUN = 40
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
+num_cpus = psutil.cpu_count(logical=False)
 
-for _ in range(1000):
+print("num_cpus: {}".format(num_cpus))
+ray.init(num_cpus=num_cpus)
+
+
+@ray.remote
+def run_world(num_steps=number_of_steps):
     world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
-    for i in range(number_of_steps):
+    for i in range(num_steps):
         world.step()
 
+results = []
+for j in range(10000):
+    results.append(run_world.remote(number_of_steps))
+
+result_ray = ray.get(results)

@@ -146,14 +146,14 @@ class World(Model):
             self.dismantle_old_plants()
             self.dismantle_unprofitable_plants()
 
-        self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
-        self.PowerExchange.price_duration_curve = []
-
-        carbon_emitted = self.get_carbon_emitted(self)
-        self.settle_gencos_financials()
-
-        self.datacollector.collect(self)
-        self.delete_old_bids()
+        # self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
+        # self.PowerExchange.price_duration_curve = []
+        #
+        # carbon_emitted = self.get_carbon_emitted(self)
+        # self.settle_gencos_financials()
+        #
+        # self.datacollector.collect(self)
+        # self.delete_old_bids()
 
         self.step_number += 1
         print(".", end='', flush=True)
@@ -172,8 +172,7 @@ class World(Model):
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
 
-        return (-abs(self.average_electricity_price), -abs(carbon_emitted))
-        # return (-abs(self.average_electricity_price) + -abs(self.get_carbon_emitted(self)))
+        # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
 
 
     def initialize_gencos(self, financial_data, plant_data):
