@@ -1,7 +1,7 @@
 import os.path
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
 from elecsim.model.world import World
 import tracemalloc

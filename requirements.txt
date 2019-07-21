@@ -37,7 +37,6 @@ google-pasta==0.1.7
 greenlet==0.4.15
 grpcio==1.18.0
 gym==0.13.1
-h5py==2.9.0
 idna==2.8
 imagesize==1.1.0
 ipykernel==5.1.0
@@ -144,7 +143,6 @@ tensorflow-estimator==1.14.0
 termcolor==1.1.0
 terminado==0.8.1
 testpath==0.4.2
-torch==1.1.0.post2
 tornado==4.5.3
 tqdm==4.31.1
 traitlets==4.3.2

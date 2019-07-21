@@ -40,8 +40,6 @@ class OrderedActivation(BaseScheduler):
 
                 reward[gen_co_name] = gen_co_to_invest.money
 
-
-
         for agent in chain(gen_cos, demand_agents):
             agent.step()
 

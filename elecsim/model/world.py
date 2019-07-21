@@ -172,7 +172,7 @@ class World(Model):
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
 
-        # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
+        return (-abs(self.average_electricity_price), -abs(carbon_emitted))
 
 
     def initialize_gencos(self, financial_data, plant_data):
@@ -337,6 +337,7 @@ class World(Model):
         gencos = model.get_gencos()
         plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
         total_capacity = sum(plant.capacity_mw for plant in plants)
+
         return total_capacity
 
 

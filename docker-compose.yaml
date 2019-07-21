@@ -1,0 +1,12 @@
+version: '3'
+services:
+  rllib-client:
+    build:
+      context: .
+      dockerfile: ./docker/rllib-server/Dockerfile
+    ports:
+     - "9900:9900"
+  environment:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
