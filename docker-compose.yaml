@@ -1,12 +1,17 @@
-version: '3'
+version: '3.5'
 services:
-  rllib-client:
+  rllibserver:
     build:
       context: .
+      shm_size: '2gb'
       dockerfile: ./docker/rllib-server/Dockerfile
-    ports:
-     - "9900:9900"
+#    ports:
+#      - "9900:9900"
+#    network_mode: host
+
   environment:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      shm_size: '2gb'
+      dockerfile: ./Dockerfile
+
