@@ -3,15 +3,24 @@ services:
   rllibserver:
     build:
       context: .
-      shm_size: '2gb'
+      shm_size: '128gb'
       dockerfile: ./docker/rllib-server/Dockerfile
-#    ports:
-#      - "9900:9900"
-#    network_mode: host
-
+    volumes:
+      - my-vol:/root/ray_results
   environment:
     build:
       context: .
-      shm_size: '2gb'
-      dockerfile: ./Dockerfile
-
+      shm_size: '128gb'
+      dockerfile: ./docker/rllib-env/Dockerfile
+    volumes:
+      - my-vol:/root/ray_results
+  tensorboard:
+    build:
+      context: .
+      dockerfile: ./docker/tensorboard/Dockerfile
+    ports:
+      - "6006:6006"
+    volumes:
+      - my-vol:/root/ray_results
+volumes:
+  my-vol:

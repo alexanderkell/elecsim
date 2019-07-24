@@ -14,6 +14,8 @@ import logging
 import ray
 import psutil
 
+import time
+
 try:
     # Capirca uses Google's abseil-py library, which uses a Google-specific
     # wrapper for logging. That wrapper will write a warning to sys.stderr if
@@ -56,8 +58,9 @@ number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 num_cpus = psutil.cpu_count(logical=False)
 
 print("num_cpus: {}".format(num_cpus))
-ray.init(num_cpus=num_cpus)
+ray.init(num_cpus=num_cpus, redis_max_memory=100000000000)
 
+time.sleep(20)
 
 @ray.remote
 def run_world(num_steps=number_of_steps):
