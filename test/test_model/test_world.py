@@ -82,6 +82,9 @@ MARKET_TIME_SPLICES = 8
 YEARS_TO_RUN = 40
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
+import time
+time.sleep(20)
+
 for _ in range(1000):
     world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
     for i in range(number_of_steps):

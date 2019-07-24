@@ -12,5 +12,5 @@ ENV NAME World
 
 ENV PYTHONPATH "${PYTHONPATH}:/elecsim"
 
-CMD ["python", "/elecsim/reinforcement_learning/external_agents/investor_server.py"]
+CMD ["python", "-u","/app/elecsim/reinforcement_learning/external_agents/investor_server.py"]
 
