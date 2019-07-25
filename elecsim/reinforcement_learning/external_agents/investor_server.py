@@ -103,11 +103,12 @@ if __name__ == "__main__":
         "my_experiment": {
             "run": "PG",
             "env": "srv",
+            'checkpoint_at_end': True,
+            'checkpoint_freq': 10,
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
                 "evaluation_num_episodes": 1,
-
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
             }
         }
