@@ -3,17 +3,19 @@ services:
   rllibserver:
     build:
       context: .
-      shm_size: '128gb'
+#      shm_size: '128gb'
       dockerfile: ./docker/rllib-server/Dockerfile
     volumes:
       - my-vol:/root/ray_results
+    shm_size: '128gb'
   environment:
     build:
       context: .
-      shm_size: '128gb'
+#      shm_size: '128gb'
       dockerfile: ./docker/rllib-env/Dockerfile
     volumes:
       - my-vol:/root/ray_results
+    shm_size: '128gb'
   tensorboard:
     build:
       context: .
