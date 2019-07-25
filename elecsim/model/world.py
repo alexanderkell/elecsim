@@ -115,7 +115,8 @@ class World(Model):
         self.create_data_loggers(data_folder)
 
         if elecsim.scenario.scenario_data.investment_mechanism == "RL":
-            self.client = PolicyClient("http://rllibserver:9900")
+            # self.client = PolicyClient("http://rllibserver:9900")
+            self.client = PolicyClient("http://localhost:9900")
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
 
