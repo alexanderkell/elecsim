@@ -16,13 +16,13 @@ services:
     volumes:
       - my-vol:/root/ray_results
     shm_size: '128gb'
-  tensorboard:
-    build:
-      context: .
-      dockerfile: ./docker/tensorboard/Dockerfile
-    ports:
-      - "6006:6006"
-    volumes:
-      - my-vol:/root/ray_results
+#  tensorboard:
+#    build:
+#      context: .
+#      dockerfile: ./docker/tensorboard/Dockerfile
+#    ports:
+#      - "6006:6006"
+#    volumes:
+#      - my-vol:/root/ray_results
 volumes:
   my-vol:
