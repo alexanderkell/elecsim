@@ -37,7 +37,8 @@ from ray import tune
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 
-SERVER_ADDRESS = "rllibserver"
+# SERVER_ADDRESS = "rllibserver"
+SERVER_ADDRESS = "localhost"
 SERVER_PORT = 9900
 CHECKPOINT_FILE = "last_checkpoint.out"
 
