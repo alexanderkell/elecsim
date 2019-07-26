@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.10.22)  25 JUL 2019 15:22
+This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.10.22)  26 JUL 2019 10:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -53,14 +53,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--4
 
 [1
 
-] [2] [3] [4] (/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/.texpadtmp/requirements-minimal.aux) ) 
+] [2] [3] (/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/.texpadtmp/requirements-minimal.aux) ) 
 Here is how much of TeX's memory you used:
  218 strings out of 493591
  2948 string characters out of 6143545
- 58754 words of memory out of 5000000
+ 57754 words of memory out of 5000000
  3709 multiletter control sequences out of 15000+600000
  3640 words of font info for 14 fonts, out of 8000000 for 9000
  1347 hyphenation exceptions out of 8191
- 23i,4n,17p,3095b,107s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 23i,4n,17p,2429b,107s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on /Users/b1017579/Documents/PhD/Projects/10. ELECSIM/.texpadtmp/requirements-minimal.pdf (4 pages).
+Output written on /Users/b1017579/Documents/PhD/Projects/10. ELECSIM/.texpadtmp/requirements-minimal.pdf (3 pages).

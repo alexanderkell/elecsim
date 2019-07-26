@@ -15,7 +15,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-investment_mechanism = "RL"
+investment_mechanism = "non-RL"
 potential_plants_to_invest = ['CCGT H Class', 'CCGT F Class', 'CCGT CHP mode', 'Coal - CCS ASC Oxy FOAK', 'Coal - CCS ASC NH3 FOAK', 'Coal - CCS IGCC FOAK', 'Coal - CCS IGCC partial FOAK', 'Coal - CCS ASC Partial FOAK', 'Coal - CCS ASC FOAK', 'Nuclear - PWR FOAK', 'Onshore UK>5MW', 'Offshore R2', 'Offshore R3', 'PV>5MW', 'Recip Gas 2000 hr', 'RECIP GAS 500 hrs', 'Recip Diesel 2000 hr', 'Recip Diesel 500 hrs', 'Recip Diesel 90 hrs']
 
 # # Demand per segment of load duration function
