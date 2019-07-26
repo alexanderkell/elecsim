@@ -55,7 +55,7 @@ MARKET_TIME_SPLICES = 8
 YEARS_TO_RUN = 40
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
-num_cpus = psutil.cpu_count(logical=False)
+num_cpus = psutil.cpu_count(logical=True)
 
 print("num_cpus: {}".format(num_cpus))
 ray.init(num_cpus=num_cpus-1, redis_max_memory=32000000000)
