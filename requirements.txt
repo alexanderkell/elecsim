@@ -68,6 +68,8 @@ MiniSom==2.1.5
 mistune==0.8.4
 more-itertools==6.0.0
 multiprocess==0.70.7
+mysql-connector==2.2.9
+mysql-connector-python-rf==2.2.2
 nbconvert==5.4.1
 nbformat==4.4.0
 networkx==2.2
