@@ -1,4 +1,8 @@
 
+import mysql.connector
+
+import mysql.connector
+from mysql.connector import errorcode
 
 import os.path
 import sys
@@ -12,7 +16,7 @@ import pandas as pd
 import linecache
 
 from elecsim.constants import ROOT_DIR
-
+import string
 from deap import algorithms
 from deap import base
 from deap import benchmarks
@@ -47,6 +51,7 @@ pd.set_option('display.max_rows', 4000)
 
 logging.basicConfig(level=logging.INFO)
 
+
 # creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0))
 # creator.create("Individual", array.array, typecode='d',
 #                fitness=creator.FitnessMin)
@@ -72,66 +77,79 @@ logging.basicConfig(level=logging.INFO)
 #         return [random.randint(a, b) for a, b in zip([low] * size, [up] * size)]
 
 
+config = {
+  'host':'elecsimresults.mysql.database.azure.com',
+  'user':'alexkell@elecsimresults',
+  'password':'b3rz0s4m4dr1dth3h01113s!',
+  'database':'elecsim',
+  'ssl_ca':'{}/database/BaltimoreCyberTrustRoot.crt.pem'.format(project_dir)
+}
+
+
+print('{}run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'.format(project_dir))
+
+
 def eval_world(individual):
-    print(individual)
-    MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 6
-    number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
-
-    scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
-
-    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-
-    for i in range(number_of_steps):
-        results_df = world.step()
-
-    contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
-    contributed_results *= 1/24
-
-    # print("contributed_results: {}".format(contributed_results))
-    contributed_results = contributed_results.rename(columns={'contributed_PV': "contributed_solar"})
-    cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
-
-    # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
-
-    results_wa = contributed_results.apply(lambda x: np.average(x, weights=cluster_size.values)).to_frame()
-
-    results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
-    # print("results_wa: {}".format(results_wa))
-    offshore = results_wa.loc["offshore"].iloc[0]
-    onshore = results_wa.loc["onshore"].iloc[0]
-    # print("offshore: {}".format(offshore))
-    # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
-    results_wa.loc['wind'] = [offshore+onshore]
-    # print("results_wa: {}".format(results_wa))
-
-    electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
-    actual_mix_2018 = electricity_mix[electricity_mix.year == 2018]
-
-
-    actual_mix_2018 = actual_mix_2018.set_index("variable")
-    # print(actual_mix_2018)
-
-    joined = actual_mix_2018[['value']].join(results_wa, how='inner')
+    # MARKET_TIME_SPLICES = 8
+    # YEARS_TO_RUN = 6
+    # number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
+    #
+    # scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
+    #
+    # world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
+    #
+    # for i in range(number_of_steps):
+    #     results_df = world.step()
+    #
+    # contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
+    # contributed_results *= 1/24
+    #
+    # # print("contributed_results: {}".format(contributed_results))
+    # contributed_results = contributed_results.rename(columns={'contributed_PV': "contributed_solar"})
+    # cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
+    #
+    # # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
+    #
+    # results_wa = contributed_results.apply(lambda x: np.average(x, weights=cluster_size.values)).to_frame()
+    #
+    # results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
+    # # print("results_wa: {}".format(results_wa))
+    # offshore = results_wa.loc["offshore"].iloc[0]
+    # onshore = results_wa.loc["onshore"].iloc[0]
+    # # print("offshore: {}".format(offshore))
+    # # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
+    # results_wa.loc['wind'] = [offshore+onshore]
+    # # print("results_wa: {}".format(results_wa))
+    #
+    # electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
+    # actual_mix_2018 = electricity_mix[electricity_mix.year == 2018]
+    #
+    #
+    # actual_mix_2018 = actual_mix_2018.set_index("variable")
+    # # print(actual_mix_2018)
+    #
+    # joined = actual_mix_2018[['value']].join(results_wa, how='inner')
+    # # print("joined: \n{}".format(joined))
+    #
+    # joined = joined.rename(columns={'value':'actual', 0:'simulated'})
+    #
+    # joined = joined.loc[~joined.index.str.contains('biomass')]
+    #
+    # # print("joined: \n{}".format(joined))
+    #
+    # joined['actual_perc'] = joined['actual']/joined['actual'].sum()
+    # joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
+    #
     # print("joined: \n{}".format(joined))
+    #
+    # total_difference_col = joined['actual_perc'] - joined['simulated_perc']
+    # print(total_difference_col)
+    # total_difference = total_difference_col.abs().sum()
+    # print("max_demand : dif: {} :x {}".format(individual, total_difference))
+    # print(total_difference)
+    # return [total_difference]
 
-    joined = joined.rename(columns={'value':'actual', 0:'simulated'})
-
-    joined = joined.loc[~joined.index.str.contains('biomass')]
-
-    # print("joined: \n{}".format(joined))
-
-    joined['actual_perc'] = joined['actual']/joined['actual'].sum()
-    joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
-
-    print("joined: \n{}".format(joined))
-
-    total_difference_col = joined['actual_perc'] - joined['simulated_perc']
-    print(total_difference_col)
-    total_difference = total_difference_col.abs().sum()
-    print("max_demand : dif: {} :x {}".format(individual, total_difference))
-    print(total_difference)
-    return total_difference
+    return [1]
 
 
 # for i in np.linspace(62244, 66326, num=50):
@@ -158,7 +176,7 @@ toolbox.register("map_distributed", futures.map)
 # Structure initializers
 #                         define 'individual' to be an individual
 #                         consisting of 100 'attr_bool' elements ('genes')
-toolbox.register("individual", tools.initCycle, list, (toolbox.attr_m, toolbox.attr_c), 1)
+toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c), 1)
 
 # define the population to be a list of individuals
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -189,7 +207,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=1)
+    pop = toolbox.population(n=300)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -214,7 +232,23 @@ def main():
     g = 0
 
     # Begin the evolution
-    while max(fits) < 100 and g < 1000:
+    while g<10:
+
+        # Connect to MySQL
+        try:
+            conn = mysql.connector.connect(**config)
+            print("Connection established")
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with the user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("Database does not exist")
+            else:
+                print(err)
+        else:
+            cursor = conn.cursor()
+
+
         # A new generation
         g = g + 1
         print("-- Generation %i --" % g)
@@ -271,7 +305,23 @@ def main():
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
 
         progression = np.array([ind.fitness.values + tuple(ind) for ind in pop])
-        np.savetxt('{}run/validation-optimisation/data/generations/generation_{}.csv'.format(project_dir, g), progression, delimiter=",")
+
+        # for ind in progression:
+        #     print("ind: {}".format(ind))
+                # Insert some data into table
+        first_part = 'INSERT INTO validoptimresults (run_number, reward, individual_m, individual_c) VALUES '
+
+        insert_vars = "".join(["({},{},{},{}),\n".format(g, ind.flat[0], ind.flat[1], ind.flat[2]) for ind in progression])
+        insert_cmd = first_part+insert_vars
+        insert_cmd = insert_cmd[:-2]
+        cursor.execute(insert_cmd)
+        # cursor.execute("INSERT INTO validoptimresults (run_number, reward, individual_m, individual_c) VALUES ({},{},{},{})".format(g, ind.flat[0], ind.flat[1], ind.flat[2]))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # np.savetxt('{}/run/validation-optimisation/data/generations/generation_{}.csv'.format(project_dir, g), progression, delimiter=",")
 
     print("-- End of (successful) evolution --")
 
