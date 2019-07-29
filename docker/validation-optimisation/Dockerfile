@@ -11,6 +11,6 @@ WORKDIR /app
 ENV NAME World
 
 ENV PYTHONPATH "${PYTHONPATH}:/elecsim"
-VOLUME [ "my-vol" ]
+#VOLUME [ "my-vol" ]
 
 CMD ["python", "-m", "scoop", "run/validation-optimisation/run_price_fitter_investment/run_GA_price_fitter.py"]

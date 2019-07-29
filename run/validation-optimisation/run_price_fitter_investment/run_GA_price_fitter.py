@@ -75,15 +75,15 @@ logging.basicConfig(level=logging.INFO)
 def eval_world(individual):
     print(individual)
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 1
+    YEARS_TO_RUN = 6
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
 
-    # for i in range(number_of_steps):
-    results_df = world.step()
+    for i in range(number_of_steps):
+        results_df = world.step()
 
     contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
     contributed_results *= 1/24
