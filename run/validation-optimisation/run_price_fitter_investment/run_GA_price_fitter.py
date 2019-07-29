@@ -165,8 +165,8 @@ toolbox = base.Toolbox()
 #                      which corresponds to integers sampled uniformly
 #                      from the range [0,1] (i.e. 0 or 1 with equal
 #                      probability)
-toolbox.register("attr_m", random.uniform, 0.0, 0.01)
-toolbox.register("attr_c", random.uniform, -200, 200)
+toolbox.register("attr_m", random.uniform, 0.0, 0.004)
+toolbox.register("attr_c", random.uniform, -100, 100)
 
 toolbox.register("map_distributed", futures.map)
 # Structure initializers
