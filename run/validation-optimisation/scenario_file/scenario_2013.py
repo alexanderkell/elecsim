@@ -15,7 +15,7 @@ __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
 
-investment_mechanism = "non-RL"
+investment_mechanism = "future_price_fit"
 potential_plants_to_invest = ['CCGT H Class', 'CCGT F Class', 'CCGT CHP mode', 'Coal - CCS ASC Oxy FOAK', 'Coal - CCS ASC NH3 FOAK', 'Coal - CCS IGCC FOAK', 'Coal - CCS IGCC partial FOAK', 'Coal - CCS ASC Partial FOAK', 'Coal - CCS ASC FOAK', 'Nuclear - PWR FOAK', 'Onshore UK>5MW', 'Offshore R2', 'Offshore R3', 'PV>5MW', 'Recip Gas 2000 hr', 'RECIP GAS 500 hrs', 'Recip Diesel 2000 hr', 'Recip Diesel 500 hrs', 'Recip Diesel 90 hrs']
 
 # # Demand per segment of load duration function
@@ -30,6 +30,7 @@ yearly_demand_change = [0.949620, 0.959511, 0.979181, 0.984285, 0.987209, 0.9831
 
 # First year maximum demand size
 initial_max_demand_size = 53400
+# initial_max_demand_size = 120400
 
 
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/4_medoids.csv'.format(ROOT_DIR))
@@ -87,9 +88,12 @@ wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
 # Hydro
 hydro_capacity_factor = 0.456 # http://www.osemosys.org/uploads/1/8/5/0/18504136/hydropower.pdf
+# Nuclear
+nuclear_capacity_factor = 0.92 * 0.826  # https://www.energy.gov/ne/articles/what-generation-capacity and https://pris.iaea.org/PRIS/WorldStatistics/ThreeYrsEnergyAvailabilityFactor.aspx
 
 # Availability factors (from Source: AESO 2017 Annual Market Statistics)
 historical_availability_factor = pd.read_csv('{}/data/processed/availability_factor/historical_availability_factor.csv'.format(ROOT_DIR))
+
 
 # UK Hourly Demand
 historical_hourly_demand = pd.read_csv('{}/data/processed/electricity_demand/uk_all_year_demand.csv'.format(ROOT_DIR))
@@ -103,7 +107,7 @@ load_duration_curve_diff = pd.read_csv('{}/data/processed/load_duration_curve/lo
 # Generator Companies imported from Government data files
 
 # 2013 power plants
-power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/plants_2013/uk_plants_2013.csv'.format(ROOT_DIR), dtype={'Start_date': int})
+power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/plants_2013/uk_plants_2013_revised.csv'.format(ROOT_DIR), dtype={'Start_date': int})
 
 # power_plants = power_plants[:100]
 modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
@@ -118,7 +122,7 @@ historical_fuel_plant_efficiency = pd.read_csv('{}/data/processed/power_plants/p
 
 
 # Company financials
-company_financials = pd.read_csv('{}/data/processed/companies/company_financials_2013.csv'.format(ROOT_DIR))
+company_financials = pd.read_csv('{}/data/processed/companies/company_financials_2013_revised.csv'.format(ROOT_DIR))
 
 # Bid mark-up price
 bid_mark_up = 1.0

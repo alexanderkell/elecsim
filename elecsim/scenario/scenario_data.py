@@ -11,7 +11,7 @@ __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
 
-investment_mechanism = "RL"
+investment_mechanism = "RLNo"
 potential_plants_to_invest = ['CCGT H Class', 'CCGT F Class', 'CCGT CHP mode', 'Coal - CCS ASC Oxy FOAK', 'Coal - CCS ASC NH3 FOAK', 'Coal - CCS IGCC FOAK', 'Coal - CCS IGCC partial FOAK', 'Coal - CCS ASC Partial FOAK', 'Coal - CCS ASC FOAK', 'Nuclear - PWR FOAK', 'Onshore UK>5MW', 'Offshore R2', 'Offshore R3', 'PV>5MW', 'Recip Gas 2000 hr', 'RECIP GAS 500 hrs', 'Recip Diesel 2000 hr', 'Recip Diesel 500 hrs', 'Recip Diesel 90 hrs']
 
 # Demand per segment of load duration function
@@ -83,6 +83,8 @@ wind_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Wind/ninja
 solar_capacity_factor = pd.read_csv('{}/data/processed/capacity_factor/Solar/ninja_pv_country_GB_merra-2_corrected.csv'.format(ROOT_DIR))
 # Hydro
 hydro_capacity_factor = 0.456 # http://www.osemosys.org/uploads/1/8/5/0/18504136/hydropower.pdf
+# Nuclear
+nuclear_capacity_factor = 0.92 * 0.826  # https://www.energy.gov/ne/articles/what-generation-capacity and https://pris.iaea.org/PRIS/WorldStatistics/ThreeYrsEnergyAvailabilityFactor.aspx
 
 # Availability factors (from Source: AESO 2017 Annual Market Statistics)
 historical_availability_factor = pd.read_csv('{}/data/processed/availability_factor/historical_availability_factor.csv'.format(ROOT_DIR))

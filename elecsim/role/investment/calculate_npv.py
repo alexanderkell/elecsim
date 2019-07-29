@@ -35,10 +35,11 @@ __email__ = "alexander@kell.es"
 
 
 class CalculateNPV:
-    def __init__(self, model, difference_in_discount_rate, look_back_years):
+    def __init__(self, model, difference_in_discount_rate, look_back_years, price_curve_parameters = None):
         self.model = model
         self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_years = look_back_years
+        self.price_curve_parameters = price_curve_parameters
 
     def get_positive_npv_plants_list(self):
         npv_rows = self.get_positive_npv_plants()
@@ -76,7 +77,7 @@ class CalculateNPV:
         # Forecast segment prices
 
         forecasted_segment_prices = self._get_price_duration_predictions()
-        # logger.info("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
+        logger.debug("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
 
@@ -127,6 +128,10 @@ class CalculateNPV:
 
         NPVp = divide(npv_power_plant, (power_plant.capacity_mw * total_running_hours))
         return NPVp
+
+
+    def fit_price_curve(self):
+        pass
 
     def _get_yearly_profit_per_mwh(self, power_plant, total_running_hours, yearly_cash_flow):
         yearly_cash_flow_per_mwh = yearly_cash_flow / (total_running_hours * power_plant.capacity_mw)

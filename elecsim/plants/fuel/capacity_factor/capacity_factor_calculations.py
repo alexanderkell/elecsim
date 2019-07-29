@@ -53,6 +53,8 @@ def get_multiple_capacity_data(renewable_type):
         capacity_data = capacity_factor_data[capacity_factor_data.data_type == 'solar']
     elif renewable_type == 'hydro':
         capacity_data = elecsim.scenario.scenario_data.hydro_capacity_factor
+    elif renewable_type == "nuclear":
+        capacity_data = elecsim.scenario.scenario_data.nuclear_capacity_factor
     else:
         raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
     return capacity_data
@@ -65,6 +67,8 @@ def get_capacity_data(renewable_type):
         capacity_data = elecsim.scenario.scenario_data.solar_capacity_factor
     elif renewable_type == 'hydro':
         capacity_data = elecsim.scenario.scenario_data.hydro_capacity_factor
+    elif renewable_type == "nuclear":
+        capacity_data = elecsim.scenario.scenario_data.nuclear_capacity_factor
     else:
         raise ValueError("Calculating demand factor can only be done for Onshore, Offshore or PV power generators.")
     return capacity_data

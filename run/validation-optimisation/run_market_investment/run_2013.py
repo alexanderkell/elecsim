@@ -30,12 +30,12 @@ pd.set_option('display.max_rows', 4000)
 logging.basicConfig(level=logging.INFO)
 
 MARKET_TIME_SPLICES = 8
-YEARS_TO_RUN = 10
+YEARS_TO_RUN = 8
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
-world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps)
+world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[0.002, 0])
 
 for i in range(number_of_steps):
     world.step()
