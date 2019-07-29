@@ -41,35 +41,35 @@ pd.set_option('display.max_rows', 4000)
 
 logging.basicConfig(level=logging.INFO)
 
-creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0))
-creator.create("Individual", array.array, typecode='d',
-               fitness=creator.FitnessMin)
-
-toolbox = base.Toolbox()
-
-# Problem definition
-# Functions zdt1, zdt2, zdt3, zdt6 have bounds [0, 1]
-BOUND_LOW, BOUND_UP = 0.0, 100
-
-# Functions zdt4 has bounds x1 = [0, 1], xn = [-5, 5], with n = 2, ..., 10
-# BOUND_LOW, BOUND_UP = [0.0] + [-5.0]*9, [1.0] + [5.0]*9
-
-# Functions zdt1, zdt2, zdt3 have 30 dimensions, zdt4 and zdt6 have 10
-NDIM = 3 * 12 * 12 + 2
-# NDIM = 3 * 51 + 1
-
-
-def uniform(low, up, size=None):
-    try:
-        return [random.randint(a, b) for a, b in zip(low, up)]
-    except TypeError:
-        return [random.randint(a, b) for a, b in zip([low] * size, [up] * size)]
+# creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0))
+# creator.create("Individual", array.array, typecode='d',
+#                fitness=creator.FitnessMin)
+#
+# toolbox = base.Toolbox()
+#
+# # Problem definition
+# # Functions zdt1, zdt2, zdt3, zdt6 have bounds [0, 1]
+# BOUND_LOW, BOUND_UP = 0.0, 100
+#
+# # Functions zdt4 has bounds x1 = [0, 1], xn = [-5, 5], with n = 2, ..., 10
+# # BOUND_LOW, BOUND_UP = [0.0] + [-5.0]*9, [1.0] + [5.0]*9
+#
+# # Functions zdt1, zdt2, zdt3 have 30 dimensions, zdt4 and zdt6 have 10
+# NDIM = 3 * 12 * 12 + 2
+# # NDIM = 3 * 51 + 1
+#
+#
+# def uniform(low, up, size=None):
+#     try:
+#         return [random.randint(a, b) for a, b in zip(low, up)]
+#     except TypeError:
+#         return [random.randint(a, b) for a, b in zip([low] * size, [up] * size)]
 
 
 def eval_world(individual):
     print(individual)
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 5
+    YEARS_TO_RUN = 6
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
@@ -111,6 +111,8 @@ def eval_world(individual):
 
     joined = joined.rename(columns={'value':'actual', 0:'simulated'})
 
+    joined = joined.loc[~joined.index.str.contains('biomass')]
+
     # print("joined: \n{}".format(joined))
 
     joined['actual_perc'] = joined['actual']/joined['actual'].sum()
@@ -133,7 +135,7 @@ def eval_world(individual):
 
 
 
-creator.create("FitnessMax", base.Fitness, weights=(-1.0,))
+creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
 
 toolbox = base.Toolbox()
@@ -143,13 +145,13 @@ toolbox = base.Toolbox()
 #                      which corresponds to integers sampled uniformly
 #                      from the range [0,1] (i.e. 0 or 1 with equal
 #                      probability)
-toolbox.register("attr_bool", random.uniform, -0.1, 0.1)
+toolbox.register("attr_m", random.uniform, 0.0, 0.01)
+toolbox.register("attr_c", random.uniform, -50, 50)
 
 # Structure initializers
 #                         define 'individual' to be an individual
 #                         consisting of 100 'attr_bool' elements ('genes')
-toolbox.register("individual", tools.initRepeat, creator.Individual,
-    toolbox.attr_bool, 2)
+toolbox.register("individual", tools.initCycle, list, (toolbox.attr_m, toolbox.attr_c), 1)
 
 # define the population to be a list of individuals
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
