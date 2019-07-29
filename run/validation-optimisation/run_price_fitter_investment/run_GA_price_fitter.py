@@ -143,7 +143,7 @@ def eval_world(individual):
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
     # print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
-    print("max_demand : dif: {} :x {}".format(individual, total_difference))
+    # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(total_difference)
     return [total_difference]
 
