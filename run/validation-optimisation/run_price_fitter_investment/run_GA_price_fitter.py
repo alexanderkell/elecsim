@@ -26,6 +26,12 @@ import logging
 logger = logging.getLogger(__name__)
 import numpy as np
 import numpy
+
+from scoop import futures
+
+from pathlib import Path
+project_dir = Path("__file__").resolve().parents[1]
+
 """
 File name: run_GA_price_fitter
 Date created: 26/07/2019
@@ -69,15 +75,15 @@ logging.basicConfig(level=logging.INFO)
 def eval_world(individual):
     print(individual)
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 6
+    YEARS_TO_RUN = 1
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
 
-    for i in range(number_of_steps):
-        results_df = world.step()
+    # for i in range(number_of_steps):
+    results_df = world.step()
 
     contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
     contributed_results *= 1/24
@@ -146,8 +152,9 @@ toolbox = base.Toolbox()
 #                      from the range [0,1] (i.e. 0 or 1 with equal
 #                      probability)
 toolbox.register("attr_m", random.uniform, 0.0, 0.01)
-toolbox.register("attr_c", random.uniform, -50, 50)
+toolbox.register("attr_c", random.uniform, -200, 200)
 
+toolbox.register("map_distributed", futures.map)
 # Structure initializers
 #                         define 'individual' to be an individual
 #                         consisting of 100 'attr_bool' elements ('genes')
@@ -179,11 +186,10 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 #----------
 
 def main():
-    random.seed(64)
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=300)
+    pop = toolbox.population(n=1)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -194,7 +200,8 @@ def main():
     print("Start of evolution")
 
     # Evaluate the entire population
-    fitnesses = list(map(toolbox.evaluate, pop))
+    # fitnesses = list(map(toolbox.evaluate, pop))
+    fitnesses = list(toolbox.map_distributed(toolbox.evaluate, pop))
     for ind, fit in zip(pop, fitnesses):
         ind.fitness.values = fit
 
@@ -215,7 +222,7 @@ def main():
         # Select the next generation individuals
         offspring = toolbox.select(pop, len(pop))
         # Clone the selected individuals
-        offspring = list(map(toolbox.clone, offspring))
+        offspring = list(toolbox.map_distributed(toolbox.clone, offspring))
 
         # Apply crossover and mutation on the offspring
         for child1, child2 in zip(offspring[::2], offspring[1::2]):
@@ -263,6 +270,8 @@ def main():
         best_ind = tools.selBest(pop, 1)[0]
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
 
+        progression = np.array([ind.fitness.values + tuple(ind) for ind in pop])
+        np.savetxt('{}run/validation-optimisation/data/generations/generation_{}.csv'.format(project_dir, g), progression, delimiter=",")
 
     print("-- End of (successful) evolution --")
 
