@@ -63,7 +63,7 @@ class GenCo(Agent):
             continue_investing = self.invest()
             if continue_investing == 1:
                 self.model.continue_investing += continue_investing
-                logger.info(self.model.continue_investing)
+                logger.debug(self.model.continue_investing)
             else:
                 self.model.continue_investing = 0
 
@@ -114,7 +114,7 @@ class GenCo(Agent):
             price = plant.short_run_marginal_cost(self.model, self)
         marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
         if plant.is_operating or future_plant_operating:
-            if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro']:
+            if plant.plant_type in ['Offshore', 'Onshore', 'PV', 'Hydro', "Nuclear"]:
                 capacity_factor, availability = _create_bid_for_capacity_factor_available_plants(
                     self.model.market_time_splices, plant, segment_hour)
                 # logger.info(_create_bid_for_capacity_factor_available_plants.cache_info())
@@ -171,18 +171,6 @@ class GenCo(Agent):
             else:
                 return 1
 
-
-            # for plant_data in potential_plant_data:
-            #     power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
-            #     # logger.info(create_power_plant.cache_info())
-            #     down_payment = power_plant_trial.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs
-            #     if self.money > down_payment:
-            #         # logger.info("investing in {} self.money: {}, down_payment: {}".format(power_plant_trial.plant_type, self.money, down_payment))
-            #         self.plants.append(power_plant_trial)
-            #         self.money -= down_payment
-            #         total_capacity += power_plant_trial.capacity_mw
-            #         break
-
             for plant_data in potential_plant_list:
 
                 # power_plant_trial = create_power_plant("invested_plant", self.model.year_number, plant_data[1], plant_data[0])
@@ -205,13 +193,6 @@ class GenCo(Agent):
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
 
-                    # bids = {}
-                    # for segment_hour in self.model.demand.year_segment_hours:
-                    #     power_plant_trial_group.capacity_fulfilled = dict.fromkeys(self.model.demand.year_segment_hours, 0)
-                    #     bid = self.create_bid(power_plant_trial_group, predict=True, segment_hour=segment_hour, step_number=self.model.step_number)
-                    #     bids[segment_hour] = bid
-                    #
-                    # self.model.last_added_plant_bids = bids
                     break
 
 

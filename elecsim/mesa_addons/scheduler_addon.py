@@ -47,7 +47,8 @@ class OrderedActivation(BaseScheduler):
         for genco in self.model.get_gencos():
             reward[genco.name] = genco.money
 
-        self.model.client.log_returns(self.model.eid, reward=reward, info={})
+        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
+            self.model.client.log_returns(self.model.eid, reward=reward, info={})
 
         self.steps += 1
         self.time += 1

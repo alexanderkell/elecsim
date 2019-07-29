@@ -12,8 +12,6 @@ from mesa import Model
 from mesa.datacollection import DataCollector
 import pickle
 
-from ray.rllib.utils.policy_client import PolicyClient
-
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
 from elecsim.agents.demand.demand import Demand
@@ -48,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, highest_demand=None, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -77,6 +75,7 @@ class World(Model):
 
         self.overwrite_scenario_file(scenario_file)
 
+        self.override_highest_demand(highest_demand)
         self.override_carbon_scenario(carbon_price_scenario)
         self.override_demand_change(demand_change)
 
@@ -116,9 +115,13 @@ class World(Model):
 
         if elecsim.scenario.scenario_data.investment_mechanism == "RL":
             # self.client = PolicyClient("http://rllibserver:9900")
+            from ray.rllib.utils.policy_client import PolicyClient
+
             self.client = PolicyClient("http://localhost:9900")
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
+        elif elecsim.scenario.scenario_data.investment_mechanism == "future_price_fit":
+            self.fitting_params = fitting_params
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
@@ -169,12 +172,12 @@ class World(Model):
             print("time taken: {}".format(end-self.start))
             # get_capacity_factor.cache_clear()
 
-        if self.step_number == self.max_number_of_steps:
+        if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
 
-        return (-abs(self.average_electricity_price), -abs(carbon_emitted))
-
+        # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
+        return self.datacollector.get_model_vars_dataframe()
 
     def initialize_gencos(self, financial_data, plant_data):
         """
@@ -200,10 +203,9 @@ class World(Model):
 
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
-            # if financials.Company.iloc[0] != name:
+            if financials.Company.iloc[0] != name:
+                raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
 
-
-            #     raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
             gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
             self.unique_id_generator += 1
             # Add power plants to generation company portfolio
@@ -458,6 +460,10 @@ class World(Model):
                 "total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
             elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in
                                                                     elecsim.scenario.scenario_data.segment_demand_diff]
+
+    def override_highest_demand(self, highest_demand):
+        if highest_demand:
+            elecsim.scenario.scenario_data.initial_max_demand_size = highest_demand
 
     def override_demand_change(self, demand_change):
         if demand_change:
