@@ -7,6 +7,7 @@ from mysql.connector import errorcode
 import os.path
 import sys
 
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
 from elecsim.model.world import World
@@ -32,9 +33,11 @@ import numpy as np
 import numpy
 
 from scoop import futures
-
+import time
 from pathlib import Path
 project_dir = Path("__file__").resolve().parents[1]
+import string
+import random
 
 """
 File name: run_GA_price_fitter
@@ -77,6 +80,7 @@ logging.basicConfig(level=logging.WARNING)
 #         return [random.randint(a, b) for a, b in zip([low] * size, [up] * size)]
 
 
+
 config = {
   'host':'elecsimresults.mysql.database.azure.com',
   'user':'alexkell@elecsimresults',
@@ -87,17 +91,31 @@ config = {
 
 
 
+
 def eval_world(individual):
+
+    # t0 = time.time()
+    # for i in range(1000):
+    #     pass
+    # t1 = time.time()
+    #
+    # time_taken = t1-t0
+    # return [1], time_taken
+
+
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 6
+    YEARS_TO_RUN = 1
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-
+    t0 = time.time()
     for i in range(number_of_steps):
         results_df = world.step()
+    t1 = time.time()
+
+    time_taken = t1-t0
 
     contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
     contributed_results *= 1/24
@@ -143,9 +161,10 @@ def eval_world(individual):
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
     # print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
-    print("max_demand : dif: {} :x {}".format(individual, total_difference))
-    # print(total_difference)
-    return [total_difference]
+    # print("max_demand : dif: {} :x {}".format(individual, total_difference))
+    # print(joined.simulated)
+    # print("returns: {}, {}, {}".format([total_difference], time_taken, joined.simulated))
+    return [total_difference], time_taken, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
@@ -203,7 +222,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=300)
+    pop = toolbox.population(n=2)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -215,9 +234,15 @@ def main():
 
     # Evaluate the entire population
     # fitnesses = list(map(toolbox.evaluate, pop))
-    fitnesses = list(toolbox.map_distributed(toolbox.evaluate, pop))
-    for ind, fit in zip(pop, fitnesses):
-        ind.fitness.values = fit
+    fitnesses_and_time = list(toolbox.map_distributed(toolbox.evaluate, pop))
+    # fitnesses = [fitness_time[0] for fitness_time in fitnesses_and_time]
+    # print(fitnesses_and_time)
+
+    timing_holder = []
+
+    for ind, fit in zip(pop, fitnesses_and_time):
+        ind.fitness.values = fit[0]
+        timing_holder.append(fit[1])
 
     print("  Evaluated %i individuals" % len(pop))
 
@@ -229,6 +254,8 @@ def main():
 
     # Begin the evolution
     while g<10:
+
+        time_results = {}
 
         # Connect to MySQL
         try:
@@ -273,11 +300,30 @@ def main():
                 toolbox.mutate(mutant)
                 del mutant.fitness.values
 
+        # # fitnesses = list(map(toolbox.evaluate, pop))
+        # fitnesses_and_time = list(toolbox.map_distributed(toolbox.evaluate, pop))
+        # # fitnesses = [fitness_time[0] for fitness_time in fitnesses_and_time]
+        # print(fitnesses_and_time)
+        #
+        # timing_holder = {}
+        #
+        # for ind, fit in zip(pop, fitnesses_and_time):
+        #     ind.fitness.values = fit[0]
+        #     timing_holder[ind[0]] = fit[1]
+
+        timing_holder = []
+        generators_invested = []
+
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        fitnesses = map(toolbox.evaluate, invalid_ind)
+        # fitnesses = map(toolbox.evaluate, invalid_ind)
+        fitnesses = list(toolbox.map_distributed(toolbox.evaluate, invalid_ind))
         for ind, fit in zip(invalid_ind, fitnesses):
-            ind.fitness.values = fit
+            ind.fitness.values = fit[0]
+            timing_holder.append(fit[1])
+            generators_invested.append(fit[2])
+
+        print("fit2: {}".format(fit[2]))
 
         print("  Evaluated %i individuals" % len(invalid_ind))
 
@@ -305,14 +351,14 @@ def main():
         # for ind in progression:
         #     print("ind: {}".format(ind))
                 # Insert some data into table
-        first_part = 'INSERT INTO validoptimresults (run_number, reward, individual_m, individual_c) VALUES '
+        first_part = 'INSERT INTO validoptimresults (run_number, time_taken, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
 
-        insert_vars = "".join(["({},{},{},{}),\n".format(g, ind.flat[0], ind.flat[1], ind.flat[2]) for ind in progression])
+        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{}),\n".format(g, time, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, gen_invested in zip(progression, timing_holder, generators_invested)])
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
-        cursor.execute(insert_cmd)
-        # cursor.execute("INSERT INTO validoptimresults (run_number, reward, individual_m, individual_c) VALUES ({},{},{},{})".format(g, ind.flat[0], ind.flat[1], ind.flat[2]))
 
+        cursor.execute(insert_cmd)
+        # print(insert_cmd)
         conn.commit()
         cursor.close()
         conn.close()
