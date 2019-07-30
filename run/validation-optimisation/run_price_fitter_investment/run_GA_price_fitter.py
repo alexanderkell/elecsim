@@ -222,7 +222,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=150)
+    pop = toolbox.population(n=200)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -253,23 +253,11 @@ def main():
     g = 0
 
     # Begin the evolution
-    while g<10:
+    while g<1000:
 
         time_results = {}
 
-        # Connect to MySQL
-        try:
-            conn = mysql.connector.connect(**config)
-            print("Connection established")
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with the user name or password")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database does not exist")
-            else:
-                print(err)
-        else:
-            cursor = conn.cursor()
+
 
 
         # A new generation
@@ -346,9 +334,26 @@ def main():
 
         progression = np.array([ind.fitness.values + tuple(ind) for ind in pop])
 
+
+
         # for ind in progression:
         #     print("ind: {}".format(ind))
                 # Insert some data into table
+
+                # Connect to MySQL
+        try:
+            conn = mysql.connector.connect(**config)
+            print("Connection established")
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with the user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("Database does not exist")
+            else:
+                print(err)
+        else:
+            cursor = conn.cursor()
+
         first_part = 'INSERT INTO validoptimresults (run_number, time_taken, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
 
         insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{}),\n".format(g, time, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, gen_invested in zip(progression, timing_holder, generators_invested)])
