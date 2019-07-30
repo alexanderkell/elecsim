@@ -360,7 +360,6 @@ def main():
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
 
-        print(insert_cmd)
         cursor.execute(insert_cmd)
         conn.commit()
         cursor.close()
