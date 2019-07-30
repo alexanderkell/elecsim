@@ -323,8 +323,6 @@ def main():
             timing_holder.append(fit[1])
             generators_invested.append(fit[2])
 
-        print("fit2: {}".format(fit[2]))
-
         print("  Evaluated %i individuals" % len(invalid_ind))
 
         # The population is entirely replaced by the offspring
