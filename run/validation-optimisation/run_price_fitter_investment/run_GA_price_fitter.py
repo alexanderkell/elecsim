@@ -104,7 +104,7 @@ def eval_world(individual):
 
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 1
+    YEARS_TO_RUN = 6
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
@@ -222,7 +222,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=2)
+    pop = toolbox.population(n=150)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
