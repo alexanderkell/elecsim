@@ -60,6 +60,7 @@ class GenCo(Agent):
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
         if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3:
+        # if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.continue_investing < 3:
             continue_investing = self.invest()
             if continue_investing == 1:
                 self.model.continue_investing += continue_investing
