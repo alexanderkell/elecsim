@@ -1,5 +1,4 @@
 
-import mysql.connector
 
 import mysql.connector
 from mysql.connector import errorcode
@@ -170,7 +169,7 @@ def eval_world(individual):
 # for i in np.linspace(62244, 66326, num=50):
 #     eval_world(i)
 
-# eval_world(63910)
+# eval_world([0.00147552, 14.268274183850039])
 
 
 
@@ -185,7 +184,7 @@ toolbox = base.Toolbox()
 #                      from the range [0,1] (i.e. 0 or 1 with equal
 #                      probability)
 toolbox.register("attr_m", random.uniform, 0.0, 0.004)
-toolbox.register("attr_c", random.uniform, -100, 100)
+toolbox.register("attr_c", random.uniform, -30, 100)
 
 toolbox.register("map_distributed", futures.map)
 # Structure initializers
@@ -222,7 +221,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=300)
+    pop = toolbox.population(n=100)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -256,9 +255,6 @@ def main():
     while g<1000:
 
         time_results = {}
-
-
-
 
         # A new generation
         g = g + 1
