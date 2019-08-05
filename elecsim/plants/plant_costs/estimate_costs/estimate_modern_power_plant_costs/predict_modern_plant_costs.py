@@ -29,6 +29,7 @@ class PredictModernPlantParameters:
 
         # Import UK power plant cost data
         self.cost_data = elecsim.scenario.scenario_data.modern_plant_costs
+        self.year_data = [int(sub.split(" _")[1]) for sub in self.cost_data.filter(regex="Connect_system_cost-Medium ").columns]
         # self.cost_data = self.cost_data[self.cost_data.Type == self.plant_type].sort_values('Plant_Size')
         self.cost_data = self.cost_data[self.cost_data.apply(lambda x: x['Type'] in self.plant_type, axis=1)].sort_values('Plant_Size')
 
@@ -81,6 +82,8 @@ class PredictModernPlantParameters:
             fuel_used = plant_type_to_fuel(self.plant_type)
             historical_efficiency_measure = elecsim.scenario.scenario_data.historical_fuel_plant_efficiency[
                 elecsim.scenario.scenario_data.historical_fuel_plant_efficiency.fuel_type == fuel_used]
+
+            historical_efficiency_measure = historical_efficiency_measure.reset_index()
             efficiency = ExtrapolateInterpolate(historical_efficiency_measure.Year,
                                                 historical_efficiency_measure.efficiency).min_max_extrapolate(
                 self.start_year)
@@ -111,20 +114,43 @@ class PredictModernPlantParameters:
         """
 
         if self.start_year in (2018, 2020, 2025):
-            cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in
+            cost_parameter_variables1 = [cost_variable + str(int(self.start_year)) for cost_variable in
                                         initial_stub_cost_parameters]
         elif self.start_year > 2025:
-            cost_parameter_variables = [cost_variable + str(int(2025)) for cost_variable in
+            cost_parameter_variables1 = [cost_variable + str(int(2025)) for cost_variable in
                                         initial_stub_cost_parameters]
         elif self.start_year == 2019 or self.start_year < 2018:
-            cost_parameter_variables = [cost_variable + str(int(2018)) for cost_variable in
+            cost_parameter_variables1 = [cost_variable + str(int(2018)) for cost_variable in
                                         initial_stub_cost_parameters]
         elif 2020 < self.start_year < 2025:
-            cost_parameter_variables = [cost_variable + str(int(2020)) for cost_variable in
+            cost_parameter_variables1 = [cost_variable + str(int(2020)) for cost_variable in
+                                        initial_stub_cost_parameters]
+        elif 2018 > self.start_year:
+            cost_parameter_variables = [cost_variable + str(2018) for cost_variable in
                                         initial_stub_cost_parameters]
 
-        else:
-            raise ValueError("Construction year must be 2018 or higher to estimate parameters for modern plants.")
+        if self.start_year in self.year_data:
+            cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in
+                                        initial_stub_cost_parameters]
+            logger.info(self.start_year)
+        elif self.start_year > self.year_data[-1]:
+            cost_parameter_variables = [cost_variable + str(self.year_data[-1]) for cost_variable in
+                                        initial_stub_cost_parameters]
+            logger.info(self.year_data[-1])
+        elif self.year_data[0] < self.start_year < self.year_data[1]:
+            cost_parameter_variables = [cost_variable + str(self.year_data[0]) for cost_variable in
+                                        initial_stub_cost_parameters]
+            logger.info(self.year_data[0])
+        elif self.year_data[1] < self.start_year < self.year_data[2]:
+            cost_parameter_variables = [cost_variable + str(self.year_data[1]) for cost_variable in
+                                        initial_stub_cost_parameters]
+            logger.info(self.year_data[1])
+        elif self.start_year < self.year_data[0]:
+            cost_parameter_variables = [cost_variable + str(self.year_data[0]) for cost_variable in
+                                        initial_stub_cost_parameters]
+
+        assert cost_parameter_variables1 == cost_parameter_variables
+
         return cost_parameter_variables
 
     # @lru_cache(maxsize=10000)

@@ -1,5 +1,8 @@
 from scipy.interpolate import interp1d
 from functools import lru_cache
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ExtrapolateInterpolate:
 
@@ -42,5 +45,5 @@ class ExtrapolateInterpolate:
         elif point >= max(self.x):
             return self.y.iloc[-1]
         else:
-            index_position = self.x[self.x==point].index[0]
+            index_position = self.x[self.x == point].index[0]
             return self.y.iloc[index_position]

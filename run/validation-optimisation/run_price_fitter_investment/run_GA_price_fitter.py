@@ -155,21 +155,21 @@ def eval_world(individual):
     joined['actual_perc'] = joined['actual']/joined['actual'].sum()
     joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
 
-    # print("joined: \n{}".format(joined))
+    print("joined: \n{}".format(joined))
 
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
     # print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    # print("returns: {}, {}, {}".format([total_difference], time_taken, joined.simulated))
+    print("returns: {}, {}, {}".format([total_difference], time_taken, joined.simulated))
     return [total_difference], time_taken, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
 #     eval_world(i)
 
-# eval_world([0.00147552, 14.268274183850039])
+# eval_world([0.002547, -13.374101])
 
 
 
@@ -221,7 +221,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=100)
+    pop = toolbox.population(n=150)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
