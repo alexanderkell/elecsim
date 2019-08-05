@@ -26,7 +26,7 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-EARLIEST_MODERN_PLANT_YEAR = 2018
+EARLIEST_MODERN_PLANT_YEAR = 2016
 
 
 @lru_cache(maxsize=10000)
