@@ -58,9 +58,9 @@ class PredictModernPlantParameters:
             self.check_plant_exists(parameters_of_plant)
 
             if all(math.isnan(value) for value in parameters_of_plant.values()):
-                self.start_year+=1
+                self.start_year += 1
             else:
-                condition=False
+                condition = False
 
         durations = ['Pre_Dur', 'Operating_Period', 'Constr_Dur', 'Efficiency', 'Average_Load_Factor']
         durations_parameters = {self._change_columns(dur): self._estimate_non_interpolatable_parameters(dur) for dur in durations}

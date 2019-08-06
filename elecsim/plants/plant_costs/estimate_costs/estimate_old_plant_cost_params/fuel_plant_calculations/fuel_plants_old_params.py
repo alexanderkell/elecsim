@@ -58,6 +58,8 @@ class FuelOldPlantCosts(OldPlantCosts):
         return params_for_scaling
 
     def _linear_optimisation(self, x, lcoe_required):
+
+        # x = [0.00001 if param == 0 else param for param in x]
         connection_cost_per_mw = x[0]
         construction_cost_per_mw = x[1]
         fixed_o_and_m_per_mw = x[2]
