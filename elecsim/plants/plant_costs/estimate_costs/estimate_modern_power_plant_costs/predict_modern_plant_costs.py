@@ -113,43 +113,22 @@ class PredictModernPlantParameters:
         :return:
         """
 
-        if self.start_year in (2018, 2020, 2025):
-            cost_parameter_variables1 = [cost_variable + str(int(self.start_year)) for cost_variable in
-                                        initial_stub_cost_parameters]
-        elif self.start_year > 2025:
-            cost_parameter_variables1 = [cost_variable + str(int(2025)) for cost_variable in
-                                        initial_stub_cost_parameters]
-        elif self.start_year == 2019 or self.start_year < 2018:
-            cost_parameter_variables1 = [cost_variable + str(int(2018)) for cost_variable in
-                                        initial_stub_cost_parameters]
-        elif 2020 < self.start_year < 2025:
-            cost_parameter_variables1 = [cost_variable + str(int(2020)) for cost_variable in
-                                        initial_stub_cost_parameters]
-        elif 2018 > self.start_year:
-            cost_parameter_variables = [cost_variable + str(2018) for cost_variable in
-                                        initial_stub_cost_parameters]
 
         if self.start_year in self.year_data:
             cost_parameter_variables = [cost_variable + str(int(self.start_year)) for cost_variable in
                                         initial_stub_cost_parameters]
-            logger.info(self.start_year)
         elif self.start_year > self.year_data[-1]:
             cost_parameter_variables = [cost_variable + str(self.year_data[-1]) for cost_variable in
                                         initial_stub_cost_parameters]
-            logger.info(self.year_data[-1])
         elif self.year_data[0] < self.start_year < self.year_data[1]:
             cost_parameter_variables = [cost_variable + str(self.year_data[0]) for cost_variable in
                                         initial_stub_cost_parameters]
-            logger.info(self.year_data[0])
         elif self.year_data[1] < self.start_year < self.year_data[2]:
             cost_parameter_variables = [cost_variable + str(self.year_data[1]) for cost_variable in
                                         initial_stub_cost_parameters]
-            logger.info(self.year_data[1])
         elif self.start_year < self.year_data[0]:
             cost_parameter_variables = [cost_variable + str(self.year_data[0]) for cost_variable in
                                         initial_stub_cost_parameters]
-
-        assert cost_parameter_variables1 == cost_parameter_variables
 
         return cost_parameter_variables
 

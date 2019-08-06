@@ -50,7 +50,8 @@ class OldPlantCosts:
         as only this data is provided in the BEIS datafile
         :return: Int containing smallest year available.
         """
-        available_years = self.modern_costs[['Constr_cost-Medium _2018','Constr_cost-Medium _2020', 'Constr_cost-Medium _2025']]
+        # available_years = self.modern_costs[['Constr_cost-Medium _2018','Constr_cost-Medium _2020', 'Constr_cost-Medium _2025']]
+        available_years = self.modern_costs.filter(regex="Constr_cost-Medium _")
         columns_with_no_nan = available_years[available_years.columns[~available_years.isnull().all()]].columns
         years_with_no_nan = [s for s in columns_with_no_nan]
         years_with_no_nan = [int(s.split("_")[2]) for s in years_with_no_nan]
