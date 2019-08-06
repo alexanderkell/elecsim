@@ -26,9 +26,6 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-EARLIEST_MODERN_PLANT_YEAR = 2016
-
-
 @lru_cache(maxsize=10000)
 def create_power_plant(name, start_date, simplified_type, capacity):
     """
@@ -72,6 +69,7 @@ def create_power_plant_group(name, start_date, simplified_type, capacity, number
 
 
 def _select_cost_estimator(start_year, plant_type, capacity):
+    earliest_modern_plant_year = min([int(column.split(" _")[1]) for column in elecsim.scenario.scenario_data.modern_plant_costs.filter(regex='Connect_system_cost-Medium _').columns])
     _check_digit(capacity, "capacity")
     _check_digit(start_year, "start_year")
     _check_positive(start_year, "start_year")
@@ -79,7 +77,7 @@ def _select_cost_estimator(start_year, plant_type, capacity):
 
     hist_costs = elecsim.scenario.scenario_data.power_plant_historical_costs_long
     hist_costs = hist_costs[hist_costs.Technology.map(lambda x: x in plant_type)].dropna()
-    if start_year < EARLIEST_MODERN_PLANT_YEAR and not hist_costs.empty:
+    if start_year < earliest_modern_plant_year and not hist_costs.empty:
         require_fuel = PlantRegistry(plant_type).check_if_fuel_required()
         cost_parameters = _estimate_old_plant_cost_parameters(capacity, plant_type, require_fuel, start_year)
         _check_parameters(capacity, cost_parameters, plant_type, start_year)
