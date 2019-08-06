@@ -110,7 +110,8 @@ load_duration_curve_diff = pd.read_csv('{}/data/processed/load_duration_curve/lo
 power_plants = pd.read_csv('{}/data/processed/power_plants/uk_power_plants/plants_2013/uk_plants_2013_revised.csv'.format(ROOT_DIR), dtype={'Start_date': int})
 
 # power_plants = power_plants[:100]
-modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
+# modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/modern_power_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
+modern_plant_costs = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/2013_predicted_plant_costs/power_plant_costs_with_simplified_type.csv'.format(ROOT_DIR))
 
 power_plant_historical_costs_long = pd.read_csv('{}/data/processed/power_plants/power_plant_costs/historical_power_plant_costs/historical_power_plant_costs_long.csv'.format(ROOT_DIR))
 
