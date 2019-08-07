@@ -127,7 +127,7 @@ class World(Model):
         '''Advance model by one step'''
         self.beginning_of_year = False
         if self.step_number % self.market_time_splices == 0:
-            self.start = time.clock()
+            self.start = time.perf_counter()
             self.operate_constructed_plants()
             if self.step_number != 0:
                 self.year_number += 1
@@ -170,7 +170,7 @@ class World(Model):
             self.average_electricity_price = self.average_electricity_price[0]
 
         if self.step_number % self.market_time_splices == 0:
-            end = time.clock()
+            end = time.perf_counter()
             print("time taken: {}".format(end-self.start))
             # get_capacity_factor.cache_clear()
 
