@@ -110,9 +110,11 @@ def eval_world(individual):
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
     time_start = time.perf_counter()
+    timestamp_start = time.time()
     for i in range(number_of_steps):
         results_df = world.step()
     time_end = time.perf_counter()
+    timestamp_end = time.time()
 
     time_taken = time_end-time_start
 
@@ -162,8 +164,9 @@ def eval_world(individual):
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
-    return [total_difference], time_taken, time_start, time_end, joined.simulated
+    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
+    return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
