@@ -356,7 +356,7 @@ def main():
 
         first_part = 'INSERT INTO validoptimresults (run_number, time_taken, timestamp_start, timestamp_end, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
 
-        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
+        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
 
