@@ -140,6 +140,8 @@ class World(Model):
                 print("{}:".format(self.year_number), end='', flush=True)
 
         obs = self.schedule.step()
+        self.operate_constructed_plants()
+
         self.continue_investing = 0
         if carbon_price is not None:
             elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price

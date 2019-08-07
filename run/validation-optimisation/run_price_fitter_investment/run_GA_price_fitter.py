@@ -93,12 +93,12 @@ config = {
 
 def eval_world(individual):
 
-    # t0 = time.time()
+    # time_start = time.time()
     # for i in range(1000):
     #     pass
     # t1 = time.time()
     #
-    # time_taken = t1-t0
+    # time_taken = t1-time_start
     # return [1], time_taken
 
 
@@ -109,12 +109,12 @@ def eval_world(individual):
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-    t0 = time.time()
+    time_start = time.time()
     for i in range(number_of_steps):
         results_df = world.step()
-    t1 = time.time()
+    time_end = time.time()
 
-    time_taken = t1-t0
+    time_taken = time_end-time_start
 
     contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
     contributed_results *= 1/24
@@ -155,15 +155,15 @@ def eval_world(individual):
     joined['actual_perc'] = joined['actual']/joined['actual'].sum()
     joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
 
-    print("joined: \n{}".format(joined))
+    # print("joined: \n{}".format(joined))
 
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
     # print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    print("returns: {}, {}, {}".format([total_difference], time_taken, joined.simulated))
-    return [total_difference], time_taken, joined.simulated
+    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    return [total_difference], time_taken, time_start, time_end, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
@@ -296,6 +296,8 @@ def main():
         #     timing_holder[ind[0]] = fit[1]
 
         timing_holder = []
+        time_start_holder = []
+        time_end_holder = []
         generators_invested = []
 
         # Evaluate the individuals with an invalid fitness
@@ -305,7 +307,9 @@ def main():
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit[0]
             timing_holder.append(fit[1])
-            generators_invested.append(fit[2])
+            time_start_holder.append(fit[2])
+            time_end_holder.append(fit[3])
+            generators_invested.append(fit[4])
 
         print("  Evaluated %i individuals" % len(invalid_ind))
 
@@ -350,11 +354,13 @@ def main():
         else:
             cursor = conn.cursor()
 
-        first_part = 'INSERT INTO validoptimresults (run_number, time_taken, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
+        first_part = 'INSERT INTO validoptimresults (run_number, time_taken, timestamp_start, timestamp_end, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
 
-        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{}),\n".format(g, time, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, gen_invested in zip(progression, timing_holder, generators_invested)])
+        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
+
+        # print("command: {}".format(insert_cmd))
 
         cursor.execute(insert_cmd)
         conn.commit()
