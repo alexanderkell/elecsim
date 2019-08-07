@@ -109,10 +109,10 @@ def eval_world(individual):
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-    time_start = time.time()
+    time_start = time.perf_counter()
     for i in range(number_of_steps):
         results_df = world.step()
-    time_end = time.time()
+    time_end = time.perf_counter()
 
     time_taken = time_end-time_start
 
