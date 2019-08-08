@@ -158,14 +158,14 @@ def eval_world(individual):
     joined['actual_perc'] = joined['actual']/joined['actual'].sum()
     joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
 
-    print("joined: \n{}".format(joined))
+    # print("joined: \n{}".format(joined))
 
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
     # print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
     # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
     return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
 
@@ -225,7 +225,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=60)
+    pop = toolbox.population(n=120)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -368,7 +368,7 @@ def main():
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
 
-        print("command: {}".format(insert_cmd))
+        # print("command: {}".format(insert_cmd))
 
         cursor.execute(insert_cmd)
         conn.commit()
