@@ -93,12 +93,12 @@ config = {
 
 def eval_world(individual):
 
-    # t0 = time.time()
+    # time_start = time.time()
     # for i in range(1000):
     #     pass
     # t1 = time.time()
     #
-    # time_taken = t1-t0
+    # time_taken = t1-time_start
     # return [1], time_taken
 
 
@@ -109,12 +109,14 @@ def eval_world(individual):
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
     world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-    t0 = time.time()
+    time_start = time.perf_counter()
+    timestamp_start = time.time()
     for i in range(number_of_steps):
         results_df = world.step()
-    t1 = time.time()
+    time_end = time.perf_counter()
+    timestamp_end = time.time()
 
-    time_taken = t1-t0
+    time_taken = time_end-time_start
 
     contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
     contributed_results *= 1/24
@@ -132,6 +134,7 @@ def eval_world(individual):
     offshore = results_wa.loc["offshore"].iloc[0]
     onshore = results_wa.loc["onshore"].iloc[0]
     # print("offshore: {}".format(offshore))
+    # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
     results_wa.loc['wind'] = [offshore+onshore]
     # print("results_wa: {}".format(results_wa))
 
@@ -161,12 +164,13 @@ def eval_world(individual):
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    print("returns: {}, {}, {}".format([total_difference], time_taken, joined.simulated))
-    return [total_difference], time_taken, joined.simulated
+    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
+    return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
 #     eval_world(i)
 
-eval_world([0.002547, -13.374101])
+eval_world([0.002040678, 0.3669954])
 # eval_world([0.0010, -13.374101])
