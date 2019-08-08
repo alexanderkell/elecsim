@@ -100,74 +100,74 @@ def eval_world(individual):
     #
     # time_taken = t1-time_start
     # return [1], time_taken
-    return ([1]),
+    # return ([1]),
 
 
-    # MARKET_TIME_SPLICES = 8
-    # YEARS_TO_RUN = 6
-    # number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
-    #
-    # scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
-    #
-    # world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
-    # time_start = time.perf_counter()
-    # timestamp_start = time.time()
-    # for i in range(number_of_steps):
-    #     results_df = world.step()
-    # time_end = time.perf_counter()
-    # timestamp_end = time.time()
-    #
-    # time_taken = time_end-time_start
-    #
-    # contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
-    # contributed_results *= 1/24
-    #
-    # # print("contributed_results: {}".format(contributed_results))
-    # contributed_results = contributed_results.rename(columns={'contributed_PV': "contributed_solar"})
-    # cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
-    #
-    # # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
-    #
-    # results_wa = contributed_results.apply(lambda x: np.average(x, weights=cluster_size.values)).to_frame()
-    #
-    # results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
-    # # print("results_wa: {}".format(results_wa))
-    # offshore = results_wa.loc["offshore"].iloc[0]
-    # onshore = results_wa.loc["onshore"].iloc[0]
-    # # print("offshore: {}".format(offshore))
-    # # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
-    # results_wa.loc['wind'] = [offshore+onshore]
-    # # print("results_wa: {}".format(results_wa))
-    #
-    # electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
-    # actual_mix_2018 = electricity_mix[electricity_mix.year == 2018]
-    #
-    #
-    # actual_mix_2018 = actual_mix_2018.set_index("variable")
-    # # print(actual_mix_2018)
-    #
-    # joined = actual_mix_2018[['value']].join(results_wa, how='inner')
-    # # print("joined: \n{}".format(joined))
-    #
-    # joined = joined.rename(columns={'value':'actual', 0:'simulated'})
-    #
-    # joined = joined.loc[~joined.index.str.contains('biomass')]
-    #
-    # # print("joined: \n{}".format(joined))
-    #
-    # joined['actual_perc'] = joined['actual']/joined['actual'].sum()
-    # joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
-    #
+    MARKET_TIME_SPLICES = 8
+    YEARS_TO_RUN = 6
+    number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
+
+    scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
+
+    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
+    time_start = time.perf_counter()
+    timestamp_start = time.time()
+    for i in range(number_of_steps):
+        results_df = world.step()
+    time_end = time.perf_counter()
+    timestamp_end = time.time()
+
+    time_taken = time_end-time_start
+
+    contributed_results = results_df.filter(regex='contributed_').tail(MARKET_TIME_SPLICES)
+    contributed_results *= 1/24
+
+    # print("contributed_results: {}".format(contributed_results))
+    contributed_results = contributed_results.rename(columns={'contributed_PV': "contributed_solar"})
+    cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
+
+    # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
+
+    results_wa = contributed_results.apply(lambda x: np.average(x, weights=cluster_size.values)).to_frame()
+
+    results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
+    # print("results_wa: {}".format(results_wa))
+    offshore = results_wa.loc["offshore"].iloc[0]
+    onshore = results_wa.loc["onshore"].iloc[0]
+    # print("offshore: {}".format(offshore))
+    # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
+    results_wa.loc['wind'] = [offshore+onshore]
+    # print("results_wa: {}".format(results_wa))
+
+    electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
+    actual_mix_2018 = electricity_mix[electricity_mix.year == 2018]
+
+
+    actual_mix_2018 = actual_mix_2018.set_index("variable")
+    # print(actual_mix_2018)
+
+    joined = actual_mix_2018[['value']].join(results_wa, how='inner')
     # print("joined: \n{}".format(joined))
-    #
-    # total_difference_col = joined['actual_perc'] - joined['simulated_perc']
-    # # print(total_difference_col)
-    # total_difference = total_difference_col.abs().sum()
-    # # print("max_demand : dif: {} :x {}".format(individual, total_difference))
-    # # print(joined.simulated)
-    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
-    # # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
-    # return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
+
+    joined = joined.rename(columns={'value':'actual', 0:'simulated'})
+
+    joined = joined.loc[~joined.index.str.contains('biomass')]
+
+    # print("joined: \n{}".format(joined))
+
+    joined['actual_perc'] = joined['actual']/joined['actual'].sum()
+    joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
+
+    print("joined: \n{}".format(joined))
+
+    total_difference_col = joined['actual_perc'] - joined['simulated_perc']
+    # print(total_difference_col)
+    total_difference = total_difference_col.abs().sum()
+    # print("max_demand : dif: {} :x {}".format(individual, total_difference))
+    # print(joined.simulated)
+    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
+    return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
