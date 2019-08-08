@@ -225,7 +225,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=1)
+    pop = toolbox.population(n=60)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -245,7 +245,6 @@ def main():
 
     for ind, fit in zip(pop, fitnesses_and_time):
         ind.fitness.values = fit[0]
-        print(type(ind))
         # timing_holder.append(fit[1])
 
     print("  Evaluated %i individuals" % len(pop))
@@ -257,7 +256,7 @@ def main():
     g = 0
 
     # Begin the evolution
-    while g<1000:
+    while g < 1000:
 
         time_results = {}
 
@@ -283,7 +282,7 @@ def main():
                 # del child2.fitness.values
 
         # Recalculate all individual due to stochastic nature of simulation
-        for ind in pop:
+        for ind in offspring:
             del ind.fitness.values
 
         for mutant in offspring:
