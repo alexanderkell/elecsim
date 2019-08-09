@@ -54,7 +54,7 @@ class MarketServing(ExternalMultiAgentEnv):
 
         ExternalMultiAgentEnv.__init__(
             self,
-            MultiDiscrete([19, 10]),
+            MultiDiscrete([16, 10]),
             # Discrete(29, shape=(1, 2)),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
@@ -69,7 +69,7 @@ class MarketServing(ExternalMultiAgentEnv):
 
 if __name__ == "__main__":
 
-    ray.init()
+    ray.init(redis_max_memory=10000000000, object_store_memory=3000000000)
     register_env("srv", lambda _: MarketServing())
 
     # We use DQN since it supports off-policy actions, but you can choose and
