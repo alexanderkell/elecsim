@@ -58,18 +58,19 @@ number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 num_cpus = psutil.cpu_count(logical=True)
 
 print("num_cpus: {}".format(num_cpus))
-ray.init(num_cpus=num_cpus-1, redis_max_memory=32000000000)
+# ray.init(num_cpus=1, redis_max_memory=32000000000)
 
 time.sleep(20)
 
-@ray.remote
+# @ray.remote
 def run_world(num_steps=number_of_steps):
     world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
     for i in range(num_steps):
         world.step()
 
-results = []
+# results = []
 for j in range(10000):
-    results.append(run_world.remote(number_of_steps))
+    run_world(number_of_steps)
+    # results.append(run_world.remote(number_of_steps))
 
-result_ray = ray.get(results)
+# result_ray = ray.get(results)

@@ -201,8 +201,8 @@ class GenCo(Agent):
         plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
 
         plant_string_to_invest = plant_list[action.item(0)]
-
-        plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.match(plant_string_to_invest)]
+        print("plant_string_to_invest: {}".format(plant_string_to_invest))
+        plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.contains(plant_string_to_invest)]
 
         plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], action.item(1))
 
