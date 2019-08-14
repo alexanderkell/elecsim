@@ -18,26 +18,26 @@ ggplot(filter(run_1), aes(y=individual_m, x=individual_c)) + geom_hex(bins=10)
 ```
 
 ```{r}
-p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_point()
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_point() + ggtitle("Scatter plot of input parameters and reward")
 p$labels$fill <- "Absolute \nPercentage \nError"
 print(p)
 ```
 ```{r}
-p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_jitter()
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_jitter() + ggtitle("Scatter (jitter) plot of input parameters and reward")
 p$labels$fill <- "Absolute \nPercentage \nError"
 print(p)
 ```
 
 
 ```{r}
-p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=time_taken), size=10) + facet_wrap(~run_number) + geom_jitter()
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=time_taken), size=10) + facet_wrap(~run_number) + geom_jitter() + ggtitle("Scatter plot of input parameters and time taken")
 p$labels$fill <- "Time \nTaken"
 print(p)
 
 ```
 
 ```{r}
-p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = reward), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1))
+p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = reward), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1)) + ggtitle("Hexagonal heatmap of input parameters and Absolute Percentage Error")
 p$labels$fill <- "Absolute \nPercentage \nError"
 print(p)
 
@@ -45,7 +45,7 @@ ggsave("~/Desktop/genetic_algorithm_progression.png")
 ```
 
 ```{r}
-run_1 %>% group_by(run_number) %>% summarise(avg_reward = mean(reward)) %>% ggplot()+ geom_smooth(data=run_1, aes(x=run_number, reward))+geom_line(aes(x=run_number, y=avg_reward)) 
+run_1 %>% group_by(run_number) %>% summarise(avg_reward = mean(reward)) %>% ggplot()+ geom_smooth(data=run_1, aes(x=run_number, reward))+geom_line(aes(x=run_number, y=avg_reward))+ggtitle("Average reward vs Population Number") 
 ```
 
 
@@ -63,7 +63,7 @@ accurate_area
 ```
 
 ```{r}
- ggplot(data=accurate_area, aes(x=individual_c, y=individual_m, color=reward))+geom_jitter()+geom_point(color="red", alpha=0.5)
+ ggplot(data=accurate_area, aes(x=individual_c, y=individual_m, color=reward))+geom_jitter()+geom_point(color="red", alpha=0.5) + ggtitle("Scatter and Jitterplot of Reward against Input Parameters for \nLast Population of GA")
 
 ```
 
@@ -78,12 +78,13 @@ accurate_area_long_perc = accurate_area_long %>% group_by(id) %>% mutate(value_p
 ```{r}
 params_more_than_10 = run_1 %>% group_by(individual_c, individual_m) %>% mutate(number = n()) %>% ungroup() %>% filter(number> 10) %>% mutate_if(is.numeric, round, 6) 
 
-params_more_than_10 %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2), alpha=0.05)
+params_more_than_10 %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2), alpha=0.05) + ggtitle("Violin plot of input parameters with more than 10 simulations \nagainst distribution of reward")
 
 ```
 
 ```{r}
-accurate_area %>% mutate_if(is.numeric, round, 6) %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2))
+accurate_area %>% mutate_if(is.numeric, round, 6) %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2))+ ggtitle("Violin plot of input parameters with more than 10 simulations of last population of GA\nagainst distribution of reward")
+
 ```
 
 
