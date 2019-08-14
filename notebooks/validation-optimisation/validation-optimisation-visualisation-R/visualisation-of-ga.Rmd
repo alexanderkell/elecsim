@@ -213,7 +213,7 @@ comparison_best_params %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_su
 
 ## Getting MAPE for best param
 
-predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc))
+predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc)) + ggtitle("Comparison of predicted vs actual for best parameter set over 10 from all runs")
 
 print(paste("MAPE = ", MAPE(predicted_means_best_param$predicted_perc, actual_mix_2018_reduced$value_perc)))
 
@@ -226,19 +226,8 @@ print(p)
 
 ```
 
-
-
 ```{r}
-accurate_area %>% ggplot() + geom_histogram(aes(individual_m)) + xlim(0.0015, 0.0025)
-
-```
-```{r}
-accurate_area %>% ggplot(aes(individual_c)) + geom_histogram() 
-
-```
-
-```{r}
-p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = time_taken), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1))
+p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = time_taken), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1)) + ggtitle("Hexagonal heatmap of input parameters against time taken with respect to population number")
 p$labels$fill <- "Time \n Taken"
 print(p)
 
@@ -246,24 +235,24 @@ ggsave('~/Desktop/time-taken-parameters.png')
 ```
 
 ```{r}
-run_1 %>% arrange(desc(run_number)) %>% ggplot(alpha=0.1, aes(y=individual_m, x=individual_c)) + geom_point(aes(color=run_number, size=time_taken))
+run_1 %>% arrange(desc(run_number)) %>% ggplot(alpha=0.1, aes(y=individual_m, x=individual_c)) + geom_point(aes(color=run_number, size=time_taken)) + ggtitle("Scatter plot showing run number against time taken and reward")
 ```
 
 ```{r}
-run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=time_taken)) + geom_violin()
+run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=time_taken)) + geom_violin() + ggtitle("Violin plot of time taken for each simulation run against population number")
 ```
 ```{r}
-ggplot(data=run_1, aes(x=as.factor(run_number), y=reward))+geom_boxplot()+geom_jitter(position=position_jitter(0.2), alpha=0.5, color='blue')
+ggplot(data=run_1, aes(x=as.factor(run_number), y=reward))+geom_boxplot()+geom_jitter(position=position_jitter(0.2), alpha=0.5, color='blue') + ggtitle("Boxplot and jitter of run number against reward")
 ```
 
 
 ```{r}
-run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=reward)) + geom_violin()
+run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=reward)) + geom_violin() + ggtitle("Violin plot of reward against population number")
 
 ```
 
 ```{r}
-ggplot(run_1, aes(x=reward, y=time_taken))+stat_smooth(method = "lm")+geom_point()+xlab("Absolute Percentage Error")
+ggplot(run_1, aes(x=reward, y=time_taken))+stat_smooth(method = "lm")+geom_point()+xlab("Absolute Percentage Error") + ggtitle("Scatter plot of time taken for each simulation run against \nabsolute percentage error")
 
 ```
 
