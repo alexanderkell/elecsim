@@ -263,7 +263,7 @@ plot_ly(data=dif_sum, x=~tot_diff, y=~time_taken, z=~reward, type="scatter3d", m
 ```
 
 ```{r}
-ggplot()+geom_point(data=run_1, aes(x=time_taken, y=reward, color=run_number))
+ggplot()+geom_point(data=run_1, aes(x=time_taken, y=reward, color=run_number)) + ggtitle("Scatter plot of time taken against reward")
 ```
 
 ```{r}
@@ -284,5 +284,4 @@ ggplot(data=dif_sum, aes(x=tot_diff, color=time_taken, y=reward)) + geom_point()
 ```{r}
 ggplot(run_1, aes(x=run_number, y=time_taken, color=reward)) + geom_point() +
    geom_smooth(method='lm')
-
 ```
