@@ -2,7 +2,7 @@
 
 import mysql.connector
 from mysql.connector import errorcode
-
+import ray
 import os.path
 import sys
 
@@ -90,7 +90,7 @@ config = {
 
 
 
-
+@ray.remote(num_return_vals=5)
 def eval_world(individual):
 
     # time_start = time.time()
@@ -100,6 +100,7 @@ def eval_world(individual):
     #
     # time_taken = t1-time_start
     # return [1], time_taken
+    # return ([1]),
 
 
     MARKET_TIME_SPLICES = 8
@@ -108,7 +109,7 @@ def eval_world(individual):
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
-    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="runs_2013", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
+    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_all_dat", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
     time_start = time.perf_counter()
     timestamp_start = time.time()
     for i in range(number_of_steps):
@@ -157,20 +158,43 @@ def eval_world(individual):
     joined['actual_perc'] = joined['actual']/joined['actual'].sum()
     joined['simulated_perc'] = joined['simulated']/joined['simulated'].sum()
 
-    print("joined: \n{}".format(joined))
+    # print("joined: \n{}".format(joined))
 
     total_difference_col = joined['actual_perc'] - joined['simulated_perc']
-    # print(total_difference_col)
+    print(total_difference_col)
     total_difference = total_difference_col.abs().sum()
     # print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
-    print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
+    # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
     # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
     return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
 
 
 # for i in np.linspace(62244, 66326, num=50):
 #     eval_world(i)
+ray.init(num_cpus=4)
 
-eval_world([0.002040678, 0.3669954])
+
+# for i in range(100):
+#     eval_world([0.001644, 11.04157])
+
+output1, output2, output3, output4, output5 = [], [], [], [], []
+
+# Launch the tasks.
+for j in range(100):
+    id1, id2, id3, id4, id5 = eval_world.remote([0.001644, 11.04157])
+    output1.append(id1)
+    output2.append(id2)
+    output3.append(id3)
+    output3.append(id4)
+    output3.append(id5)
+
+# Block until the results have finished and get the results.
+output1 = ray.get(output1)
+output2 = ray.get(output2)
+output3 = ray.get(output3)
+output3 = ray.get(output4)
+output3 = ray.get(output5)
+
+
 # eval_world([0.0010, -13.374101])

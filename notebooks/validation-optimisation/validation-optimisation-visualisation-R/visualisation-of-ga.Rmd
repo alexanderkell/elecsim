@@ -207,13 +207,13 @@ best_params_comparison = filter(run_1,near(x=individual_c, y=best_params$individ
 
 comparison_best_params = rbind(select(ungroup(best_params_comparison), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
 
-comparison_best_params %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2")
+comparison_best_params %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Comparison of predicted vs actual for best parameter set over 10 from all runs")
 
 
 
 ## Getting MAPE for best param
 
-predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc)) + ggtitle("Comparison of predicted vs actual for best parameter set over 10 from all runs")
+predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc)) 
 
 print(paste("MAPE = ", MAPE(predicted_means_best_param$predicted_perc, actual_mix_2018_reduced$value_perc)))
 
