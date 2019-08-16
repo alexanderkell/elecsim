@@ -8,6 +8,7 @@ output: html_notebook
 library("tidyverse")
 library("ggplot2")
 library(plyr)
+library("mco")
 ```
 ```{r}
 run_1 = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/validation-optimisation/data/run_2.csv')
@@ -224,6 +225,59 @@ p = best_params %>% transform(y=get_line(individual_c, individual_m), x=get_x())
 p$labels$fill <- "Percentiles"
 print(p)
 
+```
+
+
+# Calculation of best parameters with lowest variance and error
+```{r}
+# best_params = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% filter(rank(mean_diff_perc, ties.method="first")==1)
+
+# calculate_mean_error = function(df){
+#     
+#     return(gather(df, "key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% inner_join(actual_mix_2018_reduced, by='key'))
+# }
+
+# params_more_than_10 %>% group_by(individual_c, individual_m) %>% do(., calculate_mean_error)
+# ddply(params_more_than_10, .(individual_c, individual_m), calculate_mean_error)
+
+params_sd_mean_reward = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(diff_sd = sd(diff_perc), mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% group_by(individual_c, individual_m) %>% summarise(diff_sd = sd(diff_sd), mean_diff_perc = mean(mean_diff_perc))
+
+params_sd_mean_reward_ordered = arrange(params_sd_mean_reward, diff_sd, mean_diff_perc)
+frontier = get_frontier(as.data.frame(params_sd_mean_reward_ordered), diff_sd, mean_diff_perc, decreasing = FALSE, quadrant = "bottom.left")
+
+params_sd_mean_reward %>% ggplot() + geom_point(aes(diff_sd, mean_diff_perc)) + geom_line(data=frontier, aes(diff_sd, mean_diff_perc), color="red") + ggtitle("Pareto frontier of standard deviation versus mean for simulations \nof more than 10 runs")
+
+```
+
+```{r}
+params_more_than_10_perc = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value))
+
+frontier_full_data = frontier %>% inner_join(params_sd_mean_reward_ordered, by=c('diff_sd', 'mean_diff_perc')) %>% inner_join(params_more_than_10_perc, by=c("individual_c", "individual_m")) %>% mutate(type=paste(mean_diff_perc,diff_sd))
+
+
+rbind(filter(select(frontier_full_data, "key", "type", "value", 'value_perc')), select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Best parameter combinations from all genetic algorithm runs")
+    
+```
+
+```{r}
+best_one = select(filter(frontier_full_data, mean_diff_perc<0.067), "key", "type", "value", 'value_perc')
+best_one$type = "Simulated"
+
+actual_mix_2018_reduced$type = "Actual"
+
+rbind(best_one, select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Electricity Mix (%)") +scale_fill_brewer(palette = 'Set2')
+
+ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run.pdf")
+```
+
+```{r}
+best_actual = rbind(best_one, select(actual_mix_2018_reduced, -X1, -year))
+best_actual_stats = best_actual %>% group_by(type, key) %>% summarise(sd_value = sd(value_perc), mean_value = mean(value_perc)) 
+
+actuals = filter(best_actual_stats, type=="Actual")$mean_value
+predicted = filter(best_actual_stats, type=="Simulated")$mean_value
+
+RMSE(actuals,predicted)
 ```
 
 ```{r}
