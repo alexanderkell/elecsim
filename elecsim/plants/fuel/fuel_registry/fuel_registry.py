@@ -176,7 +176,8 @@ def plant_type_to_fuel(plant_type, construction_year=None):
         return None
     elif plant_type == "Hydro":
         return None
-
+    elif plant_type == "Hydro_Store":
+        return None
     else:
         raise ValueError("No fuel data for {}".format(plant_type))
 

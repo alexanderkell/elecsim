@@ -110,3 +110,14 @@ class TestCalculate_npv:
         model = Mock()
         model.year_number=2020
         select_yearly_payback_payment_for_year(power_plant, 0.6, model)
+
+
+    # @pytest.mark.parametrize("year, plant_type, capacity, expected_output",
+    #                          [
+    #                              # (2018, "CCGT", 1200, 82.55488),
+    #                              (2018, "Recip_gas", 20, 60)
+    #                          ])
+    # def test_calculate_expected_cash_flow(self, calculate_latest_NPV, year, plant_type, capacity, expected_output):
+    #
+    #     yearly_npv = calculate_latest_NPV.calculate_npv_costs(plant_type, plant_size=capacity, )
+    #     logger.debug(yearly_npv)

@@ -76,8 +76,11 @@ class CalculateNPV:
     # @lru_cache(maxsize=10000)
     def calculate_npv(self, plant_type, plant_size):
         # Forecast segment prices
+        if self.price_curve_parameters is None:
+            forecasted_segment_prices = self._get_price_duration_predictions()
+        else:
+            forecasted_segment_prices = self.price_curve_parameters
 
-        forecasted_segment_prices = self._get_price_duration_predictions()
         logger.debug("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)
