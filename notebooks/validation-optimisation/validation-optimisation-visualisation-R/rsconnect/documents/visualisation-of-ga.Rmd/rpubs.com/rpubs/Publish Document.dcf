@@ -6,5 +6,5 @@ server: rpubs.com
 hostUrl: rpubs.com
 appId: https://api.rpubs.com/api/v1/document/519818/228b73b38d974d458576d069a63c45ac
 bundleId: https://api.rpubs.com/api/v1/document/519818/228b73b38d974d458576d069a63c45ac
-url: http://rpubs.com/publish/claim/519818/85815b639f9f416497d2b9bf1bf0e56a
-when: 1565789736.36496
+url: http://rpubs.com/alexkell/519818
+when: 1566396136.03499

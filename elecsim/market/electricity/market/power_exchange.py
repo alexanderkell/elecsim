@@ -81,7 +81,8 @@ class PowerExchange:
         else:
             self.price_duration_curve = self.price_duration_curve[(self.price_duration_curve.year == self.model.year_number) & (self.price_duration_curve.day == self.model.step_number)]
             logger.debug("actual self.price_duration_curve: \n{}".format(self.price_duration_curve))
-        return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
+        # return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number].accepted_price.mean()
+        return self.price_duration_curve[self.price_duration_curve.year == self.model.year_number]#.accepted_price#.mean()
 
 
 
