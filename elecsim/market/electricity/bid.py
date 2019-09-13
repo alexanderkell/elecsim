@@ -1,7 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
 
-
 """Bid.py: A class which holds information for each bid"""
 
 __author__ = "Alexander Kell"
@@ -54,6 +53,9 @@ class Bid:
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
 
+        if self.plant.plant_type == "Nuclear":
+            self.price_per_mwh += self.gen_co.model.nuclear_subsidy
+
     def partially_accept_bid(self, segment_hour, demand_fulfilled):
         """
         Function to be called when bid is partially accepted
@@ -65,9 +67,7 @@ class Bid:
         self.partly_accepted = True
         self.plant.accepted_bids.append(self)
 
-        # Update price based on electricity capacity sold on partly accepted bid
-        # self.price_per_mwh = ((self.plant.down_payment / self.plant.lifetime + self.plant.ann_cost + self.plant.operating_cost) / (demand_fulfilled * self.segment_hours)) * 1.1
-        # self.price_per_mwh = self.plant.calculate_lcoe(self.gen_co.difference_in_discount_rate)
+
 
     def __str__(self):
         return "Plant type: " + self.plant.plant_type + ", Min running time: " +str(self.plant.min_running)+", Number of hours: "+str(self.segment_hours)+", Capacity Bid: "+str(self.capacity_bid)+", Price per MW: "+str(self.price_per_mwh) + ", Price Bid: "+str(self.price_bid)+", Plant: " + self.plant.__repr__()

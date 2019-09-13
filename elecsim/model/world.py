@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, highest_demand=None, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -70,6 +70,8 @@ class World(Model):
         self.max_number_of_steps = number_of_steps
         self.average_electricity_price = 0
         self.market_time_splices = market_time_splices
+
+        self.nuclear_subsidy = nuclear_subsidy
 
         self.set_log_level(log_level)
 
