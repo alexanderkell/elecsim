@@ -81,6 +81,9 @@ class CalculateNPV:
         elif self.price_curve_parameters:
             forecasted_segment_prices = self.price_curve_parameters
 
+        if plant_type == "Nuclear":
+            forecasted_segment_prices['accepted_price'] = forecasted_segment_prices['accepted_price'] + self.model.nuclear_subsidy
+
         logger.debug("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
 
         power_plant = create_power_plant("PowerPlantName", self.model.year_number, plant_type, plant_size)

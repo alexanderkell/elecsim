@@ -54,7 +54,7 @@ __email__ = "alexander@kell.es"
 
 pd.set_option('display.max_rows', 4000)
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.INFO)
 
 
 # creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0))
@@ -105,7 +105,7 @@ def eval_world(individual):
     # return [1], time_taken
     # return ([1]),
 
-    individual = np.array(individual).reshape(-1, 2).tolist()
+    prices_individual = np.array(individual[:-1]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
     YEARS_TO_RUN = 17
@@ -113,7 +113,7 @@ def eval_world(individual):
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=individual, highest_demand=63910)
+    world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-1])
     time_start = time.perf_counter()
     timestamp_start = time.time()
     for _ in range(YEARS_TO_RUN):
@@ -123,7 +123,7 @@ def eval_world(individual):
                 return [[99999999], 0, 0, 0, 0]
         _, cumulative_diff = get_projection_difference_sum(world.year_number, results_df)
         print("cumulative diff: {}".format(cumulative_diff))
-        if cumulative_diff > 1.5:
+        if cumulative_diff > 3:
             return [[99999999-(10*world.year_number)], 0, 0, 0, 0]
         else:
             pass
@@ -243,13 +243,15 @@ toolbox = base.Toolbox()
 #                      probability)
 toolbox.register("attr_m", random.uniform, 0.0, 0.003)
 toolbox.register("attr_c", random.uniform, -30, 50)
+toolbox.register("attr_nuclear_sub", random.uniform, 0, 150)
+
 
 toolbox.register("map_distributed", futures.map)
 
 # Structure initializers
 #                         define 'individual' to be an individual
 #                         consisting of 100 'attr_bool' elements ('genes')
-toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c), 17)
+toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_nuclear_sub), 1)
 
 # define the population to be a list of individuals
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -277,7 +279,7 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 #----------
 
 
-# eval_world([21,21,21,21,21,21,21,21,21,21,21,21,21,21])
+# eval_world([0.002547, -13.374101]*17)
 
 def main():
 
