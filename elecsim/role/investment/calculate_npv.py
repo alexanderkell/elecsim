@@ -35,7 +35,7 @@ __email__ = "alexander@kell.es"
 
 
 class CalculateNPV:
-    def __init__(self, model, difference_in_discount_rate, look_back_years, price_curve_parameters = None):
+    def __init__(self, model, difference_in_discount_rate, look_back_years, price_curve_parameters=None):
         self.model = model
         self.difference_in_discount_rate = difference_in_discount_rate
         self.look_back_years = look_back_years
@@ -78,7 +78,7 @@ class CalculateNPV:
         # Forecast segment prices
         if self.price_curve_parameters is None:
             forecasted_segment_prices = self._get_price_duration_predictions()
-        else:
+        elif self.price_curve_parameters:
             forecasted_segment_prices = self.price_curve_parameters
 
         logger.debug("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))

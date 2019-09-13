@@ -55,7 +55,7 @@ class PredictPriceDurationCurve:
             year_segment_consumption_predicted = [cons * self.demand_change_predicted for cons in year_segment_consumption]
 
         if elecsim.scenario.scenario_data.investment_mechanism == "future_price_fit":
-            predicted_price_duration_curve = self.fit_linear_price_duration_curve(self.model.year_number, year_segment_consumption_predicted, year_segment_hours)
+            predicted_price_duration_curve = self.fit_linear_price_duration_curve(year_segment_consumption_predicted, year_segment_hours)
         elif elecsim.scenario.scenario_data.investment_mechanism == "projection_fit":
             predicted_price_duration_curve = self.fit_linear_price_duration_curve_from_projections(year_segment_consumption_predicted, year_segment_hours)
             predicted_price_duration_curve_market = self.market_price_curve_prediction(year_segment_consumption_predicted, year_segment_hours)
@@ -86,7 +86,10 @@ class PredictPriceDurationCurve:
         segment_hour = year_segment_hours
         year = self.model.year_number
 
-        fitting_params = self.model.fitting_params
+        if self.model.fitting_params is not None:
+            fitting_params = self.model.fitting_params
+        elif self.model.long_term_fitting_params is not None:
+            fitting_params = self.model.long_term_fitting_params[self.model.years_from_start]
 
         temp_price_dataframe = {"segment_demand": segment_demand, "segment_hour": segment_hour, "year": year}
 

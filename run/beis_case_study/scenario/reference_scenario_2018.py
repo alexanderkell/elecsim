@@ -8,8 +8,8 @@ from scipy.optimize import root
 
 KTOE_TO_MWH = 11630
 
-# investment_mechanism = "future_price_fit"
-investment_mechanism = "projection_fit"
+investment_mechanism = "future_price_fit"
+# investment_mechanism = "projection_fit"
 potential_plants_to_invest = ['CCGT H Class', 'CCGT F Class', 'CCGT CHP mode', 'Coal - CCS ASC NH3 FOAK', 'Coal - CCS ASC Partial FOAK', 'Coal - CCS ASC FOAK', 'Nuclear - PWR FOAK', 'Onshore UK>5MW', 'Offshore R2', 'Offshore R3', 'PV>5MW', 'Recip Gas 2000 hr', 'RECIP GAS 500 hrs', 'Recip Diesel 2000 hr', 'Recip Diesel 500 hrs', 'Recip Diesel 90 hrs']
 
 multi_year_data = pd.read_csv('{}/data/processed/multi_day_data/4_medoids.csv'.format(ROOT_DIR))
