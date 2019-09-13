@@ -69,7 +69,7 @@ class MarketServing(ExternalMultiAgentEnv):
 
 if __name__ == "__main__":
 
-    ray.init(redis_max_memory=10000000000, object_store_memory=3000000000)
+    ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=3000000000)
     register_env("srv", lambda _: MarketServing())
 
     # We use DQN since it supports off-policy actions, but you can choose and
@@ -104,7 +104,7 @@ if __name__ == "__main__":
             "run": "PG",
             "env": "srv",
             'checkpoint_at_end': True,
-            'checkpoint_freq': 10,
+            'checkpoint_freq': 1,
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,

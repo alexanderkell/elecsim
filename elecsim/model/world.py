@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, highest_demand=None, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, highest_demand=None, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -108,7 +108,8 @@ class World(Model):
         self.beginning_of_year = False
 
         self.continue_investing = 0
-        
+        self.over_invested = False
+
         self.unique_id_generator += 1
         self.schedule.add(self.demand)
         self.create_data_loggers(data_folder)
@@ -121,7 +122,13 @@ class World(Model):
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
         elif elecsim.scenario.scenario_data.investment_mechanism == "future_price_fit":
-            self.fitting_params = fitting_params
+            if fitting_params is not None:
+                self.fitting_params = fitting_params
+            elif long_term_fitting_params is not None:
+                self.long_term_fitting_params = long_term_fitting_params
+                self.fitting_params = None
+            else:
+                raise ValueError("If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World")
 
     def step(self, carbon_price=None):
         '''Advance model by one step'''
@@ -141,6 +148,9 @@ class World(Model):
 
         obs = self.schedule.step()
         self.operate_constructed_plants()
+
+        if self.over_invested:
+            return self.datacollector.get_model_vars_dataframe(), self.over_invested
 
         self.continue_investing = 0
         if carbon_price is not None:
@@ -179,7 +189,7 @@ class World(Model):
             self.client.end_episode(self.eid, observation=obs)
         logger.debug(self.datacollector.get_model_vars_dataframe())
         # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
-        return self.datacollector.get_model_vars_dataframe()
+        return self.datacollector.get_model_vars_dataframe(), self.over_invested
 
     def initialize_gencos(self, financial_data, plant_data):
         """

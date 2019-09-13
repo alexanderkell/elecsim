@@ -59,14 +59,16 @@ class GenCo(Agent):
         logger.debug("Stepping generation company: {}".format(self.name))
         logger.debug("Amount of money: {}".format(self.money))
         self.delete_old_bids()
-        if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3:
-        # if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.continue_investing < 3:
-            continue_investing = self.invest()
+        if elecsim.scenario.scenario_data.investment_mechanism != "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.step_number != 0 and self.model.continue_investing < 3 and self.model.over_invested == False:
+            continue_investing, over_invested = self.invest()
+            if over_invested:
+                self.model.over_invested = True
             if continue_investing == 1:
                 self.model.continue_investing += continue_investing
                 logger.debug(self.model.continue_investing)
             else:
                 self.model.continue_investing = 0
+
 
         # self.reset_contracts()
         self.purchase_fuel()
@@ -143,9 +145,9 @@ class GenCo(Agent):
         price = plant.short_run_marginal_cost(self.model, self, fuel_price_predicted, co2_price_predicted)
         return price
 
-
     def invest(self):
 
+        # capacity_of_invested_plants = 0
         lowest_upfront_cost = 0
         down_payment = 0
         counter = 0
@@ -155,12 +157,14 @@ class GenCo(Agent):
         while self.money > lowest_upfront_cost:
         # while number_of_plants_to_purchase > 0:
 
-            counter += 1
+
+
+            # counter += 1
             # if counter>3:
             #     break
             # potential_plant_data = npv_calculation.get_positive_npv_plants_list()
             potential_plant_data = get_most_profitable_plants_by_npv(self.model, self.difference_in_discount_rate,
-                                                                     self.look_back_period)
+                                                                 self.look_back_period)
 
             # logger.info("potential_plant_data: {}".format(potential_plant_data))
             if potential_plant_data:
@@ -170,7 +174,7 @@ class GenCo(Agent):
                     potential_plant_list.append(power_plant_trial)
                 lowest_upfront_cost = min(plant.get_upfront_costs() * elecsim.scenario.scenario_data.upfront_investment_costs for plant in potential_plant_list)
             else:
-                return 1
+                return 1, False
 
             for plant_data in potential_plant_list:
 
@@ -182,8 +186,8 @@ class GenCo(Agent):
                     continue
 
                 capacity_to_purchase = number_of_plants_to_purchase * power_plant_trial.capacity_mw
-                if capacity_to_purchase > 200000:
-                    number_of_plants_to_purchase = int(200000/power_plant_trial.capacity_mw)
+                if capacity_to_purchase > 20000:
+                    number_of_plants_to_purchase = int(20000/power_plant_trial.capacity_mw)
 
                 power_plant_trial_group = create_power_plant_group(name="invested_plant_group", start_date=self.model.year_number, simplified_type=plant_data.plant_type, capacity=plant_data.capacity_mw, number_of_plants_to_purchase=number_of_plants_to_purchase)
                 down_payment_of_plant_array = number_of_plants_to_purchase*down_payment
@@ -194,8 +198,11 @@ class GenCo(Agent):
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
 
+                    if total_capacity > 70000:
+                        return 1, True
                     break
-
+        else:
+            return 0, False
 
     def invest_RL(self, action):
         plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
