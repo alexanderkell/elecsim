@@ -105,15 +105,15 @@ def eval_world(individual):
     # return [1], time_taken
     # return ([1]),
 
-    prices_individual = np.array(individual[:-1]).reshape(-1, 2).tolist()
+    prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 17
+    YEARS_TO_RUN = 18
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-1])
+    world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-3], future_price_uncertainty_m=individual[-2], future_price_uncertainty_c=individual[-1])
     time_start = time.perf_counter()
     timestamp_start = time.time()
     for _ in range(YEARS_TO_RUN):
@@ -185,11 +185,12 @@ def get_projection_difference_sum(year_to_compare, results_df):
                                              axis=1)
     results_wa_split = results_wa_split.drop([0, 'year'], axis=1)
     results_wa_long = pd.melt(results_wa_split.reset_index(), id_vars="year")
-    results_wa_long['year'] += 2019
+    results_wa_long['year'] += 2018
     # print("results_wa_long: {}".format(results_wa_long))
 
     if year_to_compare is not None:
-        results_wa_long = results_wa_long[results_wa_long.year == year_to_compare+1]
+        # results_wa_long = results_wa_long[results_wa_long.year == year_to_compare+1]
+        results_wa_long = results_wa_long[results_wa_long.year == year_to_compare]
 
     results_wa_long = results_wa_long.rename(columns={'variable': "fuel_type"})
     results_wa_long = results_wa_long.set_index(['year', 'fuel_type'])
@@ -204,7 +205,7 @@ def get_projection_difference_sum(year_to_compare, results_df):
     beis_2035_long = pd.melt(beis_forecast, id_vars='fuel_type')
     # print("beis_2035_long: {}".format(beis_2035_long))
     beis_2035_long.variable = pd.to_numeric(beis_2035_long.variable)
-    beis_2035_long = beis_2035_long[beis_2035_long.variable <= 2020]
+    # beis_2035_long = beis_2035_long[beis_2035_long.variable <= 2020]
     beis_2035_long = beis_2035_long.rename(columns={"variable": "year"})
     # print("beis_2035_long_1 : {}".format(beis_2035_long))
     beis_2035_long = beis_2035_long.set_index(["year", 'fuel_type'])
@@ -213,6 +214,7 @@ def get_projection_difference_sum(year_to_compare, results_df):
     joined = beis_2035_long.join(results_wa_long, how='inner', lsuffix="_actual", rsuffix="_predicted")
     # print("joined: \n{}".format(joined))
     joined = joined.rename(columns={'value': 'actual', 0: 'simulated'})
+    # joined = joined.reset_index()
     # joined = joined.loc[~joined.index.str.contains('biomass')]
     # print("joined: \n{}".format(joined))
 
@@ -245,13 +247,17 @@ toolbox.register("attr_m", random.uniform, 0.0, 0.003)
 toolbox.register("attr_c", random.uniform, -30, 50)
 toolbox.register("attr_nuclear_sub", random.uniform, 0, 150)
 
+toolbox.register("attr_future_price_uncertainty_m", random.uniform, 0, 10)
+toolbox.register("attr_future_price_uncertainty_c", random.uniform, 0, 10)
 
 toolbox.register("map_distributed", futures.map)
+
+
 
 # Structure initializers
 #                         define 'individual' to be an individual
 #                         consisting of 100 'attr_bool' elements ('genes')
-toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_nuclear_sub), 1)
+toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_m, toolbox.attr_c, toolbox.attr_nuclear_sub, toolbox.attr_future_price_uncertainty_c, toolbox.attr_future_price_uncertainty_m), 1)
 
 # define the population to be a list of individuals
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -274,18 +280,17 @@ toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
 # generation: each individual of the current generation
 # is replaced by the 'fittest' (best) of three individuals
 # drawn randomly from the current generation.
-toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("select", tools.selTournament, tournsize=10)
 
 #----------
 
-
-# eval_world([0.002547, -13.374101]*17)
+20# eval_world([0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547])
 
 def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=63)
+    pop = toolbox.population(n=127)
 
     # CXPB  is the probability with which two individuals
     #       are crossed

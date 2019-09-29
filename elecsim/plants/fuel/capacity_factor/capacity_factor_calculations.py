@@ -35,7 +35,6 @@ def get_capacity_factor(market_time_splices, renewable_type, demand_hour):
     if renewable_type in ['onshore', 'offshore', 'pv']:
         if market_time_splices == 1:
             capacity_factor = segment_capacity_data_by_load_curve(renewable_type, market_time_splices)
-            logger.info(segment_capacity_data_by_load_curve.cache_info())
             capacity_factor_value = get_capacity_factor_value_for_segment(capacity_factor, demand_hour, renewable_type)
         else:
             # capacity_factor = segment_multiple_capacity_data_by_load_curve(capacity_data, historical_demand, model)

@@ -90,7 +90,7 @@ config = {
 
 
 
-# @ray.remote(num_return_vals=5)
+@ray.remote(num_return_vals=5)
 def eval_world(individual):
 
     # time_start = time.time()
@@ -104,13 +104,13 @@ def eval_world(individual):
 
 
     # MARKET_TIME_SPLICES = 8
-    MARKET_TIME_SPLICES = 1
+    MARKET_TIME_SPLICES = 8
     YEARS_TO_RUN = 6
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2013 = "{}/../run/validation-optimisation/scenario_file/scenario_2013.py".format(ROOT_DIR)
 
-    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_all_dat_yearly_time_step", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
+    world = World(initialization_year=2013, scenario_file=scenario_2013, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_all_dat_yearly_time_step_retired_plants", number_of_steps=number_of_steps, fitting_params=[individual[0], individual[1]], highest_demand=63910)
     time_start = time.perf_counter()
     timestamp_start = time.time()
     for i in range(number_of_steps):
@@ -180,7 +180,7 @@ ray.init(num_cpus=4)
 #     eval_world([0.001644, 11.04157])
 
 
-eval_world([0.001644, 11.04157])
+# eval_world([0.001644, 11.04157])
 
 output1, output2, output3, output4, output5 = [], [], [], [], []
 

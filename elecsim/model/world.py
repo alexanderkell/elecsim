@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -124,6 +124,8 @@ class World(Model):
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
         elif elecsim.scenario.scenario_data.investment_mechanism == "future_price_fit":
+            self.future_price_uncertainty_m = future_price_uncertainty_m
+            self.future_price_uncertainty_c = future_price_uncertainty_c
             if fitting_params is not None:
                 self.fitting_params = fitting_params
             elif long_term_fitting_params is not None:
@@ -132,9 +134,11 @@ class World(Model):
             else:
                 raise ValueError("If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World")
 
+
     def step(self, carbon_price=None):
         '''Advance model by one step'''
         self.beginning_of_year = False
+
         if self.step_number % self.market_time_splices == 0:
             self.start = time.perf_counter()
             self.operate_constructed_plants()
@@ -240,11 +244,17 @@ class World(Model):
 
     def get_running_plants(self, plants):
         for plant in plants:
-            if plant.construction_year <= 1990 and plant.name != "invested_plant":
+            # if plant.name in elecsim.scenario.scenario_data.known_plant_retirements:
+
+            if plant.construction_year <= 1990 and plant.name != "invested_plant" and plant.name not in elecsim.scenario.scenario_data.known_plant_retirements:
                 # Reset old plants that have been modernised with new construction year
                 plant.construction_year = randint(self.year_number-15, self.year_number)
-                yield plant
-            elif plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
+                # yield plant
+            elif plant.name in elecsim.scenario.scenario_data.known_plant_retirements:
+                plant.construction_year = elecsim.scenario.scenario_data.known_plant_retirements[plant.name] - (plant.operating_period + plant.construction_period + plant.pre_dev_period) - 1
+                logger.info("plant.name: {}, plant.construction_year: {}".format(plant.name, plant.construction_year))
+
+            if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
                 yield plant
             else:
                 logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
