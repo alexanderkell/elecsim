@@ -237,7 +237,7 @@ class World(Model):
                     power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                     pickle.dump(power_plant, open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "wb"))
                 gen_co.plants.append(power_plant)
-            logger.info('Adding generation company: {}'.format(gen_co.name))
+            logger.debug('Adding generation company: {}'.format(gen_co.name))
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
 
