@@ -53,7 +53,7 @@ class Bid:
         self.bid_accepted = True
         self.plant.accepted_bids.append(self)
 
-        if self.plant.plant_type == "Nuclear":
+        if self.plant.plant_type == "Nuclear" and self.gen_co.model.nuclear_subsidy is not None:
             self.price_per_mwh += self.gen_co.model.nuclear_subsidy
 
     def partially_accept_bid(self, segment_hour, demand_fulfilled):

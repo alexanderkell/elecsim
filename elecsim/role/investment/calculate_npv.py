@@ -81,7 +81,7 @@ class CalculateNPV:
         elif self.price_curve_parameters:
             forecasted_segment_prices = self.price_curve_parameters
 
-        if plant_type == "Nuclear":
+        if plant_type == "Nuclear" and self.model.nuclear_subsidy is not None:
             forecasted_segment_prices['accepted_price'] = forecasted_segment_prices['accepted_price'] + self.model.nuclear_subsidy
 
         logger.debug("Forecasted price duration curve: \n{}".format(forecasted_segment_prices))
@@ -373,7 +373,7 @@ def select_yearly_payback_payment_for_year(power_plant, interest, downpayment_pe
         payment_in_current_year=0
     else:
         try:
-            payment_in_current_year = total_payments[years_since_construction]
+            payment_in_current_year = total_payments[int(years_since_construction)]
         except IndexError:
             payment_in_current_year=0
     return payment_in_current_year

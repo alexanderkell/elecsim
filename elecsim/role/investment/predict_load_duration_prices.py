@@ -91,6 +91,16 @@ class PredictPriceDurationCurve:
         elif self.model.long_term_fitting_params is not None:
             fitting_params = self.model.long_term_fitting_params[self.model.years_from_start]
 
+
+
+        # if self.model.fitting_params is not None and self.model.long_term_fitting_params is not None:
+        if hasattr(self.model, "fitting_params") or hasattr(self.model, "long_term_fitting_params"):
+            try:
+                fitting_params[0] *= np.random.normal(0, self.model.future_price_uncertainty_m)
+                fitting_params[1] *= np.random.normal(0, self.model.future_price_uncertainty_c)
+            except:
+                pass
+
         temp_price_dataframe = {"segment_demand": segment_demand, "segment_hour": segment_hour, "year": year}
 
         price_duration_curve = pd.DataFrame(temp_price_dataframe)

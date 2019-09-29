@@ -172,3 +172,5 @@ years_for_agents_to_predict_forward = 10
 
 # Predict lost load through exponential and linear regression
 lost_load_price_predictor = True
+
+known_plant_retirements = {"Longannet": 2016, "Ferrybridge C": 2016, "Rugeley ": 2016}

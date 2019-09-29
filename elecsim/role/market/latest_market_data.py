@@ -125,13 +125,13 @@ class LatestMarketData:
 
     def get_RL_investment_observations(self):
 
-        years_for_regression = list(range(self.model.years_from_start-5-1, self.model.years_from_start-1))
+        years_for_regression = list(range(self.model.years_from_start-2-1, self.model.years_from_start-1))
 
         historical_co2 = self._get_yearly_change_for_regression(self._get_variable_data("co2"), years_for_regression)
         historical_coal = self._get_yearly_change_for_regression(self._get_variable_data("coal"), years_for_regression)
         historical_gas = self._get_yearly_change_for_regression(self._get_variable_data("gas"), years_for_regression)
-        historical_uraniaum = self._get_yearly_change_for_regression(self._get_variable_data("uranium"), years_for_regression)
-        historical_diesel = self._get_yearly_change_for_regression(self._get_variable_data("diesel"), years_for_regression)
+        # historical_uraniaum = self._get_yearly_change_for_regression(self._get_variable_data("uranium"), years_for_regression)
+        # historical_diesel = self._get_yearly_change_for_regression(self._get_variable_data("diesel"), years_for_regression)
         historical_demand = self._get_yearly_change_for_regression(self._get_variable_data("demand"), years_for_regression)
 
         # historical_coal = self._get_variable_data("coal")
@@ -140,7 +140,8 @@ class LatestMarketData:
         # historical_diesel = self._get_variable_data("diesel")
         # historical_demand = self._get_variable_data("demand")
 
-        obs = {genco.name: np.hstack([historical_co2, historical_coal, historical_gas, historical_uraniaum, historical_diesel, historical_demand, genco.money]).reshape(31,) for genco in self.model.get_gencos()}
+        # obs = {genco.name: np.hstack([historical_co2, historical_coal, historical_gas, historical_uraniaum, historical_diesel, historical_demand, genco.money]).reshape(31,) for genco in self.model.get_gencos()}
+        obs = {genco.name: np.hstack([historical_co2, historical_coal, historical_gas, historical_demand, genco.money]).reshape(9,) for genco in self.model.get_gencos()}
 
         return obs
 
