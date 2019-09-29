@@ -83,19 +83,24 @@ logging.basicConfig(level=logging.INFO)
 
 
 
+# }config = {
+#   'host':'elecsimresults.mysql.database.azure.com',
+#   'user':'alexkell@elecsimresults',
+#   'password':'b3rz0s4m4dr1dth3h01113s!',
+#   'database':'elecsim',
+#   'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+# }
 config = {
-  'host':'elecsimresults.mysql.database.azure.com',
+  'host':'elecsimresults.database.windows.net',
   'user':'alexkell@elecsimresults',
   'password':'b3rz0s4m4dr1dth3h01113s!',
-  'database':'elecsim',
+  'database':'elecsim-results',
   'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
 }
 
 
 
-
 def eval_world(individual):
-
     # time_start = time.time()
     # for i in range(1000):
     #     pass
@@ -108,7 +113,7 @@ def eval_world(individual):
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 18
+    YEARS_TO_RUN = 2
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
@@ -122,7 +127,7 @@ def eval_world(individual):
             if over_invested:
                 return [[99999999], 0, 0, 0, 0]
         _, cumulative_diff = get_projection_difference_sum(world.year_number, results_df)
-        print("cumulative diff: {}".format(cumulative_diff))
+        # print("cumulative diff: {}".format(cumulative_diff))
         if cumulative_diff > 3:
             return [[99999999-(10*world.year_number)], 0, 0, 0, 0]
         else:
@@ -290,7 +295,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=127)
+    pop = toolbox.population(n=2)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
@@ -469,7 +474,7 @@ def main():
 
         first_part = 'INSERT INTO validoptimresults (run_number, time_taken, timestamp_start, timestamp_end, reward, individual_m, individual_c, coal, nuclear, ccgt, wind, solar) VALUES '
 
-        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
+        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18], ind.flat[19], ind.flat[20], ind.flat[21], ind.flat[22], ind.flat[23], ind.flat[24], ind.flat[25], ind.flat[26], ind.flat[27], ind.flat[28], ind.flat[29], ind.flat[30], ind.flat[31], ind.flat[32], ind.flat[33], ind.flat[34], ind.flat[35], ind.flat[36], ind.flat[37], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
 
