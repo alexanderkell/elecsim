@@ -298,7 +298,7 @@ def main():
 
     # create an initial population of 300 individuals (where
     # each individual is a list of integers)
-    pop = toolbox.population(n=64)
+    pop = toolbox.population(n=127)
 
     # CXPB  is the probability with which two individuals
     #       are crossed
