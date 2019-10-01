@@ -315,7 +315,7 @@ def main():
 
 
     # with ProcessPool() as pool:
-    fitnesses_and_time = toolbox.map_distributed(toolbox.evaluate, pop)
+    fitnesses_and_time = list(toolbox.map_distributed(toolbox.evaluate, pop))
     #     future = pool.map(toolbox.evaluate, pop)
     #     iterator = future.result()
     #
