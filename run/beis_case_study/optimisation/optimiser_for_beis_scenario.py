@@ -110,7 +110,7 @@ def eval_world(individual):
     # return [1], time_taken
     # return ([1]),
 
-    individual = np.array([0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    # individual = np.array([0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
