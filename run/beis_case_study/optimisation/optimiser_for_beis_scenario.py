@@ -126,7 +126,10 @@ def eval_world(individual):
     timestamp_start = time.time()
     for _ in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
-            results_df, over_invested = world.step()
+            try:
+                results_df, over_invested = world.step()
+            except:
+                return [[99999999], 0, 0, 0, 0]
             if over_invested:
                 return [[99999999], 0, 0, 0, 0]
         _, cumulative_diff = get_projection_difference_sum(world.year_number, results_df)
