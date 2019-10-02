@@ -228,9 +228,12 @@ def get_projection_difference_sum(year_to_compare, results_df):
 
     joined = joined.groupby("year").apply(get_mix)
     # print("joined grouped: \n{}".format(joined))
-    total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
-    # print(total_difference_col)
-    total_difference = total_difference_col.abs().sum()
+    try:
+        total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
+        # print(total_difference_col)
+        total_difference = total_difference_col.abs().sum()
+    except:
+        total_difference = 999998
     return joined, total_difference
 
 
