@@ -150,8 +150,10 @@ def eval_world(individual):
     # print(joined.simulated)
     # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, joined.simulated))
     # print("input: {} {}, returns: {}, {}, {}".format(individual[0], individual[1], [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated))
-    return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
-
+    try:
+        return [total_difference], time_taken, timestamp_start, timestamp_end, joined.simulated
+    except AttributeError:
+        return [total_difference], time_taken, timestamp_start, timestamp_end, 0
 # contributed_results['run_id'] = np.repeat(list(range(int(len(contributed_results)/number_of_steps))), number_of_steps)
 # def get_year(df):
 #     df['year'] = np.repeat(list(range(YEARS_TO_RUN)), 8)
