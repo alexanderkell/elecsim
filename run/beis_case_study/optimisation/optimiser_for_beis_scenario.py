@@ -143,7 +143,7 @@ def eval_world(individual):
 
     time_taken = time_end-time_start
 
-    joined, total_difference = get_projection_difference_sum(YEARS_TO_RUN, results_df)
+    joined, total_difference = get_projection_difference_sum(world.year_number, results_df)
 
     print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
