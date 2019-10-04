@@ -111,7 +111,6 @@ def eval_world(individual):
     # return ([1]),
 
     # individual = np.array([0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
 
@@ -172,23 +171,23 @@ def get_projection_difference_sum(year_to_compare, results_df):
     best_mix_year = contributed_results.copy()
     # best_mix_year['year'] = np.repeat(list(range(YEARS_TO_RUN)), 8)
     best_mix_year['year'] = np.repeat(list(range(int(len(best_mix_year.index)/8))), 8)
-    # print("contributed_results: {}".format(contributed_results))
+    print("contributed_results: {}".format(contributed_results))
     best_mix_year = best_mix_year.rename(columns={'contributed_PV': "contributed_solar"})
     cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
     # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
-    # print("best_mix_year: {}".format(best_mix_year))
+    print("best_mix_year: {}".format(best_mix_year))
     results_wa = best_mix_year.groupby('year').apply(
         lambda x: np.average(x, weights=cluster_size.values, axis=0)).to_frame()
-    # print("results_wa: {}".format(results_wa))
+    print("results_wa: {}".format(results_wa))
     results_wa_split = pd.DataFrame(results_wa)
-    # print(results_wa.values)
+    print(results_wa.values)
     results_wa_split[
         ['ccgt', "coal", 'onshore', 'offshore', 'solar', 'nuclear', 'recip_gas', 'biomass', 'year']] = pd.DataFrame(
         results_wa.values[0].tolist(), index=results_wa.index)
     results_wa_split
-    # print("results_wa_split: {}".format(results_wa_split))
+    print("results_wa_split: {}".format(results_wa_split))
     # results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
-    # print("results_wa: {}".format(results_wa))
+    print("results_wa: {}".format(results_wa))
     # offshore = results_wa.loc["offshore"].iloc[0]
     # onshore = results_wa.loc["onshore"].iloc[0]
     results_wa_split['wind'] = results_wa_split['offshore'] + results_wa_split['onshore']
@@ -199,7 +198,7 @@ def get_projection_difference_sum(year_to_compare, results_df):
     results_wa_split = results_wa_split.drop([0, 'year'], axis=1)
     results_wa_long = pd.melt(results_wa_split.reset_index(), id_vars="year")
     results_wa_long['year'] += 2018
-    # print("results_wa_long: {}".format(results_wa_long))
+    print("results_wa_long: {}".format(results_wa_long))
 
     if year_to_compare is not None:
         # results_wa_long = results_wa_long[results_wa_long.year == year_to_compare+1]
@@ -207,35 +206,34 @@ def get_projection_difference_sum(year_to_compare, results_df):
 
     results_wa_long = results_wa_long.rename(columns={'variable': "fuel_type"})
     results_wa_long = results_wa_long.set_index(['year', 'fuel_type'])
-    # print("offshore: {}".format(offshore))
     # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
     # results_wa.loc['wind'] = [offshore+onshore]
-    # print("results_wa: {}".format(results_wa))
+    print("results_wa: {}".format(results_wa))
     beis_forecast = pd.read_csv('{}/../run/beis_case_study/data/reference_run/2018-2035-beis.csv'.format(ROOT_DIR))
     # electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
     beis_forecast['fuel_type'] = beis_forecast['fuel_type'].replace(
         {"Coal": 'coal', 'Natural gas': 'Natural_gas', "Nuclear": "nuclear"})
     beis_2035_long = pd.melt(beis_forecast, id_vars='fuel_type')
-    # print("beis_2035_long: {}".format(beis_2035_long))
+    print("beis_2035_long: {}".format(beis_2035_long))
     beis_2035_long.variable = pd.to_numeric(beis_2035_long.variable)
     # beis_2035_long = beis_2035_long[beis_2035_long.variable <= 2020]
     beis_2035_long = beis_2035_long.rename(columns={"variable": "year"})
-    # print("beis_2035_long_1 : {}".format(beis_2035_long))
+    print("beis_2035_long_1 : {}".format(beis_2035_long))
     beis_2035_long = beis_2035_long.set_index(["year", 'fuel_type'])
-    # print("beis_2035_long: {}".format(beis_2035_long))
-    # print("results_wa_long: {}".format(results_wa_long))
+    print("beis_2035_long: {}".format(beis_2035_long))
+    print("results_wa_long: {}".format(results_wa_long))
     joined = beis_2035_long.join(results_wa_long, how='inner', lsuffix="_actual", rsuffix="_predicted")
-    # print("joined: \n{}".format(joined))
+    print("joined: \n{}".format(joined))
     joined = joined.rename(columns={'value': 'actual', 0: 'simulated'})
     # joined = joined.reset_index()
     # joined = joined.loc[~joined.index.str.contains('biomass')]
-    # print("joined: \n{}".format(joined))
+    print("joined: \n{}".format(joined))
 
     joined = joined.groupby("year").apply(get_mix)
-    # print("joined grouped: \n{}".format(joined))
+    print("joined grouped: \n{}".format(joined))
     try:
         total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
-        # print(total_difference_col)
+        print(total_difference_col)
         total_difference = total_difference_col.abs().sum()
     except:
         total_difference = 999998
@@ -300,7 +298,8 @@ toolbox.register("select", tools.selTournament, tournsize=10)
 
 #----------
 
-20# eval_world([0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547])
+# eval_world([0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547])
+eval_world([0.000137615718875977, -20.661061777482672, 0.001855046716492092, -20.20537031004143, 0.0010007529142925344, 31.253694948054033, 0.0027059244084475537, 30.01188585297122, 0.0016018356671484695, 37.59359989736696, 0.0008953508572214155, -12.892645057337102, 0.001513974732012828, 6.506433416826368, 0.002023948965422118, 1.8106558207626051, 0.0008781476149830236, -25.595797095196183, 0.0005881160162589889, 14.435076960058062, 0.0013461065471132225, -10.576048737244264, 0.0001378752516406303, 34.120748147348806, 0.001127774446127339, -17.286036063853363, 0.00012280742501245134, 7.395480867947832, 0.00032273106750109514, -18.93807731245588, 0.0014681438742877098, -21.658343265042717, 0.002670174360030499, 7.383998066104375, 37.94741640791914, 6.616435857663106, 4.446264311226145])
 
 def main():
 
@@ -517,8 +516,8 @@ def main():
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
 
 if __name__ == "__main__":
-    main()
-
+    # main()
+    pass
 
 #NSGA-2
 
