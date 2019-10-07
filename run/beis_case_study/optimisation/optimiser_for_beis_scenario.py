@@ -131,7 +131,7 @@ def eval_world(individual):
                 return [[99999999], 0, 0, 0, 0]
             if over_invested:
                 return [[99999999], 0, 0, 0, 0]
-        _, cumulative_diff = get_projection_difference_sum(world.year_number, results_df)
+        _, cumulative_diff = get_projection_difference_sum(results_df, world.year_number)
         # print("cumulative diff: {}".format(cumulative_diff))
         if cumulative_diff > 3:
             return [[99999999-(10*world.year_number)], 0, 0, 0, 0]
@@ -143,7 +143,7 @@ def eval_world(individual):
 
     time_taken = time_end-time_start
 
-    joined, total_difference = get_projection_difference_sum(world.year_number, results_df)
+    joined, total_difference = get_projection_difference_sum(results_df)
 
     print("max_demand : dif: {} :x {}".format(individual, total_difference))
     # print(joined.simulated)
@@ -163,7 +163,7 @@ def get_mix(df):
     df['simulated_perc'] = df['value_predicted'] / df['value_predicted'].sum()
     return df
 
-def get_projection_difference_sum(year_to_compare, results_df):
+def get_projection_difference_sum(results_df, year_to_compare=None):
     contributed_results = results_df.filter(regex='contributed_')  # .tail(MARKET_TIME_SPLICES)
     contributed_results *= 1 / 24
 
@@ -233,7 +233,7 @@ def get_projection_difference_sum(year_to_compare, results_df):
     # print("joined grouped: \n{}".format(joined))
     try:
         total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
-        print(total_difference_col)
+        # print(total_difference_col)
         total_difference = total_difference_col.abs().sum()
     except:
         total_difference = 999998
