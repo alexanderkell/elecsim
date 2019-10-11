@@ -1,0 +1,105 @@
+---
+title: "paper-visualisations"
+author: "Alexander Kell"
+date: "15/08/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+actual = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/processed/electricity_mix/energy_mix_historical.csv')
+actual = actual %>% mutate(year=as.factor(year),variable = str_replace_all(.$variable, c("coal"="Coal", "nuclear"="Nuclear", "ccgt"="CCGT", "solar"="Solar", "wind"="Wind"))) %>% rename(Technology=variable, Year=year) 
+actual
+```
+
+
+```{r}
+relevant_data = filter(actual, Year%in%c(2013,2018), Technology %in% c("Coal", "Nuclear", "CCGT", "Wind", "Solar"))
+ggplot(relevant_data, aes(x=Technology, y=value ,fill=Year)) + geom_col(position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Average Electricity Supply (MW)") +scale_fill_brewer(palette = 'Set2')
+    
+ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/introduction/uk_historical_mix.pdf")
+
+```
+
+
+```{r}
+relevant_data %>% group_by(Technology) %>%
+    mutate(lag = lag(value)) %>%
+    mutate(pct.change =100* (lag - value) / lag)
+
+```
+
+```{r}
+pred_actuals = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals.csv', col_names = c("Type", "Technology", "Year", "Values"))
+
+actual$Year = as.numeric(as.character(actual$Year))
+
+actual_perc = actual %>% group_by(Year) %>% mutate(value_perc = value/sum(value)*100)
+
+naive_model = forecast::naive(filter(actual_perc, Technology=="CCGT", Year<2013)$value_perc)
+
+forecast::accuracy(naive_model, filter(pred_actuals, Technology=="CCGT", Type=="Predicted")$Values)
+
+
+
+get_error_metrics = function(df){
+    ts_actual = ts(filter(actual_perc, Technology==df$Technology[1])$value_perc, start=2011, end=2019, frequency = 1)
+    windowed_actual = window(ts_actual, start=2011, end=2012)
+    
+    naive_model = forecast::naive(windowed_actual, h=6)
+    
+    ts_abm = ts(filter(df, Type=="Predicted")$Values, start=2013, end=2018)
+    windowed_abm = window(ts_abm, start=2013)
+    metrics = forecast::accuracy(naive_model, x=windowed_abm)
+    
+    p=autoplot(ts_actual) +autolayer(naive_model, series="Naive", PI=FALSE) +xlab("Year") + ylab("MW") + autolayer(windowed_abm, series="ABM") + ggtitle(df$Technology[1])
+    print(p)
+
+    
+    return(metrics)
+}
+
+dlply(pred_actuals, .(Technology), get_error_metrics)
+    ```
+
+```{r}
+
+MASE = function(y_pred, y_true, naive){
+    abm_MAE = MAE(y_pred, y_true)
+    naive_MAE = MAE(naive, y_true)
+    
+    MASE_val = abm_MAE/naive_MAE
+}
+
+get_all_error_metrics = function(predicted, actual){
+    y_pred = predicted$Values
+    y_true = filter(actual, Year>=2013, Year<2019, Technology==predicted$Technology[1])$value_perc
+    RMSE_val = RMSE(y_pred, y_true)
+    MAE_val = MAE(y_pred, y_true)
+    
+    mase_val = MASE(y_pred, y_true, filter(actual, Year==2012, Technology==predicted$Technology[1])$value_perc)
+    
+    metric_names = c("MASE","RMSE", "MAE", "SD")
+    metric_results = c(mase_val, RMSE_val, MAE_val, sd(y_pred))
+    metric_results_df = data.frame(Metric = metric_names, Value = metric_results) %>%     mutate_if(is.numeric, round, 3)
+    metric_results_wide = spread(metric_results_df, Metric, Value)
+    
+}
+
+abm_predicted = filter(pred_actuals, Type=="Predicted")
+
+
+metric_results_df = ddply(abm_predicted, .(Technology), get_all_error_metrics, actual_perc)
+write_csv(metric_results_df, '~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/results/error_metrics.csv')
+ 
+# metric_names = c("RMSE", "MASE", "MAE", "SD")
+# metric_results = c(RMSE(actuals, predicted), MASE, MAE(actuals,predicted), sd(predicted))
+# metric_results_df = data.frame(Metric = metric_names, Value = metric_results) %>% mutate_if(is.numeric, round, 3)
+# metric_results_df
+# write_csv(metric_results_df, '~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/results/error_metrics.csv')
+
+```
