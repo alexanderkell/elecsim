@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -81,7 +81,7 @@ class World(Model):
         self.override_carbon_scenario(carbon_price_scenario)
         self.override_demand_change(demand_change)
 
-        self.override_total_demand(total_demand)
+        self.override_total_demand(total_demand, number_of_agents)
 
         self.schedule = OrderedActivation(self)
 
@@ -436,6 +436,8 @@ class World(Model):
         return stratified_sample
 
 
+
+
     def set_log_level(self, log_level):
         if log_level.lower() == "warning":
             logging.basicConfig(level=logging.WARNING)
@@ -473,7 +475,7 @@ class World(Model):
 
         )
 
-    def override_total_demand(self, total_demand):
+    def override_total_demand(self, total_demand, number_of_agents=None):
         self.total_demand = total_demand
         if total_demand is not None:
             elecsim.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
@@ -484,6 +486,15 @@ class World(Model):
                 "total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
             elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in
                                                                     elecsim.scenario.scenario_data.segment_demand_diff]
+
+            if number_of_agents is not None:
+                total_plants = len(elecsim.scenario.scenario_data.power_plants)
+                fraction_to_replace = total_plants/number_of_agents
+
+                company_names = ["company_{}".format(i) for i in range(number_of_agents)]
+                elecsim.scenario.scenario_data.power_plants.Company = np.repeat(company_names, int(fraction_to_replace))
+
+
 
     def override_highest_demand(self, highest_demand):
         if highest_demand:

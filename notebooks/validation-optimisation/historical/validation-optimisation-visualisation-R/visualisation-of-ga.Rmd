@@ -1,0 +1,350 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library("tidyverse")
+library("ggplot2")
+library(plyr)
+library("mco")
+```
+```{r}
+run_1 = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/validation-optimisation/data/run_2.csv')
+tail(run_1)
+```
+```{r}
+ggplot(filter(run_1), aes(y=individual_m, x=individual_c)) + geom_hex(bins=10)
+```
+
+```{r}
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_point() + ggtitle("Scatter plot of input parameters and reward")
+p$labels$fill <- "Absolute \nPercentage \nError"
+print(p)
+```
+```{r}
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=reward), size=10) + facet_wrap(~run_number) + geom_jitter() + ggtitle("Scatter (jitter) plot of input parameters and reward")
+p$labels$fill <- "Absolute \nPercentage \nError"
+print(p)
+```
+
+
+```{r}
+p = ggplot(run_1, aes(y=individual_m, x=individual_c, color=time_taken), size=10) + facet_wrap(~run_number) + geom_jitter() + ggtitle("Scatter plot of input parameters and time taken")
+p$labels$fill <- "Time \nTaken"
+print(p)
+
+```
+
+```{r}
+p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = reward), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1)) + ggtitle("Hexagonal heatmap of input parameters and Absolute Percentage Error")
+p$labels$fill <- "Absolute \nPercentage \nError"
+print(p)
+
+ggsave("~/Desktop/genetic_algorithm_progression.png")
+```
+
+```{r}
+run_1 %>% group_by(run_number) %>% summarise(avg_reward = mean(reward)) %>% ggplot()+ geom_smooth(data=run_1, aes(x=run_number, reward))+geom_line(aes(x=run_number, y=avg_reward))+ggtitle("Average reward vs Population Number") 
+```
+
+
+
+
+
+```{r}
+# accurate_area = filter(run_1, individual_c<-4.8, individual_c>-50, individual_m <0.003, individual_m > 0.0023)
+# accurate_area = filter(run_1, reward < 0.2)
+# accurate_area = filter(run_1, run_number==11)
+accurate_area = filter(run_1, run_number == 16)
+
+accurate_area
+
+```
+
+```{r}
+ ggplot(data=accurate_area, aes(x=individual_c, y=individual_m, color=reward))+geom_jitter()+geom_point(color="red", alpha=0.5) + ggtitle("Scatter and Jitterplot of Reward against Input Parameters for \nLast Population of GA")
+
+```
+
+
+```{r}
+accurate_area_long = gather(accurate_area, "key", "value", "coal", "ccgt", "wind", "nuclear", "solar")
+accurate_area_long_perc = accurate_area_long %>% group_by(id) %>% mutate(value_perc = value/sum(value))
+
+```
+
+
+```{r}
+params_more_than_10 = run_1 %>% group_by(individual_c, individual_m) %>% mutate(number = n()) %>% ungroup() %>% filter(number> 10) %>% mutate_if(is.numeric, round, 6) 
+
+params_more_than_10 %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2), alpha=0.05) + ggtitle("Violin plot of input parameters with more than 10 simulations \nagainst distribution of reward")
+
+```
+
+```{r}
+accurate_area %>% mutate_if(is.numeric, round, 6) %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2))+ ggtitle("Violin plot of input parameters with more than 10 simulations of last population of GA\nagainst distribution of reward")
+
+```
+
+
+```{r}
+actual_mix = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/processed/electricity_mix/energy_mix_historical.csv')
+actual_mix_2018 = filter(actual_mix, year==2018)
+
+
+actual_mix_2018$type = "actual"
+
+actual_mix_2018
+```
+
+```{r}
+actual_mix_2018_reduced = filter(actual_mix_2018, variable %in% c("ccgt", 'wind', 'nuclear', 'solar', 'coal'))
+actual_mix_2018_reduced = actual_mix_2018_reduced %>% mutate(value_perc = value/sum(value))
+actual_mix_2018_reduced = dplyr::rename(actual_mix_2018_reduced, key=variable)
+head(actual_mix_2018_reduced)
+```
+```{r}
+accurate_area_long_perc$type = 'predicted'
+accurate_area_long_perc
+
+comparison = rbind(select(ungroup(accurate_area_long_perc), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
+```
+
+
+
+
+
+```{r}
+ggplot(comparison, aes(x=key, y=value_perc, fill=type)) +
+  stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ylab("Energy Mix (%)") + ggtitle("Combination of all runs in last genetic algorithm run")
+
+ggsave('~/Desktop/average_error_of_best_params.png')
+```
+
+```{r}
+best_result = run_1 %>% group_by("id") %>% filter(reward==min(reward)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted")
+
+comparison_best = rbind(select(ungroup(best_result), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
+
+ggplot(comparison_best, aes(x=key, y=value_perc, fill=type)) + geom_col(position = "dodge2") + ylab("Energy Mix (%)") + ggtitle("Best single run")
+```
+
+
+```{r}
+pdc_example = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/price_demand_curve_example.csv')
+
+
+demand_range = data.frame(x=seq(from=min(pdc_example$segment_demand),max(pdc_example$segment_demand),length.out=500))
+
+get_line = function(c, m){
+    y = m * demand_range + c
+    return(y)
+}
+
+get_x = function(){
+    return(demand_range)
+}
+
+# lines = accurate_area %>% group_by(id) %>% apply(get_line(.))
+
+lines = ddply(accurate_area, .(id), transform, y=get_line(individual_c, individual_m), x=get_x())
+
+
+ggplot() + geom_line(data=lines, aes(x=x.1, y=x, group=id, color=reward)) + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="red") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Last genetic algorithm run price curves between 2023-2028 \ncompared to price in 2018")
+
+```
+
+```{r}
+best_75_percentile = accurate_area %>% group_by(individual_c, individual_m) %>% summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
+
+p = ddply(best_75_percentile, .(name), transform, y=get_line(individual_c, individual_m), x=get_x())  %>% ggplot() + geom_line(aes(x=x.1, y=x, color=name))+ stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="yellow") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Price curve of best runs at different percentiles of last genetic \nalgorithm population")
+p$labels$fill <- "Percentiles"
+print(p)
+```
+```{r}
+best_percentiles_comparison = inner_join(accurate_area, best_75_percentile, by=c('individual_c', 'individual_m')) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type=name)
+
+comparison_percentiles = rbind(select(ungroup(best_percentiles_comparison), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
+
+comparison_percentiles %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Comparison of energy mix of final genetic algorithm population \nat different quantile levels")
+
+
+```
+```{r}
+rbind(filter(select(ungroup(best_percentiles_comparison), "key", "type", "value", 'value_perc'),type=="50%"), select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Best parameter combinations from final genetic algorithm run")
+
+```
+
+
+## BEST PARAMETER COMBINATION FROM ALL RUNS
+
+```{r}
+best_75_percentile_all_runs = run_1 %>% group_by(individual_c, individual_m) %>% summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75, 0.9, 1.0))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
+
+p = ddply(best_75_percentile_all_runs, .(name), transform, y=get_line(individual_c, individual_m), x=get_x())  %>% ggplot() + geom_line(aes(x=x.1, y=x, color=name))+ stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="yellow") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Percentiles from all runs")
+p$labels$fill <- "Percentiles"
+print(p)
+```
+```{r}
+best_percentiles_comparison = inner_join(run_1, best_75_percentile_all_runs, by=c('individual_c', 'individual_m')) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type=name)
+
+comparison_percentiles = rbind(select(ungroup(best_percentiles_comparison), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
+
+comparison_percentiles %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2")
+```
+```{r}
+rbind(filter(select(ungroup(best_percentiles_comparison), "key", "type", "value", 'value_perc'),type=="75%" | type=="90%"), select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Best parameter combinations from all genetic algorithm runs")
+
+```
+
+## Calculation of best quantile to select combination of parameters for lowest reward
+
+```{r}
+best_params = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% filter(rank(mean_diff_perc, ties.method="first")==1)
+
+best_params_comparison = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted")
+
+comparison_best_params = rbind(select(ungroup(best_params_comparison), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
+
+comparison_best_params %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Comparison of predicted vs actual for best parameter set over 10 from all runs")
+
+
+
+## Getting MAPE for best param
+
+predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc)) 
+
+print(paste("MAPE = ", MAPE(predicted_means_best_param$predicted_perc, actual_mix_2018_reduced$value_perc)))
+
+```
+
+```{r}
+p = best_params %>% transform(y=get_line(individual_c, individual_m), x=get_x())  %>% ggplot() + geom_line(aes(x=x.1, y=x))+ stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="yellow") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Best paramater combination price curve")
+p$labels$fill <- "Percentiles"
+print(p)
+
+```
+
+
+# Calculation of best parameters with lowest variance and error
+```{r}
+# best_params = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% filter(rank(mean_diff_perc, ties.method="first")==1)
+
+# calculate_mean_error = function(df){
+#     
+#     return(gather(df, "key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% inner_join(actual_mix_2018_reduced, by='key'))
+# }
+
+# params_more_than_10 %>% group_by(individual_c, individual_m) %>% do(., calculate_mean_error)
+# ddply(params_more_than_10, .(individual_c, individual_m), calculate_mean_error)
+
+params_sd_mean_reward = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(diff_sd = sd(diff_perc), mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% group_by(individual_c, individual_m) %>% summarise(diff_sd = sd(diff_sd), mean_diff_perc = mean(mean_diff_perc))
+
+params_sd_mean_reward_ordered = arrange(params_sd_mean_reward, diff_sd, mean_diff_perc)
+frontier = get_frontier(as.data.frame(params_sd_mean_reward_ordered), diff_sd, mean_diff_perc, decreasing = FALSE, quadrant = "bottom.left")
+
+params_sd_mean_reward %>% ggplot() + geom_point(aes(diff_sd, mean_diff_perc)) + geom_line(data=frontier, aes(diff_sd, mean_diff_perc), color="red") + ggtitle("Pareto frontier of standard deviation versus mean for simulations \nof more than 10 runs")
+
+```
+
+```{r}
+params_more_than_10_perc = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value))
+
+frontier_full_data = frontier %>% inner_join(params_sd_mean_reward_ordered, by=c('diff_sd', 'mean_diff_perc')) %>% inner_join(params_more_than_10_perc, by=c("individual_c", "individual_m")) %>% mutate(type=paste(mean_diff_perc,diff_sd))
+
+
+rbind(filter(select(frontier_full_data, "key", "type", "value", 'value_perc')), select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Best parameter combinations from all genetic algorithm runs")
+    
+```
+
+```{r}
+best_one = select(filter(frontier_full_data, mean_diff_perc<0.067), "key", "type", "value", 'value_perc')
+best_one$type = "Simulated"
+
+actual_mix_2018_reduced$type = "Actual"
+
+rbind(best_one, select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Electricity Mix (%)") +scale_fill_brewer(palette = 'Set2')
+
+ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run.pdf")
+```
+
+```{r}
+best_actual = rbind(best_one, select(actual_mix_2018_reduced, -X1, -year))
+best_actual_stats = best_actual %>% group_by(type, key) %>% summarise(sd_value = sd(value_perc), mean_value = mean(value_perc)) 
+
+actuals = filter(best_actual_stats, type=="Actual")$mean_value
+predicted = filter(best_actual_stats, type=="Simulated")$mean_value
+
+RMSE(actuals,predicted)
+```
+
+```{r}
+best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
+best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
+
+best_params %>% transform(y=get_line(best_c, best_m), x=get_x())  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Price Duration Curve (2018)")) + geom_line(aes(x=x.1, y=x, color="Predicted")) + xlab("Demand (MW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("Simulated Fit (2018)" = "blue", "Predicted" = "red", 'Price Duration Curve (2018)'='black'))  + theme_bw()
+
+ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/results/best_run_price_dur_curve.pdf", dpi=500, height=5, width=5)
+```
+
+```{r}
+p=ggplot(run_1, aes(y=individual_m, x=individual_c)) + stat_summary_hex(aes(z = time_taken), bins=10) + facet_wrap(~ run_number) + scale_x_continuous(breaks = round(seq(min(run_1$individual_c), max(run_1$individual_c), by = 25),1)) + ggtitle("Hexagonal heatmap of input parameters against time taken with respect to population number")
+p$labels$fill <- "Time \n Taken"
+print(p)
+
+ggsave('~/Desktop/time-taken-parameters.png')
+```
+
+```{r}
+run_1 %>% arrange(desc(run_number)) %>% ggplot(alpha=0.1, aes(y=individual_m, x=individual_c)) + geom_point(aes(color=run_number, size=time_taken)) + ggtitle("Scatter plot showing run number against time taken and reward")
+```
+
+```{r}
+run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=time_taken)) + geom_violin() + ggtitle("Violin plot of time taken for each simulation run against population number")
+```
+```{r}
+ggplot(data=run_1, aes(x=as.factor(run_number), y=reward))+geom_boxplot()+geom_jitter(position=position_jitter(0.2), alpha=0.5, color='blue') + ggtitle("Boxplot and jitter of run number against reward")
+```
+
+
+```{r}
+run_1 %>% filter(individual_c<-3, individual_m <0.0025, individual_m > 0.0015) %>% ggplot(aes(x=as.factor(run_number), y=reward)) + geom_violin() + ggtitle("Violin plot of reward against population number")
+
+```
+
+```{r}
+ggplot(run_1, aes(x=reward, y=time_taken))+stat_smooth(method = "lm")+geom_point()+xlab("Absolute Percentage Error") + ggtitle("Scatter plot of time taken for each simulation run against \nabsolute percentage error")
+
+```
+
+```{r}
+dif_sum = run_1_long %>% inner_join(actual_mix_2018_reduced, by='key') %>% group_by(id,key) %>% mutate(total_difference = value.x-value.y) %>% ddply(.(id, key), summarise, difference_sum = sum(total_difference), time_taken=time_taken, reward=reward, run_number=run_number) %>% group_by(id) %>% summarise(tot_diff = sum(difference_sum), time_taken=mean(time_taken), reward=mean(reward), run_number=mean(run_number))
+
+plot_ly(data=dif_sum, x=~tot_diff, y=~time_taken, z=~reward, type="scatter3d", mode="markers", color=~run_number) 
+```
+
+```{r}
+ggplot()+geom_point(data=run_1, aes(x=time_taken, y=reward, color=run_number)) + ggtitle("Scatter plot of time taken against reward")
+```
+
+```{r}
+run_1
+
+run_1_long = gather(run_1, "key", "value", "coal", "ccgt", "wind", "nuclear", "solar")
+
+# run_1_long %>% inner_join(actual_mix_2018_reduced, by='key') %>% group_by(id,key) %>% mutate(total_difference = value.x-value.y) %>% group_by(id, key) %>% summarise(difference_sum = sum(total_difference))
+
+ggplot(data=dif_sum, aes(x=tot_diff, y=time_taken, color=reward)) + geom_point()+geom_smooth()+xlim(-11000,10000)
+
+# actual_mix_2018_reduced
+```
+```{r}
+ggplot(data=dif_sum, aes(x=tot_diff, color=time_taken, y=reward)) + geom_point()+geom_smooth()+xlim(-11000,10000)
+```
+
+```{r}
+ggplot(run_1, aes(x=run_number, y=time_taken, color=reward)) + geom_point() +
+   geom_smooth(method='lm')
+```

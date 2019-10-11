@@ -5,6 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
 from elecsim.model.world import World
 import tracemalloc
+from elecsim.constants import ROOT_DIR
 
 import pandas as pd
 import linecache
@@ -52,7 +53,7 @@ __email__ = "alexander@kell.es"
 logging.basicConfig(level=logging.INFO)
 
 MARKET_TIME_SPLICES = 8
-YEARS_TO_RUN = 40
+YEARS_TO_RUN = 30
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 num_cpus = psutil.cpu_count(logical=True)
@@ -60,11 +61,12 @@ num_cpus = psutil.cpu_count(logical=True)
 print("num_cpus: {}".format(num_cpus))
 # ray.init(num_cpus=1, redis_max_memory=32000000000)
 
-time.sleep(20)
+# time.sleep(20)
+scenario_RL_few_agents = "{}/../run/reinforcement_learning/scenario/scenario_RL_small.py".format(ROOT_DIR)
 
 # @ray.remote
 def run_world(num_steps=number_of_steps):
-    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps)
+    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps, scenario_file=scenario_RL_few_agents, total_demand=5000, number_of_agents=3)
     for i in range(num_steps):
         world.step()
 
