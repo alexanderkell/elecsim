@@ -53,7 +53,7 @@ __email__ = "alexander@kell.es"
 logging.basicConfig(level=logging.INFO)
 
 MARKET_TIME_SPLICES = 8
-YEARS_TO_RUN = 30
+YEARS_TO_RUN = 20
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 num_cpus = psutil.cpu_count(logical=True)
