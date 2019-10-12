@@ -40,7 +40,6 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
-
 class World(Model):
     """
     Model for the electricity landscape world
@@ -492,9 +491,10 @@ class World(Model):
                 fraction_to_replace = total_plants/number_of_agents
 
                 company_names = ["company_{}".format(i) for i in range(number_of_agents)]
-                elecsim.scenario.scenario_data.power_plants.Company = np.repeat(company_names, int(fraction_to_replace))
+                company_name_repeated = np.repeat(company_names, int(fraction_to_replace))
+                company_name_repeated = np.append(company_name_repeated, np.array(["company_{}".format(number_of_agents-1) for i in range(100)]))
 
-
+                elecsim.scenario.scenario_data.power_plants.Company = company_name_repeated[:total_plants]
 
     def override_highest_demand(self, highest_demand):
         if highest_demand:
