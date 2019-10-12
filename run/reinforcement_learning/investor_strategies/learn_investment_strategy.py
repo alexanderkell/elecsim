@@ -1,9 +1,9 @@
 import os.path
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
-
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../../'))
 from elecsim.model.world import World
+
 import tracemalloc
 from elecsim.constants import ROOT_DIR
 
@@ -71,7 +71,7 @@ def run_world(num_steps=number_of_steps):
         world.step()
 
 # results = []
-for j in range(10000):
+for j in range(900000):
     run_world(number_of_steps)
     # results.append(run_world.remote(number_of_steps))
 
