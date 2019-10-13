@@ -115,7 +115,7 @@ def eval_world(individual):
 
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 18
+    YEARS_TO_RUN = 5
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
@@ -230,11 +230,12 @@ def get_projection_difference_sum(results_df, year_to_compare=None):
     # print("joined: \n{}".format(joined))
 
     joined = joined.groupby("year").apply(get_mix)
-    # print("joined grouped: \n{}".format(joined))
+    print("joined grouped: \n{}".format(joined))
     try:
         total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
-        # print(total_difference_col)
+        print(total_difference_col)
         total_difference = total_difference_col.abs().sum()
+        print(total_difference)
     except:
         total_difference = 999998
     return joined, total_difference
