@@ -111,8 +111,11 @@ if __name__ == "__main__":
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
-                # "evaluation_num_episodes": 1,
+                "evaluation_num_episodes": 1,
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
+                "sample_batch_size": 40,
+                "train_batch_size": 40,
+                # "horizon": 40,
             }
         }
     })
