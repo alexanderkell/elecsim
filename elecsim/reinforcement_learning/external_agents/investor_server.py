@@ -113,9 +113,9 @@ if __name__ == "__main__":
                 # "num_workers": 1,
                 "evaluation_num_episodes": 1,
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
-                "sample_batch_size": 40,
-                "train_batch_size": 40,
-                # "horizon": 40,
+                "sample_batch_size": 25,
+                "train_batch_size": 25,
+                "horizon": 25,
             }
         }
     })
