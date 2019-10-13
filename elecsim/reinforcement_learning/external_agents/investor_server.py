@@ -74,42 +74,46 @@ if __name__ == "__main__":
 
     # We use DQN since it supports off-policy actions, but you can choose and
     # configure any agent.
-    # dqn = PPOTrainer(
-    #     env="srv",
-    #     config={
-    #         # Use a single process to avoid needing to set up a load balancer
-    #         # "num_workers": 0,
-    #         "evaluation_num_episodes": 1,
-    #         # "sample_batch_size": 40,
-    #         # "train_batch_size": 40,
-    #         # "horizon": 40,
-    #     })
-    #
-    # # Attempt to restore from checkpoint if possible.
-    # # if os.path.exists(CHECKPOINT_FILE):
-    # #     checkpoint_path = open(CHECKPOINT_FILE).read()
-    # #     print("Restoring from checkpoint path", checkpoint_path)
-    # #     dqn.restore(checkpoint_path)
-    #
-    # # Serving and training loop
-    # while True:
-    #     print(pretty_print(dqn.train()))
-    #     checkpoint_path = dqn.save()
-    #     print("Last checkpoint", checkpoint_path)
-    #     with open(CHECKPOINT_FILE, "w") as f:
-    #         f.write(checkpoint_path)
+    dqn = PPOTrainer(
+        env="srv",
+        config={
+            # Use a single process to avoid needing to set up a load balancer
+            # "num_workers": 0,
+            "evaluation_num_episodes": 1,
+            # "sample_batch_size": 40,
+            # "train_batch_size": 40,
+            # "horizon": 40,
+        })
 
-    tune.run_experiments({
-        "my_experiment": {
-            "run": "PG",
-            "env": "srv",
-            'checkpoint_at_end': True,
-            'checkpoint_freq': 1,
-            "config": {
-                # "num_gpus": 0,
-                # "num_workers": 1,
-                "evaluation_num_episodes": 1,
-                # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
-            }
-        }
-    })
+    # Attempt to restore from checkpoint if possible.
+    # if os.path.exists(CHECKPOINT_FILE):
+    #     checkpoint_path = open(CHECKPOINT_FILE).read()
+    #     print("Restoring from checkpoint path", checkpoint_path)
+    #     dqn.restore(checkpoint_path)
+
+    # Serving and training loop
+    while True:
+        print(pretty_print(dqn.train()))
+        checkpoint_path = dqn.save()
+        print("Last checkpoint", checkpoint_path)
+        with open(CHECKPOINT_FILE, "w") as f:
+            f.write(checkpoint_path)
+
+
+
+
+
+    # tune.run_experiments({
+    #     "my_experiment": {
+    #         "run": "PG",
+    #         "env": "srv",
+    #         'checkpoint_at_end': True,
+    #         'checkpoint_freq': 1,
+    #         "config": {
+    #             # "num_gpus": 0,
+    #             # "num_workers": 1,
+    #             "evaluation_num_episodes": 1,
+    #             # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
+    #         }
+    #     }
+    # })
