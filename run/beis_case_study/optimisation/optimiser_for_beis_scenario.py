@@ -115,7 +115,7 @@ def eval_world(individual):
 
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 5
+    YEARS_TO_RUN = 18
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
@@ -133,7 +133,7 @@ def eval_world(individual):
                 return [[99999999], 0, 0, 0, 0]
         _, cumulative_diff = get_projection_difference_sum(results_df, world.year_number)
         # print("cumulative diff: {}".format(cumulative_diff))
-        if cumulative_diff > 3:
+        if cumulative_diff > 1:
             return [[99999999-(10*world.year_number)], 0, 0, 0, 0]
         else:
             pass
