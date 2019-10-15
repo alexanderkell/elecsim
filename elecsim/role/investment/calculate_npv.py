@@ -81,6 +81,8 @@ class CalculateNPV:
         elif self.price_curve_parameters:
             forecasted_segment_prices = self.price_curve_parameters
 
+        logger.debug("forecasted_segment_prices: {}".format(forecasted_segment_prices))
+
         if plant_type == "Nuclear" and self.model.nuclear_subsidy is not None:
             forecasted_segment_prices['accepted_price'] = forecasted_segment_prices['accepted_price'] + self.model.nuclear_subsidy
 
