@@ -134,7 +134,8 @@ def eval_world(individual):
         _, cumulative_diff = get_projection_difference_sum(results_df, world.year_number)
         # print("cumulative diff: {}".format(cumulative_diff))
         if cumulative_diff > 1:
-            return [[99999-(10*world.year_number)], 0, 0, 0, 0]
+            joined, total_difference = get_projection_difference_sum(results_df)
+            return [[99999-(10*world.year_number)+(10*total_difference/world.years_from_start)], 0, 0, 0, 0]
         else:
             pass
 
