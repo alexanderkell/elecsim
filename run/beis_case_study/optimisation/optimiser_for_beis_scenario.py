@@ -263,8 +263,8 @@ toolbox.register("attr_m", random.uniform, 0.0, 0.003)
 toolbox.register("attr_c", random.uniform, -30, 50)
 toolbox.register("attr_nuclear_sub", random.uniform, 0, 150)
 
-toolbox.register("attr_future_price_uncertainty_m", random.uniform, 0, 10)
-toolbox.register("attr_future_price_uncertainty_c", random.uniform, 0, 10)
+toolbox.register("attr_future_price_uncertainty_m", random.uniform, 0, 0.001)
+toolbox.register("attr_future_price_uncertainty_c", random.uniform, 0, 0.001)
 
 toolbox.register("map_distributed", futures.map)
 

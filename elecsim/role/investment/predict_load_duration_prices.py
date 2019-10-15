@@ -91,13 +91,14 @@ class PredictPriceDurationCurve:
         elif self.model.long_term_fitting_params is not None:
             fitting_params = self.model.long_term_fitting_params[self.model.years_from_start]
 
+            holder_params = fitting_params.copy()
 
 
         # if self.model.fitting_params is not None and self.model.long_term_fitting_params is not None:
         if hasattr(self.model, "fitting_params") or hasattr(self.model, "long_term_fitting_params"):
             try:
-                fitting_params[0] *= np.random.normal(0, self.model.future_price_uncertainty_m)
-                fitting_params[1] *= np.random.normal(0, self.model.future_price_uncertainty_c)
+                holder_params[0] *= np.random.normal(0, self.model.future_price_uncertainty_m)
+                holder_params[1] *= np.random.normal(0, self.model.future_price_uncertainty_c)
             except:
                 pass
 
