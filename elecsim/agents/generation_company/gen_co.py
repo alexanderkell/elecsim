@@ -197,7 +197,7 @@ class GenCo(Agent):
                     self.plants.append(power_plant_trial_group)
                     self.money -= down_payment_of_plant_array
                     total_capacity += power_plant_trial_group.capacity_mw
-                    if total_capacity > 400000:#20000000:
+                    if total_capacity > 400000:  # 20000000:
                         return 1, True
                     break
         else:
