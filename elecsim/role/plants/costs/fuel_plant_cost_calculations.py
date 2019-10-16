@@ -139,13 +139,15 @@ class FuelPlantCostCalculations(PlantCostCalculations):
         :return: Projected carbon costs per year in a list.
         """
 
-        if carbon_price is not None:
-            carbon_taxation_years = carbon_price
-        else:
-            carbon_cost = self.get_BEIS_carbon_price()
+        # if carbon_price is not None:
+        #     carbon_taxation_years = carbon_price
+        # else:
+        #     carbon_cost = self.get_BEIS_carbon_price()
 
-            year_of_beginning_operation = self.construction_year + self.pre_dev_period + self.construction_period
-            carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(
+        carbon_cost = elecsim.scenario.scenario_data.carbon_price_all_years
+
+        year_of_beginning_operation = self.construction_year + self.pre_dev_period + self.construction_period
+        carbon_taxation_years = carbon_cost[carbon_cost.year.between(int(self.construction_year), int(
                 year_of_beginning_operation + self.operating_period - 1))]
 
         carbon_emitted = self._carbon_emitted()

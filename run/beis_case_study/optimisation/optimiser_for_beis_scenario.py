@@ -98,6 +98,23 @@ config = {
   'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
 }
 
+individual = [0.0008511025216197233, -19.401661062932867, 0.0011783850942485227, 28.372621454606346, 0.00045211623446195226, -0.8869895123482578, 0.001990172840181233, -26.62954223546275, 0.0013294027220983713, 28.366489431445117, 0.00032990652213096594, 19.702647146213152, 0.0018327351810797237, 25.982769312435458, 0.0010323528404664096, -15.727441248270662, 0.0015728931970942803, 21.064899879817567, 0.002544556341860616, -28.75419672041393, 0.0009919097111649798, 23.91323044344687, 0.0002036797053729983, 37.23702573512712, 8.969174302065286e-05, -29.1974902640617, 0.0016528990587127185, 10.875430707140453, 0.00025852828226591675, 6.950537979812879, 0.0024498096786748024, -27.711357581803078, 0.0027747731964244716, -5.721543410375382, 59.327775666610734, 0.00022630375749908794, 0.0002446821648453724]
+
+prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
+
+MARKET_TIME_SPLICES = 8
+YEARS_TO_RUN = 18
+number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
+
+scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
+
+world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-3], future_price_uncertainty_m=individual[-2], future_price_uncertainty_c=individual[-1])
+time_start = time.perf_counter()
+timestamp_start = time.time()
+for _ in range(YEARS_TO_RUN):
+    for i in range(MARKET_TIME_SPLICES):
+        results_df, over_invested = world.step()
+
 
 
 def eval_world(individual):
@@ -111,6 +128,7 @@ def eval_world(individual):
     # return ([1]),
 
     # individual = np.array([0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
 

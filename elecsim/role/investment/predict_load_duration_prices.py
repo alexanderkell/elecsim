@@ -8,7 +8,7 @@ import os, sys
 from elecsim.market.electricity.market.power_exchange import PowerExchange
 from elecsim.role.market.latest_market_data import LatestMarketData
 from elecsim.role.investment.curve_fitting_functions import logit
-from elecsim.scenario.scenario_data import electricity_baseload, electricity_volume_weighted, years_for_agents_to_predict_forward
+from elecsim.scenario.scenario_data import years_for_agents_to_predict_forward
 import elecsim.scenario.scenario_data
 from scipy.optimize import curve_fit
 logger = logging.getLogger(__name__)

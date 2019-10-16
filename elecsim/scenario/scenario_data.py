@@ -36,10 +36,6 @@ multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/4_medoids
 historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
-# Future electricity prices
-electricity_volume_weighted = [58, 56, 53, 52, 53, 54, 57, 58, 58, 60, 58, 58, 59, 61, 60, 63, 60, 58]
-electricity_baseload = [58, 55, 52, 51, 53, 53, 56, 57, 57, 59, 57, 57, 58, 59, 59, 61, 58, 56]
-
 
 # Future fuel prices
 gas_price = [KW_TO_MW * 0.01909] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls

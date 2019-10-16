@@ -58,10 +58,6 @@ multi_year_data_scaled = pd.read_csv('{}/data/processed/multi_day_data/4_medoids
 historical_fuel_prices_long = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/historical_fuel_costs_converted_long.csv'.format(ROOT_DIR))
 historical_fuel_prices_mw = pd.read_csv('{}/data/processed/fuel/fuel_costs/historical_fuel_costs/fuel_costs_per_mwh.csv'.format(ROOT_DIR))
 
-# Future electricity prices
-electricity_volume_weighted = [58, 56, 53, 52, 53, 54, 57, 58, 58, 60, 58, 58, 59, 61, 60, 63, 60, 58]
-electricity_baseload = [58, 55, 52, 51, 53, 53, 56, 57, 57, 59, 57, 57, 58, 59, 59, 61, 58, 56]
-
 
 # Future $/GBP exchange rate
 dollar_gbp_exchange_rate = [1.36, 1.38, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40]
@@ -69,26 +65,27 @@ dollar_gbp_exchange_rate = [1.36, 1.38, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40, 1.40
 # Future fuel prices
 gas_scenario = [53.0, 48.0, 49.0, 51.0, 52.0, 54.0, 56.0, 57.0, 59.0, 60.0, 62.0, 63.0, 63.0, 63.0, 63.0, 63.0, 63.0]
 gas_scenario = [price / 0.0293001 / 100 for price in gas_scenario]
-gas_price = np.repeat(gas_scenario, 8).tolist()
+# gas_price = np.repeat(gas_scenario, 8).tolist()
+gas_price = gas_scenario
 
 coal_scenario = [85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 86.7, 86.7, 86.7, 86.7, 86.7, 86.7, 86.7, 86.7, 86.7, 86.7]
-coal_scenario = [price/8.141/exchange  for price, exchange in zip(coal_scenario, dollar_gbp_exchange_rate)]
-coal_price = np.repeat(coal_scenario, 8).tolist()
+coal_price = [price/8.141/exchange  for price, exchange in zip(coal_scenario, dollar_gbp_exchange_rate)]
+# coal_price = np.repeat(coal_scenario, 8).tolist()
 
 oil_scenario = [70.7, 71.7, 72.7, 74.7, 75.7, 76.7, 77.7, 79.7, 80.7, 81.7, 83.7, 84.7, 84.7, 84.7, 84.7, 84.7, 84.7]
 oil_scenario = [price/1.69941/exchange for price, exchange in zip(oil_scenario, dollar_gbp_exchange_rate)]
 
 # gas_price = [KW_TO_MW * 0.01909] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
 # coal_price = [KW_TO_MW * 0.01106] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-uranium_price = [KW_TO_MW * 0.0039] * 60  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
-oil_price = [KW_TO_MW * 0.02748] * 60  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
-diesel_price = [KW_TO_MW * 0.1] * 60  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
-woodchip_price = [KW_TO_MW * 0.0252] * 60  # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
-poultry_litter_price = [KW_TO_MW * 0.01139] * 60  # Source: How much is poultry litter worth?: sp06ca08.pdf
-straw_price = [KW_TO_MW * 0.016488] * 60  # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
-meat_price = [KW_TO_MW * 0.01] * 42  # Assumption: Low price due to plant_type being a waste product
-waste_price_post_2000 = [KW_TO_MW * -0.0252] * 60  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
-waste_price_pre_2000 = [KW_TO_MW * -0.01551] * 60  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+uranium_price = [KW_TO_MW * 0.0039] * 17  # Source: The Economics of Nuclear Power: EconomicsNP.pdf
+oil_price = [KW_TO_MW * 0.02748] * 17  # Source: Average prices of fuels purchased by the major UK power producers: table_321.xls
+diesel_price = [KW_TO_MW * 0.1] * 17  # Source: https://www.racfoundation.org/data/wholesale-fuel-prices-v-pump-prices-data
+woodchip_price = [KW_TO_MW * 0.0252] * 17  # Source: Biomass for Power Generation: IRENA BiomassCost.pdf
+poultry_litter_price = [KW_TO_MW * 0.01139] * 17  # Source: How much is poultry litter worth?: sp06ca08.pdf
+straw_price = [KW_TO_MW * 0.016488] * 17  # Source: https://dairy.ahdb.org.uk/market-information/farm-expenses/hay-straw-prices/#.W6JnFJNKiYU
+meat_price = [KW_TO_MW * 0.01] * 17  # Assumption: Low price due to plant_type being a waste product
+waste_price_post_2000 = [KW_TO_MW * -0.0252] * 17  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
+waste_price_pre_2000 = [KW_TO_MW * -0.01551] * 17  # Source: Gate fees report 2017 Comparing the costs of waste treatment options: Gate Fees report 2017_FINAL_clean.pdf
 
 # Joining historical and future fuel prices for simulation purposes.
 fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price, diesel_price, woodchip_price,
@@ -98,7 +95,7 @@ fuel_prices = pd.DataFrame(data=[coal_price, oil_price, gas_price, uranium_price
 
 fuel_prices = pd.concat([historical_fuel_prices_mw, fuel_prices], axis=1)
 # Convert from wide to long
-fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2078'].columns))
+fuel_prices = fuel_prices.melt(id_vars=['Fuel'], var_name='Year', value_vars=list(fuel_prices.loc[:,'1990':'2035'].columns))
 fuel_prices.Year = pd.to_numeric(fuel_prices.Year)
 # Fill NA's with average of group
 fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: x.fillna(x.mean()))
@@ -165,8 +162,8 @@ bid_mark_up = 1.0
 # Carbon price - Forecast used from BEIS Electricity Generation Report - Page 10 - Includes forecast for carbon tax and EU ETS
 # carbon_price_scenario = [18.00, 19.42, 20.83, 22.25, 23.67, 25.08, 26.50, 27.92, 29.33, 30.75, 32.17, 33.58, 35.00, 43.25, 51.50, 59.75, 68.00, 76.25, 84.50, 92.75, 101.00, 109.25, 117.50, 125.75, 134.00, 142.25, 150.50, 158.75, 167.00, 175.25, 183.50, 191.75, 200.00]
 # carbon_price_scenario = [10]*1000
-carbon_scenario = [30.8, 30.9, 31.7, 31.9, 32.3, 32.6, 32.9, 33.2, 33.5, 33.9, 34.2, 35.6, 42.7, 54.0, 65.3, 76.6, 87.9, 99.3]
-carbon_price_scenario = np.repeat(carbon_scenario, 8).tolist()
+carbon_price_scenario = [30.8, 30.9, 31.7, 31.9, 32.3, 32.6, 32.9, 33.2, 33.5, 33.9, 34.2, 35.6, 42.7, 54.0, 65.3, 76.6, 87.9, 99.3]
+# carbon_price_scenario = np.repeat(carbon_scenario, 8).tolist()
 # carbon_price_scenario = [0]*100
 # EU_ETS_COST = 13.62
 # carbon_price_scenario = [uk_tax + EU_ETS_COST for uk_tax in carbon_price_scenario]
@@ -183,7 +180,6 @@ def concatenate_carbon_price():
 
 
 carbon_price_all_years = concatenate_carbon_price()
-
 
 
 
