@@ -190,23 +190,23 @@ def get_projection_difference_sum(results_df, year_to_compare=None):
     best_mix_year = contributed_results.copy()
     # best_mix_year['year'] = np.repeat(list(range(YEARS_TO_RUN)), 8)
     best_mix_year['year'] = np.repeat(list(range(int(len(best_mix_year.index)/8))), 8)
-    print("contributed_results: {}".format(contributed_results))
+    # print("contributed_results: {}".format(contributed_results))
     best_mix_year = best_mix_year.rename(columns={'contributed_PV': "contributed_solar"})
     cluster_size = pd.Series([22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0])
     # contributed_results['cluster_size'] = [22.0, 30.0, 32.0, 35.0, 43.0, 53.0, 68.0, 82.0]
-    print("best_mix_year: {}".format(best_mix_year))
+    # print("best_mix_year: {}".format(best_mix_year))
     results_wa = best_mix_year.groupby('year').apply(
         lambda x: np.average(x, weights=cluster_size.values, axis=0)).to_frame()
-    print("results_wa: {}".format(results_wa))
+    # print("results_wa: {}".format(results_wa))
     results_wa_split = pd.DataFrame(results_wa)
-    print(results_wa.values)
+    # print(results_wa.values)
     results_wa_split[
         ['ccgt', "coal", 'onshore', 'offshore', 'solar', 'nuclear', 'recip_gas', 'biomass', 'year']] = pd.DataFrame(
         results_wa[0].values.tolist(), index=results_wa.index)
     results_wa_split
-    print("results_wa_split: {}".format(results_wa_split))
+    # print("results_wa_split: {}".format(results_wa_split))
     # results_wa.index = results_wa.index.str.split("_").str[1].str.lower()
-    print("results_wa: {}".format(results_wa))
+    # print("results_wa: {}".format(results_wa))
     # offshore = results_wa.loc["offshore"].iloc[0]
     # onshore = results_wa.loc["onshore"].iloc[0]
     results_wa_split['wind'] = results_wa_split['offshore'] + results_wa_split['onshore']
@@ -217,7 +217,7 @@ def get_projection_difference_sum(results_df, year_to_compare=None):
     results_wa_split = results_wa_split.drop([0, 'year'], axis=1)
     results_wa_long = pd.melt(results_wa_split.reset_index(), id_vars="year")
     results_wa_long['year'] += 2018
-    print("results_wa_long: {}".format(results_wa_long))
+    # print("results_wa_long: {}".format(results_wa_long))
 
     if year_to_compare is not None:
         # results_wa_long = results_wa_long[results_wa_long.year == year_to_compare+1]
@@ -227,29 +227,29 @@ def get_projection_difference_sum(results_df, year_to_compare=None):
     results_wa_long = results_wa_long.set_index(['year', 'fuel_type'])
     # results_wa = results_wa.append(pd.DataFrame({"wind", offshore+onshore}))
     # results_wa.loc['wind'] = [offshore+onshore]
-    print("results_wa: {}".format(results_wa))
+    # print("results_wa: {}".format(results_wa))
     beis_forecast = pd.read_csv('{}/../run/beis_case_study/data/reference_run/2018-2035-beis.csv'.format(ROOT_DIR))
     # electricity_mix = pd.read_csv("{}/data/processed/electricity_mix/energy_mix_historical.csv".format(ROOT_DIR))
     beis_forecast['fuel_type'] = beis_forecast['fuel_type'].replace(
         {"Coal": 'coal', 'Natural gas': 'Natural_gas', "Nuclear": "nuclear"})
     beis_2035_long = pd.melt(beis_forecast, id_vars='fuel_type')
-    print("beis_2035_long: {}".format(beis_2035_long))
+    # print("beis_2035_long: {}".format(beis_2035_long))
     beis_2035_long.variable = pd.to_numeric(beis_2035_long.variable)
     # beis_2035_long = beis_2035_long[beis_2035_long.variable <= 2020]
     beis_2035_long = beis_2035_long.rename(columns={"variable": "year"})
-    print("beis_2035_long_1 : {}".format(beis_2035_long))
+    # print("beis_2035_long_1 : {}".format(beis_2035_long))
     beis_2035_long = beis_2035_long.set_index(["year", 'fuel_type'])
-    print("beis_2035_long: {}".format(beis_2035_long))
-    print("results_wa_long: {}".format(results_wa_long))
+    # print("beis_2035_long: {}".format(beis_2035_long))
+    # print("results_wa_long: {}".format(results_wa_long))
     joined = beis_2035_long.join(results_wa_long, how='inner', lsuffix="_actual", rsuffix="_predicted")
-    print("joined: \n{}".format(joined))
+    # print("joined: \n{}".format(joined))
     joined = joined.rename(columns={'value': 'actual', 0: 'simulated'})
     # joined = joined.reset_index()
     # joined = joined.loc[~joined.index.str.contains('biomass')]
-    print("joined: \n{}".format(joined))
+    # print("joined: \n{}".format(joined))
 
     joined = joined.groupby("year").apply(get_mix)
-    print("joined grouped: \n{}".format(joined))
+    # print("joined grouped: \n{}".format(joined))
     try:
         total_difference_col = abs(joined['actual_perc'] - joined['simulated_perc'])
         print(total_difference_col)
