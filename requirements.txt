@@ -118,6 +118,6 @@ virtualenv-clone==0.3.0
 virtualenvwrapper==4.8.4
 wcwidth==0.1.7
 webencodings==0.5.1
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 whichcraft==0.5.2
 widgetsnbextension==3.4.2
