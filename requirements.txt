@@ -68,7 +68,7 @@ pathos==0.2.3
 pbr==5.1.2
 pexpect==4.6.0
 pickleshare==0.7.5
-Pillow==5.4.1
+Pillow==6.2.0
 pipenv==2018.11.26
 pluggy==0.8.1
 pox==0.2.5
