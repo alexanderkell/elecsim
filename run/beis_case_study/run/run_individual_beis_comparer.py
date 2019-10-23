@@ -1,5 +1,4 @@
 import pandas as pd
-from run.beis_case_study.optimisation.optimiser_for_beis_scenario import eval_world
 import ray
 from elecsim.constants import ROOT_DIR
 import numpy as np
@@ -103,3 +102,4 @@ results = ray.get(results_id)
 
 with open('results.pkl', 'wb') as f:
     pickle.dump(results, f)
+
