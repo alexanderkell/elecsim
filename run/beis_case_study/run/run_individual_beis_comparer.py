@@ -101,5 +101,5 @@ for param_list in params_repeated_list:
 
 results = ray.get(results_id)
 
-with open('parrot.pkl', 'wb') as f:
+with open('results.pkl', 'wb') as f:
     pickle.dump(results, f)
