@@ -65,7 +65,7 @@ ga_results_small = ga_results[ga_results.reward < 10]
 params_list = ga_results_small.values.tolist()
 
 
-params_repeated = np.repeat(params_list, 20, axis=0)
+params_repeated = np.repeat(params_list, 10, axis=0)
 
 params_repeated_list = params_repeated.tolist()
 
