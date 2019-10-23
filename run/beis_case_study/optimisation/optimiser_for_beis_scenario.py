@@ -149,7 +149,6 @@ def eval_world(individual):
                 return [[99999999], 0, 0, 0, 0]
             if over_invested:
                 return [[99999999], 0, 0, 0, 0]
-        logger.info("results_df: {}".format(results_df))
         _, cumulative_diff = get_projection_difference_sum(results_df, world.year_number)
         # print("cumulative diff: {}".format(cumulative_diff))
         if cumulative_diff > 1.5:
@@ -318,8 +317,7 @@ toolbox.register("select", tools.selTournament, tournsize=10)
 
 #----------
 
-# eval_world([0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547,0.002547, -13.374101,0.002547])
-# eval_world([0.000137615718875977, -20.661061777482672, 0.001855046716492092, -20.20537031004143, 0.0010007529142925344, 31.253694948054033, 0.0027059244084475537, 30.01188585297122, 0.0016018356671484695, 37.59359989736696, 0.0008953508572214155, -12.892645057337102, 0.001513974732012828, 6.506433416826368, 0.002023948965422118, 1.8106558207626051, 0.0008781476149830236, -25.595797095196183, 0.0005881160162589889, 14.435076960058062, 0.0013461065471132225, -10.576048737244264, 0.0001378752516406303, 34.120748147348806, 0.001127774446127339, -17.286036063853363, 0.00012280742501245134, 7.395480867947832, 0.00032273106750109514, -18.93807731245588, 0.0014681438742877098, -21.658343265042717, 0.002670174360030499, 7.383998066104375, 37.94741640791914, 6.616435857663106, 4.446264311226145])
+eval_world([0.00121256259168, 46.85037739256387, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.37033767006376, 0.00228312539654, 40.74731543938266, 0.00240464711411, 34.43480109190594, 0.00284186482574, -20.88014916953091, 0.00016104706555, 8.15032953348701, 0.00200271495761, -12.5461853755818, 0.00155518243668, 39.7911329705228, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.91173171312952, 0.00240696026847, -5.0144941135222, 0.00021183142493, -1.29658413335784, 0.00039441444392, -11.41659250225168, 0.00219888388243, 12.6335729432946, 120.21276910611674, 0.0005481249937, 0.00059945111227])
 
 def main():
 
@@ -507,7 +505,7 @@ def main():
 
         first_part = 'INSERT INTO validoptimresults1 (run_number,time_taken,timestamp_start,timestamp_end,reward,individual_m_1,individual_c_1,individual_m_2,individual_c_2,individual_m_3,individual_c_3,individual_m_4,individual_c_4,individual_m_5,individual_c_5,individual_m_6,individual_c_6,individual_m_7,individual_c_7,individual_m_8,individual_c_8,individual_m_9,individual_c_9,individual_m_10,individual_c_10,individual_m_11,individual_c_11,individual_m_12,individual_c_12,individual_m_13,individual_c_13,individual_m_14,individual_c_14,individual_m_15,individual_c_15,individual_m_16,individual_c_16,individual_m_17,individual_c_17,attr_nuclear_sub,attr_future_price_uncertainty_c,attr_future_price_uncertainty_m,coal,nuclear,ccgt,wind,solar) VALUES '
         try:
-            insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18], ind.flat[19], ind.flat[20], ind.flat[21], ind.flat[22], ind.flat[23], ind.flat[24], ind.flat[25], ind.flat[26], ind.flat[27], ind.flat[28], ind.flat[29], ind.flat[30], ind.flat[31], ind.flat[32], ind.flat[33], ind.flat[34], ind.flat[35], ind.flat[36], ind.flat[37], gen_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
+            insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(g, time, time_start, time_end, ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18], ind.flat[19], ind.flat[20], ind.flat[21], ind.flat[22], ind.flat[23], ind.flat[24], ind.flat[25], ind.flat[26], ind.flat[27], ind.flat[28], ind.flat[29], ind.flat[30], ind.flat[31], ind.flat[32], ind.flat[33], ind.flat[34], ind.flat[35], ind.flat[36], ind.flat[37], generators_invested.loc['coal'], gen_invested.loc['nuclear'], gen_invested.loc['ccgt'], gen_invested.loc['wind'], gen_invested.loc['solar']) for ind, time, time_start, time_end, gen_invested in zip(progression, timing_holder, time_start_holder, time_end_holder, generators_invested)])
             insert_cmd = first_part+insert_vars
             insert_cmd = insert_cmd[:-2]
             # print("command: {}".format(insert_cmd))
