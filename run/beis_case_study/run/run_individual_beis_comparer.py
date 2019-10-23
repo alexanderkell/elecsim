@@ -56,7 +56,7 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-ga_results = pd.read_csv('../data/GA_optimisation_results/GA_results.csv')
+ga_results = pd.read_csv('/../data/GA_optimisation_results/GA_results.csv')
 
 ga_results_small = ga_results[ga_results.reward < 10]
 # print(ga_results_small)
