@@ -87,8 +87,7 @@ def eval_world_parallel(individual):
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
     world = World(initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-3], future_price_uncertainty_m=individual[-2], future_price_uncertainty_c=individual[-1])
-    time_start = time.perf_counter()
-    timestamp_start = time.time()
+
     for _ in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
             try:
