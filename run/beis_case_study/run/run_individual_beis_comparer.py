@@ -94,7 +94,7 @@ def eval_world_parallel(individual):
             try:
                 results_df, over_invested = world.step()
             except:
-                return 99999
+                return 99999, 0
     return individual, results_df
 
 
