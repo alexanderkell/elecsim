@@ -1,5 +1,5 @@
 import pandas as pd
-import ray
+
 #from elecsim.constants import ROOT_DIR
 import numpy as np
 
