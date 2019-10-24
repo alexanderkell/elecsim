@@ -91,7 +91,7 @@ def eval_world_parallel(individual):
     for j in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
             try:
-                print("year from start:{}.".format(j))
+                print("j:{}, i: {}".format(j, i))
                 results_df, over_invested = world.step()
             except:
                 return 99999, 0
