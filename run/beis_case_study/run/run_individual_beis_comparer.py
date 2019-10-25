@@ -13,6 +13,7 @@ from multiprocessing import Pool, cpu_count
 import pickle
 sys.path.append(os.path.join(os.path.dirname(__file__), '/../../../../'))
 sys.path.insert(0, '/home/alexkell/elecsim/')
+
 #print(os.path.join(os.path.dirname(__file__), '../../../../'))
 #sys.path.append("/../../../../")
 from elecsim.model.world import World
@@ -59,7 +60,8 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+# ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
 
 
 
@@ -80,7 +82,6 @@ params_repeated_list = params_repeated.tolist()
 def eval_world_parallel(individual):
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
-
     MARKET_TIME_SPLICES = 8
     YEARS_TO_RUN = 18
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
@@ -95,6 +96,7 @@ def eval_world_parallel(individual):
                 results_df, over_invested = world.step()
             except:
                 return 99999, 0
+    del world
     return individual, results_df
 
 
