@@ -66,7 +66,6 @@ ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_re
 
 
 ga_results_small = ga_results[ga_results.reward < 10].iloc[:,7:-5]
-print(ga_results_small)
 params_list = ga_results_small.values.tolist()
 
 
@@ -81,7 +80,6 @@ params_repeated_list = params_repeated.tolist()
 
 # @ray.remote
 def eval_world_parallel(individual):
-    print(individual)
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
