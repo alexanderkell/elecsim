@@ -60,12 +60,13 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
-# ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+# ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
 
 
 
-ga_results_small = ga_results[ga_results.reward < 10]
+ga_results_small = ga_results[ga_results.reward < 10].iloc[:,7:-5]
+print(ga_results_small)
 params_list = ga_results_small.values.tolist()
 
 
@@ -80,6 +81,7 @@ params_repeated_list = params_repeated.tolist()
 
 # @ray.remote
 def eval_world_parallel(individual):
+    print(individual)
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
