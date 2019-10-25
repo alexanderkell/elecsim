@@ -60,8 +60,8 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-# ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
-ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+# ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
 
 
 
