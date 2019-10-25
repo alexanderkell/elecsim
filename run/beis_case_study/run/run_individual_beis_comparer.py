@@ -59,19 +59,19 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "alexander@kell.es"
 
-# ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
+ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
 
 
 
-# ga_results_small = ga_results[ga_results.reward < 10]
-# params_list = ga_results_small.values.tolist()
+ga_results_small = ga_results[ga_results.reward < 10]
+params_list = ga_results_small.values.tolist()
 
 
-# params_repeated = np.repeat(params_list, 10, axis=0)
+params_repeated = np.repeat(params_list, 10, axis=0)
 
-# params_repeated_list = params_repeated.tolist()
+params_repeated_list = params_repeated.tolist()
 
-params_repeated_list = np.array([0]*74).reshape(2,-1).tolist()
+# params_repeated_list = np.array([0]*74).reshape(2,-1).tolist()
 
 
 # ray.init()
