@@ -1,53 +1,18 @@
-import pandas as pd
-
-#from elecsim.constants import ROOT_DIR
-import numpy as np
-
-import mysql.connector
-from mysql.connector import errorcode
-
-import os.path
 import sys
 
 from multiprocessing import Pool, cpu_count
 import pickle
-sys.path.append(os.path.join(os.path.dirname(__file__), '/../../../../'))
 sys.path.insert(0, '/home/alexkell/elecsim/')
 
-#print(os.path.join(os.path.dirname(__file__), '../../../../'))
-#sys.path.append("/../../../../")
 from elecsim.model.world import World
-import tracemalloc
 
 import pandas as pd
-import linecache
 
 from elecsim.constants import ROOT_DIR
-import string
-from deap import algorithms
-from deap import base
-from deap import benchmarks
-from deap.benchmarks.tools import diversity, convergence, hypervolume
-from deap import creator
-from deap import tools
-
-import array
-import random
 import logging
 logger = logging.getLogger(__name__)
 import numpy as np
-import numpy
 
-from scoop import futures
-
-from pebble import ProcessPool
-from concurrent.futures import TimeoutError
-
-import time
-from pathlib import Path
-project_dir = Path("__file__").resolve().parents[1]
-import string
-import random
 
 """
 File name: run_individual_beis_comparer
@@ -62,8 +27,6 @@ __email__ = "alexander@kell.es"
 
 ga_results = pd.read_csv('run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
 # ga_results = pd.read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv')
-
-
 
 ga_results_small = ga_results[ga_results.reward < 10].iloc[:,7:-5]
 params_list = ga_results_small.values.tolist()
