@@ -44,7 +44,7 @@ params_repeated_list = params_repeated.tolist()
 # @ray.remote
 def eval_world_parallel(individual):
     prices_individual = np.array(individual[:-3]).reshape(-1, 2).tolist()
-    print(prices_individual)
+    # print(prices_individual)
     MARKET_TIME_SPLICES = 8
     YEARS_TO_RUN = 18
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
