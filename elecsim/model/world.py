@@ -1,7 +1,7 @@
 import datetime as dt
 import logging
 import os
-from random import uniform, randint
+from random import uniform, randint, sample
 from time import perf_counter
 import importlib.util
 import time
@@ -122,6 +122,7 @@ class World(Model):
             self.client = PolicyClient("http://localhost:9900")
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
+            # logger.info("self.intial_obs: {}".format(self.intial_obs))
         elif elecsim.scenario.scenario_data.investment_mechanism == "future_price_fit":
             self.future_price_uncertainty_m = future_price_uncertainty_m
             self.future_price_uncertainty_c = future_price_uncertainty_c
@@ -208,8 +209,6 @@ class World(Model):
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
         financial_data = financial_data[['Company', 'cash_in_bank']]
 
-
-
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
         financial_data.cash_in_bank = financial_data.cash_in_bank.fillna(0)
@@ -230,11 +229,11 @@ class World(Model):
             pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(ROOT_DIR)
             for plant in data.itertuples():
                 try:
-                    power_plant = pickle.load(open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "rb"))
+                    power_plant = pickle.load(open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "rb"))
                 except (OSError, IOError, FileNotFoundError) as e:
                     logger.info("plant: {}".format(plant))
                     power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
-                    pickle.dump(power_plant, open("{}{}-{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date, gen_co.unique_id), "wb"))
+                    pickle.dump(power_plant, open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "wb"))
                 gen_co.plants.append(power_plant)
             logger.debug('Adding generation company: {}'.format(gen_co.name))
             self.schedule.add(gen_co)
@@ -489,8 +488,8 @@ class World(Model):
             if number_of_agents is not None:
                 total_plants = len(elecsim.scenario.scenario_data.power_plants)
                 fraction_to_replace = total_plants/number_of_agents
+                company_names = sample(list(elecsim.scenario.scenario_data.power_plants.Company.unique()), number_of_agents)
 
-                company_names = ["company_{}".format(i) for i in range(number_of_agents)]
                 company_name_repeated = np.repeat(company_names, int(fraction_to_replace))
                 company_name_repeated = np.append(company_name_repeated, np.array(["company_{}".format(number_of_agents-1) for i in range(100)]))
 

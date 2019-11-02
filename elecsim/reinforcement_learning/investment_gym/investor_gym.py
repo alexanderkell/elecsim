@@ -24,6 +24,7 @@ class InvestorGym(MultiAgentEnv):
 
 
     def step(self, action_dict):
+        pass
 
     def reset(self):
         return {"{}".format(gen_co.name): 0 for gen_co in self.gen_cos}

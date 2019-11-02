@@ -46,10 +46,10 @@ class MarketServing(ExternalMultiAgentEnv):
 
     def __init__(self):
 
-        lower_bounds = [-1000]*30
+        lower_bounds = [-1000000]*8
         lower_bounds.extend([-99999999999999999999999999])
 
-        upper_bounds = [10000]*30
+        upper_bounds = [1000000]*8
         upper_bounds.extend([99999999999999999999999999])
 
         ExternalMultiAgentEnv.__init__(
@@ -107,7 +107,7 @@ if __name__ == "__main__":
             "run": "PG",
             "env": "srv",
             'checkpoint_at_end': True,
-            'checkpoint_freq': 1,
+            'checkpoint_freq': 100,
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
