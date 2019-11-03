@@ -69,8 +69,8 @@ class MarketServing(ExternalMultiAgentEnv):
 
 if __name__ == "__main__":
 
-    # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
-    ray.init()
+    ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
+    # ray.init()
 
     register_env("srv", lambda _: MarketServing())
 
@@ -109,6 +109,7 @@ if __name__ == "__main__":
             "env": "srv",
             'checkpoint_at_end': True,
             'checkpoint_freq': 100,
+            'restore': '/home/alexkell/ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint_200/',
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
