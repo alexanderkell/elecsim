@@ -14,6 +14,7 @@ import linecache
 import logging
 import ray
 import psutil
+from pympler.tracker import SummaryTracker
 
 import time
 
@@ -56,6 +57,7 @@ MARKET_TIME_SPLICES = 8
 YEARS_TO_RUN = 25
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
+tracker = SummaryTracker()
 num_cpus = psutil.cpu_count(logical=True)
 
 print("num_cpus: {}".format(num_cpus))
@@ -73,6 +75,7 @@ def run_world(num_steps=number_of_steps):
 # results = []
 for j in range(900000):
     run_world(number_of_steps)
+    tracker.print_diff()
     # results.append(run_world.remote(number_of_steps))
 
 # result_ray = ray.get(results)
