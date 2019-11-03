@@ -71,6 +71,7 @@ if __name__ == "__main__":
 
     # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
     ray.init()
+
     register_env("srv", lambda _: MarketServing())
 
     # We use DQN since it supports off-policy actions, but you can choose and
