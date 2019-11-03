@@ -109,7 +109,7 @@ if __name__ == "__main__":
             "env": "srv",
             'checkpoint_at_end': True,
             'checkpoint_freq': 100,
-            'restore': '/home/alexkell/ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint_200/',
+            'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
