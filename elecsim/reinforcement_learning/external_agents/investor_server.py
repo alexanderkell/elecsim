@@ -108,16 +108,16 @@ if __name__ == "__main__":
             "run": "PG",
             "env": "srv",
             'checkpoint_at_end': True,
-            'checkpoint_freq': 20,
-            'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
+            'checkpoint_freq': 5,
+           # 'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
                 "env": "srv",
-                "evaluation_num_episodes": 1,
+                "evaluation_num_episodes": 10,
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
-                # "sample_batch_size": 24,
-                # "train_batch_size": 24,
+                "sample_batch_size": 25,
+                "train_batch_size": 25,
                 # "horizon": 25,
             }
         }
