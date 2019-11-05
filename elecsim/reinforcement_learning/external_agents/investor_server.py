@@ -69,23 +69,25 @@ class MarketServing(ExternalMultiAgentEnv):
 
 if __name__ == "__main__":
 
-    ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
-    # ray.init()
+    # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
+    ray.init()
 
     register_env("srv", lambda _: MarketServing())
 
     # We use DQN since it supports off-policy actions, but you can choose and
     # configure any agent.
-    # dqn = PPOTrainer(
-    #     env="srv",
-    #     config={
-    #         # Use a single process to avoid needing to set up a load balancer
-    #         # "num_workers": 0,
-    #         "evaluation_num_episodes": 1,
-    #         # "sample_batch_size": 40,
-    #         # "train_batch_size": 40,
-    #         # "horizon": 40,
-    #     })
+    dqn = PGTrainer(
+        env="srv",
+        config={
+            # Use a single process to avoid needing to set up a load balancer
+            # "num_workers": 0,
+            "evaluation_num_episodes": 1,
+            # "sample_batch_size": 40,
+            # "train_batch_size": 40,
+            # "horizon": 40,
+            "sample_batch_size": 15,
+            "train_batch_size": 128,
+        })
     #
     # # Attempt to restore from checkpoint if possible.
     # # if os.path.exists(CHECKPOINT_FILE):
@@ -94,31 +96,31 @@ if __name__ == "__main__":
     # #     dqn.restore(checkpoint_path)
     #
     # # Serving and training loop
-    # while True:
-    #     print(pretty_print(dqn.train()))
-    #     checkpoint_path = dqn.save()
-    #     print("Last checkpoint", checkpoint_path)
-    #     with open(CHECKPOINT_FILE, "w") as f:
-    #         f.write(checkpoint_path)
+    while True:
+        print(pretty_print(dqn.train()))
+        checkpoint_path = dqn.save()
+        print("Last checkpoint", checkpoint_path)
+        with open(CHECKPOINT_FILE, "w") as f:
+            f.write(checkpoint_path)
 
 
 
-    tune.run_experiments({
-        "my_experiment": {
-            "run": "PG",
-            "env": "srv",
-            'checkpoint_at_end': True,
-            'checkpoint_freq': 5,
-           # 'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
-            "config": {
-                # "num_gpus": 0,
-                # "num_workers": 1,
-                "env": "srv",
-                "evaluation_num_episodes": 10,
-                # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
-                "sample_batch_size": 25,
-                "train_batch_size": 25,
-                # "horizon": 25,
-            }
-        }
-    })
+    # tune.run_experiments({
+    #     "my_experiment": {
+    #         "run": "PG",
+    #         "env": "srv",
+    #         'checkpoint_at_end': True,
+    #         'checkpoint_freq': 5,
+    #        # 'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
+    #         "config": {
+    #             # "num_gpus": 0,
+    #             # "num_workers": 1,
+    #             "env": "srv",
+    #             "evaluation_num_episodes": 10,
+    #             # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
+    #             "sample_batch_size": 25,
+    #             "train_batch_size": 25,
+    #             # "horizon": 25,
+    #         }
+    #     }
+    # })

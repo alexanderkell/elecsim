@@ -139,14 +139,6 @@ class World(Model):
         '''Advance model by one step'''
         self.beginning_of_year = False
 
-        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
-            # self.client = PolicyClient("http://rllibserver:9900")
-            from ray.rllib.utils.policy_client import PolicyClient
-
-            self.client = PolicyClient("http://localhost:9900")
-            self.eid = self.client.start_episode(training_enabled=True)
-            self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
-
         if self.step_number % self.market_time_splices == 0:
             self.start = time.perf_counter()
             self.operate_constructed_plants()
@@ -198,11 +190,9 @@ class World(Model):
             print("time taken: {}".format(end-self.start))
             # get_capacity_factor.cache_clear()
 
-        # if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
-        #     obs = LatestMarketData(self).get_RL_investment_observations()
-        #     self.client.end_episode(self.eid, observation=obs)
-        obs = LatestMarketData(self).get_RL_investment_observations()
-        self.client.end_episode(self.eid, observation=obs)
+        if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
+            obs = LatestMarketData(self).get_RL_investment_observations()
+            self.client.end_episode(self.eid, observation=obs)
 
         logger.debug(self.datacollector.get_model_vars_dataframe())
         # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
