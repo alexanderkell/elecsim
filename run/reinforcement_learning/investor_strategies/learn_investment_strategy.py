@@ -71,6 +71,7 @@ def run_world(num_steps=number_of_steps):
     world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps, scenario_file=scenario_RL_few_agents, total_demand=5000, number_of_agents=3)
     for i in range(num_steps):
         world.step()
+    time.sleep(0.25)
 
 # results = []
 for j in range(900000):
