@@ -193,6 +193,7 @@ class World(Model):
         if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
+            logger.info("episode ended")
         logger.debug(self.datacollector.get_model_vars_dataframe())
         # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
         return self.datacollector.get_model_vars_dataframe(), self.over_invested
