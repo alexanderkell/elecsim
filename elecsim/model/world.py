@@ -190,10 +190,12 @@ class World(Model):
             print("time taken: {}".format(end-self.start))
             # get_capacity_factor.cache_clear()
 
-        if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
-            obs = LatestMarketData(self).get_RL_investment_observations()
-            self.client.end_episode(self.eid, observation=obs)
-            print("episode ended")
+        # if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
+        #     obs = LatestMarketData(self).get_RL_investment_observations()
+        #     self.client.end_episode(self.eid, observation=obs)
+        obs = LatestMarketData(self).get_RL_investment_observations()
+        self.client.end_episode(self.eid, observation=obs)
+
         logger.debug(self.datacollector.get_model_vars_dataframe())
         # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
         return self.datacollector.get_model_vars_dataframe(), self.over_invested
@@ -205,7 +207,6 @@ class World(Model):
         :param financial_data: Data containing information about generation company's financial status
         :param plant_data: Data containing information about generation company's plants owned, start year and name.
         """
-
 
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
         financial_data = financial_data[['Company', 'cash_in_bank']]
