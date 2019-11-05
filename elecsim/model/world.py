@@ -11,6 +11,7 @@ import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
 import pickle
+from ray.rllib.utils.policy_client import PolicyClient
 
 from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
 
@@ -29,7 +30,6 @@ import elecsim.scenario.scenario_data
 
 import os
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -45,7 +45,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning"):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl = None):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -117,9 +117,7 @@ class World(Model):
 
         if elecsim.scenario.scenario_data.investment_mechanism == "RL":
             # self.client = PolicyClient("http://rllibserver:9900")
-            from ray.rllib.utils.policy_client import PolicyClient
-
-            self.client = PolicyClient("http://localhost:9900")
+            self.client = client_rl
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
             # logger.info("self.intial_obs: {}".format(self.intial_obs))
@@ -193,6 +191,7 @@ class World(Model):
         if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
+            del self.client
 
         logger.debug(self.datacollector.get_model_vars_dataframe())
         # return (-abs(self.average_electricity_price), -abs(carbon_emitted))

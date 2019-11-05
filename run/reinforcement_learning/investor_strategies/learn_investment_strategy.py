@@ -15,6 +15,7 @@ import logging
 import ray
 import psutil
 from pympler.tracker import SummaryTracker
+from ray.rllib.utils.policy_client import PolicyClient
 
 import gc
 
@@ -67,10 +68,11 @@ print("num_cpus: {}".format(num_cpus))
 
 # time.sleep(20)
 scenario_RL_few_agents = "{}/../run/reinforcement_learning/scenario/scenario_RL_small.py".format(ROOT_DIR)
+client = PolicyClient("http://localhost:9900")
 
 # @ray.remote
 def run_world(num_steps=number_of_steps):
-    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps, scenario_file=scenario_RL_few_agents, total_demand=5000, number_of_agents=3)
+    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps, scenario_file=scenario_RL_few_agents, total_demand=5000, number_of_agents=3, client_rl=client)
     for i in range(num_steps):
         world.step()
         time.sleep(0.25)
