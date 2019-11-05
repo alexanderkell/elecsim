@@ -54,7 +54,7 @@ __email__ = "alexander@kell.es"
 logging.basicConfig(level=logging.INFO)
 
 MARKET_TIME_SPLICES = 8
-YEARS_TO_RUN = 25
+YEARS_TO_RUN = 15
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 tracker = SummaryTracker()
