@@ -47,11 +47,11 @@ class MarketServing(ExternalMultiAgentEnv):
     def __init__(self):
 
         lower_bounds = [-100000]*8
-        lower_bounds.extend([-100000])
+        lower_bounds.extend([-9999999999999999999999999])
 
         upper_bounds = [10000]*8
-        upper_bounds.extend([100000])
-
+        upper_bounds.extend([999999999999999999999999])
+        
         ExternalMultiAgentEnv.__init__(
             self,
             MultiDiscrete([16, 10]),
