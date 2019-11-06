@@ -75,12 +75,12 @@ def run_world(num_steps=number_of_steps):
     world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="test_new", number_of_steps=number_of_steps, scenario_file=scenario_RL_few_agents, total_demand=5000, number_of_agents=3, client_rl=client)
     for i in range(num_steps):
         world.step()
-    tracker.print_diff()
+
 
 # results = []
 for j in range(900000):
     run_world(number_of_steps)
-#    tracker.print_diff()
+    tracker.print_diff()
     # results.append(run_world.remote(number_of_steps))
 
 # result_ray = ray.get(results)
