@@ -80,7 +80,7 @@ def run_world(num_steps=number_of_steps):
 # results = []
 for j in range(900000):
     run_world(number_of_steps)
-    sleep.wait(5)
+    time.sleep(5)
    # tracker.print_diff()
     # results.append(run_world.remote(number_of_steps))
 
