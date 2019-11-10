@@ -194,8 +194,8 @@ class World(Model):
             del self.client
 
         logger.debug(self.datacollector.get_model_vars_dataframe())
-        # return (-abs(self.average_electricity_price), -abs(carbon_emitted))
-        return self.datacollector.get_model_vars_dataframe(), self.over_invested
+        return (abs(self.average_electricity_price), abs(carbon_emitted))
+        # return self.datacollector.get_model_vars_dataframe(), self.over_invested
 
     def initialize_gencos(self, financial_data, plant_data):
         """

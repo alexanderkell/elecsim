@@ -1,3 +1,6 @@
+#! /bin/env python3
+import os
+
 import os.path
 import sys
 
@@ -78,9 +81,15 @@ def run_world(num_steps=number_of_steps):
 
 
 # results = []
-for j in range(900000):
-    run_world(number_of_steps)
-    time.sleep(5)
+if __name__ == '__main__':
+    print("restarting")
+    for j in range(150):
+        run_world(number_of_steps)
+
+    time.sleep(30)
+
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
    # tracker.print_diff()
     # results.append(run_world.remote(number_of_steps))
 
