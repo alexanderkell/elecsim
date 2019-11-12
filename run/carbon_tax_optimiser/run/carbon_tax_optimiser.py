@@ -65,8 +65,7 @@ def world_eval(individual):
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    # YEARS_TO_RUN = 18
-    YEARS_TO_RUN = 1
+    YEARS_TO_RUN = 18
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
@@ -129,8 +128,8 @@ def main(seed=None):
     random.seed(seed)
 
     NGEN = 999
-    # MU = 100
-    MU = 4
+    MU = 120
+    # MU = 4
     CXPB = 0.9
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
