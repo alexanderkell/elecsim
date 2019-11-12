@@ -119,8 +119,8 @@ config = {
   'user':'alexkell@elecsimresults2',
   'password':'b3rz0s4m4dr1dth3h01113s!',
   'database':'carbonoptimiser',
-  # 'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
-  'ssl_ca':'/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+  'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+  # 'ssl_ca':'/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
 
 }
 
