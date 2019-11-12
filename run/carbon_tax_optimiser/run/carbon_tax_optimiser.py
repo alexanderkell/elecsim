@@ -65,7 +65,8 @@ def world_eval(individual):
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 18
+    # YEARS_TO_RUN = 18
+    YEARS_TO_RUN = 1
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
@@ -118,7 +119,9 @@ config = {
   'user':'alexkell@elecsimresults2',
   'password':'b3rz0s4m4dr1dth3h01113s!',
   'database':'carbonoptimiser',
-  'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+  # 'ssl_ca':'run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+  'ssl_ca':'/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/validation-optimisation/database/BaltimoreCyberTrustRoot.crt.pem'
+
 }
 
 
@@ -127,7 +130,7 @@ def main(seed=None):
 
     NGEN = 999
     # MU = 100
-    MU = 2
+    MU = 4
     CXPB = 0.9
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -188,6 +191,8 @@ def main(seed=None):
         front = numpy.array(
             [ind.fitness.values + tuple(ind) for ind in pop])
 
+        print("front: {}".format(front))
+
         try:
             conn = mysql.connector.connect(**config)
             print("Connection established")
@@ -203,7 +208,7 @@ def main(seed=None):
 
         first_part = 'INSERT INTO carbon_results (reward,carbon_1,carbon_2,carbon_3,carbon_4,carbon_5,carbon_6,carbon_7,carbon_8,carbon_9,carbon_10,carbon_11,carbon_12,carbon_13,carbon_14,carbon_15,carbon_16,carbon_17,carbon_18) VALUES '
 
-        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18], ind.flat[19]) for ind in front])
+        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18]) for ind in front])
 
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
