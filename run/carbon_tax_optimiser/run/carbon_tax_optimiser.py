@@ -80,7 +80,12 @@ def world_eval(individual):
             if carbon_emitted is bool:
                 return 999999999999999999, 999999999999999999
 
-    print("average_electricity_price: {}, carbon emitted: {}".format(average_electricity_price, carbon_emitted))
+    if average_electricity_price is not numpy.float64:
+        average_electricity_price = 999999999999999999
+    if carbon_emitted is not numpy.float64:
+        carbon_emitted = 999999999999999999
+
+    print("average_electricity_price: {}, carbon_emitted: {}".format(average_electricity_price, carbon_emitted))
     return average_electricity_price, carbon_emitted
 toolbox = base.Toolbox()
 
