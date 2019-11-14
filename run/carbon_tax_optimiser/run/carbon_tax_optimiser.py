@@ -80,6 +80,7 @@ def world_eval(individual):
             if carbon_emitted is bool:
                 return 999999999999999999, 999999999999999999
 
+    print("average_electricity_price: {}, carbon emitted: {}".format(average_electricity_price, carbon_emitted))
     return average_electricity_price, carbon_emitted
 toolbox = base.Toolbox()
 
