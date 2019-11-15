@@ -80,10 +80,12 @@ def world_eval(individual):
             if carbon_emitted is bool:
                 return 999999999999999999, 999999999999999999
 
-    if average_electricity_price is not numpy.float64:
-        average_electricity_price = 999999999999999999
-    if carbon_emitted is not numpy.float64:
-        carbon_emitted = 999999999999999999
+            if not isinstance(average_electricity_price, float):
+                print("average_electricity_price {}, type {}".format(average_electricity_price, type(average_electricity_price)))
+                average_electricity_price = 999999999999999999
+            if not isinstance(carbon_emitted, float):
+                print("carbon_emitted {}, type {}".format(carbon_emitted, type(carbon_emitted)))
+                carbon_emitted = 999999999999999999
 
     print("average_electricity_price: {}, carbon_emitted: {}".format(average_electricity_price, carbon_emitted))
     return average_electricity_price, carbon_emitted
