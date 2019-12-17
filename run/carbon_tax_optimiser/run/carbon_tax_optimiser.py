@@ -83,7 +83,8 @@ def world_eval(individual):
             # except Exception as e:
             #     print("try catch error: \n{}".format(e))
             #     return 889999999999999999, 889999999999999999
-            if carbon_emitted is bool:
+            # if carbon_emitted is bool:
+            if isinstance(carbon_emitted, bool):
                 print("carbon emitted error")
                 return 999999999999999999, 999999999999999999
 
