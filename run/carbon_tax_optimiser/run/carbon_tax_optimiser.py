@@ -75,7 +75,7 @@ def world_eval(individual):
     if individual[0] == 1:
         individual = [individual[1]*i + individual[2] for i in range(1, 20)]
     else:
-        individual = [individual[3]*i ** individual[4] for i in range(1, 20)]
+        individual = [individual[3]*i ** individual[4] + individual[2] for i in range(1, 20)]
 
 
     world = World(carbon_price_scenario=individual[:-1], initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-1], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
