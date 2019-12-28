@@ -72,6 +72,12 @@ def world_eval(individual):
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
+    if individual[0] == 1:
+        individual = [individual[1]*i + individual[2] for i in range(1, 20)]
+    else:
+        individual = [individual[3]*i ^ individual[4] for i in range(1, 20)]
+
+
     world = World(carbon_price_scenario=individual[:-1], initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-1], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
     for _ in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
@@ -118,13 +124,21 @@ def uniform(low, up, size=None):
 
 
 
-toolbox.register("attr_float", uniform, BOUND_LOW, BOUND_UP, NDIM)
-toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
+# toolbox.register("attr_float", uniform, BOUND_LOW, BOUND_UP, NDIM)
+
+toolbox.register("attr_function", random.randint, 0, 1)
+toolbox.register("attr_c", random.uniform, 0, 250)
+toolbox.register("attr_m", random.uniform, -14, 14)
+toolbox.register("attr_a", random.uniform, -10, 10)
+toolbox.register("attr_d", random.uniform, 1, 14)
+# toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_c, toolbox.attr_m)
+toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_function, toolbox.attr_m, toolbox.attr_c, toolbox.attr_a, toolbox.attr_d), n=1)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
 toolbox.register("evaluate", world_eval)
-toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0)
-toolbox.register("mutate", tools.mutPolynomialBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0, indpb=1.0/NDIM)
+# toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0)
+toolbox.register("mate", tools.cxTwoPoint)
+toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
 toolbox.register("select", tools.selNSGA2)
 toolbox.register("map_distributed", futures.map)
 
@@ -144,7 +158,8 @@ def main(seed=None):
     random.seed(seed)
 
     NGEN = 999
-    MU = 120
+    # MU = 120
+    MU = 80
     # MU = 4
     CXPB = 0.9
 
@@ -221,9 +236,15 @@ def main(seed=None):
         else:
             cursor = conn.cursor()
 
-        first_part = 'INSERT INTO carbon_results (reward,carbon_1,carbon_2,carbon_3,carbon_4,carbon_5,carbon_6,carbon_7,carbon_8,carbon_9,carbon_10,carbon_11,carbon_12,carbon_13,carbon_14,carbon_15,carbon_16,carbon_17,carbon_18) VALUES '
+        # first_part = 'INSERT INTO carbon_results (reward,carbon_1,carbon_2,carbon_3,carbon_4,carbon_5,carbon_6,carbon_7,carbon_8,carbon_9,carbon_10,carbon_11,carbon_12,carbon_13,carbon_14,carbon_15,carbon_16,carbon_17,carbon_18) VALUES '
+        #
+        # insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18]) for ind in front])
 
-        insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18]) for ind in front])
+        first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,attr_function,attr_m,attr_c,attr_a,attr_d) VALUES '
+
+        insert_vars = "".join(["({},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6]) for ind in front])
+
+
 
         insert_cmd = first_part+insert_vars
         insert_cmd = insert_cmd[:-2]
