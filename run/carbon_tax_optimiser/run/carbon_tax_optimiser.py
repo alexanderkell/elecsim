@@ -243,9 +243,12 @@ def main(seed=None):
         #
         # insert_vars = "".join(["({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6], ind.flat[7], ind.flat[8], ind.flat[9], ind.flat[10], ind.flat[11], ind.flat[12], ind.flat[13], ind.flat[14], ind.flat[15], ind.flat[16], ind.flat[17], ind.flat[18]) for ind in front])
 
-        first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,attr_function,attr_m,attr_c,attr_a,attr_d) VALUES '
+        # first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,attr_function,attr_m,attr_c,attr_a,attr_d) VALUES '
+        #
+        # insert_vars = "".join(["({},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6]) for ind in front])
+        first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,,attr_m,attr_c) VALUES '
 
-        insert_vars = "".join(["({},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6]) for ind in front])
+        insert_vars = "".join(["({},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3]) for ind in front])
 
 
 
