@@ -72,11 +72,12 @@ def world_eval(individual):
 
     scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    if individual[0] == 1:
-        individual = [individual[1]*i + individual[2] for i in range(1, 20)]
-    else:
-        individual = [individual[3]*i ** individual[4] + individual[2] for i in range(1, 20)]
-
+    # if individual[0] == 1:
+    #     individual = [individual[1]*i + individual[2] for i in range(1, 20)]
+    # else:
+    #     individual = [individual[3]*i ** individual[4] + individual[2] for i in range(1, 20)]
+    individual = [individual[0]*i + individual[1] for i in range(1, 20)]
+    print(individual)
 
     world = World(carbon_price_scenario=individual[:-1], initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=individual[-1], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
     for _ in range(YEARS_TO_RUN):
@@ -126,13 +127,15 @@ def uniform(low, up, size=None):
 
 # toolbox.register("attr_float", uniform, BOUND_LOW, BOUND_UP, NDIM)
 
-toolbox.register("attr_function", random.randint, 0, 1)
-toolbox.register("attr_c", random.uniform, 0, 250)
+# toolbox.register("attr_function", random.randint, 0, 1)
 toolbox.register("attr_m", random.uniform, -14, 14)
-toolbox.register("attr_a", random.uniform, -10, 10)
-toolbox.register("attr_d", random.uniform, 1, 14)
-# toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_c, toolbox.attr_m)
-toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_function, toolbox.attr_m, toolbox.attr_c, toolbox.attr_a, toolbox.attr_d), n=1)
+toolbox.register("attr_c", random.uniform, 0, 250)
+
+# toolbox.register("attr_L", random.uniform, -10, 10)
+# toolbox.register("attr_k", random.uniform, 1, 14)
+# toolbox.register("attr_n", random.uniform, 0, 250)
+# toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_function, toolbox.attr_m, toolbox.attr_c, toolbox.attr_a, toolbox.attr_d), n=1)
+toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr_m, toolbox.attr_c), n=1)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
 toolbox.register("evaluate", world_eval)
