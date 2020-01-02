@@ -246,7 +246,7 @@ def main(seed=None):
         # first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,attr_function,attr_m,attr_c,attr_a,attr_d) VALUES '
         #
         # insert_vars = "".join(["({},{},{},{},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3], ind.flat[4], ind.flat[5], ind.flat[6]) for ind in front])
-        first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,,attr_m,attr_c) VALUES '
+        first_part = 'INSERT INTO carbon_results_function (average_electricity_price,carbon_emitted,attr_m,attr_c) VALUES '
 
         insert_vars = "".join(["({},{},{},{}),\n".format(ind.flat[0], ind.flat[1], ind.flat[2], ind.flat[3]) for ind in front])
 
