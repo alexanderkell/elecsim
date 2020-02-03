@@ -273,5 +273,5 @@ if __name__ == "__main__":
     # Use 500 of the 1000 points in the json file
     # optimal_front = sorted(optimal_front[i] for i in range(0, len(optimal_front), 2))
 
-    # pop, stats = main()
-    world_eval([3.733708, 147.4854])
+    pop, stats = main()
+    # world_eval([3.733708, 147.4854])
