@@ -11,7 +11,7 @@ library(plyr)
 library("mco")
 ```
 ```{r}
-run_1 = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/run/validation-optimisation/data/run_2.csv')
+run_1 = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/validation-optimisation/data/run_2.csv')
 tail(run_1)
 ```
 ```{r}
@@ -46,7 +46,7 @@ ggsave("~/Desktop/genetic_algorithm_progression.png")
 ```
 
 ```{r}
-run_1 %>% group_by(run_number) %>% summarise(avg_reward = mean(reward)) %>% ggplot()+ geom_smooth(data=run_1, aes(x=run_number, reward))+geom_line(aes(x=run_number, y=avg_reward))+ggtitle("Average reward vs Population Number") 
+run_1 %>% dplyr::group_by(run_number) %>% dplyr::summarise(avg_reward = mean(reward)) %>% ggplot()+ geom_smooth(data=run_1, aes(x=run_number, reward))+geom_line(aes(x=run_number, y=avg_reward))+ggtitle("Average reward vs Population Number") 
 ```
 
 
@@ -77,7 +77,7 @@ accurate_area_long_perc = accurate_area_long %>% group_by(id) %>% mutate(value_p
 
 
 ```{r}
-params_more_than_10 = run_1 %>% group_by(individual_c, individual_m) %>% mutate(number = n()) %>% ungroup() %>% filter(number> 10) %>% mutate_if(is.numeric, round, 6) 
+params_more_than_10 = run_1 %>% group_by(individual_c, individual_m) %>% dplyr::mutate(number = n()) %>% ungroup() %>% filter(number> 10) %>% dplyr::mutate_if(is.numeric, round, 6) 
 
 params_more_than_10 %>% ggplot(aes(as.factor(individual_c), reward)) +geom_violin()+facet_wrap(~individual_m)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +geom_jitter(position=position_jitter(0.2), alpha=0.05) + ggtitle("Violin plot of input parameters with more than 10 simulations \nagainst distribution of reward")
 
@@ -90,7 +90,7 @@ accurate_area %>% mutate_if(is.numeric, round, 6) %>% ggplot(aes(as.factor(indiv
 
 
 ```{r}
-actual_mix = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/elecsim/data/processed/electricity_mix/energy_mix_historical.csv')
+actual_mix = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/elecsim/data/processed/electricity_mix/energy_mix_historical.csv')
 actual_mix_2018 = filter(actual_mix, year==2018)
 
 
@@ -133,7 +133,7 @@ ggplot(comparison_best, aes(x=key, y=value_perc, fill=type)) + geom_col(position
 
 
 ```{r}
-pdc_example = read_csv('/Users/b1017579/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/price_demand_curve_example.csv')
+pdc_example = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/price_demand_curve_example.csv')
 
 
 demand_range = data.frame(x=seq(from=min(pdc_example$segment_demand),max(pdc_example$segment_demand),length.out=500))
@@ -157,7 +157,7 @@ ggplot() + geom_line(data=lines, aes(x=x.1, y=x, group=id, color=reward)) + stat
 ```
 
 ```{r}
-best_75_percentile = accurate_area %>% group_by(individual_c, individual_m) %>% summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
+best_75_percentile = accurate_area %>% group_by(individual_c, individual_m) %>% dplyr::summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
 
 p = ddply(best_75_percentile, .(name), transform, y=get_line(individual_c, individual_m), x=get_x())  %>% ggplot() + geom_line(aes(x=x.1, y=x, color=name))+ stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="yellow") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Price curve of best runs at different percentiles of last genetic \nalgorithm population")
 p$labels$fill <- "Percentiles"
@@ -181,7 +181,7 @@ rbind(filter(select(ungroup(best_percentiles_comparison), "key", "type", "value"
 ## BEST PARAMETER COMBINATION FROM ALL RUNS
 
 ```{r}
-best_75_percentile_all_runs = run_1 %>% group_by(individual_c, individual_m) %>% summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75, 0.9, 1.0))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
+best_75_percentile_all_runs = run_1 %>% group_by(individual_c, individual_m) %>% dplyr::summarise(number=n(), quantiles = list(enframe(quantile(reward, probs=c(0.25,0.5,0.75, 0.9, 1.0))))) %>% unnest %>% ungroup() %>% filter(number>10) %>% group_by(name) %>%filter(rank(value, ties.method="first")==1)
 
 p = ddply(best_75_percentile_all_runs, .(name), transform, y=get_line(individual_c, individual_m), x=get_x())  %>% ggplot() + geom_line(aes(x=x.1, y=x, color=name))+ stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price), method="lm", col="yellow") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price)) + xlab("Demand (MW)") + ylab("Accepted Price") + ggtitle("Percentiles from all runs")
 p$labels$fill <- "Percentiles"
@@ -204,7 +204,7 @@ rbind(filter(select(ungroup(best_percentiles_comparison), "key", "type", "value"
 ```{r}
 best_params = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% filter(rank(mean_diff_perc, ties.method="first")==1)
 
-best_params_comparison = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted")
+best_params_comparison = filter(run_1,dplyr::near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),dplyr::near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% dplyr::group_by(id) %>% dplyr::mutate(value_perc = value/sum(value)) %>% dplyr::mutate(type="predicted")
 
 comparison_best_params = rbind(select(ungroup(best_params_comparison), "key", "type", "value", 'value_perc'), select(actual_mix_2018_reduced, -X1, -year))
 
@@ -214,7 +214,7 @@ comparison_best_params %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_su
 
 ## Getting MAPE for best param
 
-predicted_means_best_param = filter(run_1,near(x=individual_c, y=best_params$individual_c[1], tol=0.00001),near(x=individual_m, y=best_params$individual_m[1], tol=0.00001)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% mutate(type="predicted") %>% group_by(individual_c, individual_m, key) %>% summarise(predicted_perc = mean(value_perc)) 
+predicted_means_best_param = dplyr::filter(run_1,dplyr::near(x=individual_c, y=best_params$individual_c[1], tol=0.1),dplyr::near(x=individual_m, y=best_params$individual_m[1], tol=0.1)) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% dplyr::group_by(id) %>% dplyr::mutate(value_perc = value/sum(value)) %>% dplyr::mutate(type="predicted") %>% dplyr::group_by(individual_c, individual_m, key) %>% dplyr::summarise(predicted_perc = mean(value_perc)) 
 
 print(paste("MAPE = ", MAPE(predicted_means_best_param$predicted_perc, actual_mix_2018_reduced$value_perc)))
 
@@ -240,7 +240,7 @@ print(p)
 # params_more_than_10 %>% group_by(individual_c, individual_m) %>% do(., calculate_mean_error)
 # ddply(params_more_than_10, .(individual_c, individual_m), calculate_mean_error)
 
-params_sd_mean_reward = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value)) %>% group_by(id, key) %>% inner_join(actual_mix_2018_reduced, by="key") %>% mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% group_by(id) %>% summarise(diff_sd = sd(diff_perc), mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% group_by(individual_c, individual_m) %>% summarise(diff_sd = sd(diff_sd), mean_diff_perc = mean(mean_diff_perc))
+params_sd_mean_reward = params_more_than_10 %>% dplyr::group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% dplyr::group_by(id) %>% dplyr::mutate(value_perc = value/sum(value)) %>% dplyr::group_by(id, key) %>% dplyr::inner_join(actual_mix_2018_reduced, by="key") %>% dplyr::mutate(diff_perc = abs(value_perc.x-value_perc.y)) %>% dplyr::group_by(id) %>% dplyr::summarise(diff_sd = sd(diff_perc), mean_diff_perc = mean(diff_perc), individual_c = mean(individual_c), individual_m = mean(individual_m)) %>% dplyr::group_by(individual_c, individual_m) %>% dplyr::summarise(diff_sd = sd(diff_sd), mean_diff_perc = dplyr::mean(mean_diff_perc))
 
 params_sd_mean_reward_ordered = arrange(params_sd_mean_reward, diff_sd, mean_diff_perc)
 frontier = get_frontier(as.data.frame(params_sd_mean_reward_ordered), diff_sd, mean_diff_perc, decreasing = FALSE, quadrant = "bottom.left")
@@ -250,9 +250,9 @@ params_sd_mean_reward %>% ggplot() + geom_point(aes(diff_sd, mean_diff_perc)) + 
 ```
 
 ```{r}
-params_more_than_10_perc = params_more_than_10 %>% group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% mutate(value_perc = value/sum(value))
+params_more_than_10_perc = params_more_than_10 %>% dplyr::group_by(individual_c, individual_m) %>% gather("key", "value", "coal", "ccgt", "wind", "nuclear", "solar") %>% group_by(id) %>% dplyr::mutate(value_perc = value/sum(value))
 
-frontier_full_data = frontier %>% inner_join(params_sd_mean_reward_ordered, by=c('diff_sd', 'mean_diff_perc')) %>% inner_join(params_more_than_10_perc, by=c("individual_c", "individual_m")) %>% mutate(type=paste(mean_diff_perc,diff_sd))
+frontier_full_data = frontier %>% dplyr::inner_join(params_sd_mean_reward_ordered, by=c('diff_sd', 'mean_diff_perc')) %>%dplyr:: inner_join(params_more_than_10_perc, by=c("individual_c", "individual_m")) %>% dplyr::mutate(type=paste(mean_diff_perc,diff_sd))
 
 
 rbind(filter(select(frontier_full_data, "key", "type", "value", 'value_perc')), select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + ggtitle("Best parameter combinations from all genetic algorithm runs")
@@ -260,22 +260,22 @@ rbind(filter(select(frontier_full_data, "key", "type", "value", 'value_perc')), 
 ```
 
 ```{r}
-best_one = select(filter(frontier_full_data, mean_diff_perc<0.067), "key", "type", "value", 'value_perc')
+best_one = dplyr::select(dplyr::filter(frontier_full_data, mean_diff_perc<0.067), "key", "type", "value", 'value_perc')
 best_one$type = "Simulated"
 
 actual_mix_2018_reduced$type = "Actual"
 
 rbind(best_one, select(actual_mix_2018_reduced, -X1, -year)) %>% ggplot(aes(x=key, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2")+ stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Electricity Mix (%)") +scale_fill_brewer(palette = 'Set2')
 
-ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run.pdf")
+ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run.pdf")
 ```
 
 ```{r}
 best_actual = rbind(best_one, select(actual_mix_2018_reduced, -X1, -year))
-best_actual_stats = best_actual %>% group_by(type, key) %>% summarise(sd_value = sd(value_perc), mean_value = mean(value_perc)) 
+best_actual_stats = best_actual %>% dplyr::group_by(type, key) %>% dplyr::summarise(sd_value = sd(value_perc), mean_value = mean(value_perc)) 
 
-actuals = filter(best_actual_stats, type=="Actual")$mean_value
-predicted = filter(best_actual_stats, type=="Simulated")$mean_value
+actuals = dplyr::filter(best_actual_stats, type=="Actual")$mean_value
+predicted = dplyr::filter(best_actual_stats, type=="Simulated")$mean_value
 
 RMSE(actuals,predicted)
 ```
@@ -284,9 +284,10 @@ RMSE(actuals,predicted)
 best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
 best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
 
-best_params %>% transform(y=get_line(best_c, best_m), x=get_x())  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Price Duration Curve (2018)")) + geom_line(aes(x=x.1, y=x, color="Predicted")) + xlab("Demand (MW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("Simulated Fit (2018)" = "blue", "Predicted" = "red", 'Price Duration Curve (2018)'='black'))  + theme_bw()
+best_params %>% transform(y=get_line(best_c, best_m), x=get_x())  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="PDC (2018)")) + geom_line(aes(x=x.1, y=x, color="PPDC"), size=2) + xlab("Demand (MW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("PDC (2018)" = "orange", "PPDC" = "#306996", 'Simulated Fit (2018)'='red'))  + theme_classic() +theme(text = element_text(size=18))+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
 
-ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/results/best_run_price_dur_curve.pdf", dpi=500, height=5, width=5)
+
+ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/results/best_run_price_dur_curve.pdf", dpi=1000)
 ```
 
 ```{r}
