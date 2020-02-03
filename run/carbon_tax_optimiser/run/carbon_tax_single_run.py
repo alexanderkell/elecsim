@@ -79,7 +79,7 @@ def world_eval(individual):
     individual = [individual[0]*i + individual[1] for i in range(1, 20)]
     print(individual)
 
-    world = World(carbon_price_scenario=individual[:-1], initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-1], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
+    world = World(carbon_price_scenario=individual[:-1], initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="best_run_beis_comparison", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
     for _ in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
             # try:
@@ -273,4 +273,5 @@ if __name__ == "__main__":
     # optimal_front = sorted(optimal_front[i] for i in range(0, len(optimal_front), 2))
 
     # pop, stats = main()
-    world_eval([3.733708, 147.4854])
+
+    world_eval([])
