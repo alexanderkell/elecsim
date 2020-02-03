@@ -1,0 +1,60 @@
+---
+title: "carbon-optimiser-paper"
+author: "Alexander Kell"
+date: "03/02/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+## R Markdown
+
+
+```{r cars}
+linear = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/ga_linear.csv')
+
+each_point = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/each_year_optimisation.csv')
+
+```
+
+```{r}
+each_point$run_number = as.factor(each_point$run_number)
+```
+
+```{r}
+
+library(RColorBrewer)
+my_blue = brewer.pal(n = 9, "Blues")[c(TRUE, FALSE)]
+my_blue_nth = my_blue[-1]
+
+each_point_pointplot = dplyr::rename(each_point, `Generation Number` = run_number)
+
+ggplot(data=each_point_pointplot, aes(y=carbon_emitted, x=average_electricity_price, color=`Generation Number`))+geom_point(size=3) + ylab("Relative Carbon Density") + xlab("Average Electricity Price (£/MWh)") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_colour_manual(values=my_blue_nth)
+
+ggsave('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/free_points_ga_development.pdf', dpi=1000)
+
+```
+
+```{r}
+
+linear_pointplot = dplyr::rename(linear, `Generation Number` = run_number)
+linear_pointplot$`Generation Number` = as.factor(linear_pointplot$`Generation Number`)
+my_blue_6 = brewer.pal(n = 9, "Blues")[3:9]
+
+ggplot(data=linear_pointplot, aes(y=carbon_emitted, x=average_electricity_price, color=`Generation Number`))+geom_point(size=3) + ylab("Relative Carbon Density") + xlab("Average Electricity Price (£/MWh)") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_colour_manual(values=my_blue_6)
+
+```
+```{r}
+
+# my_blue_6 = brewer.pal(n = 9, "Blues")[3:9]
+
+ggplot(data=linear_pointplot, aes(x=average_electricity_price, color=`Generation Number`))+geom_density(alpha=0.1, size=1) + ylab("Density") + xlab("Average Electricity Price (£/MWh)") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_fill_brewer(palette="Blues") + scale_colour_manual(values=my_blue_6)+xlim(3.2, 8)
+
+ggsave('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_ga_development_distribution.pdf', dpi=1000)
+```
