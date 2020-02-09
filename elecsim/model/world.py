@@ -456,7 +456,9 @@ class World(Model):
                              "contributed_Nuclear": lambda m: self.get_accepted_bid_capacity(m, "Nuclear"),
                              "contributed_Recip_gas": lambda m: self.get_accepted_bid_capacity(m, "Recip_gas"),
                              "contributed_Biomass": lambda m: self.get_accepted_bid_capacity(m, "Biomass"),
+
                              # "hourly_accepted_bids": lambda m: self.get_accepted_bid_capacity_per_segment_hour(m),
+
                              "total_CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
                              "total_Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
                              "total_Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),

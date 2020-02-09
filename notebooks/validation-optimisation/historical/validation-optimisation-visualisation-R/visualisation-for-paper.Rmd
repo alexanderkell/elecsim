@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(latex2exp)
+
 ```
 
 
@@ -139,5 +141,20 @@ all_projections = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/no
 all_projections %>% filter(type %in% c("Actual", "ElecSim")) %>% ggplot(aes(x=Technology, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2") + stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Electricity Mix (%)") +scale_fill_brewer(palette = 'Set2')
 
 ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run_coal_dropout.pdf")
+```
+
+```{r temporal granularity}
+
+mean_error_results = read_csv('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/data/long_term_method_comparison/long_term_method_comparison_cleaned.csv')
+
+mean_error_results$Metric = str_remove_all(mean_error_results$Metric, "[$]") %>% str_replace_all("\\{","[") %>% str_replace_all("\\}","]") %>% str_replace_all("_","")
+
+# mean_error_results$n_clusters = as.factor(mean_error_results$n_clusters)
+
+
+
+ggplot(data=mean_error_results) + geom_line(size=1, aes(y=value, x=n_clusters, color=Method, group=Method)) + geom_point(aes(y=value, x=n_clusters, color=Method)) + facet_wrap(.~Metric, scales = "free_y", labeller = label_parsed) + xlab(bquote("Number of clusters "~(log[2]))) + ylab("Value") + ylim(0,NA) + theme_light() +theme(text = element_text(size=18)) + scale_color_manual(values = c("#1f78b4", "#33a02c"))  + scale_x_continuous(trans='log2')
+    
+ggsave('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/figures/clusters_compared_ggplot.pdf', dpi=1000, width=20, height=7, units="cm")
 ```
 

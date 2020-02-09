@@ -29,6 +29,18 @@ ggsave("/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/forward_scen
 ```
 
 
+```{r optimal pdc prices differences}
+ggplot() + geom_line(data = pred_prices, aes(x=X_axis, y=Y_axis, group = year, colour = year, show.legend = TRUE), size=0.8) +  
+  scale_colour_gradientn(name = "Year", colors = c("#54B1F7", "#103045"))  + geom_point(data=pdc_example, aes(x = segment_demand, y=accepted_price, fill = 'PDC (2018)'), color="orange")+ geom_smooth(data=pdc_example, aes(x = segment_demand, y=accepted_price, fill = 'Simulated Fit (2018)'), method = lm, color="red", se=FALSE, size=2) + scale_fill_manual("", values=c(1, 1), guide=guide_legend(override.aes = list(colour=c("orange", "red")))) + ylab("Accepted Price (£/MWh)") + xlab("Demand (MW)") + scale_x_continuous(labels = scales::comma, limits = c(4030,54069.78)) + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
+
+
+
+ggsave("/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/forward_scenario/figures/optimal_pdc_prices_differences.pdf", dpi=1000)
+
+```
+
+
+
 ```{r}
 long_scen_dat = read_csv("/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/beis_case_study/data/GA_optimisation_results/GA_results.csv")
 long_scen_dat  = filter(long_scen_dat, reward <500)
