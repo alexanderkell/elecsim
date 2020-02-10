@@ -7,11 +7,10 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-<<<<<<< HEAD
+
 library(latex2exp)
 
-=======
->>>>>>> 7a2bca4ba0351e30ac6a91f57db3c5decf93d8fb
+
 ```
 
 
@@ -146,7 +145,6 @@ all_projections %>% filter(type %in% c("Actual", "ElecSim")) %>% ggplot(aes(x=Te
 ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run_coal_dropout.pdf")
 ```
 
-<<<<<<< HEAD
 ```{r temporal granularity}
 
 mean_error_results = read_csv('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/data/long_term_method_comparison/long_term_method_comparison_cleaned.csv')
@@ -162,5 +160,4 @@ ggplot(data=mean_error_results) + geom_line(size=1, aes(y=value, x=n_clusters, c
 ggsave('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/figures/clusters_compared_ggplot.pdf', dpi=1000, width=20, height=7, units="cm")
 ```
 
-=======
->>>>>>> 7a2bca4ba0351e30ac6a91f57db3c5decf93d8fb
+
