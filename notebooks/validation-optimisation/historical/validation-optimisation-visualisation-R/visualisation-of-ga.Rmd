@@ -281,12 +281,19 @@ RMSE(actuals,predicted)
 ```
 
 ```{r}
+<<<<<<< HEAD
 pdc_example$segment_demand = pdc_example$segment_demand/1000
 
 best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
 best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
 
 best_params %>% transform(y=get_line(best_c, best_m), x=get_x()/1000)  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="PDC (2018)")) + geom_line(aes(x=x.1, y=x, color="PPDC"), size=2) + xlab("Demand (GW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("PDC (2018)" = "orange", "PPDC" = "#306996", 'Simulated Fit (2018)'='red'))  + theme_classic() +theme(text = element_text(size=18))+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
+=======
+best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
+best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
+
+best_params %>% transform(y=get_line(best_c, best_m), x=get_x())  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="PDC (2018)")) + geom_line(aes(x=x.1, y=x, color="PPDC"), size=2) + xlab("Demand (MW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("PDC (2018)" = "orange", "PPDC" = "#306996", 'Simulated Fit (2018)'='red'))  + theme_classic() +theme(text = element_text(size=18))+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
+>>>>>>> 7a2bca4ba0351e30ac6a91f57db3c5decf93d8fb
 
 
 ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/results/best_run_price_dur_curve.pdf", dpi=1000)
