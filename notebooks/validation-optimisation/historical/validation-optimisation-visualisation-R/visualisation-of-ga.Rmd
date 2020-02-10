@@ -9,7 +9,10 @@ library("tidyverse")
 library("ggplot2")
 library(plyr)
 library("mco")
+library(MLmetrics)
+library(KraljicMatrix)
 ```
+
 ```{r}
 run_1 = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/validation-optimisation/data/run_2.csv')
 tail(run_1)
@@ -281,19 +284,15 @@ RMSE(actuals,predicted)
 ```
 
 ```{r}
-<<<<<<< HEAD
 pdc_example$segment_demand = pdc_example$segment_demand/1000
+
 
 best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
 best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
 
 best_params %>% transform(y=get_line(best_c, best_m), x=get_x()/1000)  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="PDC (2018)")) + geom_line(aes(x=x.1, y=x, color="PPDC"), size=2) + xlab("Demand (GW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("PDC (2018)" = "orange", "PPDC" = "#306996", 'Simulated Fit (2018)'='red'))  + theme_classic() +theme(text = element_text(size=18))+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
-=======
-best_c = filter(frontier_full_data, mean_diff_perc<0.067)$individual_c[1]
-best_m = filter(frontier_full_data, mean_diff_perc<0.067)$individual_m[1]
 
-best_params %>% transform(y=get_line(best_c, best_m), x=get_x())  %>% ggplot() + stat_smooth(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="Simulated Fit (2018)"), method="lm") + geom_point(data=pdc_example, aes(x=segment_demand, y=accepted_price, color="PDC (2018)")) + geom_line(aes(x=x.1, y=x, color="PPDC"), size=2) + xlab("Demand (MW)") + ylab("Accepted Price (£/MWh)") + scale_color_manual(name = "Data",  values = c("PDC (2018)" = "orange", "PPDC" = "#306996", 'Simulated Fit (2018)'='red'))  + theme_classic() +theme(text = element_text(size=18))+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
->>>>>>> 7a2bca4ba0351e30ac6a91f57db3c5decf93d8fb
+
 
 
 ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/results/best_run_price_dur_curve.pdf", dpi=1000)
@@ -329,11 +328,7 @@ ggplot(run_1, aes(x=reward, y=time_taken))+stat_smooth(method = "lm")+geom_point
 
 ```
 
-```{r}
-dif_sum = run_1_long %>% inner_join(actual_mix_2018_reduced, by='key') %>% group_by(id,key) %>% mutate(total_difference = value.x-value.y) %>% ddply(.(id, key), summarise, difference_sum = sum(total_difference), time_taken=time_taken, reward=reward, run_number=run_number) %>% group_by(id) %>% summarise(tot_diff = sum(difference_sum), time_taken=mean(time_taken), reward=mean(reward), run_number=mean(run_number))
 
-plot_ly(data=dif_sum, x=~tot_diff, y=~time_taken, z=~reward, type="scatter3d", mode="markers", color=~run_number) 
-```
 
 ```{r}
 ggplot()+geom_point(data=run_1, aes(x=time_taken, y=reward, color=run_number)) + ggtitle("Scatter plot of time taken against reward")
@@ -350,6 +345,13 @@ ggplot(data=dif_sum, aes(x=tot_diff, y=time_taken, color=reward)) + geom_point()
 
 # actual_mix_2018_reduced
 ```
+
+```{r}
+dif_sum = run_1_long %>% inner_join(actual_mix_2018_reduced, by='key') %>% group_by(id,key) %>% mutate(total_difference = value.x-value.y) %>% ddply(.(id, key), summarise, difference_sum = sum(total_difference), time_taken=time_taken, reward=reward, run_number=run_number) %>% group_by(id) %>% summarise(tot_diff = sum(difference_sum), time_taken=mean(time_taken), reward=mean(reward), run_number=mean(run_number))
+
+plot_ly(data=dif_sum, x=~tot_diff, y=~time_taken, z=~reward, type="scatter3d", mode="markers", color=~run_number) 
+```
+
 ```{r}
 ggplot(data=dif_sum, aes(x=tot_diff, color=time_taken, y=reward)) + geom_point()+geom_smooth()+xlim(-11000,10000)
 ```
