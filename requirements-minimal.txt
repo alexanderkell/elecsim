@@ -49,7 +49,6 @@ MarkupSafe==1.1.1
 Mesa==0.8.6
 multiprocess==0.70.8
 netifaces==0.10.4
-networkx==2.3
 numpy==1.16.4
 oauthlib==2.0.6
 opencv-contrib-python==4.1.0.25
