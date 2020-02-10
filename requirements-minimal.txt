@@ -55,7 +55,7 @@ opencv-contrib-python==4.1.0.25
 opencv-python==4.1.0.25
 opencv-python-headless==4.1.0.25
 packaging==19.0
-pandas==0.25.0
+pandas==0.25.3
 pathos==0.2.4
 Pillow==6.1.0
 pluggy==0.12.0
