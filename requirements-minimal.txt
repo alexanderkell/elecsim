@@ -13,7 +13,6 @@ chardet==3.0.4
 Click==7.0
 cloudpickle==1.2.1
 colorama==0.4.1
-command-not-found==0.3
 configobj==5.0.6
 constantly==15.1.0
 cookiecutter==1.6.0
