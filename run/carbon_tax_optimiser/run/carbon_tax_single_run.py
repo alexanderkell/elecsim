@@ -274,4 +274,8 @@ if __name__ == "__main__":
 
     # pop, stats = main()
 
+<<<<<<< HEAD
     world_eval([11.384098, 202.538132])
+=======
+    world_eval([])
+>>>>>>> 7a2bca4ba0351e30ac6a91f57db3c5decf93d8fb
