@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(hdrcde)
+library(gghighlight)
 ```
 
 ## R Markdown
@@ -87,10 +89,32 @@ linear_data_exploded$x = linear_data_exploded$x + 2018
 linear_data_exploded = dplyr::rename(linear_data_exploded, `Average\nElectricity Price\n£/MWh` = average_electricity_price)
 
 
-ggplot(data=filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5)) + geom_line(aes(x=x,y=y,color=`Average\nElectricity Price\n£/MWh`, group=`Average\nElectricity Price\n£/MWh`))+ theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Year") + ylab("Carbon Tax £/t CO2")
+ggplot(data=filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5)) + geom_line(aes(x=x,y=y,color=`Average\nElectricity Price\n£/MWh`, group=`Average\nElectricity Price\n£/MWh`))+ theme_classic() +theme(text = element_text(size=18))  + xlab("Year") + ylab("Carbon Tax £/t CO2")+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm"))
 
 ggsave('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_actual_lines.pdf', dpi=1000)
 ```
+
+```{r}
+
+linear_data_exploded$whether_highlighted = linear_data_exploded$id
+linear_data_exploded = linear_data_exploded %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`, 4.4252347946167), "Highest", whether_highlighted)) %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`, 3.84739232063294), "Flat", whether_highlighted)) %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`,  4.41116809844971
+ ), "Lowest", whether_highlighted))
+
+
+
+
+best_lines = filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5)
+
+ggplot(data=best_lines, aes(x=x,y=y,color=`Average\nElectricity Price\n£/MWh`))+geom_line(aes(group=whether_highlighted))+ theme_classic() +theme(text = element_text(size=18))  + xlab("Year") + ylab("Carbon Tax £/t CO2")+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm"))+
+  scale_color_continuous() +  gghighlight(near(`Average\nElectricity Price\n£/MWh`,  
+4.4252347946167) | near(`Average\nElectricity Price\n£/MWh`,  
+3.84739232063294) | near(`Average\nElectricity Price\n£/MWh`,  
+ 4.41116809844971), keep_scales = TRUE)
+
+ggsave('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/highlighted_linear_actual_lines.pdf', dpi=1000)
+
+```
+
 
 ```{r}
 arrange(filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5), attr_c)
@@ -121,4 +145,11 @@ ggplot(data=both_together) + facet_wrap(.~method) + geom_density(aes(x=average_e
 
 ggsave('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_and_free_ga_development_distribution_avg_elec_price.pdf', dpi=1000, height =5, width =9.5)
 
+```
+
+```{r}
+hdr.den(linear$average_electricity_price,prob=95)
+```
+```{r}
+hdr.den(each_point$average_electricity_price,prob=95)
 ```
