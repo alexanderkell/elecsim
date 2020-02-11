@@ -298,7 +298,7 @@ if __name__ == "__main__":
         output2 = ray.get(output2)
 
     ray.init(num_cpus=os.cpu_count()-1)
-    world_eval_parallel([11.384098, 81.34436], "lowest")
-    world_eval_parallel([11.384098, 202.53813], "highest")
+    # world_eval_parallel([11.384098, 81.34436], "lowest")
+    # world_eval_parallel([11.384098, 202.53813], "highest")
     world_eval_parallel([-0.2289701, 192.5701], "flat")
 
