@@ -96,7 +96,8 @@ if __name__ == "__main__":
     X = multi_step_dat.filter(regex='^(?!.*value).*$').values.astype(np.float32)
 
     helper1 = EstimatorSelectionHelper(models, params, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'])
-    helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
+    # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
+    helper1.fit_parallel(X, y, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'], n_jobs=-1, cv=5, refit=False)
 
     res = helper1.score_summary()
 
