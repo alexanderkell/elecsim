@@ -24,7 +24,8 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 
-from elecsim.constants import ROOT_DIR
+# from elecsim.constants import ROOT_DIR
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 """
 File name: initial_exploration_ML
@@ -76,7 +77,7 @@ if __name__ == "__main__":
 
     # "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    demand = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/demand.csv'.format(ROOT_DIR))
+    demand = pd.read_csv('{}/../data/capacity/demand.csv'.format(ROOT_DIR))
     # solar = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/solar.csv'.format(ROOT_DIR))
     # offshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/offshore.csv'.format(ROOT_DIR))
     # onshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/onshore.csv'.format(ROOT_DIR))
@@ -101,4 +102,4 @@ if __name__ == "__main__":
 
     timezone = pytz.timezone("Europe/London")
 
-    res.to_csv('{}/../run/market_forecasting_comparison/data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)))
+    res.to_csv('{}/../data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)))
