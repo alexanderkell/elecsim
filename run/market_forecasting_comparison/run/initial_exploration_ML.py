@@ -107,7 +107,7 @@ if __name__ == "__main__":
     # onshore = onshore.drop(columns=['time','Unnamed: 0'])
     # offshore = offshore.drop(columns=['time','Unnamed: 0'])
 
-    prev_days_needed = get_hours_of_days_needed(days_wanted=[1, 2, 7, 30], hours_wanted=[30, 30, 30, 30, 30])
+    prev_days_needed = get_hours_of_days_needed(days_wanted=[1, 2, 7, 30], hours_wanted=[28, 28, 28, 28, 28])
     multi_step_dat = multi_step_data_prep(dat=demand, input_lags=prev_days_needed, outputs=24)
 
     y = multi_step_dat.filter(like='value').values
