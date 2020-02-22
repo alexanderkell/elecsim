@@ -42,16 +42,16 @@ __email__ = "alexander@kell.es"
 models = {
     'LinearRegression': LinearRegression(),
     'Lasso': Lasso(),
-    'Ridge': Ridge(),
-    'ElasticNet': ElasticNet(),
-    'llars': LassoLars(),
-    'ExtraTreesRegressor': ExtraTreesRegressor(),
-    'RandomForestRegressor': RandomForestRegressor(),
-    'AdaBoostRegressor': AdaBoostRegressor(),
-    'GradientBoostingRegressor': GradientBoostingRegressor(),
-    'SVR': SVR(),
-    "MLPRegressor": MLPRegressor(),
-    'KNeighborsRegressor': KNeighborsRegressor()
+    # 'Ridge': Ridge(),
+    # 'ElasticNet': ElasticNet(),
+    # 'llars': LassoLars(),
+    # 'ExtraTreesRegressor': ExtraTreesRegressor(),
+    # 'RandomForestRegressor': RandomForestRegressor(),
+    # 'AdaBoostRegressor': AdaBoostRegressor(),
+    # 'GradientBoostingRegressor': GradientBoostingRegressor(),
+    # 'SVR': SVR(),
+    # "MLPRegressor": MLPRegressor(),
+    # 'KNeighborsRegressor': KNeighborsRegressor()
 }
 
 # params = {
