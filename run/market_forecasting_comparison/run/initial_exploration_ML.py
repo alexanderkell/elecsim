@@ -42,9 +42,9 @@ __email__ = "alexander@kell.es"
 models = {
     'LinearRegression': LinearRegression(),
     'Lasso': Lasso(),
-    # 'Ridge': Ridge(),
-    # 'ElasticNet': ElasticNet(),
-    # 'llars': LassoLars(),
+    'Ridge': Ridge(),
+    'ElasticNet': ElasticNet(),
+    'llars': LassoLars(),
     # 'ExtraTreesRegressor': ExtraTreesRegressor(),
     # 'RandomForestRegressor': RandomForestRegressor(),
     # 'AdaBoostRegressor': AdaBoostRegressor(),
