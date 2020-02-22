@@ -45,13 +45,13 @@ models = {
     'Ridge': Ridge(),
     'ElasticNet': ElasticNet(),
     'llars': LassoLars(),
-    # 'ExtraTreesRegressor': ExtraTreesRegressor(),
-    # 'RandomForestRegressor': RandomForestRegressor(),
-    # 'AdaBoostRegressor': AdaBoostRegressor(),
-    # 'GradientBoostingRegressor': GradientBoostingRegressor(),
-    # 'SVR': SVR(),
-    # "MLPRegressor": MLPRegressor(),
-    # 'KNeighborsRegressor': KNeighborsRegressor()
+    'ExtraTreesRegressor': ExtraTreesRegressor(),
+    'RandomForestRegressor': RandomForestRegressor(),
+    'AdaBoostRegressor': AdaBoostRegressor(),
+    'GradientBoostingRegressor': GradientBoostingRegressor(),
+    'SVR': SVR(),
+    "MLPRegressor": MLPRegressor(),
+    'KNeighborsRegressor': KNeighborsRegressor()
 }
 
 # params = {
