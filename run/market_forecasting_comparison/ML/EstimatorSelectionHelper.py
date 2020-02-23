@@ -64,14 +64,18 @@ class EstimatorSelectionHelper:
             output.append(gs)
 
         output = ray.get(output)
-        self.grid_searches = {key: out for key ,out in zip(list_of_keys, output)}
+        self.grid_searches = {key: out for key, out in zip(list_of_keys, output)}
 
     def score_summary(self):
         all_results = []
         for k in self.grid_searches:
-            results = pd.DataFrame(self.grid_searches[k].cv_results_)
-            results['estimator'] = k
-            all_results.append(results)
+            try:
+                results = pd.DataFrame(self.grid_searches[k].cv_results_)
+                results['estimator'] = k
+                all_results.append(results)
+            except Exception as e:
+                print(e)
+
         results_df = pd.concat(all_results)
         results_df = results_df.loc[:,~results_df.columns.str.contains('train')]
 
