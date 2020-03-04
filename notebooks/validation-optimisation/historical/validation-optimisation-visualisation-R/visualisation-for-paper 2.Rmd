@@ -1,0 +1,163 @@
+---
+title: "paper-visualisations"
+author: "Alexander Kell"
+date: "15/08/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(latex2exp)
+
+
+```
+
+
+```{r cars}
+actual = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/elecsim/data/processed/electricity_mix/energy_mix_historical.csv')
+actual = actual %>% mutate(year=as.factor(year),variable = str_replace_all(.$variable, c("coal"="Coal", "nuclear"="Nuclear", "ccgt"="CCGT", "solar"="Solar", "wind"="Wind"))) %>% dplyr::rename(Technology=variable, Year=year) 
+actual
+```
+
+
+```{r}
+relevant_data = filter(actual, Year%in%c(2013,2018), Technology %in% c("Coal", "Nuclear", "CCGT", "Wind", "Solar"))
+ggplot(relevant_data, aes(x=Technology, y=value ,fill=Year)) + geom_col(position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Average Electricity Supply (MW)") +scale_fill_brewer(palette = 'Set2')
+    
+ggsave("~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/figures/introduction/uk_historical_mix.pdf")
+
+```
+
+
+```{r}
+relevant_data %>% group_by(Technology) %>%
+    mutate(lag = lag(value)) %>%
+    mutate(pct.change =100* (lag - value) / lag)
+
+```
+
+```{r}
+# pred_actuals = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals.csv', col_names = c("Type", "Technology", "Year", "Values"))
+
+pred_actuals = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals.csv', col_names = c("Type", "Technology", "Year", "Values"))
+
+actual$Year = as.numeric(as.character(actual$Year))
+
+actual_perc = actual %>% group_by(Year) %>% mutate(value_perc = value/sum(value)*1000)
+
+naive_model = forecast::naive(filter(actual_perc, Technology=="CCGT", Year<2013)$value_perc)
+
+forecast::accuracy(naive_model, filter(pred_actuals, Technology=="CCGT", Type=="Predicted")$Values)
+
+
+
+get_error_metrics = function(df){
+    ts_actual = ts(filter(actual_perc, Technology==df$Technology[1])$value_perc, start=2011, end=2019, frequency = 1)
+    windowed_actual = window(ts_actual, start=2011, end=2012)
+    
+    naive_model = forecast::naive(windowed_actual, h=6)
+    
+    ts_abm = ts(filter(df, Type=="Predicted")$Values, start=2013, end=2018)
+    windowed_abm = window(ts_abm, start=2013)
+    metrics = forecast::accuracy(naive_model, x=windowed_abm)
+    
+    p=autoplot(ts_actual) +autolayer(naive_model, series="Naive", PI=FALSE) +xlab("Year") + ylab("MW") + autolayer(windowed_abm, series="ABM") + ggtitle(df$Technology[1])
+    print(p)
+
+    
+    return(metrics)
+}
+
+dlply(pred_actuals, .(Technology), get_error_metrics)
+    ```
+
+```{r}
+
+MASE = function(y_pred, y_true, naive){
+    abm_MAE = MAE(y_pred, y_true)
+    naive_MAE = MAE(naive, y_true)
+    
+    MASE_val = abm_MAE/naive_MAE
+}
+
+get_all_error_metrics = function(predicted, actual){
+    y_pred = predicted$Values
+    y_true = filter(actual, Year>=2013, Year<2019, Technology==predicted$Technology[1])$value_perc
+    print(predicted$Technology[1])
+    print("y_pred")
+    print(y_pred)
+    print('y_true')
+    print(y_true)
+    
+    RMSE_val = RMSE(y_pred, y_true)
+    MAE_val = MAE(y_pred, y_true)
+    
+    mase_val = MASE(y_pred, y_true, filter(actual, Year==2013, Technology==predicted$Technology[1])$value_perc)
+    
+    metric_names = c("MASE","RMSE", "MAE")
+    metric_results = c(mase_val, RMSE_val, MAE_val)
+    metric_results_df = data.frame(Metric = metric_names, Value = metric_results) %>%     mutate_if(is.numeric, round, 3)
+    metric_results_wide = spread(metric_results_df, Metric, Value)
+    
+}
+
+abm_predicted = filter(pred_actuals, Type=="Predicted")
+actual = filter(pred_actuals, Type=="Actual") %>% dplyr::rename(value_perc = Values)
+
+
+metric_results_df = ddply(abm_predicted, .(Technology), get_all_error_metrics, actual)
+write_csv(metric_results_df, '~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/error_metrics.csv')
+ 
+# metric_names = c("RMSE", "MASE", "MAE", "SD")
+# metric_results = c(RMSE(actuals, predicted), MASE, MAE(actuals,predicted), sd(predicted))
+# metric_results_df = data.frame(Metric = metric_names, Value = metric_results) %>% mutate_if(is.numeric, round, 3)
+# metric_results_df
+# write_csv(metric_results_df, '~/Documents/PhD/Projects/10. ELECSIM/notebooks/validation-optimisation/data/results/error_metrics.csv')
+
+```
+
+
+
+```{r}
+results_coal_drop = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals_coal_dropout.csv', col_names = c("Type", "Technology", "Year", "Values"))
+
+# results_coal_drop = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals_coal_dropout1.csv', col_names = c("Type", "Technology", "Year", "Values"))
+
+abm_predicted_drop = filter(results_coal_drop, Type=="Predicted")
+
+    
+abm_predicted_drop$Technology <- gsub('Gas', 'CCGT', abm_predicted_drop$Technology)
+
+
+metric_results_coal_drop_df = ddply(abm_predicted_drop, .(Technology), get_all_error_metrics, actual_perc)
+write_csv(metric_results_coal_drop_df, '~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/error_metrics_coal_dropout.csv')
+
+```
+
+
+
+```{r}
+all_projections = read_csv('/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/data/results/predictions_actuals_all_data_coal_dropout.csv')
+
+all_projections %>% filter(type %in% c("Actual", "ElecSim")) %>% ggplot(aes(x=Technology, y=value_perc, fill=type)) + stat_summary(geom = "bar", fun.y = mean, position = "dodge2") + stat_summary(geom = "errorbar", fun.data = mean_se, position = "dodge2") + theme_classic() +theme(text = element_text(size=18))+ xlab("") + ylab("Electricity Mix (%)") +scale_fill_brewer(palette = 'Set2')
+
+ggsave("~/Documents/PhD/Projects/10-ELECSIM/notebooks/validation-optimisation/figures/introduction/best_run_coal_dropout.pdf")
+```
+
+```{r temporal granularity}
+
+mean_error_results = read_csv('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/data/long_term_method_comparison/long_term_method_comparison_cleaned.csv')
+
+mean_error_results$Metric = str_remove_all(mean_error_results$Metric, "[$]") %>% str_replace_all("\\{","[") %>% str_replace_all("\\}","]") %>% str_replace_all("_","")
+
+# mean_error_results$n_clusters = as.factor(mean_error_results$n_clusters)
+
+
+
+ggplot(data=mean_error_results) + geom_line(size=1, aes(y=value, x=n_clusters, color=Method, group=Method)) + geom_point(aes(y=value, x=n_clusters, color=Method)) + facet_wrap(.~Metric, scales = "free_y", labeller = label_parsed) + xlab(bquote("Number of clusters "~(log[2]))) + ylab("Value") + ylim(0,NA) + theme_light() +theme(text = element_text(size=18)) + scale_color_manual(values = c("#1f78b4", "#33a02c"))  + scale_x_continuous(trans='log2')
+    
+ggsave('/Users/b1017579/Documents/PhD/Projects/14-temporal-granularity/temporal_granularity/reports/figures/clusters_compared_ggplot.pdf', dpi=1000, width=20, height=7, units="cm")
+```
+
+
