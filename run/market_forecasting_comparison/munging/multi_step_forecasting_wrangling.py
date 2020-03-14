@@ -30,7 +30,7 @@ def get_hours_of_day(prev_day_needed, hours_needed=24):
         first_hour = 1
     else:
         first_hour = 0
-    day = [hour + 24*prev_day_needed for hour in range(first_hour,hours_needed)]
+    day = [hour + 24*prev_day_needed for hour in range(first_hour, hours_needed)]
     return day
 
 
