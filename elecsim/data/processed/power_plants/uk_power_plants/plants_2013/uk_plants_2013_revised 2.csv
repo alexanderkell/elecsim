@@ -1,0 +1,386 @@
+,Company,Name,Simplified_Type,Capacity,Start_date
+0,A7 Energy,Greendykeside,Onshore,4.0,2007
+1,A7 Energy,Lochhead,Onshore,6.0,2009
+3,AES,Kilroot,Coal,520.0,1981
+4,AES,Kilroot OCGT,OCGT,142.0,1981
+5,AES,Ballylumford B,Recip_gas,540.0,1968
+6,AES,Ballylumford B OCGT,OCGT,116.0,1968
+7,AES,Ballylumford C,CCGT,616.0,2003
+9,Baglan Generation Ltd,Baglan Bay,CCGT,510.0,2002
+11,Barking Power,Barking,CCGT,1000.0,1994
+13,Beaufort Wind Ltd,Bears Down,Onshore,10.0,2001
+14,Beaufort Wind Ltd,Bein Ghlas,Onshore,8.0,1999
+15,Beaufort Wind Ltd,Bryn Titli,Onshore,10.0,1994
+16,Beaufort Wind Ltd,Carno,Onshore,34.0,1996
+17,Beaufort Wind Ltd,Causeymire,Onshore,48.0,2004
+18,Beaufort Wind Ltd,Kirkby Moor,Onshore,5.0,1993
+19,Beaufort Wind Ltd,Lambrigg,Onshore,7.0,2000
+20,Beaufort Wind Ltd,Llyn Alaw,Onshore,20.0,1997
+21,Beaufort Wind Ltd,Mynydd Gorddu,Onshore,10.0,1996
+22,Beaufort Wind Ltd,Novar,Onshore,17.0,1997
+23,Beaufort Wind Ltd,Taff Ely,Onshore,9.0,1993
+24,Beaufort Wind Ltd,Tow Law,Onshore,2.0,2001
+25,Beaufort Wind Ltd,Trysglwyn,Onshore,6.0,1996
+26,Beaufort Wind Ltd,Windy Standard,Onshore,22.0,1996
+27,Beaufort Wind Ltd,North Hoyle,Offshore,60.0,2003
+28,Beaufort Wind Ltd,Farr,Onshore,92.0,2006
+29,Beaufort Wind Ltd,Ffynnon Oer,Onshore,32.0,2006
+31,BNP Paribas Clean Energy Partners GP Limited,Gruig,Onshore,25.0,2009
+33,Braes of Doune Windfarm,Braes of Doune,Onshore,72.0,2007
+35,British Energy,Dungeness B,Nuclear,1040.0,1983
+36,British Energy,Hartlepool,Nuclear,1180.0,1984
+37,British Energy,Heysham1,Nuclear,1155.0,1984
+38,British Energy,Heysham 2,Nuclear,1220.0,1988
+39,British Energy,Hinkley Point B,Nuclear,880.0,1976
+40,British Energy,Sizewell B,Nuclear,1198.0,1995
+41,British Energy,Hunterston B,Nuclear,890.0,1976
+42,British Energy,Torness,Nuclear,1185.0,1988
+44,Cemmaes Windfarm Ltd,Cemmaes,Onshore,15.0,2002
+46,Centrica,Barry (10),CCGT,140.0,1998
+47,Centrica,Glanford Brigg (10),CCGT,140.0,1993
+48,Centrica,Killingholme,CCGT,665.0,1994
+49,Centrica,Peterborough (10),CCGT,240.0,1993
+50,Centrica,South Humber Bank ,CCGT,1285.0,1996
+51,Centrica,Langage,CCGT,905.0,2010
+52,Centrica,Glens of Foudland,Onshore,26.0,2005
+53,Centrica,Lynn,Offshore,97.0,2009
+54,Centrica,Inner Dowsing,Offshore,97.0,2009
+56,Cold Northcott Windfarm Ltd,Cold Northcott,Onshore,7.0,1993
+57,Coolkeeragh ESB Ltd,Coolkeeragh,CCGT,408.0,2005
+58,Coolkeeragh ESB Ltd,Coolkeeragh OCGT,OCGT,72.0,2005
+60,Corby Power Ltd,Corby,CCGT,401.0,1993
+62,Dong Energy,Burbo Bank,Offshore,90.0,2009
+63,Dong Energy,Gunfleet Sands 1,Offshore,108.0,2010
+64,Dong Energy,Gunfleet Sands 2,Offshore,65.0,2010
+65,Dong Energy,Walney 1 (3),Offshore,184.0,2011
+66,Dong Energy,Walney 2 (3),Offshore,184.0,2011
+67,Dong Energy,Barrow (11),Offshore,90.0,2006
+68,Dong Energy,Severn,CCGT,848.0,2010
+69,Dong Energy,Lincs (11),Offshore,270.0,2012
+71,Drax Power Ltd,Drax,Biomass_wood,3870.0,1974
+72,Drax Power Ltd,Drax GT,OCGT,75.0,1971
+74,EDF Energy,Cottam,Coal,2008.0,1969
+75,EDF Energy,West Burton,Coal,2012.0,1967
+76,EDF Energy,West Burton GT,OCGT,40.0,1967
+77,EDF Energy,Thames Valley Power,Biomass_wood,15.0,1995
+78,EDF Energy,London Heat & Power Company ,OCGT,9.0,2000
+80,EDF Energy,Barkantine Heat & Power Company ,OCGT,1.0,2000
+81,EDF Energy,Aberdare District Energy,Recip_gas,10.0,2002
+82,EDF Energy,Bridgewater District Energy,Recip_gas,10.0,2000
+83,EDF Energy,Sevington District Energy,Recip_gas,10.0,2000
+84,EDF Energy,Solutia District Energy,Recip_gas,10.0,2000
+85,EDF Energy,West Burton CCGT,CCGT,1410.0,2012
+87,EDF Energy Renewables,Bicker Fen,Onshore,26.0,2008
+88,EDF Energy Renewables,Walkway,Onshore,14.0,2008
+89,EDF Energy Renewables,Longpark,Onshore,38.0,2009
+90,EDF Energy Renewables,Burnfoot Hill,Onshore,26.0,2010
+91,EDF Energy Renewables,Rusholme,Onshore,24.0,2010
+92,EDF Energy Renewables,Fairfield,Onshore,7.0,2011
+93,EDF Energy Renewables,Green Rigg ,Onshore,36.0,2012
+94,EDF Energy Renewables,Fallago,Onshore,144.0,2013
+95,EDF Energy Renewables,Glass Moor II,Onshore,12.0,2013
+96,EDF Energy Renewables,Boundary Lane,Onshore,6.0,2013
+98,Eggborough Power Ltd,Eggborough,Coal,1960.0,1967
+100,EPR Ely Limited,Elean,CCGT,38.0,2001
+102,EPR Glanford Ltd,Glanford,Biomass_wood,13.0,1993
+103,EPR Thetford Ltd,Thetford,Biomass_wood,39.0,1998
+104,EPR Scotland Ltd,Westfield,Biomass_wood,12.0,2000
+106,EON,Ironbridge,Biomass_wood,900.0,1970
+107,EON,Ratcliffe,Coal,2000.0,1968
+108,EON,Grain GT,OCGT,55.0,1978
+109,EON,Ratcliffe GT,OCGT,34.0,1966
+110,EON,Taylor's Lane GT,OCGT,132.0,1979
+111,EON,Connahs Quay,CCGT,1380.0,1996
+112,EON,Cottam Development Centre,CCGT,390.0,1999
+113,EON,Enfield,CCGT,408.0,1999
+114,EON,Killingholme,CCGT,900.0,1993
+115,EON,Sandbach,CCGT,50.0,1999
+116,EON,Castleford,CCGT,56.0,2002
+117,EON,Thornhill,CCGT,50.0,1998
+118,EON,Grain,CCGT,1365.0,2010
+119,EON,Steven's Croft,Biomass_wood,50.0,2007
+121,EON,Askam,Onshore,5.0,1999
+122,EON,Bowbeat,Onshore,31.0,2002
+123,EON,Deucheran Hill,Onshore,16.0,2001
+124,EON,Hare Hill,Onshore,6.0,2004
+125,EON,High Volts,Onshore,8.0,2004
+126,EON,Holmside,Onshore,6.0,2004
+127,EON,Lowca,Onshore,5.0,2000
+128,EON,Oldside,Onshore,5.0,1996
+129,EON,Out Newton,Onshore,9.0,2002
+130,EON,Scroby Sands,Offshore,60.0,2004
+131,EON,Siddick,Onshore,4.0,1996
+132,EON,Stags Holt ,Onshore,20.0,2007
+133,EON,Rhyd-y-Groes,Onshore,7.0,1992
+134,EON,Blyth,Offshore,4.0,2000
+135,EON,Robin Rigg ,Offshore,180.0,2010
+136,EON,Great Eppleton ,Onshore,8.0,2010
+137,EON,Butterwick Moor,Onshore,21.0,2011
+138,EON,Haswell Moor,Onshore,10.0,2010
+139,EON,Rosehall,Onshore,25.0,2012
+140,EON,Tween Bridge,Onshore,44.0,2012
+141,EON,Camster,Onshore,10.0,2012
+143,Falck Renewables Wind Ltd,Ben Aketil,Onshore,28.0,2007
+144,Falck Renewables Wind Ltd,Boyndie,Onshore,16.0,2006
+145,Falck Renewables Wind Ltd,Cefn Croes,Onshore,59.0,2006
+146,Falck Renewables Wind Ltd,Earlsburn,Onshore,38.0,2007
+147,Falck Renewables Wind Ltd,Kilbraur,Onshore,68.0,2008
+148,Falck Renewables Wind Ltd,Millennium,Onshore,65.0,2008
+150,Fenland Windfarms Ltd,Deeping,Onshore,16.0,2006
+151,Fenland Windfarms Ltd,Glass Moor,Onshore,16.0,2006
+152,Fenland Windfarms Ltd,Red House,Onshore,12.0,2006
+153,Fenland Windfarms Ltd,Red Tile,Onshore,24.0,2007
+155,Fred Olsen,Crystal Rig Windfarm,Onshore,63.0,2003
+156,Fred Olsen,Paul's Hill,Onshore,64.0,2005
+157,Fred Olsen,Rothes,Onshore,51.0,2004
+158,Fred Olsen,Crystal Rig II,Onshore,138.0,2010
+159,Fred Olsen,Rothes II,Onshore,41.0,2013
+161,GDF Suez,Teesside (13),OCGT,45.0,1992
+162,GDF Suez,Scotia,Onshore,20.0,2010
+164,Great Orton Windfarm Ltd,Great Orton,Onshore,4.0,1999
+166,HG Capital,Tyr Mostyn & Foel Goch,Onshore,21.0,2005
+167,HG Capital,Bagmoor ,Onshore,16.0,2009
+168,HG Capital,Solutia,Onshore,5.0,2009
+169,HG Capital,Workington (Eastman),Onshore,4.0,2005
+170,HG Capital,Dewley Cheese,Onshore,2.0,2010
+172,High Hedley Hope Wind Ltd,High Hedley 1,Onshore,2.0,2001
+173,High Hedley Hope Wind Ltd,High Hedley 2,Onshore,5.0,2008
+174,High Hedley Hope Wind Ltd,Trimdon Grange,Onshore,5.0,2008
+175,High Hedley Hope Wind Ltd,Langley Park,Onshore,8.0,2008
+176,High Hedley Hope Wind Ltd,Broomhill,Onshore,8.0,2008
+178,Immingham CHP LLP,Immingham CHP,OCGT,1240.0,2004
+179,Infinis,Ardrossan,Onshore,24.0,2004
+180,Infinis,Ardrossan Extension,Onshore,6.0,2008
+181,Infinis,Dalswinton,Onshore,30.0,2008
+182,Infinis,Minsca,Onshore,37.0,2008
+183,Infinis,Slieve Divena,Onshore,30.0,2009
+184,Infinis,Rheidol,Onshore,2.0,1997
+185,Infinis,Lissett,Onshore,30.0,2007
+186,Infinis,Mynydd Clogau,Onshore,14.0,2004
+187,Infinis,Hill of Fiddes,Onshore,7.0,2010
+188,Infinis,Low Spinney,Onshore,8.0,2011
+189,Infinis,Blackstone Edge,Onshore,6.0,2013
+190,Infinis,Gordonstown,Onshore,6.0,2013
+191,Infinis,Seamer,Onshore,10.0,2012
+192,Infinis,Westfield,Onshore,10.0,2013
+193,Infinis,Wingates,Onshore,15.0,2013
+194,Infinis,Glenkerie,Onshore,20.0,2012
+195,Intergen,Coryton ,CCGT,800.0,2001
+196,Intergen,Rocksavage,CCGT,810.0,1998
+197,Intergen,Spalding,CCGT,880.0,2004
+200,International Power Ltd,Dinorwig,Hydro_Store,1728.0,1983
+201,International Power Ltd,Ffestiniog,Hydro_Store,360.0,1961
+202,International Power Ltd,Rugeley ,Coal,1006.0,1972
+203,International Power Ltd,Rugeley GT,OCGT,50.0,1972
+204,International Power Ltd,Deeside ,CCGT,515.0,1994
+205,International Power Ltd,Saltend ,CCGT,1200.0,2000
+207,Kirkheaton Wind Ltd,Kirkheaton,Onshore,2.0,2000
+209,K/S Winscales,Winscales 1,Onshore,2.0,1999
+210,K/S Winscales,Winscales 2,Onshore,7.0,2005
+212,Llangwyryfon Windfarm Ltd,Llangwyryfon,Onshore,9.0,2003
+214,London Array Ltd,London Array,Offshore,630.0,2012
+216,Londonwaste Limited,Belvedere,EfW,60.0,2012
+218,Lynemouth Power Ltd,Lynemouth,Coal,420.0,1972
+220,Magnox Ltd,Wylfa,Nuclear,490.0,1971
+221,Magnox Ltd,Maentwrog,Hydro,28.0,1928
+223,Marchwood Power Limited,Marchwood,CCGT,842.0,2009
+225,PEEL WIND POWER,Scout Moor (3),Onshore,65.0,2009
+227,Peel Energy Ltd,Seaforth,Onshore,4.0,1999
+228,Peel Energy Ltd,Port of Liverpool,Onshore,10.0,2008
+230,Px Limited,Fellside CHP,OCGT,180.0,1995
+232,RES-Gen Ltd,Dyffryn Brodyn,Onshore,5.0,1994
+233,RES-Gen Ltd,Four Burrows,Onshore,5.0,1995
+234,RES-Gen Ltd,Forss,Onshore,2.0,2003
+235,RES-Gen Ltd,Forss2,Onshore,5.0,2007
+236,RES-Gen Ltd,Lendrum's Bridge,Onshore,13.0,2000
+237,RES-Gen Ltd,Altahullion,Onshore,26.0,2003
+238,RES-Gen Ltd,Altahullion2,Onshore,12.0,2007
+239,RES-Gen Ltd,Black Hill,Onshore,29.0,2006
+240,RES-Gen Ltd,Lough Hill,Onshore,8.0,2007
+241,RES-Gen Ltd,Kelburn ,Onshore,28.0,2011
+242,RES-Gen Ltd,Hill of Towie,Onshore,48.0,2012
+243,RES-Gen Ltd,Meikle Carewe,Onshore,10.0,2013
+244,RES-Gen Ltd,Tallentire,Onshore,12.0,2013
+245,RES-Gen Ltd,Grange,Onshore,14.0,2013
+246,RES-Gen Ltd,Roos ,Onshore,17.0,2012
+247,RES-Gen Ltd,Wadlow,Onshore,26.0,2012
+248,RGS Energy Ltd,Knapton,Recip_gas,40.0,1994
+250,Riverside Resource Recovery Limited,Edmonton,EfW,80.0,2011
+252,RWE Npower Plc,Aberthaw B,Coal,1586.0,1971
+253,RWE Npower Plc,Tilbury B ,Biomass_wood,750.0,1968
+254,RWE Npower Plc,Aberthaw GT,OCGT,51.0,1971
+255,RWE Npower Plc,Cowes ,OCGT,140.0,1982
+256,RWE Npower Plc,Didcot GT,OCGT,100.0,1972
+257,RWE Npower Plc,Fawley GT,OCGT,68.0,1969
+258,RWE Npower Plc,Littlebrook GT,OCGT,105.0,1982
+259,RWE Npower Plc,Tilbury GT,Biomass_wood,68.0,1968
+260,RWE Npower Plc,Little Barford GT,OCGT,17.0,2006
+262,RWE Npower Plc,Didcot B,CCGT,1430.0,1998
+263,RWE Npower Plc,Great Yarmouth,CCGT,420.0,2001
+264,RWE Npower Plc,Little Barford,CCGT,720.0,1995
+265,RWE Npower Plc,Staythorpe C,CCGT,1724.0,2010
+266,RWE Npower Plc,Pembroke,CCGT,2180.0,2012
+268,RWE Npower Renewables Ltd,Black Rock,Hydro,2.0,2012
+294,Affric/Beauly,Mullardoch Tunnel,Hydro,2.0,1955
+295,Affric/Beauly,Fasnakyle,Hydro,69.0,1951
+296,Affric/Beauly,Fasnakyle Compensation Set,Hydro,8.0,2006
+297,Affric/Beauly,Deanie,Hydro,38.0,1963
+298,Affric/Beauly,Culligran,Hydro,17.0,1962
+299,Affric/Beauly,Culligran Compensation  Set,Hydro,2.0,1962
+300,Affric/Beauly,Aigas,Hydro,20.0,1962
+301,Affric/Beauly,Kilmorack,Hydro,20.0,1962
+303,Breadalbane,Lubreoch,Hydro,4.0,1958
+304,Breadalbane,Cashlie,Hydro,11.0,1959
+305,Breadalbane,Lochay,Hydro,46.0,1958
+306,Breadalbane,Lochay Compensation Set,Hydro,2.0,1959
+307,Breadalbane,Finlarig,Hydro,17.0,1955
+308,Breadalbane,Lednock,Hydro,3.0,1961
+309,Breadalbane,St. Fillans,Hydro,17.0,1957
+310,Breadalbane,Dalchonzie,Hydro,4.0,1958
+312,Conon,Achanalt,Hydro,3.0,1956
+313,Conon,Cuileg,Hydro,3.0,2002
+314,Conon,Grudie Bridge,Hydro,19.0,1950
+315,Conon,Mossford,Hydro,19.0,1957
+316,Conon,Luichart,Hydro,34.0,1954
+317,Conon,Orrin,Hydro,18.0,1959
+318,Conon,Torr Achilty,Hydro,15.0,1954
+319,Foyers,Foyers,Hydro,300.0,1974
+321,Great Glen,Foyers Falls,Hydro,5.0,1968
+322,Great Glen,Mucomir,Hydro,2.0,1962
+323,Great Glen,Ceannacroc,Hydro,20.0,1956
+324,Great Glen,Livishie,Hydro,17.0,1962
+325,Great Glen,Glenmoriston,Hydro,37.0,1957
+326,Great Glen,Glendoe,Hydro,100.0,2008
+327,Great Glen,Quoich,Hydro,18.0,1955
+328,Great Glen,Invergarry,Hydro,20.0,1956
+329,Great Glen,Kingairloch,Hydro,4.0,2005
+331,Shin,Cassley,Hydro,10.0,1959
+332,Shin,Lairg,Hydro,4.0,1959
+333,Shin,Shin,Hydro,18.0,1958
+335,Sloy/Awe,Sloy,Hydro,153.0,1950
+336,Sloy/Awe,Sron Mor,Hydro,4.0,1957
+337,Sloy/Awe,Clachan,Hydro,40.0,1955
+338,Sloy/Awe,Allt-na-Lairige,Hydro,7.0,1956
+339,Sloy/Awe,Nant,Hydro,15.0,1963
+340,Sloy/Awe,Inverawe,Hydro,25.0,1963
+341,Sloy/Awe,Kilmelfort,Hydro,2.0,1956
+342,Sloy/Awe,Loch Gair,Hydro,6.0,1961
+343,Sloy/Awe,Lussa,Hydro,2.0,1952
+344,Sloy/Awe,Striven,Hydro,8.0,1951
+345,Tummel,Gaur,Hydro,8.0,1953
+346,Tummel,Cuaich,Hydro,3.0,1959
+347,Tummel,Loch Ericht,Hydro,2.0,1962
+348,Tummel,Rannoch,Hydro,45.0,1930
+349,Tummel,Clunie,Hydro,61.0,1950
+350,Tummel,Tummel,Hydro,34.0,1933
+351,Tummel,Errochty,Hydro,75.0,1955
+352,Tummel,Pitlochry,Hydro,15.0,1950
+354,SSE,Artfield Fell,Onshore,20.0,2005
+355,SSE,Balmurrie Fell,Onshore,9.0,2012
+356,SSE,Bu,Onshore,3.0,2002
+357,SSE,Hadyard Hill,Onshore,120.0,2005
+358,SSE,Spurness Extension (19),Onshore,10.0,2012
+359,SSE,Tangy,Onshore,19.0,2002
+360,SSE,Drumderg,Onshore,37.0,2008
+362,SSE,Bessy Bell 1,Onshore,5.0,1995
+363,SSE,Bessy Bell 2,Onshore,9.0,2008
+364,SSE,Bin Mountain (20),Onshore,9.0,2007
+365,SSE,Tappaghan (20),Onshore,29.0,2005
+366,SSE,Slieve Kirk,Onshore,28.0,2011
+367,SSE,Carcant (20),Onshore,7.0,2010
+368,SSE,Toddleburn,Onshore,28.0,2010
+369,SSE,Griffin,Onshore,156.0,2011
+370,SSE,Greater Gabbard (21),Offshore,504.0,2011
+371,SSE,Achany,Onshore,38.0,2010
+372,SSE,Fairburn,Onshore,40.0,2009
+373,SSE,Clyde South,Onshore,129.0,2011
+374,SSE,Clyde Central,Onshore,113.0,2011
+375,SSE,Clyde North,Onshore,108.0,2012
+376,SSE,Gordonbush,Onshore,70.0,2011
+378,Small Hydros:,Chliostair,Hydro,1.0,1960
+379,Small Hydros:,Cuileig,Hydro,3.0,2002
+380,Small Hydros:,Kerry Falls,Hydro,1.0,1951
+381,Small Hydros:,Nostie Bridge,Hydro,1.0,1950
+382,Small Hydros:,Storr Lochs,Hydro,2.0,1952
+384,SSE,Peterhead (22),CCGT,1180.0,1980
+385,SSE,Keadby,CCGT,710.0,1994
+386,SSE,Keadby GT,OCGT,25.0,1994
+387,SSE,Medway,CCGT,700.0,1995
+388,SSE,Ferrybridge C,Coal,1960.0,1966
+389,SSE,Fiddler’s Ferry,Coal,1961.0,1971
+390,SSE,Ferrybridge GT,OCGT,34.0,1966
+391,SSE,Fiddler’s Ferry GT,OCGT,34.0,1969
+392,SSE,Uskmouth,Biomass_wood,240.0,2000
+393,SSE,Slough,Biomass_wood,61.0,1918
+395,SSE,Chickerell,OCGT,45.0,1998
+396,SSE,Burghfield,OCGT,45.0,1998
+399,SSE,Chippenham,Recip_gas,10.0,2002
+402,SSE,Arnish,Recip_diesel,10.0,2001
+403,SSE,Barra,Recip_diesel,3.0,1990
+404,SSE,Bowmore,Recip_diesel,6.0,1946
+405,SSE,Kirkwall,Recip_diesel,16.0,1953
+406,SSE,Lerwick,Recip_diesel,67.0,1953
+407,SSE,"Loch Carnan, South Uist",Recip_diesel,10.0,1971
+408,SSE,Stornoway,Recip_diesel,19.0,1950
+409,SSE,Tiree,Recip_diesel,3.0,1945
+412,Galloway,Carsfad,Hydro,12.0,1936
+413,Galloway,Drumjohn,Hydro,2.0,1985
+414,Galloway,Earlstoun,Hydro,14.0,1936
+415,Galloway,Glenlee,Hydro,24.0,1935
+416,Galloway,Kendoon,Hydro,24.0,1936
+417,Galloway,Tongland,Hydro,33.0,1935
+419,Lanark,Bonnington,Hydro,11.0,1927
+420,Lanark,Stonebyres,Hydro,6.0,1927
+422,Cruachan,Cruachan,Hydro_Store,440.0,1966
+424,SSE,Longannet,Coal,2304.0,1970
+425,SSE,Damhead Creek,CCGT,800.0,2000
+426,SSE,Pilkington - Greengate,OCGT,10.0,1998
+427,SSE,Rye House,CCGT,715.0,1993
+428,SSE,Shoreham,CCGT,400.0,2000
+430,SSE,Arecleoch,Onshore,120.0,2010
+431,SSE,Beinn an Tuirc I,Onshore,30.0,2001
+432,SSE,Beinn an Tuirc II,Onshore,7.0,2012
+433,SSE,Beinn Tharsuinn,Onshore,30.0,2007
+434,SSE,Black Law,Onshore,124.0,2005
+435,SSE,Callagheen,Onshore,17.0,2006
+436,SSE,Carland Cross RP,Onshore,10.0,2013
+437,SSE,Clachan Flats,Onshore,15.0,2009
+438,SSE,Coal Clough,Onshore,10.0,1992
+439,SSE,Coldham,Onshore,16.0,2006
+440,SSE,Corkey,Onshore,5.0,1994
+441,SSE,Cruach Mhor,Onshore,30.0,2004
+442,SSE,Dun Law I,Onshore,17.0,2000
+443,SSE,Dun Law II,Onshore,30.0,2009
+444,SSE,Elliots Hill,Onshore,5.0,1995
+445,SSE,Greenknowes,Onshore,27.0,2008
+446,SSE,Hagshaw Hill I,Onshore,16.0,1995
+447,SSE,Hagshaw Hill II,Onshore,26.0,2009
+448,SSE,Hare Hill,Onshore,13.0,2000
+449,SSE,Lynemouth,Onshore,26.0,2012
+450,SSE,Mark Hill,Onshore,56.0,2011
+451,SSE,Middleton,Onshore,12.0,2013
+452,SSE,Penryddian & Llidiartywaun,Onshore,31.0,1992
+453,SSE,Rigged Hill,Onshore,5.0,1994
+454,SSE,Wether Hill,Onshore,18.0,2007
+455,SSE,Whitelee,Onshore,322.0,2007
+456,SSE,Whitelee II,Onshore,217.0,2012
+457,SSE,Wolf Bog,Onshore,10.0,2008
+459,Seabank Power Limited,Seabank 1,CCGT,812.0,1998
+460,Seabank Power Limited,Seabank 2,CCGT,410.0,2000
+463,Sembcorp Utilities,Wilton GT2,Recip_gas,42.0,2005
+464,Sembcorp Utilities,Wilton 10,Biomass_wood,38.0,2007
+467,Combined Heat & Power Ltd,SELCHP ERF,EfW,32.0,1994
+469,Statkraft Energy Ltd,Rheidol,Hydro,49.0,1961
+470,Statkraft Energy Ltd,Alltwalis,Onshore,23.0,2009
+471,Statkraft Energy Ltd,Scira (Sheringham Shoal),Offshore,316.0,2012
+472,Statkraft Energy Ltd,Baillie,Onshore,53.0,2013
+474,Sutton Bridge Power Generation,Sutton Bridge,CCGT,819.0,1999
+476,Talisman Energy,Beatrice (3),Offshore,10.0,2007
+478,Triodos,FMC (2),Onshore,2.0,2011
+480,Vattenfall Wind Power,Kentish Flats,Offshore,90.0,2005
+481,Vattenfall Wind Power,Thanet,Offshore,300.0,2010
+482,Vattenfall Wind Power,Edinbane,Onshore,41.0,2010
+483,Vattenfall Wind Power,Ormonde,Offshore,150.0,2011
+484,Vattenfall Wind Power,Swinford,Onshore,22.0,2012
+488,Yorkshire Windpower Ltd ,Ovenden Moor,Onshore,9.0,1993
+489,Yorkshire Windpower Ltd ,Royd Moor,Onshore,7.0,1993
