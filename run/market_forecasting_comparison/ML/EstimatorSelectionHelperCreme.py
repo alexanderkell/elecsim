@@ -152,7 +152,7 @@ def run_models(dat, i, model_to_use, all_differences):
             model_to_use
         )
 
-    metric = Rolling(metrics.MAE(), 48)
+    metric = metrics.Rolling(metrics.MAE(), 48)
 
     X_y1 = stream.iter_array(X=X_stream_values, y=y_stream_values)
 
