@@ -11,7 +11,7 @@ import json
 import ray
 from sklearn.model_selection import ParameterGrid
 from creme import linear_model
-from creme.metrics import Rolling
+from creme import metrics
 from creme import model_selection
 from creme import multioutput
 from creme import preprocessing
@@ -23,7 +23,7 @@ from creme import optim
 import numpy as np
 import pandas as pd
 
-from sklearn import metrics
+# from sklearn import metrics
 
 """
 File name: EstimatorSelectionHelperCreme
