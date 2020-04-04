@@ -1,0 +1,1086 @@
+,Unnamed: 0,Company,Name,Fuel,Capacity,Start_date,Simplified_Type
+0,0,AES,Ballylumford B,Gas,540.0,1968.00,Recip_gas
+1,1,AES,Ballylumford B OCGT,Gas oil,116.0,1968.00,Recip_diesel
+2,2,AES,Ballylumford C,CCGT,616.0,2003.00,CCGT
+3,3,AES,Kilroot OCGT,Gas oil,142.0,1981.00,Recip_diesel
+4,4,AES,Kilroot,Coal,560.0,1981.00,Coal
+5,5,Anesco,Abergelli,Solar,7.7,2015.00,PV
+6,6,Anesco,Anglesey,Solar,14.9,2014.00,PV
+7,7,Anesco,Ashton,Solar,4.8,2017.00,PV
+8,8,Anesco,Askern,Solar,5.0,2015.00,PV
+9,9,Anesco,Beeches,Solar,5.0,2016.00,PV
+10,10,Anesco,Berry Court,Solar,3.9,2016.00,PV
+11,11,Anesco,Bilsthorpe ,Solar,5.7,2014.00,PV
+12,12,Anesco,Blackdown ,Solar,7.5,2014.00,PV
+13,13,Anesco,Blackwell,Solar,5.0,2017.00,PV
+14,14,Anesco,Blue House,Solar,5.0,2016.00,PV
+15,15,Anesco,Bourne Park ,Solar,0.3,2012.00,PV
+16,16,Anesco,Bourne Park 2 ,Solar,2.4,2015.00,PV
+17,17,Anesco,Bristol Water,Solar,1.1,2017.00,PV
+18,18,Anesco,Brook hall ,Solar,4.7,2016.00,PV
+19,19,Anesco,Brookbarn,Solar,3.6,2015.00,PV
+20,20,Anesco,Brookside ,Solar,5.0,2016.00,PV
+21,21,Anesco,Bulls Head North,Solar,5.5,2014.00,PV
+22,22,Anesco,Bumpers Farm,Solar,5.0,2017.00,PV
+23,23,Anesco,Cadland 2 ,Solar,3.0,2014.00,PV
+24,24,Anesco,Clawdd Ddu ,Solar,13.5,2014.00,PV
+25,25,Anesco,Cotgrave,Solar,5.0,2015.00,PV
+26,26,Anesco,Culworth ,Solar,3.6,2015.00,PV
+27,27,Anesco,East Appleton,Solar,5.0,2016.00,PV
+28,28,Anesco,East Fairlee ,Solar,7.0,2015.00,PV
+29,29,Anesco,East Farm ,Solar,6.8,2013.00,PV
+30,30,Anesco,Evesham ,Solar,3.7,2014.00,PV
+31,31,Anesco,Fell View ,Solar,4.3,2016.00,PV
+32,32,Anesco,Gedling,Solar,5.7,2015.00,PV
+33,33,Anesco,Grimsargh ,Solar,2.9,2016.00,PV
+34,34,Anesco,Hale,Solar,3.6,2015.00,PV
+35,35,Anesco,Hale Manor Farm ,Solar,5.0,2016.00,PV
+36,36,Anesco,Hermitage ,Solar,5.0,2016.00,PV
+37,37,Anesco,Higher Bye,Solar,6.8,2015.00,PV
+38,38,Anesco,Homestead,Solar,4.0,2015.00,PV
+39,39,Anesco,Hungerford ,Solar,4.5,2016.00,PV
+40,40,Anesco,Huntingdon ,Solar,10.2,2014.00,PV
+41,41,Anesco,Hyde Farm,Solar,4.9,2017.00,PV
+42,42,Anesco,Lee Moor,Solar,5.0,2016.00,PV
+43,43,Anesco,Lodge Farm,Solar,4.9,2015.00,PV
+44,44,Anesco,Low Burntoft ,Solar,5.0,2016.00,PV
+45,45,Anesco,Lucern,Solar,4.7,2016.00,PV
+46,46,Anesco,Mendip ,Solar,7.2,2014.00,PV
+47,47,Anesco,Moss Thorn,Solar,5.0,2017.00,PV
+48,48,Anesco,Nanthenfoel,Solar,5.0,2017.00,PV
+49,49,Anesco,New Kaine,Solar,1.9,2015.00,PV
+50,50,Anesco,Newnton Dairy ,Solar,7.2,2014.00,PV
+51,51,Anesco,Newton Ferrers ,Solar,19.5,2016.00,PV
+52,52,Anesco,Oak Cottage,Solar,4.9,2015.00,PV
+53,53,Anesco,Oakham,Solar,4.6,2016.00,PV
+54,54,Anesco,Ollerton,Solar,4.2,2017.00,PV
+55,55,Anesco,Owls Lodge ,Solar,10.0,2013.00,PV
+56,56,Anesco,Oxcroft,Solar,4.2,2016.00,PV
+57,57,Anesco,Palmersford,Solar,3.0,2016.00,PV
+58,58,Anesco,Parsonage ,Solar,0.6,2013.00,PV
+59,59,Anesco,Pencoose ,Solar,8.1,2015.00,PV
+60,60,Anesco,Pierces Farm,Solar,1.7,2015.00,PV
+61,61,Anesco,Playters,Solar,8.6,2015.00,PV
+62,62,Anesco,Portworthy,Solar,4.0,2015.00,PV
+63,63,Anesco,Puriton,Solar,4.6,2011.00,PV
+64,64,Anesco,Radcliffe,Solar,4.2,2015.00,PV
+65,65,Anesco,Rainbow ,Solar,4.8,2015.00,PV
+66,66,Anesco,Salcey Farm ,Solar,5.5,2014.00,PV
+67,67,Anesco,Sandys Moor ,Solar,2.9,2013.00,PV
+68,68,Anesco,Saron,Solar,6.3,2015.00,PV
+69,69,Anesco,Shalfleet,Solar,5.0,2015.00,PV
+70,70,Anesco,Sheep Shed ,Solar,5.0,2016.00,PV
+71,71,Anesco,Shelswell ,Solar,5.1,2013.00,PV
+72,72,Anesco,Skegness ,Solar,10.7,2016.00,PV
+73,73,Anesco,Skylark,Solar,4.9,2013.00,PV
+74,74,Anesco,Slepe Farm ,Solar,0.5,2011.00,PV
+75,75,Anesco,Spring Lane,Solar,1.0,2017.00,PV
+76,76,Anesco,Stables,Solar,2.0,2014.00,PV
+77,77,Anesco,Steventon ,Solar,10.0,2014.00,PV
+78,78,Anesco,Stripe,Solar,5.0,2016.00,PV
+79,79,Anesco,Stud Farm ,Solar,2.4,2016.00,PV
+80,80,Anesco,The Leys,Solar,5.0,2016.00,PV
+81,81,Anesco,The Oaks,Solar,4.7,2016.00,PV
+82,82,Anesco,The Rushes ,Solar,5.0,2016.00,PV
+83,83,Anesco,Tope Farm,Solar,3.3,2014.00,PV
+84,84,Anesco,Trequite ,Solar,11.0,2014.00,PV
+85,85,Anesco,Trewidland ,Solar,5.0,2014.00,PV
+86,86,Anesco,Trickey Warren,Solar,4.6,2015.00,PV
+87,87,Anesco,Warren ,Solar,5.0,2016.00,PV
+88,88,Anesco,Welbeck ,Solar,11.3,2014.00,PV
+89,89,Anesco, Whitchurch ,Solar,6.5,2014.00,PV
+90,90,Anesco,Woden Park ,Solar,5.0,2014.00,PV
+91,91,Anesco,Woodtown,Solar,2.7,2015.00,PV
+92,92,Anesco,Wychwood ,Solar,0.7,2012.00,PV
+93,93,Anesco,Wymeswold - Wide Lane,Solar,5.0,2016.00,PV
+94,94,Anesco,Wymeswold ,Solar,2.1,2016.00,PV
+95,95,Anesco,Yarburgh,Solar,8.1,2015.00,PV
+96,96,Anesco,Grange Farm ,Solar,5.8,2013.00,PV
+97,97,Anesco,Limberlost ,Solar,1.6,2013.00,PV
+98,98,Anesco,Pen-Y-Cae,Solar,6.8,2015.00,PV
+99,99,Anesco,Penycae Solar Farm,Solar,5.0,2016.00,PV
+100,100,Blue energy,Beinneun Wind Farm,Wind,108.8,2017.00,Onshore
+101,101,Blue energy,Cour Wind Farm,Wind,20.5,2016.00,Onshore
+102,102,Blue energy,Grange Wind Farm,Wind,12.3,2016.00,Onshore
+103,103,British Solar Renewables Ltd,Aller Court Solar Park,Solar,5.0,2017.00,PV
+104,104,British Solar Renewables Ltd,Blenches Mill Solar Park,Solar,6.1,2014.00,PV
+105,105,British Solar Renewables Ltd,Bowden Lane Solar Park,Solar,5.0,2017.00,PV
+106,106,British Solar Renewables Ltd,Bradenstoke Solar Park,Solar,69.8,2015.00,PV
+107,107,British Solar Renewables Ltd,Burcroft Solar Parks,Solar,12.7,2014.00,PV
+108,108,British Solar Renewables Ltd,Butleigh Solar Park,Solar,5.0,2011.00,PV
+109,109,British Solar Renewables Ltd,Chilton Cantelo Solar Park,Solar,5.0,2013.00,PV
+110,110,British Solar Renewables Ltd,Copley Wood Solar Park,Solar,1.5,2016.00,PV
+111,111,British Solar Renewables Ltd,Crossways Solar Park,Solar,5.0,2014.00,PV
+112,112,British Solar Renewables Ltd,Higher Hill Solar Park,Solar,5.0,2011.00,PV
+113,113,British Solar Renewables Ltd,Hook Valley Solar Park,Solar,15.3,2014.00,PV
+114,114,British Solar Renewables Ltd,Knockworthy Farm Solar Park,Solar,4.6,2013.00,PV
+115,115,British Solar Renewables Ltd,Long Ash Lane Solar Park,Solar,5.0,2016.00,PV
+116,116,British Solar Renewables Ltd,Raglington Farm Solar Park,Solar,5.7,2013.00,PV
+117,117,British Solar Renewables Ltd,Rampisham Estate Solar Park,Solar,5.0,2017.00,PV
+118,118,British Solar Renewables Ltd,Stalbridge Solar Park,Solar,5.0,2017.00,PV
+119,119,British Solar Renewables Ltd,Whitley (Ashcott Farm) Solar Park,Solar,7.6,2014.00,PV
+120,120,British Solar Renewables Ltd,Wyld Meadow Farm Solar Park,Solar,4.8,2012.00,PV
+121,121,Calon energy (formerly MPF operations),Sutton Bridge,CCGT,819.0,1999.00,CCGT
+122,122,Calon energy (formerly MPF operations),Baglan Bay CCGT,CCGT,520.0,2002.00,CCGT
+123,123,Calon energy (formerly MPF operations),Severn Power,CCGT,850.0,2010.00,CCGT
+124,124,Calon energy (formerly MPF operations),Baglan Bay OCGT,OCGT,32.3,2002.00,OCGT
+125,125,Centrica,Peterborough,CCGT,360.0,1993.00,CCGT
+126,126,Centrica,Glanford Brigg,CCGT,150.0,1993.00,CCGT
+127,127,Centrica,Barry,CCGT,235.0,1998.00,CCGT
+128,128,Corby Power Ltd,Corby,CCGT,401.0,1993.00,CCGT
+129,129,Cubico Sustainable Investments Limited,Bake Farm Solar Park (England),Solar,5.0,2016.00,PV
+130,130,Cubico Sustainable Investments Limited,Barton Close Solar Park (England),Solar,4.6,2015.00,PV
+131,131,Cubico Sustainable Investments Limited,Broxted Solar Park (England),Solar,31.6,2014.00,PV
+132,132,Cubico Sustainable Investments Limited,Grantham Solar Park (England),Solar,4.9,2016.00,PV
+133,133,Cubico Sustainable Investments Limited,Hadlow Solar Park (England),Solar,18.9,2015.00,PV
+134,134,Cubico Sustainable Investments Limited,Kinblethmont Solar Park (Scotland),Solar,5.0,2016.00,PV
+135,135,Cubico Sustainable Investments Limited,New Mains of Guynd (Scotland),Solar,5.0,2016.00,PV
+136,136,Cubico Sustainable Investments Limited,Newlands Farm Solar Park (England),Solar,5.0,2016.00,PV
+137,137,Cubico Sustainable Investments Limited,Overton Solar Park (England),Solar,3.8,2015.00,PV
+138,138,Cubico Sustainable Investments Limited,Owl's Hatch Solar Park (England),Solar,51.9,2015.00,PV
+139,139,Cubico Sustainable Investments Limited,Southfield Solar Park (England),Solar,9.8,2016.00,PV
+140,140,Cubico Sustainable Investments Limited,Wisbech Solar Park (England),Solar,3.4,2015.00,PV
+141,141,Drax Power Ltd,Drax - biomass units,Biomass_wood,1980.0,1974.00,Biomass_wood
+142,142,Drax Power Ltd,Drax - coal units,Coal,1980.0,1974.00,Coal
+143,143,Drax Power Ltd,Drax GT,Gas oil,75.0,1971.00,Recip_diesel
+144,144,E.On UK,Blackburn meadows *,Biomass_wood,33.0,2015.00,Biomass_wood
+145,145,E.On UK,Castleford,CCGT,56.0,2002.00,CCGT
+146,146,E.On UK,Sandbach,CCGT,56.0,1999.00,CCGT
+147,147,E.On UK,Steven's Croft *,Biomass_wood,50.0,2007.00,Biomass_wood
+148,148,E.On UK,Thornhill,CCGT,50.0,1998.00,CCGT
+149,149,E.On UK,Blyth T1,Wind (offshore),2.0,2001.00,Offshore
+150,150,E.On UK,Blyth T2,Wind (offshore),2.3,2001.00,Offshore
+151,151,E.On UK,Bowbeat (Emly Bank),Wind,15.6,2002.00,Onshore
+152,152,E.On UK,Bowbeat (Roughside),Wind,15.6,2002.00,Onshore
+153,153,E.On UK,Butterwick Moor Circuit 1,Wind,10.3,2011.00,Onshore
+154,154,E.On UK,Butterwick Moor Circuit 2,Wind,10.3,2011.00,Onshore
+155,155,E.On UK,Camster,Wind,50.0,2013.00,Onshore
+156,156,E.On UK,Deucheran Hill (RO),Wind,15.8,2001.00,Onshore
+157,157,E.On UK,Great Eppleton (ex NFFO),Wind,4.1,1997.00,Onshore
+158,158,E.On UK,Great Eppleton RO,Wind,4.1,2010.00,Onshore
+159,159,E.On UK,Hare hill,Wind,3.0,2000.00,Onshore
+160,160,E.On UK,Hare Hill RO,Wind,2.8,2004.00,Onshore
+161,161,E.On UK,Haswell Moor Circuit 1,Wind,5.0,2010.00,Onshore
+162,162,E.On UK,Haswell Moor Circuit 2,Wind,5.3,2010.00,Onshore
+163,163,E.On UK,High Volts,Wind,5.5,2004.00,Onshore
+164,164,E.On UK,High Volts RO,Wind,2.8,2004.00,Onshore
+165,165,E.On UK,Holmside,Wind,2.8,2004.00,Onshore
+166,166,E.On UK,Holmside RO,Wind,2.8,2004.00,Onshore
+167,167,E.On UK,Humber Gateway,Wind (offshore),219.0,2015.00,Offshore
+168,168,E.On UK,London Array,Wind (offshore),630.0,2013.00,Offshore
+169,169,E.On UK,Out Newton (RO),Wind,9.1,2002.00,Onshore
+170,170,E.On UK,Ovenden Moor,Wind,18.0,1993.00,Onshore
+171,171,E.On UK,Rhyd y Groes,Wind,7.0,1992.00,Onshore
+172,172,E.On UK,Robin Rigg East,Wind (offshore),90.0,2010.00,Offshore
+173,173,E.On UK,Robin Rigg West,Wind (offshore),90.0,2010.00,Offshore
+174,174,E.On UK,Rosehall,Wind,25.0,2013.00,Onshore
+175,175,E.On UK,Royd Moor,Wind,7.0,1993.00,Onshore
+176,176,E.On UK,Scroby Sands,Wind (offshore),60.0,2004.00,Offshore
+177,177,E.On UK,Stags Holt,Wind,20.0,2007.00,Onshore
+178,178,E.On UK,Tween Bridge,Wind,44.0,2012.00,Onshore
+179,179,E.On UK,Rampion,Wind (offshore),182.9,2018.00,Offshore
+180,180,Ecotricity,Alveston,Wind,6.9,2017.00,Onshore
+181,181,Ecotricity,Ballymena,Wind,4.6,2013.00,Onshore
+182,182,Ecotricity,Bambers,Wind,9.6,2004.00,Onshore
+183,183,Ecotricity,Bristol Port,Wind,6.0,2007.00,Onshore
+184,184,Ecotricity,Cardiff,Wind,2.3,2013.00,Onshore
+185,185,Ecotricity,Dagenham,Wind,5.9,2004.00,Onshore
+186,186,Ecotricity,Dalby,Wind,7.3,2016.00,Onshore
+187,187,Ecotricity,Dundee,Wind,4.0,2006.00,Onshore
+188,188,Ecotricity,East Kilbride,Wind,0.6,2016.00,Onshore
+189,189,Ecotricity,Ecotech,Wind,1.5,1999.00,Onshore
+190,190,Ecotricity,Fen Farm,Wind,16.0,2007.00,Onshore
+191,191,Ecotricity,Galsworthy,Wind,9.2,2014.00,Onshore
+192,192,Ecotricity,GreenPark,Wind,2.0,2005.00,Onshore
+193,193,Ecotricity,HandH,Wind,0.8,2016.00,Onshore
+194,194,Ecotricity,Lynch Knoll,Wind,0.5,1996.00,Onshore
+195,195,Ecotricity,Mablethorpe,Wind,1.2,2002.00,Onshore
+196,196,Ecotricity,QEH,Wind,0.8,2016.00,Onshore
+197,197,Ecotricity,RSPB,Wind,0.8,2016.00,Onshore
+198,198,Ecotricity,Shooters,Wind,2.0,2008.00,Onshore
+199,199,Ecotricity,Somerton,Wind,1.8,2000.00,Onshore
+200,200,Ecotricity,Swaffham II,Wind,1.8,2003.00,Onshore
+201,201,Ecotricity,Worksopp,Wind,2.0,2016.00,Onshore
+202,202,Ecotricity,Fen Farm Solar,Solar,0.9,2011.00,PV
+203,203,EDF Energy,Dungeness B,Nuclear,1120.0,1983.00,Nuclear
+204,204,EDF Energy,Hartlepool,Nuclear,1207.0,1984.00,Nuclear
+205,205,EDF Energy,Heysham 1,Nuclear,1179.0,1984.00,Nuclear
+206,206,EDF Energy,Heysham 2,Nuclear,1254.0,1988.00,Nuclear
+207,207,EDF Energy,Hinkley Point B,Nuclear,1061.0,1976.00,Nuclear
+208,208,EDF Energy,Sizewell B,Nuclear,1216.0,1995.00,Nuclear
+209,209,EDF Energy,Hunterston B,Nuclear,1074.0,1976.00,Nuclear
+210,210,EDF Energy,Torness,Nuclear,1250.0,1988.00,Nuclear
+211,211,EDF Energy,Cottam,Coal,2008.0,1969.00,Coal
+212,212,EDF Energy,West Burton,Coal,2012.0,1967.00,Coal
+213,213,EDF Energy,West Burton CCGT,CCGT,1332.0,2012.00,CCGT
+214,214,EDF Energy,Barkantine Heat & Power Company *,Gas,1.0,2000.00,Recip_gas
+215,215,EDF Energy,London Heat & Power Company *,Gas,9.0,2000.00,Recip_gas
+216,216,EDF Energy,West Burton GT,Gas oil,40.0,1967.00,Recip_diesel
+217,217,EDF renewables,Barmoor,Wind,12.0,2014.00,Onshore
+218,218,EDF renewables,Beckburn,Wind,31.1,2017.00,Onshore
+219,219,EDF renewables,Bicker Fen,Wind,26.0,2008.00,Onshore
+220,220,EDF renewables,Blyth,Wind (offshore),40.0,2017.00,Offshore
+221,221,EDF renewables,Boundary Lane,Wind,6.0,2013.00,Onshore
+222,222,EDF renewables,Broomhill,Wind,8.0,2009.00,Onshore
+223,223,EDF renewables,Burnfoot,Wind,30.1,2010.00,Onshore
+224,224,EDF renewables,Burnhead Moss,Wind,26.0,2015.00,Onshore
+225,225,EDF renewables,Cemmaes,Wind,15.3,2002.00,Onshore
+226,226,EDF renewables,Cold Northcott,Wind,6.6,1993.00,Onshore
+227,227,EDF renewables,Corriemoillie,Wind,47.5,2017.00,Onshore
+228,228,EDF renewables,Deeping,Wind,16.0,2006.00,Onshore
+229,229,EDF renewables,Fairfield,Wind,6.5,2011.00,Onshore
+230,230,EDF renewables,Fallago Rig,Wind,144.0,2013.00,Onshore
+231,231,EDF renewables,Glass Moor,Wind,16.0,2006.00,Onshore
+232,232,EDF renewables,Glass Moor II,Wind,12.0,2013.00,Onshore
+233,233,EDF renewables,Great Orton,Wind,4.0,1999.00,Onshore
+234,234,EDF renewables,Green Rigg,Wind,36.0,2012.00,Onshore
+235,235,EDF renewables,High Hedley I,Wind,2.4,2001.00,Onshore
+236,236,EDF renewables,High Hedley II,Wind,5.2,2008.00,Onshore
+237,237,EDF renewables,Kirkheaton,Wind,1.8,2000.00,Onshore
+238,238,EDF renewables,Langley,Wind,8.0,2008.00,Onshore
+239,239,EDF renewables,Llangwyryfon,Wind,9.4,1993.00,Onshore
+240,240,EDF renewables,Longpark,Wind,38.0,2009.00,Onshore
+241,241,EDF renewables,Park Spring,Wind,8.6,2015.00,Onshore
+242,242,EDF renewables,Pearie Law,Wind,19.2,2016.00,Onshore
+243,243,EDF renewables,Red House,Wind,12.0,2006.00,Onshore
+244,244,EDF renewables,Red Tile,Wind,24.0,2006.00,Onshore
+245,245,EDF renewables,Rhodders ,Wind,12.0,2016.00,Onshore
+246,246,EDF renewables,Roade,Wind,7.2,2014.00,Onshore
+247,247,EDF renewables,Rusholme,Wind,24.0,2010.00,Onshore
+248,248,EDF renewables,Teesside (offshore),Wind (offshore),62.0,2013.00,Offshore
+249,249,EDF renewables,Trimdon,Wind,5.2,2008.00,Onshore
+250,250,EDF renewables,Walkway,Wind,14.0,2008.00,Onshore
+251,251,EDF renewables,Winscales I,Wind,2.0,1999.00,Onshore
+252,252,EDF renewables,Winscales II,Wind,6.8,2005.00,Onshore
+253,253,Eggborough Power Ltd,Eggborough,Coal,1960.0,1967.00,Coal
+254,254,Eneco,Burn of Whilk,Wind,22.5,2015.00,Onshore
+255,255,Eneco,Lochluichart,Wind,69.0,2014.00,Onshore
+256,256,Eneco,Moy,Wind,60.0,2016.00,Onshore
+257,257,Eneco,Tullo,Wind,17.0,2010.00,Onshore
+258,258,Eneco,Twinshiels,Wind,25.0,2015.00,Onshore
+259,259,Eneco,Oaklands,Solar,5.0,2016.00,PV
+260,260,Eneco,Oaklands,Solar,5.0,2016.00,PV
+261,261,Engie,Deeside,CCGT,515.0,1994.00,CCGT
+262,262,Engie,Dinorwig,Pumped storage,1800.0,1983.00,Hydro_Store
+263,263,Engie,Ffestiniog,Pumped storage,360.0,1961.00,Hydro_Store
+264,264,EPR,Eye Suffolk,Biomass_poultry_litter,14.3,1992.00,Biomass_poultry_litter
+265,265,EPR,Glanford,Meat,14.0,1993.00,Biomass_meat
+266,266,EPR,Thetford,Biomass_poultry_litter,41.5,1998.00,Biomass_poultry_litter
+267,267,EPR,Westfield,Biomass_poultry_litter,12.5,2000.00,Biomass_poultry_litter
+268,268,EPR,EPR Ely Ltd,Straw,38.0,2001.00,Biomass_straw
+269,269,EPUKi,South Humber Bank,CCGT,1365.0,1996.00,CCGT
+270,270,EPUKi,Langage,CCGT,905.0,2010.00,CCGT
+271,271,ESB,Coolkeeragh,CCGT,408.0,2005.00,CCGT
+272,272,ESB,Coolkeeragh OCGT,Gas oil,53.0,2005.00,Recip_diesel
+273,273,ESB,Carrington,CCGT,910.0,2016.00,CCGT
+274,274,Falck renewables LTD,Assel Valley,Wind,25.0,2016.00,Onshore
+275,275,Falck renewables LTD,Auchrobert,Wind,38.8,2017.00,Onshore
+276,276,Falck renewables LTD,Ben Aketil,Wind,27.6,2007.00,Onshore
+277,277,Falck renewables LTD,Boyndie,Wind,16.3,2006.00,Onshore
+278,278,Falck renewables LTD,Cambrian,Wind,58.5,2016.00,Onshore
+279,279,Falck renewables LTD,Earlsburn,Wind,37.5,2006.00,Onshore
+280,280,Falck renewables LTD,Kilbraur,Wind,67.5,2008.00,Onshore
+281,281,Falck renewables LTD,Kingsburn,Wind,22.5,2016.00,Onshore
+282,282,Falck renewables LTD,Millennium,Wind,65.0,2007.00,Onshore
+283,283,Falck renewables LTD,Nutberry,Wind,15.0,2011.00,Onshore
+284,284,Falck renewables LTD,Spaldington,Wind,11.8,2016.00,Onshore
+285,285,Falck renewables LTD,West Browncastle,Wind,30.0,2014.00,Onshore
+286,286,Foresight Group ,Shotwick Solar Park,Solar,72.2,2016.00,PV
+287,287,Fred Olsen Renewables,Brockloch Rig ,Wind,61.5,2017.00,Onshore
+288,288,Fred Olsen Renewables,Crystal Rig,Wind,62.5,2003.00,Onshore
+289,289,Fred Olsen Renewables,Crystal Rig II,Wind,138.0,2003.00,Onshore
+290,290,Fred Olsen Renewables,Crystal Rig III,Wind,13.8,2016.00,Onshore
+291,291,Fred Olsen Renewables,Mid Hill,Wind,75.9,2013.00,Onshore
+292,292,Fred Olsen Renewables,Pauls Hill,Wind,64.4,2005.00,Onshore
+293,293,Fred Olsen Renewables,Rothes,Wind,50.6,2004.00,Onshore
+294,294,Fred Olsen Renewables,Rothes II,Wind,41.4,2013.00,Onshore
+295,295,Greencoat,Bin Mountain Wind Farm ,Wind,9.0,2007.00,Onshore
+296,296,Greencoat,Bishopthorpe,Wind,20.0,2017.00,Onshore
+297,297,Greencoat,Bogenlea,Wind,2.3,2014.00,Onshore
+298,298,Greencoat,Braes of Doune Wind Farm,Wind,72.0,2006.00,Onshore
+299,299,Greencoat,Carcant Wind Farm,Wind,6.0,2010.00,Onshore
+300,300,Greencoat,Cotton Farm,Wind,16.4,2013.00,Onshore
+301,301,Greencoat,Drone Hill,Wind,28.6,2012.00,Onshore
+302,302,Greencoat,Earls Hall Farm,Wind,10.3,2013.00,Onshore
+303,303,Greencoat,Kildrummy,Wind,18.4,2013.00,Onshore
+304,304,Greencoat,Langhope Rig,Wind,20.0,2015.00,Onshore
+305,305,Greencoat,Maerdy,Wind,24.0,2012.00,Onshore
+306,306,Greencoat,North Rhins,Wind,22.0,2010.00,Onshore
+307,307,Greencoat,Screggagh,Wind,20.0,2011.00,Onshore
+308,308,Greencoat,Sixpenny Wood,Wind,20.5,2013.00,Onshore
+309,309,Greencoat,Stroupster,Wind,29.9,2015.00,Onshore
+310,310,Greencoat,Tappaghan Wind Farm,Wind,28.5,2004.00,Onshore
+311,311,Greencoat,Yelvertoft,Wind,16.4,2013.00,Onshore
+312,312,Greencoat,Slieve Divena,Wind,30.0,2009.00,Onshore
+313,313,Greencoat,30 Acres,Solar,5.0,2016.00,PV
+314,314,Greencoat,Ainderby,Solar,5.0,2017.00,PV
+315,315,Greencoat,Ashby,Solar,5.0,2016.00,PV
+316,316,Greencoat,Bann Road,Solar,45.8,2017.00,PV
+317,317,Greencoat,Bedborough,Solar,5.0,2015.00,PV
+318,318,Greencoat,Berthllwyd,Solar,5.0,2017.00,PV
+319,319,Greencoat,Bilsborrow,Solar,5.0,2017.00,PV
+320,320,Greencoat,Bodwen,Solar,5.0,2017.00,PV
+321,321,Greencoat,Bryn Bachau,Solar,4.6,2016.00,PV
+322,322,Greencoat,Carnemough,Solar,10.1,2016.00,PV
+323,323,Greencoat,Chatteris,Solar,4.3,2016.00,PV
+324,324,Greencoat,Coltishall 1,Solar,33.7,2015.00,PV
+325,325,Greencoat,Coltishall 2.1,Solar,4.7,2016.00,PV
+326,326,Greencoat,Coltishall 2.2,Solar,4.9,2016.00,PV
+327,327,Greencoat,Coltishall 2.3,Solar,5.0,2016.00,PV
+328,328,Greencoat,Coltishall 2.4,Solar,3.7,2016.00,PV
+329,329,Greencoat,Common Farm,Solar,3.4,2017.00,PV
+330,330,Greencoat,Ebnal Lodge,Solar,5.0,2017.00,PV
+331,331,Greencoat,Eveley,Solar,49.3,2016.00,PV
+332,332,Greencoat,Fanny House,Solar,4.9,2015.00,PV
+333,333,Greencoat,Ferry Farm,Solar,4.9,2015.00,PV
+334,334,Greencoat,Hunger Hill,Solar,5.0,2017.00,PV
+335,335,Greencoat,Lagness,Solar,4.8,2016.00,PV
+336,336,Greencoat,Lower House,Solar,8.2,2016.00,PV
+337,337,Greencoat,Manor Farm,Solar,4.9,2016.00,PV
+338,338,Greencoat,Margate,Solar,3.4,2015.00,PV
+339,339,Greencoat,Merston,Solar,5.0,2016.00,PV
+340,340,Greencoat,Ramsey Airfields,Solar,5.0,2016.00,PV
+341,341,Greencoat,Ramsey Heights,Solar,5.0,2016.00,PV
+342,342,Greencoat,Redbridge,Solar,6.5,2013.00,PV
+343,343,Greencoat,Sandhutton,Solar,5.0,2017.00,PV
+344,344,Greencoat,Sellindge,Solar,11.2,2016.00,PV
+345,345,Greencoat,Stonebarrow,Solar,7.5,2014.00,PV
+346,346,Greencoat,Westover,Solar,7.0,2014.00,PV
+347,347,Greencoat,Wilton,Solar,9.5,2015.00,PV
+348,348,Greencoat,Wrangle Farm,Solar,10.8,2014.00,PV
+349,349,Greencoat,Wraysbury,Solar,3.0,2017.00,PV
+350,350,Greencoat,Common Farm,Solar,3.4,2017.00,PV
+351,351,Greencoat,Manor Farm,Solar,4.9,2016.00,PV
+352,352,Indian Queens Power Ltd,Indian Queens,Gas,140.0,1996.00,Recip_gas
+353,353,Infinis,Ardrossan,Wind,30.0,2004.00,Onshore
+354,354,Infinis,A'Chruach,Wind,42.6,2016.00,Onshore
+355,355,Infinis,Blackstone Edge,Wind,6.0,2013.00,Onshore
+356,356,Infinis,Dalswinton,Wind,30.0,2007.00,Onshore
+357,357,Infinis,Galawhistle,Wind,55.2,2016.00,Onshore
+358,358,Infinis,Glenkerie,Wind,19.4,2012.00,Onshore
+359,359,Infinis,Gordonstown,Wind,12.3,2013.00,Onshore
+360,360,Infinis,Hill of Fiddes,Wind,6.9,2010.00,Onshore
+361,361,Infinis,Lissett,Wind,30.0,2007.00,Onshore
+362,362,Infinis,Low Spinney,Wind,8.0,2011.00,Onshore
+363,363,Infinis,Minsca,Wind,36.8,2007.00,Onshore
+364,364,Infinis,Mynydd Clogau,Wind,14.3,2005.00,Onshore
+365,365,Infinis,North Steads,Wind,18.5,2016.00,Onshore
+366,366,Infinis,Rheidol,Wind,2.4,1997.00,Onshore
+367,367,Infinis,Seamer,Wind,10.3,2012.00,Onshore
+368,368,Infinis,Sisters,Wind,8.2,2016.00,Onshore
+369,369,Infinis,Tedder Hill,Wind,6.8,2013.00,Onshore
+370,370,Infinis,Westfield,Wind,9.8,2013.00,Onshore
+371,371,Infinis,Wingates,Wind,14.7,2013.00,Onshore
+372,372,Infinis,Bears down reservoir ,Wind,9.6,2001.00,Onshore
+373,373,Infinis,Beinn ghlas windfarm,Wind,8.4,1999.00,Onshore
+374,374,Infinis,Bryn titli wind farm,Wind,10.0,1994.00,Onshore
+375,375,Infinis,Carno,Wind,33.6,1997.00,Onshore
+376,376,Infinis,Causeymire wind farm,Wind,48.3,2004.00,Onshore
+377,377,Infinis,Farr wind farm ltd,Wind,92.0,2005.00,Onshore
+378,378,Infinis,Fynnon Oer,Wind,32.0,2006.00,Onshore
+379,379,Infinis,Kirkby moor wind farm,Wind,4.8,1993.00,Onshore
+380,380,Infinis,Lambirgg,Wind,6.5,2000.00,Onshore
+381,381,Infinis,Llyn Alaw,Wind,20.4,1997.00,Onshore
+382,382,Infinis,Mynydd gorddu ,Wind,10.2,1998.00,Onshore
+383,383,Infinis,Novar,Wind,17.0,1997.00,Onshore
+384,384,Infinis,Taff Ely  ,Wind,9.0,1993.00,Onshore
+385,385,Infinis,Tow law wind farm,Wind,2.3,2001.00,Onshore
+386,386,Infinis,Trysglwyn,Wind,5.6,1996.00,Onshore
+387,387,Infinis,Windy Standard,Wind,21.6,1996.00,Onshore
+388,388,Innogy renewables,An Suidhe,Wind,19.3,2005.00,Onshore
+389,389,Innogy renewables,Bilbster,Wind,3.9,2007.00,Onshore
+390,390,Innogy renewables,Bradwell,Wind,20.5,2013.00,Onshore
+391,391,Innogy renewables,Burgar Hill,Wind,5.0,2006.00,Onshore
+392,392,Innogy renewables,Galloper,Wind (offshore),33.0,2013.00,Offshore
+393,393,Innogy renewables,Goole Fields 2,Wind,34.9,2016.00,Onshore
+394,394,Innogy renewables,Gwynt-y-Mor,Wind (offshore),576.0,2013.00,Offshore
+395,395,Innogy renewables,Hameldon Hill,Wind,6.0,2006.00,Onshore
+396,396,Innogy renewables,Hameldon Hill Extension,Wind,6.0,2013.00,Onshore
+397,397,Innogy renewables,Hellrigg,Wind,9.2,2012.00,Onshore
+398,398,Innogy renewables,Hollies,Wind,2.6,2008.00,Onshore
+399,399,Innogy renewables,Kiln Pit Hill,Wind,14.0,2011.00,Onshore
+400,400,Innogy renewables,Knabs Ridge,Wind,16.0,2007.00,Onshore
+401,401,Innogy renewables,Lindhurst,Wind,9.0,2010.00,Onshore
+402,402,Innogy renewables,Little Cheyne Court,Wind,59.8,2008.00,Onshore
+403,403,Innogy renewables,Lochelbank,Wind,9.6,2010.00,Onshore
+404,404,Innogy renewables,Middlemoor,Wind,54.0,2013.00,Onshore
+405,405,Innogy renewables,North Hoyle,Wind (offshore),60.0,2003.00,Offshore
+406,406,Innogy renewables,Novar2,Wind,36.8,2012.00,Onshore
+407,407,Innogy renewables,Rhyl Flats,Wind (offshore),90.0,2009.00,Offshore
+408,408,Innogy renewables,Galloper Wind Farm,Wind (offshore),72.0,2017.00,Offshore
+409,409,Innogy renewables,Cia Aig ,Hydro,3.0,2016.00,Hydro
+410,410,Innogy renewables,Auchtertyre,Hydro,0.6,2000.00,Hydro
+411,411,Innogy renewables,Black Rock,Hydro,3.5,2012.00,Hydro
+412,412,Innogy renewables,Blantyre,Hydro,0.6,1995.00,Hydro
+413,413,Innogy renewables,Braevallich,Hydro,2.2,2005.00,Hydro
+414,414,Innogy renewables,Carnoch,Hydro,1.4,2009.00,Hydro
+415,415,Innogy renewables,Croesor,Hydro,0.5,1999.00,Hydro
+416,416,Innogy renewables,Cwm Dyli,Hydro,10.0,2002.00,Hydro
+417,417,Innogy renewables,Dolgarrog High Head,Hydro,17.0,2002.00,Hydro
+419,419,Innogy renewables,Douglas Water,Hydro,3.0,2008.00,Hydro
+420,420,Innogy renewables,Dulyn,Hydro,0.5,1998.00,Hydro
+421,421,Innogy renewables,Garnedd,Hydro,0.5,1990.00,Hydro
+422,422,Innogy renewables,Garrogie,Hydro,2.4,2005.00,Hydro
+423,423,Innogy renewables,Garry Gualach,Hydro,0.8,2002.00,Hydro
+424,424,Innogy renewables,Glen Tarbert,Hydro,0.9,2000.00,Hydro
+425,425,Innogy renewables,Grudie ,Hydro,2.0,2017.00,Hydro
+426,426,Innogy renewables,Inverbain,Hydro,1.0,2006.00,Hydro
+427,427,Innogy renewables,Inverlael,Hydro,2.5,2009.00,Hydro
+428,428,Innogy renewables,Kielder,Hydro,6.0,2006.00,Hydro
+429,429,Innogy renewables,Maldie,Hydro,4.0,2013.00,Hydro
+430,430,Innogy renewables,River E,Hydro,3.0,2008.00,Hydro
+431,431,Innogy renewables,Selset,Hydro,0.8,2010.00,Hydro
+432,432,Innogy renewables,Stanley Mill,Hydro,0.8,2003.00,Hydro
+433,433,Intergen,Rocksavage,CCGT,810.0,1998.00,CCGT
+434,434,Intergen,Coryton,CCGT,800.0,2001.00,CCGT
+435,435,Intergen,Spalding,CCGT,880.0,2004.00,CCGT
+436,436,Lark,Barr Farm Limited,Solar,1.9,2015.00,PV
+437,437,Lark,Brafield on the Green Solar Park,Solar,4.9,2016.00,PV
+438,438,Lark,Burton Pedwardine,Solar,9.0,2014.00,PV
+439,439,Lark,Burton Pedwardine Solar Farm Phase 2,Solar,4.2,2014.00,PV
+440,440,Lark,Chalgrove - Langlay Hall - Solar Farm,Solar,2.4,2014.00,PV
+441,441,Lark,Coton Park Solar Farm,Solar,2.7,2015.00,PV
+442,442,Lark,Ellough Solar Farm,Solar,19.9,2014.00,PV
+444,444,Lark,Fen Road Solar Farm,Solar,1.4,2011.00,PV
+445,445,Lark,Fiskerton Solar Farm,Solar,13.0,2015.00,PV
+446,446,Lark,Huddlesford House Farm,Solar,0.9,2016.00,PV
+447,447,Lark,Kenninghall Solar Farm,Solar,8.0,2015.00,PV
+448,448,Lark,Ketton Solar Farm,Solar,9.0,2014.00,PV
+449,449,Lark,Ketton Solar Phase 2,Solar,3.1,2015.00,PV
+450,450,Lark,Langford Solar Farm,Solar,13.2,2015.00,PV
+451,451,Lark,Langley Priory Solar Farm,Solar,2.0,2015.00,PV
+452,452,Lark,Limes Farm Wickham Solar,Solar,5.8,2013.00,PV
+453,453,Lark,Little Irchester ,Solar,4.7,2016.00,PV
+454,454,Lark,Lodge Farm1,Solar,1.0,2016.00,PV
+455,455,Lark,Monty's farm,Solar,4.6,2016.00,PV
+456,456,Lark,Park Lane,Solar,0.9,2016.00,PV
+457,457,Lark,Pond Farm Solar Farm,Solar,3.6,2014.00,PV
+458,458,Lark,Sywell,Solar,5.0,2017.00,PV
+459,459,Lark,Temple Normanton,Solar,4.9,2016.00,PV
+460,460,Lark,Thornborough Grounds,Solar,5.0,2016.00,PV
+461,461,Lark,Wellingborough Solar Farm,Solar,8.5,2014.00,PV
+462,462,Lark,William's Farm,Solar,4.2,2016.00,PV
+463,463,Lark,Wroxton Solar Farm,Solar,1.8,2014.00,PV
+464,464,Lark,Nixey Farm - Chalgrove - Solar Farm,Solar,21.3,2015.00,PV
+465,465,LightsourceBP,Acrefair,Solar,5.0,2015.00,PV
+466,466,LightsourceBP,Beckton,Solar,0.5,2011.00,PV
+467,467,LightsourceBP,Benbole,Solar,1.7,2011.00,PV
+468,468,LightsourceBP,Bentley Estate,Solar,4.8,2015.00,PV
+469,469,LightsourceBP,Bentley Estate 2,Solar,5.0,2016.00,PV
+470,470,LightsourceBP,Binsted,Solar,5.0,2016.00,PV
+471,471,LightsourceBP,Blatchworthy,Solar,1.4,2013.00,PV
+472,472,LightsourceBP,Bodmin,Solar,5.0,2015.00,PV
+473,473,LightsourceBP,Bolsovermoor Quarry ,Solar,5.0,2017.00,PV
+474,474,LightsourceBP,Brook Farm,Solar,8.9,2016.00,PV
+475,475,LightsourceBP,Brynteg,Solar,14.8,2014.00,PV
+476,476,LightsourceBP,Burnthouse,Solar,4.8,2015.00,PV
+477,477,LightsourceBP,Burthy,Solar,13.1,2015.00,PV
+478,478,LightsourceBP,Bury Lane,Solar,22.2,2014.00,PV
+479,479,LightsourceBP,Castle Combe,Solar,15.3,2015.00,PV
+480,480,LightsourceBP,Charity Farm - CfD,Solar,14.4,2016.00,PV
+481,481,LightsourceBP,Chittering,Solar,5.0,2012.00,PV
+482,482,LightsourceBP,Church Farm - Slapton,Solar,5.0,2015.00,PV
+483,483,LightsourceBP,Cleave Farm,Solar,4.6,2013.00,PV
+484,484,LightsourceBP,Cold Harbour,Solar,5.0,2015.00,PV
+485,485,LightsourceBP,Crookedstone,Solar,4.8,2016.00,PV
+486,486,LightsourceBP,Crossness,Solar,1.5,2011.00,PV
+487,487,LightsourceBP,Crucis Farm,Solar,16.1,2014.00,PV
+488,488,LightsourceBP,Crundale,Solar,43.7,2014.00,PV
+489,489,LightsourceBP,Cwrt Henllys,Solar,5.0,2016.00,PV
+490,490,LightsourceBP,Dunsfold,Solar,2.0,2011.00,PV
+491,491,LightsourceBP,Eastacombe,Solar,3.6,2012.00,PV
+492,492,LightsourceBP,Epwell,Solar,9.0,2014.00,PV
+493,493,LightsourceBP,Exning,Solar,30.3,2015.00,PV
+494,494,LightsourceBP,Fairwinds,Solar,12.2,2014.00,PV
+495,495,LightsourceBP,Fareham,Solar,20.5,2014.00,PV
+496,496,LightsourceBP,Fawley (Langley),Solar,5.0,2012.00,PV
+497,497,LightsourceBP,Ffos Las,Solar,5.0,2012.00,PV
+498,498,LightsourceBP,Fields Farm (Agden) ,Solar,5.0,2017.00,PV
+499,499,LightsourceBP,Francis Court,Solar,4.2,2017.00,PV
+500,500,LightsourceBP,Gelli Gron,Solar,3.6,2016.00,PV
+501,501,LightsourceBP,Great Knowles,Solar,2.9,2012.00,PV
+502,502,LightsourceBP,Green Lane,Solar,4.2,2017.00,PV
+503,503,LightsourceBP,Hadley Farm,Solar,5.0,2015.00,PV
+504,504,LightsourceBP,Hawton,Solar,4.9,2016.00,PV
+505,505,LightsourceBP,Henbury Quarry,Solar,3.7,2015.00,PV
+506,506,LightsourceBP,Hill Farm,Solar,7.7,2015.00,PV
+507,507,LightsourceBP,Hill Hall Farm,Solar,5.0,2016.00,PV
+508,508,LightsourceBP,Hill House Farm,Solar,28.3,2015.00,PV
+509,509,LightsourceBP,High point,Solar,3.7,2017.00,PV
+510,510,LightsourceBP,Horam,Solar,8.1,2014.00,PV
+511,511,LightsourceBP,Hornacott,Solar,5.0,2015.00,PV
+512,512,LightsourceBP,Howbery,Solar,0.7,2011.00,PV
+513,513,LightsourceBP,Howton,Solar,5.0,2011.00,PV
+514,514,LightsourceBP,Knowlton,Solar,11.5,2014.00,PV
+515,515,LightsourceBP,Langton (FIT),Solar,4.3,2015.00,PV
+516,516,LightsourceBP,Langunnett,Solar,6.2,2013.00,PV
+517,517,LightsourceBP,Lawrence End Park,Solar,5.0,2015.00,PV
+518,518,LightsourceBP,Little Neath,Solar,6.1,2015.00,PV
+519,519,LightsourceBP,Maes Bach,Solar,4.6,2015.00,PV
+520,520,LightsourceBP,Manor Farm Eggington,Solar,5.0,2015.00,PV
+521,521,LightsourceBP,Manston,Solar,9.8,2014.00,PV
+522,522,LightsourceBP,Marston,Solar,4.5,2011.00,PV
+523,523,LightsourceBP,Meadow Farm (Thorpe Lanton) ,Solar,5.0,2014.00,PV
+524,524,LightsourceBP,Millar Farm,Solar,7.2,2017.00,PV
+525,525,LightsourceBP,Moor Solar 1,Solar,1.7,2011.00,PV
+526,526,LightsourceBP,Moor Solar 2,Solar,1.1,2011.00,PV
+527,527,LightsourceBP,Morfa,Solar,2.0,2016.00,PV
+528,528,LightsourceBP,Nefyn (Tyddyn Cae),Solar,4.9,2015.00,PV
+534,534,LightsourceBP,Norrington,Solar,11.1,2014.00,PV
+535,535,LightsourceBP,North Tenement,Solar,5.0,2017.00,PV
+536,536,LightsourceBP,Park Farm West ,Solar,3.9,2017.00,PV
+537,537,LightsourceBP,Pen Rhiw ,Solar,4.7,2017.00,PV
+538,538,LightsourceBP,Pont Andrew,Solar,1.5,2012.00,PV
+539,539,LightsourceBP,Prestop Park,Solar,15.9,2015.00,PV
+540,540,LightsourceBP,Primrose Hill,Solar,4.3,2012.00,PV
+541,541,LightsourceBP,Promens,Solar,1.6,2011.00,PV
+542,542,LightsourceBP,QE2 Reservoir,Solar,6.3,2016.00,PV
+543,543,LightsourceBP,RedHill Farm ,Solar,4.8,2015.00,PV
+544,544,LightsourceBP,Rudge Hill Farm,Solar,1.0,2013.00,PV
+545,545,LightsourceBP,Safeguard Bradwall,Solar,5.0,2017.00,PV
+546,546,LightsourceBP,Sandhill,Solar,1.9,2011.00,PV
+547,547,LightsourceBP,Says Court,Solar,19.8,2014.00,PV
+548,548,LightsourceBP,School Aycliffe,Solar,5.0,2015.00,PV
+549,549,LightsourceBP,Shaftesbury,Solar,5.0,2015.00,PV
+550,550,LightsourceBP,Sharland Farm ,Solar,2.8,2017.00,PV
+551,551,LightsourceBP,Sheriffhales,Solar,5.0,2015.00,PV
+552,552,LightsourceBP,South Creake,Solar,26.0,2016.00,PV
+553,553,LightsourceBP,St Francis,Solar,4.3,2015.00,PV
+554,554,LightsourceBP,Stragglethorpe,Solar,5.0,2016.00,PV
+555,555,LightsourceBP,Summerlands,Solar,0.8,2012.00,PV
+556,556,LightsourceBP,Sundorne,Solar,18.2,2015.00,PV
+557,557,LightsourceBP,Trefinnick,Solar,4.4,2013.00,PV
+558,558,LightsourceBP,Treguff,Solar,3.7,2015.00,PV
+559,559,LightsourceBP,Trevemper,Solar,1.7,2011.00,PV
+560,560,LightsourceBP,Upper Clayhill,Solar,4.7,2015.00,PV
+561,561,LightsourceBP,Walton,Solar,1.8,2011.00,PV
+562,562,LightsourceBP,West Bradley,Solar,1.0,2012.00,PV
+563,563,LightsourceBP,West Farm,Solar,7.6,2013.00,PV
+564,564,LightsourceBP,Westwood,Solar,9.2,2014.00,PV
+565,565,LightsourceBP,Wheal Jane,Solar,1.4,2011.00,PV
+566,566,LightsourceBP,Wick Red Farm,Solar,5.0,2016.00,PV
+567,567,LightsourceBP,Wilburton,Solar,5.0,2011.00,PV
+568,568,LightsourceBP,Wrockwardine,Solar,10.5,2015.00,PV
+569,569,LightsourceBP,Lough Road PV,Solar,32.1,2017.00,PV
+570,570,Londonwaste Limited,Edmonton,Waste,60.0,1970.00,EfW
+571,571,Magnox Ltd,Maentwrog,Hydro,35.3,1928.00,Hydro
+572,572,Marchwood Power Limited,Marchwood,CCGT,920.0,2009.00,CCGT
+573,573,Multifuel energy ltd,Ferrybridge Multi-fuel,Waste,79.0,2015.00,EfW
+574,574,Octopus energy,Abbots Ripton,Solar,24.7,2014.00,PV
+575,575,Octopus energy,Apse,Solar,3.1,2013.00,PV
+576,576,Octopus energy,Ash Row,Solar,5.0,2015.00,PV
+577,577,Octopus energy,Avenue Farm,Solar,7.6,2015.00,PV
+578,578,Octopus energy,Averill Farm,Solar,5.0,2015.00,PV
+579,579,Octopus energy,Barn Farm,Solar,4.6,2015.00,PV
+580,580,Octopus energy,Barton,Solar,1.2,2012.00,PV
+581,581,Octopus energy,Birch Estate,Solar,5.0,2015.00,PV
+582,582,Octopus energy,Bishops Sutton,Solar,12.0,2014.00,PV
+583,583,Octopus energy,Bradford,Solar,5.3,2013.00,PV
+584,584,Octopus energy,Bratton,Solar,5.0,2013.00,PV
+585,585,Octopus energy,Brickkiln Lane,Solar,5.0,2016.00,PV
+586,586,Octopus energy,Broadgate,Solar,1.1,2012.00,PV
+587,587,Octopus energy,Bryn Yr Odyn,Solar,14.9,2015.00,PV
+588,588,Octopus energy,Burntstalks,Solar,11.5,2013.00,PV
+589,589,Octopus energy,Bystock Farm,Solar,4.1,2015.00,PV
+590,590,Octopus energy,Carlisle Estate,Solar,5.0,2016.00,PV
+591,591,Octopus energy,Causilgey,Solar,5.0,2013.00,PV
+592,592,Octopus energy,Chalcroft,Solar,6.3,2013.00,PV
+593,593,Octopus energy,Chawton,Solar,3.7,2013.00,PV
+594,594,Octopus energy,Chediston,Solar,12.3,2013.00,PV
+595,595,Octopus energy,Chisbon,Solar,12.3,2015.00,PV
+596,596,Octopus energy,Clann Farm,Solar,1.5,2014.00,PV
+597,597,Octopus energy,Cloford Common,Solar,5.0,2015.00,PV
+598,598,Octopus energy,Crapnell (Dinder),Solar,4.7,2014.00,PV
+599,599,Octopus energy,Craymarsh,Solar,1.8,2012.00,PV
+600,600,Octopus energy,Dairy House,Solar,3.4,2016.00,PV
+601,601,Octopus energy,Decoy,Solar,5.3,2014.00,PV
+602,602,Octopus energy,Drapers Farm,Solar,6.0,2014.00,PV
+603,603,Octopus energy,Eakring,Solar,11.8,2015.00,PV
+604,604,Octopus energy,Ellicombe,Solar,1.3,2013.00,PV
+605,605,Octopus energy,Ermine,Solar,32.4,2014.00,PV
+606,606,Octopus energy,Guisborough,Solar,5.0,2016.00,PV
+607,607,Octopus energy,Hatchlands,Solar,5.2,2013.00,PV
+608,608,Octopus energy,Hazard,Solar,5.7,2014.00,PV
+609,609,Octopus energy,Hewas,Solar,6.0,2013.00,PV
+610,610,Octopus energy,Higher Knapp,Solar,1.5,2013.00,PV
+611,611,Octopus energy,Higher Pirzwell,Solar,1.2,2012.00,PV
+612,612,Octopus energy,Higher Trenhayle,Solar,2.9,2013.00,PV
+613,613,Octopus energy,Hollamoor,Solar,2.2,2012.00,PV
+614,614,Octopus energy,Hollies,Solar,8.6,2013.00,PV
+615,615,Octopus energy,Holtwood,Solar,5.0,2016.00,PV
+616,616,Octopus energy,Hullavington,Solar,8.3,2014.00,PV
+617,617,Octopus energy,Kia Ora,Solar,1.8,2013.00,PV
+618,618,Octopus energy,Lawn Lane,Solar,4.3,2016.00,PV
+619,619,Octopus energy,Lenham,Solar,6.6,2014.00,PV
+620,620,Octopus energy,Lexham,Solar,7.9,2013.00,PV
+621,621,Octopus energy,Little Morton Farm,Solar,14.3,2014.00,PV
+622,622,Octopus energy,Little T,Solar,5.4,2013.00,PV
+623,623,Octopus energy,Littleton,Solar,12.0,2015.00,PV
+624,624,Octopus energy,Lodge Farm - Orston,Solar,12.0,2014.00,PV
+625,625,Octopus energy,Lovedean,Solar,4.5,2013.00,PV
+626,626,Octopus energy,Luson,Solar,1.9,2013.00,PV
+627,627,Octopus energy,Manor Farm Dorset,Solar,4.9,2014.00,PV
+628,628,Octopus energy,Marley Thatch,Solar,6.2,2013.00,PV
+629,629,Octopus energy,Melborn Black Peak,Solar,19.0,2015.00,PV
+630,630,Octopus energy,Melborn Muncey,Solar,30.9,2015.00,PV
+631,631,Octopus energy,Mill Hill,Solar,5.0,2015.00,PV
+632,632,Octopus energy,Mingay Farm (Wilburton 2),Solar,19.3,2014.00,PV
+633,633,Octopus energy,Molland,Solar,5.0,2016.00,PV
+634,634,Octopus energy,Mopley,Solar,3.0,2012.00,PV
+635,635,Octopus energy,Mount Mill,Solar,12.0,2015.00,PV
+636,636,Octopus energy,Natewood,Solar,9.0,2015.00,PV
+637,637,Octopus energy,New Row Farm,Solar,4.5,2014.00,PV
+638,638,Octopus energy,Newlands,Solar,4.3,2013.00,PV
+639,639,Octopus energy,Ninnis,Solar,3.9,2013.00,PV
+640,640,Octopus energy,North Perrott Fruit Farm,Solar,0.8,2013.00,PV
+641,641,Octopus energy,North Wayton,Solar,8.4,2014.00,PV
+642,642,Octopus energy,Northmoor,Solar,4.9,2015.00,PV
+643,643,Octopus energy,Palfreys Barton,Solar,1.0,2013.00,PV
+644,644,Octopus energy,Parciau,Solar,12.7,2015.00,PV
+645,645,Octopus energy,Park Wall,Solar,5.0,2013.00,PV
+646,646,Octopus energy,Parkhouse,Solar,6.6,2013.00,PV
+647,647,Octopus energy,Penhale,Solar,3.5,2013.00,PV
+648,648,Octopus energy,Peter Hill,Solar,5.0,2016.00,PV
+649,649,Octopus energy,Pitchford,Solar,21.0,2015.00,PV
+650,650,Octopus energy,Pitts Farm,Solar,3.2,2014.00,PV
+651,651,Octopus energy,Pollington Airfield,Solar,4.6,2015.00,PV
+652,652,Octopus energy,Pyde Drove,Solar,8.4,2014.00,PV
+653,653,Octopus energy,Ratcliffe House Farm,Solar,3.5,2015.00,PV
+654,654,Octopus energy,Reaches,Solar,6.2,2014.00,PV
+655,655,Octopus energy,Rew Farm,Solar,5.1,2014.00,PV
+656,656,Octopus energy,Rudge Manor,Solar,6.4,2013.00,PV
+657,657,Octopus energy,Rydon Farm,Solar,9.6,2015.00,PV
+658,658,Octopus energy,Ryston Estate Solar Plant,Solar,4.6,2015.00,PV
+659,659,Octopus energy,Sheriffhales CIC,Solar,3.2,2015.00,PV
+660,660,Octopus energy,Shipton Bellinger,Solar,5.4,2013.00,PV
+661,661,Octopus energy,Singrug,Solar,12.0,2015.00,PV
+662,662,Octopus energy,Six Hills,Solar,18.7,2015.00,PV
+663,663,Octopus energy,Slaughtergate,Solar,1.8,2013.00,PV
+664,664,Octopus energy,Somerton Door,Solar,8.7,2015.00,PV
+665,665,Octopus energy,Southcombe Farm,Solar,1.2,2013.00,PV
+666,666,Octopus energy,Spittleborough Farm,Solar,9.1,2014.00,PV
+667,667,Octopus energy,Stables (Lightsource),Solar,1.0,2012.00,PV
+668,668,Octopus energy,Staining Wood,Solar,5.0,2016.00,PV
+669,669,Octopus energy,Stratton Hall,Solar,11.8,2014.00,PV
+670,670,Octopus energy,Strete,Solar,4.9,2013.00,PV
+671,671,Octopus energy,Sutton Mawr,Solar,7.5,2014.00,PV
+672,672,Octopus energy,Sycamore,Solar,19.0,2014.00,PV
+673,673,Octopus energy,Tavells,Solar,5.4,2013.00,PV
+674,674,Octopus energy,The Breck,Solar,5.0,2016.00,PV
+675,675,Octopus energy,The Hydes,Solar,10.7,2014.00,PV
+676,676,Octopus energy,Thoresby,Solar,19.8,2015.00,PV
+677,677,Octopus energy,Till House,Solar,10.5,2014.00,PV
+678,678,Octopus energy,Tooleys Solar Farm,Solar,5.0,2015.00,PV
+679,679,Octopus energy,Tredown Farm,Solar,1.4,2013.00,PV
+680,680,Octopus energy,Tregassow,Solar,5.9,2013.00,PV
+681,681,Octopus energy,Trench Farm,Solar,5.0,2015.00,PV
+682,682,Octopus energy,Turves,Solar,5.0,2013.00,PV
+683,683,Octopus energy,Upper Farringdon,Solar,6.2,2015.00,PV
+684,684,Octopus energy,Walland Farm,Solar,5.0,2015.00,PV
+685,685,Octopus energy,Waterloo ,Solar,28.7,2015.00,PV
+686,686,Octopus energy,Wedgehill,Solar,13.5,2015.00,PV
+687,687,Octopus energy,Week Farm 2 (Week Farm Solar Park),Solar,3.7,2014.00,PV
+688,688,Octopus energy,West Hall,Solar,5.5,2014.00,PV
+689,689,Octopus energy,Westerfield,Solar,13.0,2015.00,PV
+690,690,Octopus energy,Westwood Farm,Solar,5.1,2015.00,PV
+691,691,Octopus energy,Whiddon Farm,Solar,0.9,2013.00,PV
+692,692,Octopus energy,Wiggin Hill,Solar,11.4,2015.00,PV
+693,693,Octopus energy,Willsland,Solar,3.3,2013.00,PV
+694,694,Octopus energy,Woodlands Farm,Solar,13.2,2015.00,PV
+695,695,Orsted,Barrow,Wind (offshore),90.0,2006.00,Offshore
+696,696,Orsted,Burbo Extension Offshore Windfarm,Wind (offshore),259.0,2017.00,Offshore
+697,697,Orsted,Burbo Offshore Windfarm,Wind (offshore),90.0,2007.00,Offshore
+698,698,Orsted,Gunfleet Sands 1 & 2 Ltd.,Wind (offshore),172.8,2010.00,Offshore
+699,699,Orsted,Gunfleet Sands 3,Wind (offshore),12.0,2013.00,Offshore
+700,700,Orsted,Lincs,Wind (offshore),270.0,2013.00,Offshore
+701,701,Orsted,Race Bank,Wind (offshore),548.1,2018.00,Offshore
+702,702,Orsted,Walney 1 & 2,Wind (offshore),368.0,2012.00,Offshore
+703,703,Orsted,Walney 3,Wind (offshore),330.0,2017.00,Offshore
+704,704,Orsted,West of Duddon Sands,Wind (offshore),388.8,2014.00,Offshore
+705,705,Orsted,Westermost Rough,Wind (offshore),210.0,2014.00,Offshore
+706,706,Peel energy,Frodsham Wind Farm Ltd,Wind,50.4,2016.00,Onshore
+707,707,Peel energy,Port of Sheerness Wind Farm Ltd,Wind,8.2,2016.00,Onshore
+708,708,Peel energy,Seaforth Wind Farm Ltd,Wind,3.0,1999.00,Onshore
+709,709,REG power,Barlborough,Wind,0.8,2016.00,Onshore
+710,710,REG power,Batsworthy Cross,Wind,18.5,2016.00,Onshore
+711,711,REG power,Brackagh Quarry,Wind,5.0,2017.00,Onshore
+712,712,REG power,Braich Ddu,Wind,3.9,2007.00,Onshore
+713,713,REG power,Burnthouse Farm,Wind,6.2,2013.00,Onshore
+714,714,REG power,Denzell Downs Windfarm,Wind,10.3,2015.00,Onshore
+715,715,REG power,French Farm,Wind,4.0,2016.00,Onshore
+716,716,REG power,Glens of Foudland,Wind,26.0,2005.00,Onshore
+717,717,REG power,Goonhilly Downs Wind Farm,Wind,12.1,1993.00,Onshore
+718,718,REG power,High Down,Wind,0.5,2016.00,Onshore
+719,719,REG power,High Haswell Wind Farm,Wind,4.1,2016.00,Onshore
+720,720,REG power,High Pow,Wind,3.9,2007.00,Onshore
+721,721,REG power,High Sharpley,Wind,2.6,2006.00,Onshore
+722,722,REG power,Loscar,Wind,4.5,2016.00,Onshore
+723,723,REG power,Mynydd Brombil,Wind,8.0,2017.00,Onshore
+724,724,REG power,Mynydd Portref,Wind,12.0,2012.00,Onshore
+725,725,REG power,Orchard End Windfarm,Wind,4.1,2013.00,Onshore
+726,726,REG power,Ramsey,Wind,1.8,2016.00,Onshore
+727,727,REG power,Ramsey 2 Wind Farm,Wind,8.2,2015.00,Onshore
+728,728,REG power,Rodbaston,Wind,2.1,2017.00,Onshore
+729,729,REG power,Roskrow Barton,Wind,1.7,2007.00,Onshore
+730,730,REG power,Sancton Hill Wind Farm,Wind,10.4,2012.00,Onshore
+731,731,REG power,South Sharpley Wind Farm,Wind,6.2,2013.00,Onshore
+732,732,REG power,St Breock,Wind,10.3,2015.00,Onshore
+733,733,REG power,Whittlesey,Wind,1.8,2016.00,Onshore
+734,734,REG power,Goonhilly Solar,Solar,4.5,2014.00,PV
+735,735,REG power,Hale Farm Solar,Solar,12.2,2015.00,PV
+736,736,REG power,Mendennick Solar,Solar,2.6,2016.00,PV
+737,737,REG power,SPD 2 Hall Farm,Solar,14.9,2016.00,PV
+738,738,REG power,SPD 3 Grange Farm,Solar,9.5,2015.00,PV
+739,739,REG power,SPD 4 Gelliwern,Solar,6.2,2015.00,PV
+740,740,REG power,UK Solar (Hartwell) LLP,Solar,18.6,2015.00,PV
+741,741,REG power,UK Solar (Lower Newton) LLP,Solar,11.9,2015.00,PV
+742,742,Renewable energy systems,Gruig Wind Farm Limited,Wind,25.0,2009.00,Onshore
+743,743,Renewable energy systems,Todmorden Moor Wind Farm Limited,Wind,12.5,2014.00,Onshore
+744,744,Renewable energy systems,Altahullion Extension Wind Farm (NI),Wind,11.7,2007.00,Onshore
+745,745,Renewable energy systems,Altahullion Wind Farm (NI),Wind,26.0,2003.00,Onshore
+746,746,Renewable energy systems,Black Hill Wind Farm (GB),Wind,28.6,2006.00,Onshore
+747,747,Renewable energy systems,Den Brook Wind Farm (GB),Wind,18.0,2016.00,Onshore
+748,748,Renewable energy systems,Dyffryn Brodyn Wind Farm (GB),Wind,5.4,1994.00,Onshore
+749,749,Renewable energy systems,Earlseat Wind Farm (GB),Wind,16.0,2014.00,Onshore
+750,750,Renewable energy systems,Forss Extension Wind Farm (GB),Wind,5.2,2007.00,Onshore
+751,751,Renewable energy systems,Forss Wind Farm (GB),Wind,2.0,2003.00,Onshore
+752,752,Renewable energy systems,Four Burrows Wind Farm (GB),Wind,4.5,1995.00,Onshore
+753,753,Renewable energy systems,Freasdail (GB),Wind,22.5,2017.00,Onshore
+754,754,Renewable energy systems,Garreg Llwyd (GB),Wind,30.4,2017.00,Onshore
+755,755,Renewable energy systems,Glenchamber Wind Farm (GB),Wind,27.5,2016.00,Onshore
+756,756,Renewable energy systems,Grange Wind Farm (GB),Wind,14.0,2013.00,Onshore
+757,757,Renewable energy systems,Hill of Towie Wind Farm (GB),Wind,48.3,2012.00,Onshore
+758,758,Renewable energy systems,Jacks Lane (GB),Wind,15.0,2015.00,Onshore
+759,759,Renewable energy systems,Kelburn Wind Farm (GB),Wind,28.0,2012.00,Onshore
+760,760,Renewable energy systems,Lendrums Bridge Extension Wind Farm (NI),Wind,7.3,1999.00,Onshore
+761,761,Renewable energy systems,Lendrums Bridge Wind Farm (NI),Wind,5.9,2000.00,Onshore
+762,762,Renewable energy systems,Lough Hill Wind Farm (NI),Wind,7.8,2007.00,Onshore
+763,763,Renewable energy systems,Meikle Carewe Wind Farm (GB),Wind,10.2,2013.00,Onshore
+764,764,Renewable energy systems,Minnygap (GB),Wind,25.0,2017.00,Onshore
+765,765,Renewable energy systems,Neilston (GB),Wind,10.1,2013.00,Onshore
+766,766,Renewable energy systems,Penmanshiel (GB),Wind,28.7,2016.00,Onshore
+767,767,Renewable energy systems,Roos Wind Farm (GB),Wind,17.1,2013.00,Onshore
+768,768,Renewable energy systems,Tallentire Wind Farm (GB),Wind,12.0,2013.00,Onshore
+769,769,Renewable energy systems,Turncole Wind Farm (GB),Wind,17.5,2016.00,Onshore
+770,770,Renewable energy systems,Wadlow Farm (GB),Wind,26.0,2012.00,Onshore
+771,771,Renewable energy systems,Woolley Hill (GB),Wind,10.0,2015.00,Onshore
+772,772,Renewable energy systems,Wryde Croft Wind Farm (GB),Wind,26.0,2016.00,Onshore
+773,773,Renewable energy systems,Wix Lodge (Stour Fields),Solar,18.7,2014.00,PV
+774,774,Renewable energy systems,Derriton (Tamar Heights),Solar,11.7,2014.00,PV
+775,775,Renewable energy systems,Parley,Solar,24.2,2014.00,PV
+776,776,Renewable energy systems,Penare,Solar,11.1,2014.00,PV
+777,777,Renewable energy systems,Marvel (Stone Farm),Solar,5.0,2011.00,PV
+778,778,Renewable energy systems,Parsonage (Hazel),Solar,7.0,2013.00,PV
+779,779,Renewable energy systems,Four Burrows Solar (Kenwyn),Solar,7.2,2015.00,PV
+780,780,Riverside Resource Recovery Limited,Riverside - Energy from Waste,Waste,80.0,2011.00,EfW
+781,781,Rockfire capital,Astley,Solar,5.0,2016.00,PV
+782,782,Rockfire capital,Balcombe,Solar,5.0,2016.00,PV
+783,783,Rockfire capital,Carrowdore,Solar,6.0,2017.00,PV
+784,784,Rockfire capital,Cranham,Solar,3.0,2016.00,PV
+785,785,Rockfire capital,Eckland Lodge,Solar,3.7,2016.00,PV
+786,786,Rockfire capital,Five Oaks,Solar,5.0,2011.00,PV
+787,787,Rockfire capital,Home Farm,Solar,5.0,2017.00,PV
+788,788,Rockfire capital,Lisburn,Solar,20.5,2017.00,PV
+789,789,Rockfire capital,Mill Farm,Solar,4.4,2016.00,PV
+790,790,Rockfire capital,Moor House,Solar,4.9,2016.00,PV
+791,791,Rockfire capital,Newton,Solar,5.0,2016.00,PV
+792,792,Rockfire capital,Otherton,Solar,2.5,2017.00,PV
+793,793,Rockfire capital,Outwood,Solar,5.0,2016.00,PV
+794,794,Rockfire capital,Rolls Royce,Solar,3.2,2016.00,PV
+795,795,Rockfire capital,Shuttleworth,Solar,4.1,2016.00,PV
+796,796,Rockfire capital,Swindon Solar Farm,Solar,60.9,2016.00,PV
+797,797,Rockfire capital,Trowle,Solar,5.0,2016.00,PV
+798,798,Rockfire capital,Upper wick,Solar,5.0,2017.00,PV
+799,799,Rockfire capital,Widehurst,Solar,5.0,2017.00,PV
+800,800,Rockfire capital,Wilbees,Solar,5.0,2016.00,PV
+801,801,Rockfire capital,Willersey ,Solar,3.8,2017.00,PV
+802,802,Rockfire capital,Woodhouse,Solar,5.0,2017.00,PV
+803,803,Rockfire capital,Wrea Green,Solar,4.9,2017.00,PV
+804,804,RWE Generation SE,Aberthaw B,Coal,1610.0,1971.00,Coal
+805,805,RWE Generation SE,Aberthaw GT,Gas oil,51.0,1971.00,Recip_diesel
+806,806,RWE Generation SE,Cowes,Gas oil,140.0,1982.00,Recip_diesel
+807,807,RWE Generation SE,Didcot B,CCGT,1550.0,1998.00,CCGT
+808,808,RWE Generation SE,Didcot GT,Gas oil,100.0,1972.00,Recip_diesel
+809,809,RWE Generation SE,Great Yarmouth,CCGT,420.0,2001.00,CCGT
+810,810,RWE Generation SE,Little Barford,CCGT,740.0,1995.00,CCGT
+811,811,RWE Generation SE,Little Barford GT,Gas oil,17.0,2006.00,Recip_diesel
+812,812,RWE Generation SE,Markinch CHP *,Biomass_wood,65.0,2014.00,Biomass_wood
+813,813,RWE Generation SE,Pembroke,CCGT,2199.0,2012.00,CCGT
+814,814,RWE Generation SE,Staythorpe C,CCGT,1772.0,2010.00,CCGT
+815,815,Saltend Cogeneration Company Ltd,Saltend *,CCGT,1200.0,2000.00,CCGT
+816,816,Scira Offshore Energy Ltd,Dudgeon BMU 1,Wind (offshore),108.0,2017.00,Offshore
+817,817,Scira Offshore Energy Ltd,Dudgeon BMU 2,Wind (offshore),90.0,2017.00,Offshore
+818,818,Scira Offshore Energy Ltd,Dudgeon BMU 3,Wind (offshore),102.0,2017.00,Offshore
+819,819,Scira Offshore Energy Ltd,Dudgeon BMU 4,Wind (offshore),102.0,2017.00,Offshore
+820,820,Scira Offshore Energy Ltd,Hywind BMU 1,Wind (offshore),30.0,2017.00,Offshore
+821,821,Scira Offshore Energy Ltd,Sheringham Shoal BMU 1,Wind (offshore),158.0,2012.00,Offshore
+822,822,Scira Offshore Energy Ltd,Sheringham Shoal BMU 2,Wind (offshore),158.0,2017.00,Offshore
+823,823,Scotia wind,Barlockhart Moor Wind Energy Ltd,Wind,8.2,2013.00,Onshore
+824,824,Scotia wind,Blantyre Muir Wind Energy Ltd,Wind,12.3,2013.00,Onshore
+825,825,Scotia wind,Cairnborrow Wind Energy Ltd,Wind,10.0,2017.00,Onshore
+826,826,Scotia wind,Carsington Wind Energy Ltd,Wind,8.2,2014.00,Onshore
+827,827,Scotia wind,Crimp Wind Power Ltd,Wind,2.4,2011.00,Onshore
+828,828,Scotia wind,Flimby Wind Energy Ltd,Wind,6.2,2013.00,Onshore
+829,829,Scotia wind,Scotia wind (Craigengelt) Ltd,Wind,20.0,2010.00,Onshore
+830,830,Scotia wind,Sober Hill Wind Farm Ltd,Wind,12.3,2013.00,Onshore
+831,831,Scotia wind,Capel Grange Solar Energy Ltd,Solar,5.0,2016.00,PV
+832,832,Scottish power,Blackburn,CCGT,59.0,2011.00,CCGT
+833,833,Scottish power,Damhead Creek,CCGT,805.0,2000.00,CCGT
+834,834,Scottish power,Shoreham,CCGT,420.0,2000.00,CCGT
+835,835,Scottish power,Rye House,CCGT,715.0,1993.00,CCGT
+836,836,Scottish power,Arecleoch,Wind,120.0,2010.00,Onshore
+837,837,Scottish power,Beinn an Tuirc I,Wind,29.7,2001.00,Onshore
+838,838,Scottish power,Beinn an Tuirc II,Wind,43.7,2002.00,Onshore
+839,839,Scottish power,Beinn Tharsuinn,Wind,29.8,2006.00,Onshore
+840,840,Scottish power,Black Law,Wind,124.2,2005.00,Onshore
+841,841,Scottish power,Black Law II,Wind,63.4,2017.00,Onshore
+842,842,Scottish power,Callagheen,Wind,16.9,2006.00,Onshore
+843,843,Scottish power,Carland Cross RP,Wind,20.0,2013.00,Onshore
+844,844,Scottish power,Clachan Flats,Wind,15.0,2009.00,Onshore
+845,845,Scottish power,Coal Clough RP,Wind,16.0,1992.00,Onshore
+846,846,Scottish power,Coldham,Wind,16.0,2005.00,Onshore
+847,847,Scottish power,Corkey,Wind,5.0,1994.00,Onshore
+848,848,Scottish power,Cruach Mhor,Wind,29.8,2004.00,Onshore
+849,849,Scottish power,Dersalloch,Wind,69.0,2016.00,Onshore
+850,850,Scottish power,Dun Law I,Wind,17.2,2000.00,Onshore
+851,851,Scottish power,Dun Law II,Wind,29.8,2009.00,Onshore
+852,852,Scottish power,Elliot's Hill,Wind,5.0,1995.00,Onshore
+853,853,Scottish power,Ewe Hill I,Wind,13.8,2016.00,Onshore
+854,854,Scottish power,Ewe Hill II,Wind,36.8,2017.00,Onshore
+855,855,Scottish power,Glenapp,Wind,22.0,2016.00,Onshore
+856,856,Scottish power,Green Knowes,Wind,27.0,2008.00,Onshore
+857,857,Scottish power,Hagshaw Hill I,Wind,15.6,1995.00,Onshore
+858,858,Scottish power,Hagshaw Hill II,Wind,26.0,1995.00,Onshore
+859,859,Scottish power,Hare Hill (scotland),Wind,13.2,2004.00,Onshore
+860,860,Scottish power,Hare Hill II,Wind,29.8,2016.00,Onshore
+861,861,Scottish power,Harestanes,Wind,136.0,2013.00,Onshore
+862,862,Scottish power,Kilgallioch ,Wind,239.0,2017.00,Onshore
+863,863,Scottish power,Lynemouth,Wind,26.0,2012.00,Onshore
+864,864,Scottish power,Mark Hill,Wind,56.0,2011.00,Onshore
+865,865,Scottish power,Middleton,Wind,12.0,2013.00,Onshore
+866,866,Scottish power,P&L,Wind,30.6,1993.00,Onshore
+867,867,Scottish power,Rigged Hill,Wind,5.0,1994.00,Onshore
+868,868,Scottish power,Wether Hill,Wind,18.2,2007.00,Onshore
+869,869,Scottish power,Whitelee,Wind,322.0,2007.00,Onshore
+870,870,Scottish power,Whitelee II,Wind,217.0,2013.00,Onshore
+871,871,Scottish power,Wolf Bog,Wind,10.0,2007.00,Onshore
+872,872,Scottish power,Carsfad,Hydro,12.0,1936.00,Hydro
+873,873,Scottish power,Drumjohn,Hydro,2.0,1985.00,Hydro
+874,874,Scottish power,Earlstoun,Hydro,14.0,1936.00,Hydro
+875,875,Scottish power,Glenlee,Hydro,24.0,1935.00,Hydro
+876,876,Scottish power,Kendoon,Hydro,24.0,1936.00,Hydro
+877,877,Scottish power,Tongland,Hydro,33.0,1935.00,Hydro
+878,878,Scottish power,Bonnington,Hydro,11.0,1927.00,Hydro
+879,879,Scottish power,Stonebyres,Hydro,6.0,1927.00,Hydro
+880,880,Scottish power,Cruachan,Pumped storage,440.0,1966.00,Hydro_Store
+881,881,Seabank Power Limited,Seabank,CCGT,1234.0,1998.00,CCGT
+882,882,Sellafield Ltd,Fellside CHP *,CCGT,180.0,1995.00,CCGT
+883,883,Sembcorp Utilities (UK) Ltd,Wilton GT *,Gas,120.0,1952.00,Recip_gas
+884,884,Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass_wood,38.0,2007.00,Biomass_wood
+885,885,SIMEC,Uskmouth power,Coal,363.0,1966.00,Coal
+886,886,South East London Combined Heat & Power Ltd,SELCHP ERF *,Waste,35.0,1994.00,EfW
+887,887,SSE,Aigas,Hydro,20.0,1962.00,Hydro
+888,888,SSE,Culligran,Hydro,17.0,1962.00,Hydro
+889,889,SSE,Culligran Compensation Set,Hydro,2.1,1962.00,Hydro
+890,890,SSE,Deanie,Hydro,38.0,1963.00,Hydro
+891,891,SSE,Fasnakyle,Hydro,69.0,1951.00,Hydro
+892,892,SSE,Fasnakyle Compensation Set,Hydro,7.5,2006.00,Hydro
+893,893,SSE,Kilmorack,Hydro,20.0,1962.00,Hydro
+894,894,SSE,Mullardoch Tunnel,Hydro,2.4,1955.00,Hydro
+895,895,SSE,Cashlie,Hydro,11.0,1959.00,Hydro
+896,896,SSE,Dalchonzie,Hydro,4.0,1958.00,Hydro
+897,897,SSE,Finlarig,Hydro,16.5,1955.00,Hydro
+898,898,SSE,Lednock,Hydro,3.0,1961.00,Hydro
+899,899,SSE,Lochay,Hydro,46.0,1958.00,Hydro
+900,900,SSE,Lochay Compensation Set,Hydro,2.0,1959.00,Hydro
+902,902,SSE,Lubreoch,Hydro,4.0,1958.00,Hydro
+903,903,SSE,St. Fillans,Hydro,16.8,1957.00,Hydro
+904,904,SSE,Achanalt,Hydro,3.0,1956.00,Hydro
+905,905,SSE,Cuileg,Hydro,3.1,2002.00,Hydro
+906,906,SSE,Grudie Bridge,Hydro,18.7,1950.00,Hydro
+907,907,SSE,Loch Dubh,Hydro,1.2,1954.00,Hydro
+908,908,SSE,Luichart,Hydro,34.0,1954.00,Hydro
+909,909,SSE,Luichart Dam,Hydro,0.1,1954.00,Hydro
+910,910,SSE,Mossford,Hydro,18.7,1957.00,Hydro
+911,911,SSE,Orrin,Hydro,18.0,1959.00,Hydro
+912,912,SSE,Orrin Dam,Hydro,0.3,1959.00,Hydro
+913,913,SSE,Torr Achilty,Hydro,15.0,1954.00,Hydro
+914,914,SSE,Foyers,Pumped storage,300.0,1974.00,Hydro_Store
+915,915,SSE,Ceannacroc,Hydro,20.0,1956.00,Hydro
+916,916,SSE,Foyers Falls,Hydro,5.0,1968.00,Hydro
+917,917,SSE,Glendoe,Hydro,100.0,2008.00,Hydro
+918,918,SSE,Glenmoriston,Hydro,37.0,1957.00,Hydro
+919,919,SSE,Invergarry,Hydro,20.0,1956.00,Hydro
+920,920,SSE,Invergarry Dam,Hydro,0.3,1956.00,Hydro
+921,921,SSE,Kingairloch,Hydro,3.5,2005.00,Hydro
+922,922,SSE,Livishie,Hydro,17.0,1962.00,Hydro
+923,923,SSE,Mucomir,Hydro,1.8,1962.00,Hydro
+924,924,SSE,Quoich,Hydro,18.1,1955.00,Hydro
+925,925,SSE,Quoich Dam,Hydro,0.4,1955.00,Hydro
+926,926,SSE,Cassley,Hydro,10.0,1959.00,Hydro
+927,927,SSE,Lairg,Hydro,4.0,1959.00,Hydro
+928,928,SSE,Shin,Hydro,18.6,1958.00,Hydro
+929,929,SSE,Shin Diversion Dam,Hydro,0.1,1958.00,Hydro
+930,930,SSE,Allt na Lairige,Hydro,6.0,1956.00,Hydro
+931,931,SSE,Awe Barrage,Hydro,0.9,1956.00,Hydro
+932,932,SSE,Clachan,Hydro,40.0,1955.00,Hydro
+933,933,SSE,Inverawe,Hydro,25.0,1963.00,Hydro
+934,934,SSE,Kilmelfort,Hydro,2.1,1956.00,Hydro
+935,935,SSE,Loch Gair,Hydro,6.0,1961.00,Hydro
+936,936,SSE,Lussa,Hydro,2.4,1952.00,Hydro
+937,937,SSE,Nant,Hydro,15.0,1963.00,Hydro
+938,938,SSE,Sloy,Hydro,152.5,1950.00,Hydro
+939,939,SSE,Sron Mor,Hydro,4.0,1957.00,Hydro
+940,940,SSE,Striven,Hydro,8.0,1951.00,Hydro
+941,941,SSE,Clunie,Hydro,61.2,1950.00,Hydro
+942,942,SSE,Clunie Dam,Hydro,0.2,1950.00,Hydro
+943,943,SSE,Cuaich,Hydro,2.5,1959.00,Hydro
+944,944,SSE,Errochty,Hydro,75.0,1955.00,Hydro
+945,945,SSE,Gaur,Hydro,7.9,1953.00,Hydro
+946,946,SSE,Loch Ericht,Hydro,2.2,1962.00,Hydro
+947,947,SSE,Pitlochry,Hydro,15.0,1950.00,Hydro
+948,948,SSE,Pitlochry Dam,Hydro,0.1,1950.00,Hydro
+949,949,SSE,Rannoch,Hydro,45.0,1930.00,Hydro
+950,950,SSE,Tummel,Hydro,34.0,1933.00,Hydro
+951,951,SSE,Beannachran Dam,Hydro,0.2,2005.00,Hydro
+952,952,SSE,Chliostair,Hydro,1.2,1960.00,Hydro
+953,953,SSE,Cladach Dam,Hydro,0.2,1949.00,Hydro
+954,954,SSE,Cluanie Dam,Hydro,0.3,1955.00,Hydro
+955,955,SSE,Duchally,Hydro,0.4,1959.00,Hydro
+956,956,SSE,Dundreggan Dam A,Hydro,0.2,1957.00,Hydro
+957,957,SSE,Gisla,Hydro,0.7,1960.00,Hydro
+958,958,SSE,Kerry Falls,Hydro,1.3,1951.00,Hydro
+959,959,SSE,Loyne,Hydro,0.6,1959.00,Hydro
+960,960,SSE,Meig Dam,Hydro,0.1,1954.00,Hydro
+961,961,SSE,Misgeach Power Station,Hydro,0.4,1963.00,Hydro
+962,962,SSE,Morar Power Station,Hydro,0.8,1950.00,Hydro
+963,963,SSE,Nostie Bridge,Hydro,1.3,1950.00,Hydro
+964,964,SSE,Storr Lochs,Hydro,2.4,1952.00,Hydro
+965,965,SSE,Stronuich Power Station,Hydro,0.2,1957.00,Hydro
+966,966,SSE,Tobermory Power Station,Hydro,0.3,1954.00,Hydro
+967,967,SSE,Tralaig Power Station,Hydro,0.1,1956.00,Hydro
+968,968,SSE,Trinafour Power Station,Hydro,0.6,1959.00,Hydro
+969,969,SSE,Vaich Power Station,Hydro,0.3,1956.00,Hydro
+970,970,SSE,Arnish,Diesel,10.2,2001.00,Recip_diesel
+971,971,SSE,Barkip AD,Waste,2.7,2012.00,EfW
+972,972,SSE,Barra,Diesel,3.0,1990.00,Recip_diesel
+973,973,SSE,Bowmore,Diesel,6.2,1946.00,Recip_diesel
+974,974,SSE,Burghfield,Gas,50.0,1998.00,Recip_gas
+975,975,SSE,Chickerell,Gas,50.0,1998.00,Recip_gas
+976,976,SSE,Kirkwall,Diesel,16.0,1953.00,Recip_diesel
+977,977,SSE,Lerwick,Diesel,67.0,1953.00,Recip_diesel
+978,978,SSE,"Loch Carnan, South Uist",Diesel,11.5,1971.00,Recip_diesel
+979,979,SSE,Peterhead,CCGT,1180.0,1980.00,CCGT
+980,980,SSE,Stornoway,Diesel,24.0,1950.00,Recip_diesel
+981,981,SSE,Tiree,Diesel,3.0,1945.00,Recip_diesel
+982,982,SSE,Keadby,CCGT,735.0,1994.00,CCGT
+983,983,SSE,Medway,CCGT,755.0,1995.00,CCGT
+984,984,SSE,Fiddler’s Ferry GT,Gas oil,35.0,1969.00,Recip_diesel
+985,985,SSE,Fiddler’s Ferry,Coal,1961.0,1971.00,Coal
+986,986,SSE,Slough *,Biomass_wood,35.0,1918.00,Biomass_wood
+987,987,SSE,Chippenham,Gas,10.0,2002.00,Recip_gas
+988,988,SSE,Keadby GT,Gas oil,25.0,1994.00,Recip_diesel
+989,989,SSE,Pilkington - Greengate *,Gas,10.0,1998.00,Recip_gas
+990,990,SSE,Achany Windfarm,Wind,38.0,2010.00,Onshore
+991,991,SSE,"Artfield Fell Windfarm - A,C",Wind,28.6,2005.00,Onshore
+992,992,SSE,Bessy Bell Windfarm,Wind,5.0,1995.00,Onshore
+993,993,SSE,Bessy Bell Windfarm (NI) Limited,Wind,9.0,2008.00,Onshore
+994,994,SSE,Bhlaraidh Wind Farm,Wind,110.4,2017.00,Onshore
+995,995,SSE,Cathkin Braes Wind Farm,Wind,3.0,2013.00,Onshore
+996,996,SSE,Clyde Windfarm (Central),Wind,112.7,2011.00,Onshore
+997,997,SSE,Clyde Windfarm (North),Wind,108.1,2012.00,Onshore
+998,998,SSE,Clyde Windfarm (South),Wind,128.8,2011.00,Onshore
+999,999,SSE,Drumderg Windfarm,Wind,36.8,2008.00,Onshore
+1000,1000,SSE,Dunmaglass Wind Farm,Wind,94.1,2016.00,Onshore
+1001,1001,SSE,Fairburn Windfarm,Wind,40.0,2010.00,Onshore
+1002,1002,SSE,Gordonbush Wind Farm,Wind,70.0,2012.00,Onshore
+1003,1003,SSE,Greater Gabbard,Wind (offshore),504.0,2012.00,Offshore
+1004,1004,SSE,Griffin Wind Farm,Wind,188.6,2012.00,Onshore
+1005,1005,SSE,"Hadyard Hill Windfarm - A,C",Wind,119.8,2006.00,Onshore
+1006,1006,SSE,Keadby Wind Farm,Wind,68.0,2013.00,Onshore
+1007,1007,SSE,National Offshore Wind Turbine Test Facility (NOWTTF),Wind,13.2,2014.00,Onshore
+1008,1008,SSE,Port of Tilbury Wind Farm ,Wind,9.2,2013.00,Onshore
+1009,1009,SSE,Slieve Divena 2,Wind,18.8,2017.00,Onshore
+1010,1010,SSE,Slieve Kirk Windfarm,Wind,73.6,2012.00,Onshore
+1011,1011,SSE,Spurness Wind Farm II,Wind,10.0,2012.00,Onshore
+1012,1012,SSE,Strathy North,Wind,66.0,2015.00,Onshore
+1013,1013,SSE,Tangy Wind Farm - A,Wind,18.5,2002.00,Onshore
+1014,1014,SSE,Toddleburn Windfarm,Wind,27.6,2010.00,Onshore
+1015,1015,SSE,Tievenameenta Wind Farm,Wind,34.5,2017.00,Onshore
+1016,1016,SSE,Edinburgh College,Solar,0.6,2013.00,PV
+1017,1017,SSE,SSE Arena Belfast,Solar,0.4,2017.00,PV
+1018,1018,Statkraft Energy Ltd,Alltwalis Wind Farm,Wind,23.0,2009.00,Onshore
+1019,1019,Statkraft Energy Ltd,Andershaw Wind Farm,Wind,35.0,2016.00,Onshore
+1020,1020,Statkraft Energy Ltd,Baillie Wind Farm,Wind,52.5,2013.00,Onshore
+1021,1021,Statkraft Energy Ltd,Berry Burn Wind farm,Wind,66.7,2014.00,Onshore
+1022,1022,Statkraft Energy Ltd,Rheidol,Hydro,56.0,1961.00,Hydro
+1023,1023,Suez recycling and recovery,Wilton 11 EfW,Waste,49.0,2016.00,EfW
+1024,1024,Third Energy Trading Ltd,Knapton,Gas,41.5,1994.00,Recip_gas
+1025,1025,Uniper UK Limited,Cottam Development Centre,CCGT,445.0,1999.00,CCGT
+1026,1026,Uniper UK Limited,Connahs Quay,CCGT,1380.0,1996.00,CCGT
+1027,1027,Uniper UK Limited,Enfield,CCGT,408.0,1999.00,CCGT
+1028,1028,Uniper UK Limited,Grain CHP *,CCGT,1517.0,2010.00,CCGT
+1029,1029,Uniper UK Limited,Killingholme,OCGT,600.0,1994.00,OCGT
+1030,1030,Uniper UK Limited,Ratcliffe,Coal,2021.0,1968.00,Coal
+1031,1031,Uniper UK Limited,Taylor's Lane GT,Gas oil,144.0,1979.00,Recip_diesel
+1032,1032,Uniper UK Limited,Grain GT,Gas oil,56.0,1978.00,Recip_diesel
+1033,1033,Uniper UK Limited,Ratcliffe GT,Gas oil,34.0,1966.00,Recip_diesel
+1034,1034,Vattenfall,Clashindarroch,Wind,36.9,2015.00,Onshore
+1035,1035,Vattenfall,Edinbane,Wind,41.4,2010.00,Onshore
+1036,1036,Vattenfall,Kentish,Wind (offshore),90.0,2005.00,Offshore
+1037,1037,Vattenfall,Kentish Flats Extension,Wind (offshore),49.5,2015.00,Offshore
+1038,1038,Vattenfall,Ormonde,Wind (offshore),150.0,2012.00,Offshore
+1039,1039,Vattenfall,Parc Cynog,Wind,3.6,2001.00,Onshore
+1040,1040,Vattenfall,Pen y Cymoedd,Wind,228.0,2016.00,Onshore
+1041,1041,Vattenfall,Pendine,Wind,4.8,2009.00,Onshore
+1042,1042,Vattenfall,Ray,Wind,54.4,2017.00,Onshore
+1043,1043,Vattenfall,Swinford,Wind,22.0,2012.00,Onshore
+1044,1044,Vattenfall,Thanet,Wind (offshore),300.0,2010.00,Offshore
+1045,1045,Vattenfall,PV@Pendine,Solar,4.9,2016.00,PV
+1046,1046,Viridor Waste Management,Runcorn EfW,Waste,86.0,2014.00,EfW
+1047,1047,Viridor Waste Management,Ardley EfW,Waste,26.0,2014.00,EfW
+1048,1048,Viridor Waste Management,Bolton EfW,Waste,8.0,1971.00,EfW
+1049,1049,Viridor Waste Management,Cardiff EfW,Waste,30.0,2014.00,EfW
+1050,1050,Viridor Waste Management,Exeter EfW,Waste,3.5,2014.00,EfW
+1051,1051,Viridor Waste Management,Lakeside EfW,Waste,37.0,2010.00,EfW
+1052,1052,Viridor Waste Management,Peterborough EfW,Waste,7.3,2016.00,EfW
+1053,1053,VPI Immingham LLP,VPI Immingham *,CCGT,1240.0,2004.00,CCGT
+1054,1054,WPO,Airfield Poddington,Wind,8.6,2017.00,Onshore
+1055,1055,WPO,Airies,Wind,39.9,2017.00,Onshore
+1056,1056,WPO,Altaveedan,Wind,18.0,2017.00,Onshore
+1057,1057,WPO,AOE,Wind,11.5,2014.00,Onshore
+1058,1058,WPO,Arnish Moor,Wind,3.9,2006.00,Onshore
+1059,1059,WPO,Bagmoor,Wind,16.0,2009.00,Onshore
+1060,1060,WPO,Betty Hill,Wind,6.0,2013.00,Onshore
+1061,1061,WPO,Corriegarth,Wind,69.0,2016.00,Onshore
+1062,1062,WPO,Daintree,Wind,4.0,2016.00,Onshore
+1063,1063,WPO,Dewlay (Garstang),Wind,2.0,2010.00,Onshore
+1064,1064,WPO,Dungavel,Wind,26.0,2015.00,Onshore
+1065,1065,WPO,East Youlstone,Wind,4.0,2014.00,Onshore
+1066,1066,WPO,Eye,Wind,5.0,2013.00,Onshore
+1067,1067,WPO,FMC Dunfermline,Wind,1.5,2010.00,Onshore
+1068,1068,WPO,Garlenick,Wind,4.0,2015.00,Onshore
+1069,1069,WPO,Greendykeside,Wind,4.0,2007.00,Onshore
+1070,1070,WPO,Haverigg III,Wind,3.4,2005.00,Onshore
+1071,1071,WPO,Hill of Auquhirie,Wind,6.9,2013.00,Onshore
+1072,1072,WPO,Lairg,Wind,7.5,2012.00,Onshore
+1073,1073,WPO,Lochhead,Wind,6.0,2009.00,Onshore
+1074,1074,WPO,March ,Wind,1.5,2014.00,Onshore
+1075,1075,WPO,Middle Balbeggie,Wind,4.0,2016.00,Onshore
+1076,1076,WPO,Middlewick,Wind,20.7,2014.00,Onshore
+1077,1077,WPO,Mossmorran,Wind,4.6,2015.00,Onshore
+1078,1078,WPO,Newton of Fortrie,Wind,6.9,2013.00,Onshore
+1079,1079,WPO,Oakdale,Wind,4.0,2013.00,Onshore
+1080,1080,WPO,Pentland Road,Wind,13.8,2013.00,Onshore
+1081,1081,WPO,Port of Liverpool,Wind,10.0,2008.00,Onshore
+1082,1082,WPO,Potato Pot,Wind,6.0,2016.00,Onshore
+1083,1083,WPO,Scout Moor,Wind,65.0,2008.00,Onshore
+1084,1084,WPO,Solutia (Newport),Wind,5.0,2010.00,Onshore
+1085,1085,WPO,Standford Hill,Wind,4.6,2013.00,Onshore
+1086,1086,WPO,Strath of Brydock,Wind,6.9,2009.00,Onshore
+1087,1087,WPO,Tir Mostyn & Foel Goch,Wind,21.3,2005.00,Onshore
+1088,1088,WPO,Workington (Voridian),Wind,4.0,2006.00,Onshore
+1089,1089,WPO,Wythegill,Wind,1.5,2015.00,Onshore
+1090,1090,WPO,Ysgellog,Wind,4.6,2013.00,Onshore
+1091,1091,Xceco,Inner Dowsing ,Wind (offshore),97.2,2009.00,Offshore
+1092,1092,Xceco,Lynn ,Wind (offshore),97.2,2009.00,Offshore
