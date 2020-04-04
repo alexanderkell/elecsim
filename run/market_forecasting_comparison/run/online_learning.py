@@ -133,11 +133,11 @@ if __name__ == "__main__":
 
 
 
-    test_data = multi_step_dat[(multi_step_dat.time > "2016-11-28")  & (multi_step_dat.time < "2017-01-10")]
+    # test_data = multi_step_dat[(multi_step_dat.time > "2016-11-28")  & (multi_step_dat.time < "2017-01-10")]
 
 
     estimator = EstimatorSelectionHelperCreme(models, params)
-    estimator.fit_parallel(test_data)
+    estimator.fit_parallel(multi_step_dat)
 
     estimator.grid_searches
 
