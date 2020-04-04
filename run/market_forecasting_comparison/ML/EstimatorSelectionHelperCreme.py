@@ -23,6 +23,8 @@ from creme import optim
 import numpy as np
 import pandas as pd
 
+from sklearn import metrics
+
 """
 File name: EstimatorSelectionHelperCreme
 Date created: 04/04/2020
@@ -114,8 +116,15 @@ def run_creme(dat, model_to_use=None, metric=None):
         # print(type(model))
     differences_dataframe = ray.get(diffs)
     print(differences_dataframe)
-#     return int(np.mean(abs(differences_dataframe.differences)))
-    return differences_dataframe
+    error_metrics = {
+        "median_absolute_error": np.median(abs(differences_dataframe.differences)),
+        "mean_squared_error": np.mean(np.square(differences_dataframe.differences)),
+        "mean_absolute_error" : np.mean(abs(differences_dataframe.differences)),
+        "root_mean_squared_error": np.root(np.mean(np.square(differences_dataframe.differences)))
+    }
+    # return np.mean(abs(differences_dataframe.differences))
+    # return differences_dataframe
+    return error_metrics
 
 @ray.remote(num_return_vals=1)
 def run_models(dat, i, model_to_use, all_differences):
