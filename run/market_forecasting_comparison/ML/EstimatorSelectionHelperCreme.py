@@ -11,7 +11,7 @@ import json
 import ray
 from sklearn.model_selection import ParameterGrid
 from creme import linear_model
-from creme import metrics
+from creme.metrics import Rolling
 from creme import model_selection
 from creme import multioutput
 from creme import preprocessing
@@ -152,7 +152,7 @@ def run_models(dat, i, model_to_use, all_differences):
             model_to_use
         )
 
-    metric = metrics.Rolling(metrics.MAE(), 48)
+    metric = Rolling(metrics.MAE(), 48)
 
     X_y1 = stream.iter_array(X=X_stream_values, y=y_stream_values)
 
