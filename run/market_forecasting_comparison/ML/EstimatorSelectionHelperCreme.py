@@ -55,9 +55,9 @@ class EstimatorSelectionHelperCreme:
             grid_searches = {}
             param_grid = list(ParameterGrid(self.params[key]))
             for params in param_grid:
-                print("Running {}".format(self.params))
+                # print("Running {}".format(self.params))
                 for model_param_key,value in params.items():
-                    print("Running {}".format(model_param_key))
+                    # print("Running {}".format(model_param_key))
                     setattr(self.models[key],model_param_key,value)
 
                 model = self.models[key]
@@ -97,8 +97,8 @@ class EstimatorSelectionHelperCreme:
                 output.append(error)
 
             output_of_creme = ray.get(output)
-        print("self.keys: {}".format(self.keys))
-        print("output_of_creme: {}".format(output_of_creme))
+        # print("self.keys: {}".format(self.keys))
+        # print("output_of_creme: {}".format(output_of_creme))
 #             self.model_results[key] = grid_searches
         self.grid_searches = {key: out for key, out in zip(list_of_keys, output_of_creme)}
 
@@ -120,7 +120,7 @@ def run_creme(dat, model_to_use=None, metric=None):
         "median_absolute_error": np.median(abs(differences_dataframe.differences)),
         "mean_squared_error": np.mean(np.square(differences_dataframe.differences)),
         "mean_absolute_error" : np.mean(abs(differences_dataframe.differences)),
-        "root_mean_squared_error": np.root(np.mean(np.square(differences_dataframe.differences)))
+        "root_mean_squared_error": np.sqrt(np.mean(np.square(differences_dataframe.differences)))
     }
     # return np.mean(abs(differences_dataframe.differences))
     # return differences_dataframe
