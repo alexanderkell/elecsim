@@ -115,7 +115,7 @@ def run_creme(dat, model_to_use=None, metric=None):
 #         model = model_selection.online_score(X_y1, model, metric, print_every=47000)
         # print(type(model))
     differences_dataframe = ray.get(diffs)
-    print(differences_dataframe)
+    # print(differences_dataframe)
     error_metrics = {
         "median_absolute_error": np.median(abs(differences_dataframe.differences)),
         "mean_squared_error": np.mean(np.square(differences_dataframe.differences)),
