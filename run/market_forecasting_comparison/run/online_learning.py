@@ -55,14 +55,14 @@ models = {
 }
 
 params = {
-    'PassiveAggressiveRegressor': {'C': [0.1, 1, 2], "fit_intercept": [True, False], "max_iter": [1, 10, 100, 1000], "shuffle": [False], 'tol':[0.001]},
+    'PassiveAggressiveRegressor': {'C': [0.1, 1, 2], "fit_intercept": [True, False], "max_iter": [1, 10, 100, 1000], "shuffle": [False], 'tol': [0.001]},
     'LinearRegression': {},
     'BoxCoxRegressor': {'power': [0.1, 0.05, 0.01]},
 #     'KNeighborsRegressor': {},
     'SoftmaxRegression': {},
     'MLPRegressor': {
-        "solver": {'lbfgs', 'sgd', 'adam'},
-        'learning_rate': {'constant', 'invscaling', 'adaptive'},
+        "solver": ['adam'],
+        'learning_rate': ['constant', 'adaptive'],
         'hidden_layer_sizes': {(10,50,100), (10), (20),(50), (10,50)},
     },
 }
