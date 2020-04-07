@@ -114,14 +114,9 @@ def run_creme(dat, model_to_use=None, metric=None):
 
 #         model = model_selection.online_score(X_y1, model, metric, print_every=47000)
         # print(type(model))
-    differences_dataframe = ray.get(diffs)
+    error_metrics = ray.get(diffs)
     # print(differences_dataframe)
-    error_metrics = {
-        "median_absolute_error": np.median(abs(differences_dataframe.differences)),
-        "mean_squared_error": np.mean(np.square(differences_dataframe.differences)),
-        "mean_absolute_error" : np.mean(abs(differences_dataframe.differences)),
-        "root_mean_squared_error": np.sqrt(np.mean(np.square(differences_dataframe.differences)))
-    }
+
     # return np.mean(abs(differences_dataframe.differences))
     # return differences_dataframe
     return error_metrics
@@ -172,6 +167,13 @@ def run_models(dat, i, model_to_use, all_differences):
         #     flattened_differences = np.concatenate(all_differences, axis=0).flatten()
         differences_dataframe = pd.DataFrame({'differences':all_differences})
 #         diff_results = int(np.mean(abs(differences_dataframe.differences)))
-    return differences_dataframe
+
+        error_metrics = {
+            "median_absolute_error": np.median(abs(differences_dataframe.differences)),
+            "mean_squared_error": np.mean(np.square(differences_dataframe.differences)),
+            "mean_absolute_error" : np.mean(abs(differences_dataframe.differences)),
+            "root_mean_squared_error": np.sqrt(np.mean(np.square(differences_dataframe.differences)))
+        }
+    return error_metrics
 
 
