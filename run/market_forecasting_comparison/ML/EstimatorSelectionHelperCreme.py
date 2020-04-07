@@ -91,7 +91,9 @@ class EstimatorSelectionHelperCreme:
 
                 model = self.models[key]
 
-                error = run_creme.remote(dat, model)
+                # error = run_creme.remote(dat, model)
+                error = run_creme(dat, model)
+
 #                 print(error)
                 params_string = json.dumps(params)
 #                 grid_searches[params_string] = error
@@ -105,7 +107,7 @@ class EstimatorSelectionHelperCreme:
         self.grid_searches = {key: out for key, out in zip(list_of_keys, output_of_creme)}
 
 
-@ray.remote(num_return_vals=1)
+# @ray.remote(num_return_vals=1)
 def run_creme(dat, model_to_use=None, metric=None):
     all_differences = []
     results = []
