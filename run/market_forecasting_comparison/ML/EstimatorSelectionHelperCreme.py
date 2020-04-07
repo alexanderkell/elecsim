@@ -23,6 +23,8 @@ from creme import optim
 import numpy as np
 import pandas as pd
 
+import multiprocessing
+
 # from sklearn import metrics
 
 """
@@ -72,7 +74,7 @@ class EstimatorSelectionHelperCreme:
 
     def fit_parallel(self, dat, n_jobs=3, verbose=1):
         ray.shutdown()
-        ray.init(object_store_memory=int(220000000000))
+        ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
         output = []
         list_of_keys = []
         for key in self.keys:
