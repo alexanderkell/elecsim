@@ -74,7 +74,8 @@ class EstimatorSelectionHelperCreme:
 
     def fit_parallel(self, dat, n_jobs=3, verbose=1):
         ray.shutdown()
-        ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
+        # ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
+        ray.init(object_store_memory=int(2200000000), num_cpus=multiprocessing.cpu_count()-1)
         output = []
         list_of_keys = []
         for key in self.keys:
@@ -84,7 +85,7 @@ class EstimatorSelectionHelperCreme:
             grid_searches = {}
             param_grid = list(ParameterGrid(self.params[key]))
             for params in param_grid:
-                print("Running {}".format(self.params))
+                # print("Running {}".format(self.params))
                 for model_param_key,value in params.items():
 #                     print("Running {}".format(model_param_key))
                     setattr(self.models[key],model_param_key,value)
