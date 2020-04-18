@@ -76,6 +76,7 @@ class EstimatorSelectionHelperCreme:
         ray.shutdown()
         # ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
         ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-6)
+        # ray.init()
         output = []
         list_of_keys = []
         for key in self.keys:
@@ -101,7 +102,9 @@ class EstimatorSelectionHelperCreme:
                 list_of_keys.append(params_string)
                 output.append(error)
 
-            output_of_creme = ray.get(output)
+            # output_of_creme = ray.get(output)
+            output_of_creme = output
+
         # print("self.keys: {}".format(self.keys))
         # print("output_of_creme: {}".format(output_of_creme))
 #             self.model_results[key] = grid_searches
