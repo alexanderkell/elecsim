@@ -54,8 +54,8 @@ class MarketServing(ExternalMultiAgentEnv):
         
         ExternalMultiAgentEnv.__init__(
             self,
-            MultiDiscrete([16, 10]),
-            # Discrete(29, shape=(1, 2)),
+            # MultiDiscrete([16, 10]),
+            Discrete(16),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
         )
@@ -107,7 +107,8 @@ if __name__ == "__main__":
 
     tune.run_experiments({
         "my_experiment": {
-            "run": "PG",
+            # "run": "PG",
+            "run": "DQN",
             "env": "srv",
             'checkpoint_at_end': True,
             'checkpoint_freq': 5,
