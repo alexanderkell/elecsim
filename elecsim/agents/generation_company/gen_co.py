@@ -208,8 +208,8 @@ class GenCo(Agent):
         print("action: {}".format(action))
         # plant_string_to_invest = plant_list[action.item(0)]
         number_of_plants = 1
-        action = action - 1
-        if action > len(plant_list):
+        # action = action - 1
+        if action >= len(plant_list):
             number_of_plants = action//len(plant_list)
             action = action % len(plant_list)
 
