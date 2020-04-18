@@ -207,12 +207,14 @@ class GenCo(Agent):
         plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
         print("action: {}".format(action))
         # plant_string_to_invest = plant_list[action.item(0)]
+        number_of_plants = 1
         if action > len(plant_list):
             number_of_plants = action//len(plant_list)
             action = action % len(plant_list)
 
-        print("number_of_plants: {}".format(number_of_plants))
-        print("action: {}".format(action))
+        # print("len(plant_list): {}".format(len(plant_list)))
+        # print("number_of_plants: {}".format(number_of_plants))
+        # print("action: {}".format(action))
 
         plant_string_to_invest = plant_list[action]
         plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.contains(plant_string_to_invest)]
