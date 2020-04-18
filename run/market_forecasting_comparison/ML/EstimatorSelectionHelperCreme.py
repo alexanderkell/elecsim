@@ -119,12 +119,14 @@ def run_creme(dat, model_to_use=None, metric=None):
 
 #         model = model_selection.online_score(X_y1, model, metric, print_every=47000)
         # print(type(model))
-    error_metrics = ray.get(diffs)
+    # error_metrics = ray.get(diffs)
+
     # print(differences_dataframe)
 
     # return np.mean(abs(differences_dataframe.differences))
     # return differences_dataframe
-    return error_metrics
+    # return error_metrics
+    return results
 
 @ray.remote(num_return_vals=1)
 def run_models(dat, i, model_to_use, all_differences):
