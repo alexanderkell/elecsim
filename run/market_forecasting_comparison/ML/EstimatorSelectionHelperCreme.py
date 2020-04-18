@@ -75,7 +75,7 @@ class EstimatorSelectionHelperCreme:
     def fit_parallel(self, dat, n_jobs=3, verbose=1):
         ray.shutdown()
         # ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
-        ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-20)
+        ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-20, num_redis_shards=7)
         # ray.init()
         output = []
         list_of_keys = []
