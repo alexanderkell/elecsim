@@ -22,9 +22,9 @@ from creme import optim
 
 import numpy as np
 import pandas as pd
-
+from tqdm import tqdm
 import multiprocessing
-
+from joblib import Parallel, delayed
 # from sklearn import metrics
 
 """
@@ -75,7 +75,7 @@ class EstimatorSelectionHelperCreme:
     def fit_parallel(self, dat, n_jobs=3, verbose=1):
         ray.shutdown()
         # ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
-        ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-20, num_redis_shards=7)
+        # ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-20, num_redis_shards=7)
         # ray.init()
         output = []
         list_of_keys = []
@@ -115,10 +115,16 @@ class EstimatorSelectionHelperCreme:
 def run_creme(dat, model_to_use=None, metric=None):
     all_differences = []
     results = []
-    for i in range(0,24):
 
-        diffs = run_models.remote(dat, i, model_to_use, all_differences)
-        results.append(diffs)
+    # diffs = run_models.remote(dat, i, model_to_use, all_differences)
+    # results.append(diffs)
+    # results = Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_models)(dat, i, model_to_use, all_differences)for i in tqdm(range(0, 24))))
+    results = Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_models)(dat, i, model_to_use, all_differences) for i in tqdm(range(0,24)))
+
+    # for i in range(0,24):
+
+        # diffs = run_models.remote(dat, i, model_to_use, all_differences)
+        # results.append(diffs)
 
 #         model = model_selection.online_score(X_y1, model, metric, print_every=47000)
         # print(type(model))
@@ -131,7 +137,7 @@ def run_creme(dat, model_to_use=None, metric=None):
     # return error_metrics
     return results
 
-@ray.remote(num_return_vals=1)
+# @ray.remote(num_return_vals=1)
 def run_models(dat, i, model_to_use, all_differences):
 
     X_stream = dat[dat.year<2018].filter(regex='^(?!.*value|working_day|season|time).*$')#.values.astype(np.float32)
