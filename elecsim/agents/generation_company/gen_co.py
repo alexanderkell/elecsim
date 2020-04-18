@@ -205,7 +205,7 @@ class GenCo(Agent):
 
     def invest_RL(self, action):
         plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
-        print("action: {}".format(action))
+        # print("action: {}".format(action))
         # plant_string_to_invest = plant_list[action.item(0)]
         number_of_plants = 1
         if action > len(plant_list):
