@@ -55,7 +55,7 @@ class MarketServing(ExternalMultiAgentEnv):
         ExternalMultiAgentEnv.__init__(
             self,
             # MultiDiscrete([16, 10]),
-            Discrete(160),
+            Discrete(159),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
         )
