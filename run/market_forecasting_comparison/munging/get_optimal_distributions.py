@@ -34,11 +34,11 @@ def dict_to_results_df(results_dict):
 
 
 
-results_dict = pickle.load( open( '/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/data/results/demand_initial_exploration-2020-04-19 09_19_00.102190-select-few-groupby-day-season.csv', "rb" ) )
+results_dict = pickle.load( open( '../data/results/demand_initial_exploration-2020-04-19 09_19_00.102190-select-few-groupby-day-season.csv', "rb" ) )
 residuals = dict_to_results_df(results_dict)
 residuals = {f'{k}-groupby': v for k, v in residuals.items()}
 
-results_no_work_day = pickle.load( open( '/Users/b1017579/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/data/results/demand_initial_exploration-2020-04-19 11_11_17.690094-no-workday-season-groupby.csv', "rb" ) )
+results_no_work_day = pickle.load( open( '../data/results/demand_initial_exploration-2020-04-19 11_11_17.690094-no-workday-season-groupby.csv', "rb" ) )
 
 merged_dict = {**residuals, **results_no_work_day}
 
