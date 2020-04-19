@@ -58,5 +58,7 @@ def find_distributions(results, results_dict):
 # for result in merged_dict:
 #     find_distributions(result, merged_dict)
 
-Parallel(n_jobs=62)(delayed(find_distributions)(result, merged_dict) for result in merged_dict)
+final_result = Parallel(n_jobs=62)(delayed(find_distributions)(result, merged_dict) for result in merged_dict)
 
+with open('final_result_distributions.pickle', 'wb') as handle:
+    pickle.dump(final_result, handle)
