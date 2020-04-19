@@ -94,7 +94,8 @@ class EstimatorSelectionHelperCreme:
                 model = self.models[key]
 
                 # error = run_creme.remote(dat, model)
-                error = run_creme(dat, model)
+                # error = run_creme(dat, model)
+                error = dat.groupby(['season', 'working_day']).apply(run_creme, (model))
 
 #                 print(error)
                 params_string = json.dumps(params)
