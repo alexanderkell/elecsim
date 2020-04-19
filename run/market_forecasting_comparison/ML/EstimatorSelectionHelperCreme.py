@@ -112,6 +112,11 @@ class EstimatorSelectionHelperCreme:
         self.grid_searches = {key: out for key, out in zip(list_of_keys, output_of_creme)}
 
 
+
+def applyParallel(dfGrouped, func):
+    retLst = Parallel(n_jobs=multiprocessing.cpu_count())(delayed(func)(group) for name, group in dfGrouped)
+    return pd.concat(retLst)
+
 # @ray.remote(num_return_vals=1)
 def run_creme(dat, model_to_use=None, metric=None):
     all_differences = []
