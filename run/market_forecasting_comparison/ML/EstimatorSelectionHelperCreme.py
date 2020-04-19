@@ -196,6 +196,6 @@ def run_models(dat, i, model_to_use, all_differences):
             "mean_absolute_error" : np.mean(abs(differences_dataframe.differences)),
             "root_mean_squared_error": np.sqrt(np.mean(np.square(differences_dataframe.differences)))
         }
-    return error_metrics
-
+    # return error_metrics
+    return differences_dataframe
 
