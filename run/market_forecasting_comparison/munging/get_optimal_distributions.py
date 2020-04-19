@@ -45,11 +45,12 @@ merged_dict = {**residuals, **results_no_work_day}
 result_distributions = {}
 
 
+
 def find_distributions(results, results_dict):
     try:
-        f = Fitter(results[results])
+        f = Fitter(results_dict[results])
     except:
-        f = Fitter(results[results][0])
+        f = Fitter(results_dict[results][0])
     f.fit()
     result_distributions[results] = f.summary()
     return result_distributions
@@ -57,5 +58,5 @@ def find_distributions(results, results_dict):
 # for result in merged_dict:
 #     find_distributions(result, merged_dict)
 
-Parallel(n_jobs=62)(delayed(find_distributions)(result, merged_dict) for result in merged_dict)
+# Parallel(n_jobs=62)(delayed(find_distributions)(result, merged_dict) for result in merged_dict)
 
