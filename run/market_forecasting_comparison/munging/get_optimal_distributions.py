@@ -46,7 +46,10 @@ result_distributions = {}
 
 
 def find_distributions(results, results_dict):
-    f = Fitter(results[results][0])
+    try:
+        f = Fitter(results[results])
+    except:
+        f = Fitter(results[results][0])
     f.fit()
     result_distributions[results] = f.summary()
     return result_distributions
