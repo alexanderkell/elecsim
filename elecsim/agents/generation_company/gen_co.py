@@ -222,7 +222,12 @@ class GenCo(Agent):
         plant_string_to_invest = plant_list[action]
         plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.contains(plant_string_to_invest)]
 
-        number_of_plants_needed = multiplier_of_100mw*(plant.Plant_Size.values[0]/100)
+        number_of_plants_needed = (multiplier_of_100mw*100)/(plant.Plant_Size.values[0])
+
+        print("number_of_plants_needed: {}".format(number_of_plants_needed))
+        print("MW required: {}".format(multiplier_of_100mw*100))
+        print("plant.Plant_Size.values[0]: {}".format(plant.Plant_Size.values[0]))
+
         # For multi discrete action type
         # plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], action.item(1))
         # For discrete action type
