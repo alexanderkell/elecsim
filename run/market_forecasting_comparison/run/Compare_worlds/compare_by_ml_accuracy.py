@@ -13,6 +13,7 @@ import sys
 import pickle
 import ray
 from elecsim.model.world import World
+import numpy as np
 
 import tracemalloc
 from elecsim.constants import ROOT_DIR
@@ -52,11 +53,11 @@ number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 # print("ROOT_DIR: {}".format(ROOT_DIR))
 
-scenario_file = "{}/scenario/scenario_data.py".format(ROOT_DIR)
+scenario_file = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
 @ray.remote
-def run_world(num_steps=number_of_steps, demand_distribution=None):
-    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="results", number_of_steps=number_of_steps, scenario_file=scenario_file, demand_distribution=demand_distribution)
+def run_world(num_steps=number_of_steps, demand_distribution=None, long_term_fitting_params=None):
+    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="results", number_of_steps=number_of_steps, scenario_file=scenario_file, demand_distribution=demand_distribution, long_term_fitting_params=prices_individual)
     for i in range(num_steps):
         world.step()
 
@@ -64,6 +65,13 @@ def run_world(num_steps=number_of_steps, demand_distribution=None):
 # results = []
 if __name__ == '__main__':
     ray.init()
+
+    beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0, -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668, 39.791132970522796, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.9117317131295195, 0.00240696026847, -5.0144941135222, 0.00021183142492999999, -1.29658413335784, 0.00039441444392000004, -11.41659250225168, 0.00039441444392000004, -11.41659250225168, 120.21276910611674, 0.0, 0.00059945111227]
+    # beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0, -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668, 39.791132970522796, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.9117317131295195, 0.00240696026847, -5.0144941135222, 0.00021183142492999999, -1.29658413335784, 0.00039441444392000004, -11.41659250225168, 0.0021988838824299997, 12.633572943294599, 120.21276910611674, 0.0, 0.00059945111227]
+
+    prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
+
+
     result_distributions_object = pickle.load(open("{}/../run/market_forecasting_comparison/data/distribution_objects/result_distributions_object.p".format(ROOT_DIR), "rb"))
     print(result_distributions_object)
     for resultant_dists in result_distributions_object:
@@ -71,11 +79,11 @@ if __name__ == '__main__':
 
         dist_class = eval(list(result_distributions_object[resultant_dists].fitted_param.keys())[0] + ".rvs")
         dist_object = dist_class(*list(result_distributions_object[resultant_dists].fitted_param.values())[0],
-                                 size=10000)
+                                 size=50000)
         print(dist_object)
         for j in range(150):
 
-            run_world.remote(number_of_steps, dist_object)
+            run_world.remote(number_of_steps, dist_object, prices_individual)
 
         time.sleep(30)
 
