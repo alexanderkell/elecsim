@@ -21,12 +21,13 @@ __email__ = "Alexander@Kell.es"
 
 class PowerExchange:
 
-    def __init__(self, model):
+    def __init__(self, model, demand_distribution=None):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
         :param model: Model in which the agents are contained in.
         """
         self.model = model
+        self.demand_distribution = demand_distribution
         self.hold_duration_curve_prices = []
         self.price_duration_curve = pd.DataFrame(columns=["year", "segment_hour", "segment_demand", "accepted_price"])
 

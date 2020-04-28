@@ -97,15 +97,17 @@ class World(Model):
         self.last_added_plant_bids = None
 
         # Create PowerExchange
+
         if self.market_time_splices == 1:
-            self.PowerExchange = PowerExchange(self)
+            self.PowerExchange = PowerExchange(self, demand_distribution)
             self.demand = Demand(self, self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff)
         elif self.market_time_splices > 1:
-            self.PowerExchange = PowerExchange(self)
+            self.PowerExchange = PowerExchange(self, demand_distribution)
             # self.PowerExchange = HighTemporalExchange(self)
             self.demand = MultiDayDemand(self, self.unique_id_generator, elecsim.scenario.scenario_data.multi_year_data)
         else:
             raise ValueError("market_time_splices must be equal to or larger than 1.")
+
 
         self.running = True
         self.beginning_of_year = False
@@ -152,7 +154,7 @@ class World(Model):
             else:
                 print("{}:".format(self.year_number), end='', flush=True)
 
-        obs = self.schedule.step()
+        # obs = self.schedule.step()
         self.operate_constructed_plants()
 
         if self.over_invested:
