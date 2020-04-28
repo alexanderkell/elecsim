@@ -152,6 +152,7 @@ class World(Model):
             self.dismantle_old_plants()
             self.dismantle_unprofitable_plants()
 
+        print("self.demand.segment_consumption: {}".format(self.demand.segment_consumption))
         self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption)
         self.PowerExchange.price_duration_curve = []
 
