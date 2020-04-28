@@ -29,14 +29,14 @@ __email__ = "alexander@kell.es"
 logging.basicConfig(level=logging.INFO)
 
 MARKET_TIME_SPLICES = 8
-YEARS_TO_RUN = 15
+YEARS_TO_RUN = 25
 number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 scenario_file = "{}/../../../../scenario/scenario_data.py".format(ROOT_DIR)
 
 # @ray.remote
-def run_world(num_steps=number_of_steps, demand_change):
-    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="results", number_of_steps=number_of_steps, scenario_file=scenario_file, demand_change=demand_distribution)
+def run_world(num_steps=number_of_steps, demand_distribution):
+    world = World(initialization_year=2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="results", number_of_steps=number_of_steps, scenario_file=scenario_file, demand_distribution=demand_distribution)
     for i in range(num_steps):
         world.step()
 
@@ -44,6 +44,7 @@ def run_world(num_steps=number_of_steps, demand_change):
 # results = []
 if __name__ == '__main__':
     for j in range(150):
+
         run_world(number_of_steps, demand_distribution)
 
     time.sleep(30)

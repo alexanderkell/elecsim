@@ -45,7 +45,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl = None):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
