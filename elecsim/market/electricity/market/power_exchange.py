@@ -6,6 +6,7 @@ import pandas as pd
 
 from elecsim.market.electricity.bid import Bid
 import elecsim.scenario.scenario_data
+from random import sample
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ __email__ = "Alexander@Kell.es"
 
 class PowerExchange:
 
-    def __init__(self, model, demand_distribution=None):
+    def __init__(self, model, demand_distribution=[0]):
         """
         Power exchange agent which contains functionality to tender and respond to bids.
         :param model: Model in which the agents are contained in.
@@ -69,11 +70,14 @@ class PowerExchange:
 
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
-            logger.debug("segment hour: {}".format(segment_hour))
+
             highest_bid = self._accept_bids(accepted_bids)
             # highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
 
-            self._create_load_duration_price_curve(segment_hour, segment_demand, highest_bid)
+            # print("segment hour: {}".format(segment_demand))
+            # print("segment_demand + sample(self.segment_demand, 1): {}".format(segment_demand + sample(self.demand_distribution, 1)[0]))
+
+            self._create_load_duration_price_curve(segment_hour, segment_demand + sample(self.demand_distribution, 1)[0], highest_bid)
 
         self.price_duration_curve = pd.DataFrame(self.hold_duration_curve_prices)
         if predict:
