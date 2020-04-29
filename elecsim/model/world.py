@@ -45,7 +45,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -81,6 +81,7 @@ class World(Model):
         self.override_demand_change(demand_change)
 
         self.demand_distribution_uncertainty = demand_distribution
+        self.distribution_name = distribution_name
 
         self.override_total_demand(total_demand, number_of_agents)
 
@@ -526,11 +527,11 @@ class World(Model):
             if not os.path.exists(directory):
                 os.makedirs(directory)
             self.datacollector.get_model_vars_dataframe().to_csv(
-                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
+                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}.csv".format(directory, self.demand_change_name,
                                                                             self.carbon_scenario_name,
                                                                             dt.datetime.now().strftime(
                                                                                 '%Y-%m-%d_%H-%M-%S'),
-                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]))
+                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]), self.distribution_name)
 
         if self.step_number == self.max_number_of_steps:
             end = perf_counter()
