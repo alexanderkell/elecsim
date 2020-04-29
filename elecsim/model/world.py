@@ -154,7 +154,7 @@ class World(Model):
             else:
                 print("{}:".format(self.year_number), end='', flush=True)
 
-        # obs = self.schedule.step()
+        obs = self.schedule.step()
         self.operate_constructed_plants()
 
         if self.over_invested:
