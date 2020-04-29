@@ -2,7 +2,7 @@ from creme import linear_model
 from creme import meta
 from creme import neighbors
 from sklearn import neural_network
-
+from joblib import Parallel, delayed
 from creme import compat
 from creme import model_selection
 from sklearn.model_selection import ParameterGrid
