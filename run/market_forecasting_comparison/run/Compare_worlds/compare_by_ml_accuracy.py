@@ -5,8 +5,8 @@ import os
 import os.path
 import sys
 from datetime import date, datetime, timedelta
-sys.path.insert(os.path.join(os.path.dirname(os.path.realpath('__file__')), '../../../..'))
-# sys.path.insert(0, 'home/alexkell/elecsim3/elecsim')
+sys.path.insert(os.path.join(os.path.dirname(os.path.realpath('__file__')), '../../..'))
+sys.path.insert(0, 'home/alexkell/elecsim3/elecsim')
 ROOT_DIR = os.path.join(os.path.dirname(os.path.realpath('__file__')), '')
 from joblib import Parallel, delayed
 import os.path
