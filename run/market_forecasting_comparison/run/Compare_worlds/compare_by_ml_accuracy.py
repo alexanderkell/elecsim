@@ -1,7 +1,7 @@
 #! /bin/env python3
 import os
 
-import pytz
+# import pytz
 import os.path
 import sys
 from datetime import date, datetime, timedelta
