@@ -140,8 +140,8 @@ if __name__ == '__main__':
         dist_object = dist_class(*list(result_distributions_object[resultant_dists].fitted_param.values())[0], size=50000).tolist()
 
         # print(dist_object))
-        run_world(carbon_list, resultant_dists, dist_object)
-        # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(dist_object, resultant_dists, carbon_list) for i in tqdm(range(0, 100)))
+        # run_world(carbon_list, resultant_dists, dist_object)
+        Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
         # time.sleep(30)
