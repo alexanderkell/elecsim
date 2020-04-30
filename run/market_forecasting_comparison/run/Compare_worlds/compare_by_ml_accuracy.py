@@ -20,12 +20,6 @@ from tqdm import tqdm
 import multiprocessing
 
 import sys
-import warnings
-
-if not sys.warnoptions:
-        warnings.simplefilter("ignore")
-
-
 
 import numpy as np
 # import multiprocessing
