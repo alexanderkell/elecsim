@@ -5,9 +5,10 @@ import os
 import os.path
 import sys
 from datetime import date, datetime, timedelta
-sys.path.append(os.path.join(os.path.dirname(os.path.realpath('__file__')), '../../..'))
-sys.path.insert(0, 'home/alexkell/elecsim3')
-ROOT_DIR = os.path.join(os.path.dirname(os.path.realpath('__file__')), '')
+# sys.path.append(os.path.join(os.path.dirname(os.path.realpath('__file__')), '../../..'))
+# sys.path.insert(0, 'home/alexkell/elecsim3')
+# ROOT_DIR = os.path.join(os.path.dirname(os.path.realpath('__file__')), '')
+ROOT_DIR = "~/elecsim3/elecsim/"
 from joblib import Parallel, delayed
 import os.path
 import sys
@@ -17,6 +18,12 @@ from elecsim.model.world import World
 
 from tqdm import tqdm
 import multiprocessing
+
+import sys
+import warnings
+
+if not sys.warnoptions:
+        warnings.simplefilter("ignore")
 
 
 
@@ -116,14 +123,14 @@ if __name__ == '__main__':
     YEARS_TO_RUN = 17
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
-    scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
+    scenario_2018 = "reference_scenario_2018.py".format(ROOT_DIR)
 
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
-    carbon_df = pd.read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/data/carbon_tax.csv')
+    carbon_df = pd.read_csv('linear_data_exploded.csv'.format(ROOT_DIR))
     carbon_list = carbon_df.x.tolist()
 
-    result_distributions_object = pickle.load(open("{}/../run/market_forecasting_comparison/data/distribution_objects/result_distributions_object.p".format(ROOT_DIR), "rb"))
+    result_distributions_object = pickle.load(open("result_distributions_object.p".format(ROOT_DIR), "rb"))
     # print(result_distributions_object)
     for resultant_dists in result_distributions_object:
         # print(resultant_dists)
