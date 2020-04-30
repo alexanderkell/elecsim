@@ -6,7 +6,7 @@ import os.path
 import sys
 from datetime import date, datetime, timedelta
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath('__file__')), '../../..'))
-sys.path.insert(0, 'home/alexkell/elecsim3')
+sys.path.insert(0, 'home/alexkell/elecsim3/elec')
 ROOT_DIR = os.path.join(os.path.dirname(os.path.realpath('__file__')), '')
 from joblib import Parallel, delayed
 import os.path
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
-    carbon_df = pd.read_csv('{}/../run/market_forecasting_comparison/data/carbon_tax.csv'.format(ROOT_DIR))
+    carbon_df = pd.read_csv('{}/../run/market_forecasting_comparison/data/carbon_tax/linear_data_exploded.csv'.format(ROOT_DIR))
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = pickle.load(open("{}/../run/market_forecasting_comparison/data/distribution_objects/result_distributions_object.p".format(ROOT_DIR), "rb"))
