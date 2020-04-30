@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
-    carbon_df = pd.read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/data/carbon_tax.csv')
+    carbon_df = pd.read_csv('{}/../run/market_forecasting_comparison/data/carbon_tax.csv'.format(ROOT_DIR))
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = pickle.load(open("{}/../run/market_forecasting_comparison/data/distribution_objects/result_distributions_object.p".format(ROOT_DIR), "rb"))
