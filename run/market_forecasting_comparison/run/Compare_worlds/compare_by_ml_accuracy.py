@@ -76,7 +76,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 2
+    YEARS_TO_RUN = 25
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
     scenario_2018 = "{}/scenario/reference_scenario_beis_2018.py".format(ROOT_DIR)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        # Parallel(n_jobs=1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
+        # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
         # time.sleep(30)
