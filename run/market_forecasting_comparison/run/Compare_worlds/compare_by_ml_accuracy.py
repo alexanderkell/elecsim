@@ -79,7 +79,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
     YEARS_TO_RUN = 17
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
-    scenario_2018 = "reference_scenario_beis_2018.py".format(ROOT_DIR)
+    scenario_2018 = "reference_scenario_2018.py".format(ROOT_DIR)
 
     # if individual[0] == 1:
     #     individual = [individual[1]*i + individual[2] for i in range(1, 20)]
