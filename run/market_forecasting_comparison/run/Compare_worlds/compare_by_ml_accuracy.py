@@ -63,7 +63,8 @@ number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 # print("ROOT_DIR: {}".format(ROOT_DIR))
 
-scenario_file = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
+scenario_file = "{}/scenario/reference_scenario_beis_2018.py".format(ROOT_DIR)
+
 # scenario_file = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
 # @ray.remote
@@ -75,10 +76,10 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
     prices_individual = np.array(beis_params[:-3]).reshape(-1, 2).tolist()
 
     MARKET_TIME_SPLICES = 8
-    YEARS_TO_RUN = 17
+    YEARS_TO_RUN = 2
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
-    scenario_2018 = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
+    scenario_2018 = "{}/scenario/reference_scenario_beis_2018.py".format(ROOT_DIR)
 
     # if individual[0] == 1:
     #     individual = [individual[1]*i + individual[2] for i in range(1, 20)]
