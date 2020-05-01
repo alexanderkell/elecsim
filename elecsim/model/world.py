@@ -536,7 +536,7 @@ class World(Model):
                                                                                                elecsim.scenario.scenario_data.segment_demand_diff[
                                                                                                    -1], self.distribution_name)
 
-            directory_filename = "{}/{}.csv".format(filename)
+            directory_filename = "{}/{}.csv".format(directory, filename)
 
             results_df = self.datacollector.get_model_vars_dataframe()
             results_df.to_csv(directory_filename)
@@ -556,8 +556,8 @@ class World(Model):
             access_token = 'J0BrnIaGJ78AAAAAAABLCd6RWS4T1JQwhKCtYcdWTdyE--pvA0-DfNIt4OUnUZQx'
             transferData = TransferData(access_token)
 
-            file_from = directory_filename
-            file_to = filename
+            file_from = "/{}".format(directory_filename)
+            file_to = "/{}".format(filename)
 
             # API v2
             transferData.upload_file(file_from, file_to)
