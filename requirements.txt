@@ -77,7 +77,6 @@ linetimer==0.1.0
 lz4==2.1.6
 Markdown==3.0.1
 MarkupSafe==1.1.0
-matlabengineforpython===R2020a
 matplotlib==3.0.3
 mccabe==0.6.1
 Mesa==0.8.5
