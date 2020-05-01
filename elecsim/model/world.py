@@ -5,6 +5,7 @@ from random import uniform, randint, sample
 from time import perf_counter
 import importlib.util
 import time
+import dropbox
 
 import numpy as np
 import pandas as pd
@@ -526,12 +527,45 @@ class World(Model):
             directory = "{}/{}/".format(parent_directory, self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            self.datacollector.get_model_vars_dataframe().to_csv(
-                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}.csv".format(directory, self.demand_change_name,
-                                                                            self.carbon_scenario_name,
-                                                                            dt.datetime.now().strftime(
-                                                                                '%Y-%m-%d_%H-%M-%S'),
-                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]), self.distribution_name)
+
+            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}.csv".format(
+                                                                                               self.demand_change_name,
+                                                                                               self.carbon_scenario_name,
+                                                                                               dt.datetime.now().strftime(
+                                                                                                   '%Y-%m-%d_%H-%M-%S'),
+                                                                                               elecsim.scenario.scenario_data.segment_demand_diff[
+                                                                                                   -1], self.distribution_name)
+
+            directory_filename = "{}/{}.csv".format(filename)
+
+            results_df = self.datacollector.get_model_vars_dataframe()
+            results_df.to_csv(directory_filename)
+
+            class TransferData:
+                def __init__(self, access_token):
+                    self.access_token = access_token
+
+                def upload_file(self, file_from, file_to):
+                    """upload a file to Dropbox using API v2
+                    """
+                    dbx = dropbox.Dropbox(self.access_token)
+
+                    with open(file_from, 'rb') as f:
+                        dbx.files_upload(f.read(), file_to)
+
+            access_token = 'J0BrnIaGJ78AAAAAAABLCd6RWS4T1JQwhKCtYcdWTdyE--pvA0-DfNIt4OUnUZQx'
+            transferData = TransferData(access_token)
+
+            file_from = directory_filename
+            file_to = filename
+
+            # API v2
+            transferData.upload_file(file_from, file_to)
+
+
+
+
+
 
         if self.step_number == self.max_number_of_steps:
             end = perf_counter()
