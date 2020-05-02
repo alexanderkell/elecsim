@@ -97,7 +97,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
                 print('end of year')
                 pass
             world.step()
-    # return None
+    return None
 
 
 # @ray.remote
@@ -128,8 +128,10 @@ if __name__ == '__main__':
 
     result_distributions_object = pickle.load(open("result_distributions_object.p".format(ROOT_DIR), "rb"))
     print(type(result_distributions_object))
+    print(result_distributions_object)
+    result_distributions_object.pop('{"C": 0.1, "fit_intercept": true, "max_iter": 1, "shuffle": false, "tol": 0.001}')
 
-    for resultant_dists in result_distributions_object.items()[1:]:
+    for resultant_dists in result_distributions_object:
         print("Iterating resultant_dists")
 
         dist_class = eval(list(result_distributions_object[resultant_dists].fitted_param.keys())[0] + ".rvs")
