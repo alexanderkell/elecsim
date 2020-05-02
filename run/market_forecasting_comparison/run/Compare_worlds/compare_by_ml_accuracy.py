@@ -141,7 +141,8 @@ if __name__ == '__main__':
 
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
-        Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
+        # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
+        Parallel(n_jobs=multiprocessing.cpu_count()-1)(run_world(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
