@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
         # time.sleep(30)
 
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+    # os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
 
