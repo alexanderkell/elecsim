@@ -95,7 +95,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
             # try:
             if i/8 == 0:
                 print('end of year')
-
+                pass
             world.step()
     # return None
 
@@ -127,9 +127,10 @@ if __name__ == '__main__':
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = pickle.load(open("result_distributions_object.p".format(ROOT_DIR), "rb"))
-    # print(result_distributions_object)
-    for resultant_dists in result_distributions_object:
-        # print(resultant_dists)
+    print(type(result_distributions_object))
+
+    for resultant_dists in result_distributions_object.items()[1:]:
+        print("Iterating resultant_dists")
 
         dist_class = eval(list(result_distributions_object[resultant_dists].fitted_param.keys())[0] + ".rvs")
         dist_object = dist_class(*list(result_distributions_object[resultant_dists].fitted_param.values())[0], size=50000).tolist()
