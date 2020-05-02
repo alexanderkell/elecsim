@@ -135,8 +135,10 @@ if __name__ == '__main__':
     result_distributions_object.pop('{"C": 0.1, "fit_intercept": false, "max_iter": 1000, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{"C": 2, "fit_intercept": true, "max_iter": 1, "shuffle": false, "tol": 0.001}')
 
+    print(len(result_distributions_object))
+
     for resultant_dists in result_distributions_object:
-        print(resultant_dists`)
+        print(resultant_dists)
 
         dist_class = eval(list(result_distributions_object[resultant_dists].fitted_param.keys())[0] + ".rvs")
         dist_object = dist_class(*list(result_distributions_object[resultant_dists].fitted_param.values())[0], size=50000).tolist()
