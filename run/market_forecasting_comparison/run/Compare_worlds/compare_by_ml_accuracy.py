@@ -132,6 +132,7 @@ if __name__ == '__main__':
     result_distributions_object.pop('{"C": 0.1, "fit_intercept": true, "max_iter": 1, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{"C": 0.1, "fit_intercept": true, "max_iter": 1000, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{"C": 0.1, "fit_intercept": false, "max_iter": 1, "shuffle": false, "tol": 0.001}')
+    result_distributions_object.pop('{"C": 0.1, "fit_intercept": false, "max_iter": 1000, "shuffle": false, "tol": 0.001}')
 
     for resultant_dists in result_distributions_object:
         print("Iterating resultant_dists")
@@ -142,7 +143,7 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51, timeout=4500)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
+        Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51, timeout=4500)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in tqdm(range(0, 100)))
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
