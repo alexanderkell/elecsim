@@ -533,8 +533,9 @@ class World(Model):
                                                                                                self.carbon_scenario_name,
                                                                                                dt.datetime.now().strftime(
                                                                                                    '%Y-%m-%d_%H-%M-%S'),
-                                                                                               elecsim.scenario.scenario_data.segment_demand_diff[
-                                                                                                   -1], self.distribution_name)
+                                                                                               # elecsim.scenario.scenario_data.segment_demand_diff[-1],
+                                                                                                1,
+                                                                                                self.distribution_name)
 
             directory_filename = "{}/{}.csv".format(directory, filename)
 
