@@ -89,7 +89,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
     # print(individual)
 
 
-    world = World(demand_distribution=demand_distribution, distribution_name = distribution_name, carbon_price_scenario=optimal_carbon_tax, initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1])
+    world = World(demand_distribution=demand_distribution, distribution_name = distribution_name, carbon_price_scenario=optimal_carbon_tax, initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1], dropbox=True)
     for _ in range(YEARS_TO_RUN):
         for i in range(MARKET_TIME_SPLICES):
             # try:
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51, timeout=4500)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in tqdm(range(0, 100)))
+        Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in tqdm(range(0, 100)))
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
