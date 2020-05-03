@@ -123,6 +123,20 @@ if __name__ == "__main__":
                 "sample_batch_size": 25,
                 "train_batch_size": 25,
                 # "horizon": 25,
+                "exploration_config": {
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 1.0,
+                    "final_epsilon": 0.1,
+                    # "epsilon_timesteps": 10000,  # Timesteps over which to anneal epsilon.
+
+                    # For soft_q, use:
+                    # "exploration_config" = {
+                    #   "type": "SoftQ"
+                    #   "temperature": [float, e.g. 1.0]
+                    # }
+                },
             }
         }
     })
