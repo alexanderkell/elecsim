@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=False):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -553,15 +553,15 @@ class World(Model):
 
                     with open(file_from, 'rb') as f:
                         dbx.files_upload(f.read(), file_to)
+            if dropbox:
+                access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
+                transferData = TransferData(access_token)
 
-            access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
-            transferData = TransferData(access_token)
+                file_from = "/{}".format(directory_filename)
+                file_to = "/{}".format(filename)
 
-            file_from = "/{}".format(directory_filename)
-            file_to = "/{}".format(filename)
-
-            # API v2
-            transferData.upload_file(file_from, file_to)
+                # API v2
+                transferData.upload_file(file_from, file_to)
 
 
 
