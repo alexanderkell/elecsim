@@ -70,8 +70,8 @@ class World(Model):
         self.max_number_of_steps = number_of_steps
         self.average_electricity_price = 0
         self.market_time_splices = market_time_splices
-
         self.nuclear_subsidy = nuclear_subsidy
+        self.dropbox = dropbox
 
         self.set_log_level(log_level)
 
@@ -553,7 +553,7 @@ class World(Model):
 
                     with open(file_from, 'rb') as f:
                         dbx.files_upload(f.read(), file_to)
-            if dropbox:
+            if self.dropbox:
                 access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
                 transferData = TransferData(access_token)
 
