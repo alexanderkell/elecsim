@@ -554,7 +554,7 @@ class World(Model):
                     with open(file_from, 'rb') as f:
                         dbx.files_upload(f.read(), file_to)
 
-            access_token = 'J0BrnIaGJ78AAAAAAABLCd6RWS4T1JQwhKCtYcdWTdyE--pvA0-DfNIt4OUnUZQx'
+            access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
             transferData = TransferData(access_token)
 
             file_from = "/{}".format(directory_filename)
