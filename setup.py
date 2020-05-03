@@ -19,7 +19,7 @@ setup(
   package_data={'elecsim': extra_files},
 
   py_modules=['elecsim'],
-  version = '0.1.79',
+  version = '0.1.80',
   license='MIT',
   description = 'Agent-based Model for Electricity Markets',
   author = 'Alexander Kell',
