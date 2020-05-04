@@ -139,6 +139,7 @@ if __name__ == '__main__':
     result_distributions_object.pop('{"C": 2, "fit_intercept": false, "max_iter": 1000, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{}')
     result_distributions_object.pop('{"power": 0.1}')
+    result_distributions_object.pop('{"hidden_layer_sizes": 10, "learning_rate": "adaptive", "solver": "adam"}')
 
     print(len(result_distributions_object))
 
@@ -148,6 +149,7 @@ if __name__ == '__main__':
         dist_class = eval(list(result_distributions_object[resultant_dists].fitted_param.keys())[0] + ".rvs")
         dist_object = dist_class(*list(result_distributions_object[resultant_dists].fitted_param.values())[0], size=50000).tolist()
 
+        resultant_dists = None
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
@@ -158,6 +160,13 @@ if __name__ == '__main__':
         # time.sleep(30)
 
     # os.execv(sys.executable, [sys.executable] + sys.argv)
+
+    resultant_dists = None
+    # print(dist_object))
+    # run_world(carbon_list, resultant_dists, dist_object)
+    # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
+    returned_result = Parallel(n_jobs=multiprocessing.cpu_count() - 1, verbose=51, backend='multiprocessing')(
+        delayed(run_world)(carbon_list, resultant_dists, None) for _ in range(0, 100))
 
 
 
