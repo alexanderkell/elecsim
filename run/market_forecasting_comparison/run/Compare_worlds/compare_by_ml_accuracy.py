@@ -97,7 +97,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
                 print('end of year')
                 pass
             world.step()
-    return None
+    return 1
 
 
 # @ray.remote
@@ -150,7 +150,7 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51, backend='multiprocessing')(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in range(0, 100))
+        returned_result = Parallel(n_jobs=multiprocessing.cpu_count()-1, verbose=51, backend='multiprocessing')(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in range(0, 100))
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
         # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
 
