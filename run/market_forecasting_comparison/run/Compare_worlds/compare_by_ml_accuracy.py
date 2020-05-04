@@ -138,6 +138,7 @@ if __name__ == '__main__':
     result_distributions_object.pop('{"C": 2, "fit_intercept": false, "max_iter": 1, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{"C": 2, "fit_intercept": false, "max_iter": 1000, "shuffle": false, "tol": 0.001}')
     result_distributions_object.pop('{}')
+    result_distributions_object.pop('{"power": 0.1}')
 
     print(len(result_distributions_object))
 
