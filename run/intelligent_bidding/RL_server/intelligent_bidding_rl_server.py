@@ -88,10 +88,10 @@ if __name__ == "__main__":
                 # "num_gpus": 0,
                 # "num_workers": 1,
                 "env": "srv",
-                "evaluation_num_episodes": 5,
+                "evaluation_num_episodes": 1,
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
-                "sample_batch_size": 1000,
-                "train_batch_size": 1000,
+                "sample_batch_size": 100,
+                "train_batch_size": 200,
                 # "horizon": 25,
                 # "exploration_config": {
                 #     # The Exploration class to use.
