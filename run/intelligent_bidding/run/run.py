@@ -44,7 +44,8 @@ def run_scenario(gencos_rl_bidding):
                       market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy",
                       number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910,
                       nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2],
-                      future_price_uncertainty_c=beis_params[-1], dropbox=False, gencos_rl=gencos_rl_bidding)
+                      future_price_uncertainty_c=beis_params[-1], dropbox=False, gencos_rl=gencos_rl_bidding,
+                      write_data_to_file=False)
 
         for _ in range(YEARS_TO_RUN):
             for i in range(MARKET_TIME_SPLICES):
