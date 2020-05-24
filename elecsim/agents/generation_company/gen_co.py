@@ -31,7 +31,7 @@ __email__ = "Alexander@Kell.es"
 
 class GenCo(Agent):
     def __init__(self, unique_id, model, name, difference_in_discount_rate, look_back_period, plants=None,
-                 money=5000000):
+                 money=5000000, rl_bidding=False):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -53,6 +53,8 @@ class GenCo(Agent):
 
         self.gas_price_modifier = 0
         self.coal_price_modifier = 0
+
+        self.rl_bidding = rl_bidding
 
 
     def step(self):
@@ -81,7 +83,7 @@ class GenCo(Agent):
     #         bids.append(Bid(self, plant, segment_hour, plant.capacity_mw, marked_up_price))
     #     return bids
 
-    def calculate_bids(self, segment_hour, predict=False):
+    def calculate_bids(self, segment_hour, predict=False, actions=None):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
         The bids submitted are the fixed costs divided by lifetime of plant plus yearly variable costs plus a 10% margin
@@ -91,15 +93,19 @@ class GenCo(Agent):
         """
 
         bids = []
-
+        counter = 0
         for plant in self.plants:
-            bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
+            if actions is not None:
+                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number, price=actions[counter])
+                counter += 1
+            else:
+                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
             if bid:
                 bids.append(bid)
         return bids
 
     @lru_cache(100000)
-    def create_bid(self, plant, predict, segment_hour, step_number):
+    def create_bid(self, plant, predict, segment_hour, step_number, price=None):
         future_plant_operating = False
         if predict is True:
             YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
@@ -113,6 +119,9 @@ class GenCo(Agent):
                     return None
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
+        elif self.rl_bidding is True:
+            return Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw,
+                       price, self.model.year_number)
         else:
             price = plant.short_run_marginal_cost(self.model, self)
         marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up

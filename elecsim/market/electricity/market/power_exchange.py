@@ -4,6 +4,7 @@ from itertools import chain
 # from linetimer import CodeTimer
 import pandas as pd
 
+from elecsim.role.market.latest_market_data import LatestMarketData
 from elecsim.market.electricity.bid import Bid
 import elecsim.scenario.scenario_data
 from random import sample
@@ -55,27 +56,42 @@ class PowerExchange:
             for plant in gen_co.plants:
                 plant.capacity_fulfilled = dict.fromkeys(segment_hours, 0)
 
+        highest_bid = 0
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
-            bids = []
 
+            eid_bidding = self.model.bidding_client.start_episode()
+
+            co2_price = LatestMarketData(self.model)._get_variable_data("co2")[self.model.years_from_start]
+            gas_price = LatestMarketData(self.model)._get_variable_data("gas")[self.model.years_from_start]
+            coal_price = LatestMarketData(self.model)._get_variable_data("coal")[self.model.years_from_start]
+
+            observation = [segment_hour, segment_demand, self.model.year_number, co2_price, gas_price, coal_price, highest_bid]
+            # logger.info("observation: {}".format(observation))
+            actions = self.model.bidding_client.get_action(eid_bidding, observation)
+            # logger.info("action: {}".format(actions))
+
+            bids = []
+            action_index = 0
             for generation_company in generator_companies:
-                bids.append(generation_company.calculate_bids(segment_hour, predict))
-                # logger.info(generation_company.calculate_bids.cache_info())
+                if generation_company.name in self.model.gencos_rl:
+                    number_of_plants = len(generation_company.plants)
+                    actual_bid = generation_company.calculate_bids(segment_hour, predict, actions[action_index:(action_index+number_of_plants)])
+                    action_index += number_of_plants
+                else:
+                    actual_bid = generation_company.calculate_bids(segment_hour, predict)
+                bids.append(actual_bid)
 
             sorted_bids = self._sort_bids(bids)
             if predict is False:
-
                 logger.debug("bids len: {}".format(len(sorted_bids)))
                 # logger.info("total capacity of bids: {}".format(sum(bid.capacity_bid for bid in sorted_bids)))
 
             accepted_bids = self._respond_to_bids(sorted_bids, segment_hour, segment_demand)
 
-
             highest_bid = self._accept_bids(accepted_bids)
-            # highest_bid = max(bid.price_per_mwh for bid in accepted_bids)
 
-            # print("segment hour: {}".format(segment_demand))
-            # print("segment_demand + sample(self.segment_demand, 1): {}".format(segment_demand + sample(self.demand_distribution, 1)[0]))
+            total_accepted_bids = sum([int(rl_bid.bid_accepted) for rl_bid in accepted_bids if rl_bid.rl_bid is True])
+            self.model.bidding_client.log_returns(eid_bidding, total_accepted_bids)
 
             if self.demand_distribution:
                 self._create_load_duration_price_curve(segment_hour, segment_demand + sample(self.demand_distribution, 1)[0], highest_bid)
@@ -219,6 +235,7 @@ class PowerExchange:
                 logger.debug('bid REJECTED: price: {}, year: {}, capacity required: {}, capacity: {}, capacity_bid: {}, type: {}, name {}'.format(bid.price_per_mwh, bid.plant.construction_year, capacity_required, bid.plant.capacity_mw, bid.capacity_bid, bid.plant.plant_type,  bid.plant.name))
         if capacity_required > 0:
             accepted_bids.append(Bid(None, None, segment_hour, 0, elecsim.scenario.scenario_data.lost_load, self.model.year_number))
+
         return accepted_bids
 
 

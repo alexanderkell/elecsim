@@ -11,7 +11,7 @@ __email__ = "Alexander@Kell.es"
 
 class Bid:
 
-    def __init__(self, gen_co, plant, segment_hours, capacity_bid, price_per_mwh, year_of_bid):
+    def __init__(self, gen_co, plant, segment_hours, capacity_bid, price_per_mwh, year_of_bid, rl_bid = False):
         """Bid class that contains all the information related to the creation of bids
 
         :param gen_co: Generation company from which the bid originates from
@@ -27,6 +27,7 @@ class Bid:
         self.price_per_mwh = price_per_mwh
         self.year_of_bid = year_of_bid
         self.price_bid = price_per_mwh
+        self.rl_bid = rl_bid
 
         self.bid_accepted = False
         self.bid_rejected = False

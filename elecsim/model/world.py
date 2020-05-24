@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None, gencos_rl=None):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -72,6 +72,7 @@ class World(Model):
         self.market_time_splices = market_time_splices
         self.nuclear_subsidy = nuclear_subsidy
         self.dropbox = dropbox
+        self.gencos_rl = gencos_rl
 
         self.set_log_level(log_level)
 
@@ -92,8 +93,11 @@ class World(Model):
         plant_data = elecsim.scenario.scenario_data.power_plants
         financial_data = elecsim.scenario.scenario_data.company_financials
 
+        if self.gencos_rl:
+            self.bidding_client = PolicyClient("http://127.0.0.1:9920")
+
         # Initialize generation companies using financial and plant data
-        self.initialize_gencos(financial_data, plant_data)
+        self.initialize_gencos(financial_data, plant_data, gencos_rl)
 
         self.last_added_plant = None
         self.last_added_plant_bids = None
@@ -137,6 +141,8 @@ class World(Model):
                 self.fitting_params = None
             else:
                 raise ValueError("If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World")
+
+
 
 
     def step(self, carbon_price=None):
@@ -203,7 +209,7 @@ class World(Model):
         return abs(self.average_electricity_price), abs(carbon_emitted)
         # return self.datacollector.get_model_vars_dataframe(), self.over_invested
 
-    def initialize_gencos(self, financial_data, plant_data):
+    def initialize_gencos(self, financial_data, plant_data, gencos_rl):
         """
         Creates generation company agents based on financial data and power plants owned. Estimates cost parameters
          of each power plant if data not for power plant not available.
@@ -224,18 +230,22 @@ class World(Model):
 
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
+            rl_bidding = False
             if financials.Company.iloc[0] != name:
                 raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
+            elif financials.Company.iloc[0] in gencos_rl:
+                rl_bidding = True
 
-            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
+            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0], rl_bidding=rl_bidding)
             self.unique_id_generator += 1
             # Add power plants to generation company portfolio
             # parent_directory = os.path.dirname(os.getcwd())
             pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(ROOT_DIR)
+
             for plant in data.itertuples():
                 try:
                     power_plant = pickle.load(open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "rb"))
-                except (OSError, IOError, FileNotFoundError) as e:
+                except (OSError, IOError, FileNotFoundError, EOFError) as e:
                     logger.info("plant: {}".format(plant))
                     power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                     pickle.dump(power_plant, open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "wb"))
