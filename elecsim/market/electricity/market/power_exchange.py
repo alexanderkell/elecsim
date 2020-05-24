@@ -90,9 +90,10 @@ class PowerExchange:
 
             highest_bid = self._accept_bids(accepted_bids)
 
-            total_accepted_bids = sum([int(rl_bid.bid_accepted) for rl_bid in accepted_bids if rl_bid.rl_bid is True])
+            total_accepted_bids = sum([int(rl_bid.bid_accepted)*rl_bid.price_per_mwh for rl_bid in accepted_bids if rl_bid.rl_bid is True])
+            # logger.info("total_accepted_bids: {}".format(total_accepted_bids))
             self.model.bidding_client.log_returns(eid_bidding, total_accepted_bids)
-            self.model.end_episode(eid_bidding, observation)
+            self.model.bidding_client.end_episode(eid_bidding, observation)
 
             if self.demand_distribution:
                 self._create_load_duration_price_curve(segment_hour, segment_demand + sample(self.demand_distribution, 1)[0], highest_bid)

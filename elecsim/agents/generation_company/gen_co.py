@@ -96,7 +96,7 @@ class GenCo(Agent):
         counter = 0
         for plant in self.plants:
             if actions is not None:
-                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number, price=actions[counter])
+                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number, rl_price=actions[counter])
                 counter += 1
             else:
                 bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
@@ -105,7 +105,7 @@ class GenCo(Agent):
         return bids
 
     @lru_cache(100000)
-    def create_bid(self, plant, predict, segment_hour, step_number, price=None):
+    def create_bid(self, plant, predict, segment_hour, step_number, rl_price=None):
         future_plant_operating = False
         if predict is True:
             YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
@@ -121,7 +121,7 @@ class GenCo(Agent):
                 price = plant.short_run_marginal_cost(self.model, self)
         elif self.rl_bidding is True:
             return Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw,
-                       price, self.model.year_number)
+                       rl_price, self.model.year_number, rl_bid=True)
         else:
             price = plant.short_run_marginal_cost(self.model, self)
         marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
