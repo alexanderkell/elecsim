@@ -58,17 +58,17 @@ class PowerExchange:
 
         highest_bid = 0
         for segment_hour, segment_demand in zip(segment_hours, segment_demand):
+            if self.model.gencos_rl:
+                eid_bidding = self.model.bidding_client.start_episode()
 
-            eid_bidding = self.model.bidding_client.start_episode()
+                co2_price = LatestMarketData(self.model)._get_variable_data("co2")[self.model.years_from_start]
+                gas_price = LatestMarketData(self.model)._get_variable_data("gas")[self.model.years_from_start]
+                coal_price = LatestMarketData(self.model)._get_variable_data("coal")[self.model.years_from_start]
 
-            co2_price = LatestMarketData(self.model)._get_variable_data("co2")[self.model.years_from_start]
-            gas_price = LatestMarketData(self.model)._get_variable_data("gas")[self.model.years_from_start]
-            coal_price = LatestMarketData(self.model)._get_variable_data("coal")[self.model.years_from_start]
-
-            observation = [segment_hour, segment_demand, self.model.year_number, co2_price, gas_price, coal_price, highest_bid]
-            # logger.info("observation: {}".format(observation))
-            actions = self.model.bidding_client.get_action(eid_bidding, observation)
-            # logger.info("action: {}".format(actions))
+                observation = [segment_hour, segment_demand, self.model.year_number, co2_price, gas_price, coal_price, highest_bid]
+                # logger.info("observation: {}".format(observation))
+                actions = self.model.bidding_client.get_action(eid_bidding, observation)
+                # logger.info("action: {}".format(actions))
 
             bids = []
             action_index = 0
@@ -90,10 +90,11 @@ class PowerExchange:
 
             highest_bid = self._accept_bids(accepted_bids)
 
-            total_accepted_bids = sum([int(rl_bid.bid_accepted)*rl_bid.price_per_mwh for rl_bid in accepted_bids if rl_bid.rl_bid is True])
-            # logger.info("total_accepted_bids: {}".format(total_accepted_bids))
-            self.model.bidding_client.log_returns(eid_bidding, total_accepted_bids)
-            self.model.bidding_client.end_episode(eid_bidding, observation)
+            if self.model.gencos_rl:
+                total_accepted_bids = sum([int(rl_bid.bid_accepted)*rl_bid.price_per_mwh for rl_bid in accepted_bids if rl_bid.rl_bid is True])
+                # logger.info("total_accepted_bids: {}".format(total_accepted_bids))
+                self.model.bidding_client.log_returns(eid_bidding, total_accepted_bids)
+                self.model.bidding_client.end_episode(eid_bidding, observation)
 
             if self.demand_distribution:
                 self._create_load_duration_price_curve(segment_hour, segment_demand + sample(self.demand_distribution, 1)[0], highest_bid)

@@ -45,7 +45,7 @@ def run_scenario(gencos_rl_bidding):
                       number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910,
                       nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2],
                       future_price_uncertainty_c=beis_params[-1], dropbox=False, gencos_rl=gencos_rl_bidding,
-                      write_data_to_file=False)
+                      write_data_to_file=True)
 
         for _ in range(YEARS_TO_RUN):
             for i in range(MARKET_TIME_SPLICES):
@@ -57,4 +57,5 @@ def run_scenario(gencos_rl_bidding):
 
 if __name__ == "__main__":
     gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE', 'Uniper UK Limited', 'Drax Power Ltd']
+    # gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE']
     run_scenario(gencos_rl_bidding)
