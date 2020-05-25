@@ -3,6 +3,7 @@ from functools import lru_cache
 from itertools import chain
 # from linetimer import CodeTimer
 import pandas as pd
+from statistics import mean
 
 from elecsim.role.market.latest_market_data import LatestMarketData
 from elecsim.market.electricity.bid import Bid
@@ -91,7 +92,7 @@ class PowerExchange:
             highest_bid = self._accept_bids(accepted_bids)
 
             if self.model.gencos_rl:
-                total_accepted_bids = sum([int(rl_bid.bid_accepted)*rl_bid.price_per_mwh for rl_bid in accepted_bids if rl_bid.rl_bid is True])
+                total_accepted_bids = mean([int(rl_bid.bid_accepted)*rl_bid.price_per_mwh for rl_bid in accepted_bids if rl_bid.rl_bid is True])
                 # logger.info("total_accepted_bids: {}".format(total_accepted_bids))
                 self.model.bidding_client.log_returns(eid_bidding, total_accepted_bids)
                 self.model.bidding_client.end_episode(eid_bidding, observation)

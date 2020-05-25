@@ -2,6 +2,9 @@ import pandas as pd
 import os.path
 import sys
 import numpy as np
+import pickle
+from fitter import Fitter
+import fitter
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
@@ -15,6 +18,7 @@ from elecsim.constants import ROOT_DIR
 import logging
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
+from scipy.stats import johnsonsb, skewnorm, dgamma, genlogistic, dweibull, johnsonsu
 
 
 def run_scenario(gencos_rl_bidding):
@@ -39,13 +43,23 @@ def run_scenario(gencos_rl_bidding):
     carbon_df = pd.read_csv('linear_data_exploded.csv'.format(ROOT_DIR))
     carbon_list = carbon_df.x.tolist()
 
+    result_distributions_object = pickle.load(open(
+        "/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p",
+        "rb"))
+
+    resultant_dist = '{}'
+
+    dist_class = eval(list(result_distributions_object[resultant_dist].fitted_param.keys())[0] + ".rvs")
+    dist_object = dist_class(*list(result_distributions_object[resultant_dist].fitted_param.values())[0],
+                             size=50000).tolist()
+
     while True:
         world = World(carbon_price_scenario=carbon_list, initialization_year=2018, scenario_file=scenario_2018,
                       market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy",
                       number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910,
                       nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2],
                       future_price_uncertainty_c=beis_params[-1], dropbox=False, gencos_rl=gencos_rl_bidding,
-                      write_data_to_file=True)
+                      write_data_to_file=True, demand_distribution=dist_object, distribution_name=resultant_dist)
 
         for _ in range(YEARS_TO_RUN):
             for i in range(MARKET_TIME_SPLICES):
