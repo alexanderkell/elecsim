@@ -45,7 +45,9 @@ CHECKPOINT_FILE = "last_checkpoint.out"
 
 class MarketServing(ExternalEnv):
 
-    def __init__(self):
+    def __init__(self, number_of_plants):
+
+        self.number_of_plants = number_of_plants
         lower_bounds = [-100000] * 7
         # lower_bounds.extend([-99999])
 
@@ -57,8 +59,8 @@ class MarketServing(ExternalEnv):
             # MultiDiscrete([16, 10]),
             # Discrete(159),
             # action_space=Box(shape=37),
-            action_space=Box(low=0, high=200, shape=(37,), dtype=np.float),
-            # action_space=Box(low=0, high=200, shape=(25,), dtype=np.float),
+            # action_space=Box(low=0, high=200, shape=(37,), dtype=np.float),
+            action_space=Box(low=0, high=600, shape=(self.number_of_plants,), dtype=np.float),
             observation_space=Box(np.array(lower_bounds), np.array(upper_bounds))
         )
 
@@ -72,19 +74,19 @@ class MarketServing(ExternalEnv):
 if __name__ == "__main__":
     # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
     ray.init()
+    number_of_plants = 25
+    # number_of_plants = 37
 
-    register_env("srv", lambda _: MarketServing())
-
-
+    register_env("srv", lambda _: MarketServing(number_of_plants))
 
     tune.run_experiments({
-        "rl_bidding": {
+        "rl_bidding_{}".format(number_of_plants): {
             # "run": "PG",
             "run": "DDPG",
             "env": "srv",
             'checkpoint_at_end': True,
             'checkpoint_freq': 5,
-            # 'restore': '../ray_results/my_experiment/PG_srv_0_2019-11-02_18-13-192rctqjmg/checkpoint_200/checkpoint-200',
+            # 'restore': '../../../../../../../ray_results/rl_bidding/DDPG_srv_0_2020-05-25_16-11-377wk6ln6z/checkpoint_30/checkpoint-30',
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
