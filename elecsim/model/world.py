@@ -46,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None, gencos_rl=None, write_data_to_file=True):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None, gencos_rl=None, write_data_to_file=True, rl_port_number=9920):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -95,7 +95,7 @@ class World(Model):
         financial_data = elecsim.scenario.scenario_data.company_financials
 
         if self.gencos_rl:
-            self.bidding_client = PolicyClient("http://127.0.0.1:9920")
+            self.bidding_client = PolicyClient("http://127.0.0.1:{}".format(rl_port_number))
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data, gencos_rl)
