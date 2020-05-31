@@ -87,12 +87,12 @@ def run_scenario(gencos_rl_bidding, port_number):
     carbon_df = pd.read_csv('linear_data_exploded.csv'.format(ROOT_DIR))
     carbon_list = carbon_df.x.tolist()
 
-    result_distributions_object = pickle.load(open(
-        "{}/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p".format(ROOT_DIR),
-        "rb"))
-
-    resultant_dist = '{}'
-
+    # result_distributions_object = pickle.load(open(
+    #     "{}/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p".format(ROOT_DIR),
+    #     "rb"))
+    #
+    # resultant_dist = '{}'
+    #
     # dist_class = eval(list(result_distributions_object[resultant_dist].fitted_param.keys())[0] + ".rvs")
     # dist_object = dist_class(*list(result_distributions_object[resultant_dist].fitted_param.values())[0],
     #                          size=50000).tolist()
