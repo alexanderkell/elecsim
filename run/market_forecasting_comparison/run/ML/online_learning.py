@@ -67,7 +67,6 @@ models = {
 #     },
 # }
 
-Par
 params = {
     'PassiveAggressiveRegressor': {'C': [0.1, 2], "fit_intercept": [True, False], "max_iter": [1, 1000], "shuffle": [False], 'tol': [0.001]},
     'LinearRegression': {},

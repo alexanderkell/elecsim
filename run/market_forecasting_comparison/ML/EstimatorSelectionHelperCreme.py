@@ -146,12 +146,12 @@ def run_creme(dat, model_to_use=None, metric=None):
 # @ray.remote(num_return_vals=1)
 def run_models(dat, i, model_to_use, all_differences):
 
-    X_stream = dat[dat.year<2018].filter(regex='^(?!.*value|working_day|season|time).*$')#.values.astype(np.float32)
+    X_stream = dat[dat.year < 2018].filter(regex='^(?!.*value|working_day|season|time).*$')#.values.astype(np.float32)
     start_date = len(X_stream[X_stream.year<2017])
     if i == 0:
-        y_stream = dat[dat.year<2018]['value']
+        y_stream = dat[dat.year < 2018]['value']
     else:
-        y_stream = dat[dat.year<2018]['value-{}'.format(i)]
+        y_stream = dat[dat.year < 2018]['value-{}'.format(i)]
 
     X_stream_values = X_stream.values.astype(np.float32)
     y_stream_values = y_stream.values

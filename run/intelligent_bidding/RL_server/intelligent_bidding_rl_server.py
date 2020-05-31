@@ -19,6 +19,14 @@ To try this out, in two separate shells run:
     $ python cartpole_client.py
 """
 
+import sys
+import os
+from multiprocessing import Process
+import time
+
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
+
 import os
 from gym import spaces
 from gym.spaces import Tuple, Box
@@ -71,8 +79,10 @@ class MarketServing(ExternalEnv):
         server.serve_forever()
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def run_agent():
     # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
+    print("Starting agent")
     ray.init()
     number_of_plants = 25
     # number_of_plants = 37
@@ -113,3 +123,6 @@ if __name__ == "__main__":
             }
         # }
     })
+
+# if __name__ == "__main__":
+#     run_agent()
