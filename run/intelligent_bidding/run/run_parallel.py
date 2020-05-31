@@ -64,6 +64,7 @@ import ray
 # @ray.remote
 def run_scenario(gencos_rl_bidding, port_number):
     print("Running scenario with: {}".format(gencos_rl_bidding))
+    print("{}/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p".format(ROOT_DIR))
     time.sleep(60)
     beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814,
                    18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0,
@@ -87,7 +88,7 @@ def run_scenario(gencos_rl_bidding, port_number):
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = pickle.load(open(
-        "/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p",
+        "{}/run/market_forecasting_comparison/run/Compare_worlds/result_distributions_object.p".format(ROOT_DIR),
         "rb"))
 
     resultant_dist = '{}'
