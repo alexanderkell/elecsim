@@ -200,12 +200,12 @@ def run_agent(port_number, number_of_plants=14):
     })
 
 @ray.remote
-def run_agent_and_server_parallel(port_number, gencos_rl_bidding):
+def run_agent_and_server_parallel(port_number, gencos_rl_bidding, number_of_plants):
 
     print(port_number)
     print(gencos_rl_bidding)
 
-    ray.get([run_agent.remote(port_number), run_scenario.remote(gencos_rl_bidding, port_number)])
+    ray.get([run_agent.remote(port_number, number_of_plants), run_scenario.remote(gencos_rl_bidding, port_number)])
     # p1 = Process(target=run_agent, args=(port_number,))
     # p1.start()
     #
@@ -217,21 +217,35 @@ def run_agent_and_server_parallel(port_number, gencos_rl_bidding):
 
 
 if __name__ == "__main__":
-    ray.init(num_cpus=6)
+    ray.init(num_cpus=mp.cpu_count()-10)
     gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE', 'test']
 
     company_stats = pd.read_csv('../data/company_list/company_stats.csv')
     print(company_stats.head(7))
 
-    # results = []
-    # for port_number, gencos in zip(range(9921, 9924), [gencos_rl_bidding]*3):
-    #     print(port_number)
-    #     print(gencos)
-    #     # result = run_agent_and_server_parallel.remote(port_number, gencos)
-    #     result = run_agent_and_server_parallel.remote(port_number, gencos)
-    #     results.append(result)
-    #
-    # ray.get(results)
+    gencos_rl_bidding = [["EDF Energy"],
+                         ["EDF Energy", "RWE Generation SE"],
+                         ["EDF Energy", "RWE Generation SE", "SSE"],
+                         ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited"],
+                         ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power"],
+                         ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power",
+                          "Drax Power Ltd"], ['Orsted'], ['RWE Generation SE'], ['SSE'], ['Uniper UK Limited'],
+                         ['Scottish power'], ['Drax Power Ltd']]
+
+    number_of_plants = [14, 25, 155, 164, 213, 216, 11, 11, 130, 9, 49, 3]
+
+    for genco_group in gencos_rl_bidding:
+        print(genco_group)
+
+    results = []
+    for port_number, gencos, plant_number in zip(range(9921, 9921+len(gencos_rl_bidding)), [gencos_rl_bidding]):
+        print(port_number)
+        print(gencos)
+        # result = run_agent_and_server_parallel.remote(port_number, gencos)
+        result = run_agent_and_server_parallel.remote(port_number, gencos, plant_number)
+        results.append(result)
+
+    ray.get(results)
 
 
 
