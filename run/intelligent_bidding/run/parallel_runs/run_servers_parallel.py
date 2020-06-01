@@ -155,27 +155,27 @@ class MarketServing(ExternalEnv):
 
 # if __name__ == "__main__":
 @ray.remote
-def run_agent(port_number, number_of_plants=14):
+def run_agent(port_number):
     # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
     print("Starting agent")
     # ray.init()
-    # number_of_plants = 25
+    number_of_plants = 25
     # number_of_plants = 37
 
-    register_env("srv_{}".format(port_number), lambda _: MarketServing(number_of_plants, port_number))
+    register_env("srv", lambda _: MarketServing(number_of_plants, port_number))
 
     tune.run_experiments({
         "rl_bidding_{}_{}".format(number_of_plants, port_number): {
             # "run": "PG",
             "run": "DDPG",
-            "env": "srv_{}".format(port_number),
+            "env": "srv",
             # 'checkpoint_at_end': True,
             # 'checkpoint_freq': 5,
             # 'restore': '../../../../../../../ray_results/rl_bidding/DDPG_srv_0_2020-05-25_16-11-377wk6ln6z/checkpoint_30/checkpoint-30',
             "config": {
                 # "num_gpus": 0,
                 # "num_workers": 1,
-                "env": "srv_{}".format(port_number),
+                "env": "srv",
                 "evaluation_num_episodes": 1,
                 # "sgd_stepsize": tune.grid_search([0.01, 0.001, 0.0001])
                 "sample_batch_size": 100,
@@ -199,7 +199,7 @@ def run_agent(port_number, number_of_plants=14):
         # }
     })
 
-@ray.remote
+# @ray.remote
 def run_agent_and_server_parallel(port_number, gencos_rl_bidding):
 
     print(port_number)
@@ -217,28 +217,8 @@ def run_agent_and_server_parallel(port_number, gencos_rl_bidding):
 
 
 if __name__ == "__main__":
-    ray.init(num_cpus=6)
-    gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE', 'test']
-
-    company_stats = pd.read_csv('../data/company_list/company_stats.csv')
-    print(company_stats.head(7))
-
-    # results = []
-    # for port_number, gencos in zip(range(9921, 9924), [gencos_rl_bidding]*3):
-    #     print(port_number)
-    #     print(gencos)
-    #     # result = run_agent_and_server_parallel.remote(port_number, gencos)
-    #     result = run_agent_and_server_parallel.remote(port_number, gencos)
-    #     results.append(result)
-    #
-    # ray.get(results)
-
-
-
-
-
-
-
+    ray.init(num_cpus=4)
+    gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE']
 
     # run_scenario(gencos_rl_bidding)
     # run_agent()
@@ -256,6 +236,17 @@ if __name__ == "__main__":
     #
     #     results = p.starmap(run_agent_and_server_parallel, [(port_number, gencos) for port_number, gencos in zip(range(9921, 9927), [gencos_rl_bidding]*6)])
 
-    # with futures.ProcessPoolExecutor() as pool:
-    #     for res in pool.map(run_agent_and_server_parallel, range(9921, 9927), [gencos_rl_bidding]*6):
-    #         pass
+    results = []
+    with futures.ProcessPoolExecutor() as pool:
+        for res in pool.map(run_agent_and_server_parallel, range(9921, 9927), [gencos_rl_bidding]*6):
+            pass
+
+        # for port_number, gencos in zip(range(9921, 9927), [gencos_rl_bidding]*6):
+        #     print(port_number)
+        #     print(gencos)
+        #     # result = run_agent_and_server_parallel.remote(port_number, gencos)
+        #     result = run_agent_and_server_parallel(port_number, gencos)
+        #     results.append(result)
+        #
+        # ray.get(results)
+
