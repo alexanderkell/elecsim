@@ -217,11 +217,8 @@ def run_agent_and_server_parallel(port_number, gencos_rl_bidding, number_of_plan
 
 
 if __name__ == "__main__":
-    ray.init(num_cpus=mp.cpu_count()-10)
+    ray.init(num_cpus=mp.cpu_count()-4)
     gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE', 'test']
-
-    company_stats = pd.read_csv('../data/company_list/company_stats.csv')
-    print(company_stats.head(7))
 
     gencos_rl_bidding = [["EDF Energy"],
                          ["EDF Energy", "RWE Generation SE"],
@@ -230,7 +227,7 @@ if __name__ == "__main__":
                          ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power"],
                          ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power",
                           "Drax Power Ltd"], ['Orsted'], ['RWE Generation SE'], ['SSE'], ['Uniper UK Limited'],
-                         ['Scottish power'], ['Drax Power Ltd']]
+                         ['Scottish power'], ['Drax Power Ltd'], ["Magnox Ltd"]]
 
     number_of_plants = [14, 25, 155, 164, 213, 216, 11, 11, 130, 9, 49, 3]
 
@@ -238,7 +235,7 @@ if __name__ == "__main__":
         print(genco_group)
 
     results = []
-    for port_number, gencos, plant_number in zip(range(9921, 9921+len(gencos_rl_bidding)), [gencos_rl_bidding]):
+    for port_number, gencos, plant_number in zip(range(9921, 9921+len(gencos_rl_bidding)), gencos_rl_bidding, number_of_plants):
         print(port_number)
         print(gencos)
         # result = run_agent_and_server_parallel.remote(port_number, gencos)
