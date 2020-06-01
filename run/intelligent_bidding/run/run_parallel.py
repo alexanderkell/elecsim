@@ -68,7 +68,7 @@ from concurrent import futures
 def run_scenario(gencos_rl_bidding, port_number):
     print("Running scenario with: {}".format(gencos_rl_bidding))
 
-    time.sleep(60)
+    time.sleep(120)
     beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814,
                    18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0,
                    -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668,
