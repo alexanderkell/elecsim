@@ -122,12 +122,12 @@ def run_scenario(gencos_rl_bidding, port_number):
 
 class MarketServing(ExternalEnv):
 
-    def __init__(self, number_of_plants, server_port=9920):
+    def __init__(self, number_of_plants, server_port=9920, max_bid=600):
         self.SERVER_ADDRESS = "localhost"
         # SERVER_PORT = 9920
         self.CHECKPOINT_FILE = "last_checkpoint.out"
         self.server_port = server_port
-
+        self.max_bid = max_bid
 
         self.number_of_plants = number_of_plants
         lower_bounds = [-100000] * 7
@@ -142,9 +142,8 @@ class MarketServing(ExternalEnv):
             # Discrete(159),
             # action_space=Box(shape=37),
             # action_space=Box(low=0, high=200, shape=(37,), dtype=np.float),
-            action_space=Box(low=0, high=600, shape=(self.number_of_plants,), dtype=np.float),
+            action_space=Box(low=0, high=self.max_bid, shape=(self.number_of_plants,), dtype=np.float),
             observation_space=Box(np.array(lower_bounds), np.array(upper_bounds))
-        )
 
     def run(self):
         print("Starting policy server at {}:{}".format(self.SERVER_ADDRESS,
@@ -155,17 +154,17 @@ class MarketServing(ExternalEnv):
 
 # if __name__ == "__main__":
 @ray.remote
-def run_agent(port_number, number_of_plants=14):
+def run_agent(port_number, number_of_plants=14, max_bid=600):
     # ray.init(redis_max_memory=10000000000, object_store_memory=3000000000, memory=2000000000)
     print("Starting agent")
     # ray.init()
     # number_of_plants = 25
     # number_of_plants = 37
 
-    register_env("srv_{}".format(port_number), lambda _: MarketServing(number_of_plants, port_number))
+    register_env("srv_{}".format(port_number), lambda _: MarketServing(number_of_plants, port_number, max_bid))
 
     tune.run_experiments({
-        "rl_bidding_{}_{}".format(number_of_plants, port_number): {
+        "rl_bidding_{}_{}_max_bid_{}".format(number_of_plants, port_number, max_bid): {
             # "run": "PG",
             "run": "DDPG",
             "env": "srv_{}".format(port_number),
@@ -200,12 +199,12 @@ def run_agent(port_number, number_of_plants=14):
     })
 
 @ray.remote
-def run_agent_and_server_parallel(port_number, gencos_rl_bidding, number_of_plants):
+def run_agent_and_server_parallel(port_number, gencos_rl_bidding, number_of_plants, max_bid):
 
     print(port_number)
     print(gencos_rl_bidding)
 
-    ray.get([run_agent.remote(port_number, number_of_plants), run_scenario.remote(gencos_rl_bidding, port_number)])
+    ray.get([run_agent.remote(port_number, number_of_plants, max_bid), run_scenario.remote(gencos_rl_bidding, port_number)])
     # p1 = Process(target=run_agent, args=(port_number,))
     # p1.start()
     #
@@ -230,6 +229,16 @@ if __name__ == "__main__":
                          ['Scottish power'], ['Drax Power Ltd'], ["Magnox Ltd"]]
 
     number_of_plants = [14, 25, 155, 164, 213, 216, 11, 11, 130, 9, 49, 3]
+    plant_names = [["EDF Energy"],
+                 ["EDF Energy", "RWE Generation SE"],
+                 ["EDF Energy", "RWE Generation SE", "SSE"],
+                 ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited"],
+                 ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power"],
+                 ["EDF Energy", "RWE Generation SE", "SSE", "Uniper UK Limited", "Scottish power",
+                  "Drax Power Ltd"], ['Orsted'], ['RWE Generation SE'], ['SSE'], ['Uniper UK Limited'],
+                 ['Scottish power'], ['Drax Power Ltd'], ["Magnox Ltd"]]
+
+    max_bid = 150
 
     for genco_group in gencos_rl_bidding:
         print(genco_group)
@@ -239,7 +248,7 @@ if __name__ == "__main__":
         print(port_number)
         print(gencos)
         # result = run_agent_and_server_parallel.remote(port_number, gencos)
-        result = run_agent_and_server_parallel.remote(port_number, gencos, plant_number)
+        result = run_agent_and_server_parallel.remote(port_number, gencos, plant_number, max_bid)
         results.append(result)
 
     ray.get(results)
