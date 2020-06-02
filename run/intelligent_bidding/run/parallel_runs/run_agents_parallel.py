@@ -122,12 +122,12 @@ def run_scenario(gencos_rl_bidding, port_number):
 
 class MarketServing(ExternalEnv):
 
-    def __init__(self, number_of_plants, server_port=9920):
+    def __init__(self, number_of_plants, server_port=9920, max_bid=600):
         self.SERVER_ADDRESS = "localhost"
         # SERVER_PORT = 9920
         self.CHECKPOINT_FILE = "last_checkpoint.out"
         self.server_port = server_port
-
+        self.max_bid = max_bid
 
         self.number_of_plants = number_of_plants
         lower_bounds = [-100000] * 7
@@ -142,7 +142,7 @@ class MarketServing(ExternalEnv):
             # Discrete(159),
             # action_space=Box(shape=37),
             # action_space=Box(low=0, high=200, shape=(37,), dtype=np.float),
-            action_space=Box(low=0, high=600, shape=(self.number_of_plants,), dtype=np.float),
+            action_space=Box(low=0, high=self.max_bid, shape=(self.number_of_plants,), dtype=np.float),
             observation_space=Box(np.array(lower_bounds), np.array(upper_bounds))
         )
 
