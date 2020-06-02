@@ -244,7 +244,7 @@ if __name__ == "__main__":
         print(genco_group)
 
     results = []
-    for port_number, gencos, plant_number in zip(range(9921, 9921+len(gencos_rl_bidding)), gencos_rl_bidding, number_of_plants):
+    for port_number, gencos, plant_number in zip(range(9951, 9951+len(gencos_rl_bidding)), gencos_rl_bidding, number_of_plants):
         print(port_number)
         print(gencos)
         # result = run_agent_and_server_parallel.remote(port_number, gencos)
