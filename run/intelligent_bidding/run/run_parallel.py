@@ -143,7 +143,7 @@ class MarketServing(ExternalEnv):
             # action_space=Box(shape=37),
             # action_space=Box(low=0, high=200, shape=(37,), dtype=np.float),
             action_space=Box(low=0, high=self.max_bid, shape=(self.number_of_plants,), dtype=np.float),
-            observation_space=Box(np.array(lower_bounds), np.array(upper_bounds))
+            observation_space=Box(np.array(lower_bounds), np.array(upper_bounds)))
 
     def run(self):
         print("Starting policy server at {}:{}".format(self.SERVER_ADDRESS,
