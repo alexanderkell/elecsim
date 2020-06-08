@@ -262,7 +262,7 @@ if __name__ == "__main__":
     X = multi_step_dat.filter(regex='^(?!.*value).*$').values.astype(np.float32)
 
     print(sorted(SCORERS.keys()))
-    scoring_params = ['neg_mean_absolute_error', 'neg_mean_squared_error' 'r2']
+    scoring_params = ['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2']
 
     helper1 = EstimatorSelectionHelper(models, params, scoring=scoring_params)
     # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
