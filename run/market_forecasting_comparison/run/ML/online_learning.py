@@ -50,7 +50,7 @@ models = {
     'LinearRegression': linear_model.LinearRegression(),
     'BoxCoxRegressor': meta.BoxCoxRegressor(regressor=linear_model.LinearRegression(intercept_lr=0.2)),
 #     'KNeighborsRegressor': neighbors.KNeighborsRegressor(),
-#     'SoftmaxRegression': linear_model.SoftmaxRegression(),
+    'SoftmaxRegression': linear_model.SoftmaxRegression(),
     'MLPRegressor': compat.convert_sklearn_to_creme(neural_network.MLPRegressor()),
 }
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     # "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    demand = pd.read_csv('{}/../data/capacity/demand.csv'.format(ROOT_DIR))
+    demand = pd.read_csv('{}/../../data/capacity/demand.csv'.format(ROOT_DIR))
     # solar = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/solar.csv'.format(ROOT_DIR))
     # offshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/offshore.csv'.format(ROOT_DIR))
     # onshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/onshore.csv'.format(ROOT_DIR))
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
 
 
-    demand = pd.read_csv('{}/../data/capacity/demand.csv'.format(ROOT_DIR))
+    demand = pd.read_csv('{}/../../data/capacity/demand.csv'.format(ROOT_DIR))
 
     demand = demand[demand.time < '2018']
 
@@ -152,13 +152,13 @@ if __name__ == "__main__":
     # multi_step_dat = multi_step_dat[(multi_step_dat.time > "2016-11-28")  & (multi_step_dat.time < "2017-01-10")]
 
 
-    estimator = EstimatorSelectionHelperCreme(models, params)
+    estimator = EstimatorSelectionHelperCreme(models, params, cv=20)
     estimator.fit_parallel(multi_step_dat)
 
     estimator.grid_searches
 
     timezone = pytz.timezone("Europe/London")
-    with open('{}/../data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)), 'wb') as handle:
+    with open('{}/../../data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)), 'wb') as handle:
         pickle.dump(estimator.grid_searches, handle, protocol=pickle.HIGHEST_PROTOCOL)
         # res.to_csv('{}/../data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)))
 
