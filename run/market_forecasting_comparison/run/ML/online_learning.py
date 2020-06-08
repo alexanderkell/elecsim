@@ -123,10 +123,10 @@ class EstimatorSelectionHelperCreme:
 
 
     def fit_parallel(self, dat, n_jobs=3, verbose=1, cv=2):
-        ray.shutdown()
+        # ray.shutdown()
         # ray.init(object_store_memory=int(220000000000), num_cpus=multiprocessing.cpu_count()-1)
         # ray.init(object_store_memory=int(2.30e11), num_cpus=multiprocessing.cpu_count()-20, num_redis_shards=7)
-        # ray.init()
+        ray.init()
         output = []
         list_of_keys = []
         for _ in range(cv):
@@ -144,8 +144,8 @@ class EstimatorSelectionHelperCreme:
 
                     model = self.models[key]
 
-                    # error = run_creme.remote(dat, model)
-                    error = run_creme(dat, model, cv=self.cv)
+                    error = run_creme.remote(dat, model, cv=self.cv)
+                    # error = run_creme(dat, model, cv=self.cv)
                     # error = dat.groupby(['season', 'working_day']).apply(run_creme, (model))
 
     #                 print(error)
@@ -168,7 +168,7 @@ def applyParallel(dfGrouped, func):
     retLst = Parallel(n_jobs=multiprocessing.cpu_count())(delayed(func)(group) for name, group in dfGrouped)
     return pd.concat(retLst)
 
-# @ray.remote(num_return_vals=1)
+@ray.remote(num_return_vals=1)
 def run_creme(dat, model_to_use=None, metric=None, cv = 2):
     all_differences = []
     results = []
