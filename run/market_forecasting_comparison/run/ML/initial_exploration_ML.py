@@ -23,7 +23,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
-
+from sklearn.metrics import SCORERS
 # from elecsim.constants import ROOT_DIR
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -113,9 +113,11 @@ if __name__ == "__main__":
     y = multi_step_dat.filter(like='value').values
     X = multi_step_dat.filter(regex='^(?!.*value).*$').values.astype(np.float32)
 
+    print(sorted(SCORERS.keys()))
+
     helper1 = EstimatorSelectionHelper(models, params, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'])
     # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
-    scoring_params = ['explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error', 'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance']
+    scoring_params = ['explained_variance', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2']
 
     helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=20, refit=False, verbose=1)
 
