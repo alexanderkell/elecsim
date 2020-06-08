@@ -6,8 +6,8 @@ from itertools import chain
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
-from run.market_forecasting_comparison.munging.multi_step_forecasting_wrangling import multi_step_data_prep, get_hours_of_days_needed
-from run.market_forecasting_comparison.ML.EstimatorSelectionHelper import EstimatorSelectionHelper
+# from run.market_forecasting_comparison.munging.multi_step_forecasting_wrangling import multi_step_data_prep, get_hours_of_days_needed
+# from run.market_forecasting_comparison.ML.EstimatorSelectionHelper import EstimatorSelectionHelper
 
 import pandas as pd
 import numpy as np
@@ -262,10 +262,10 @@ if __name__ == "__main__":
     X = multi_step_dat.filter(regex='^(?!.*value).*$').values.astype(np.float32)
 
     print(sorted(SCORERS.keys()))
+    scoring_params = ['explained_variance', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_mean_squared_log_error', 'r2']
 
-    helper1 = EstimatorSelectionHelper(models, params, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'])
+    helper1 = EstimatorSelectionHelper(models, params, scoring=scoring_params)
     # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
-    scoring_params = ['explained_variance', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2']
 
     helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=20, refit=False, verbose=1)
 
