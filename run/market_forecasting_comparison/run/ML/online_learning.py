@@ -154,8 +154,8 @@ class EstimatorSelectionHelperCreme:
                     list_of_keys.append(params_string)
                     output.append(error)
 
-                # output_of_creme = ray.get(output)
-                output_of_creme = output
+                output_of_creme = ray.get(output)
+                # output_of_creme = output
 
         # print("self.keys: {}".format(self.keys))
         # print("output_of_creme: {}".format(output_of_creme))
