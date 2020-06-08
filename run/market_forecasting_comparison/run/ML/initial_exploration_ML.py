@@ -54,48 +54,48 @@ models = {
     'KNeighborsRegressor': KNeighborsRegressor()
 }
 
-# params = {
-#     'LinearRegression': {},
-#     'Lasso': {},
-#     'Ridge': {},
-#     'ElasticNet': {},
-#     'llars': {},
-#     'ExtraTreesRegressor': {'model__estimator__n_estimators': [16, 32]},
-#     'RandomForestRegressor': {'model__estimator__n_estimators': [16, 32]},
-#     'AdaBoostRegressor':  {'model__estimator__n_estimators': [16, 32]},
-#     'GradientBoostingRegressor': {'model__estimator__n_estimators': [16, 32], 'model__estimator__learning_rate': [0.8, 1.0]},
-#     'SVR': [
-#         {'model__estimator__kernel': ['linear'], 'model__estimator__C': [1, 10]},
-#         {'model__estimator__kernel': ['rbf'], 'model__estimator__C': [1, 10], 'model__estimator__gamma': [0.001, 0.0001]},
-#     ],
-#     'MLPRegressor': {"model__estimator__hidden_layer_sizes": [(1,), (50,)], "model__estimator__activation": ["tanh", "relu"], "model__estimator__solver": ["adam"], "model__estimator__alpha": [0.00005, 0.0005]},
-#     'KNeighborsRegressor': {'model__estimator__n_neighbors': [5, 20, 50]},
-# }
-
 params = {
     'LinearRegression': {},
     'Lasso': {},
     'Ridge': {},
     'ElasticNet': {},
     'llars': {},
-    'ExtraTreesRegressor': {'model__estimator__n_estimators': [32]},
-    'RandomForestRegressor': {'model__estimator__n_estimators': [32]},
-    'AdaBoostRegressor':  {'model__estimator__n_estimators': [32]},
-    'GradientBoostingRegressor': {'model__estimator__n_estimators': [32], 'model__estimator__learning_rate': [0.8]},
+    'ExtraTreesRegressor': {'model__estimator__n_estimators': [16, 32]},
+    'RandomForestRegressor': {'model__estimator__n_estimators': [16, 32]},
+    'AdaBoostRegressor':  {'model__estimator__n_estimators': [16, 32]},
+    'GradientBoostingRegressor': {'model__estimator__n_estimators': [16, 32], 'model__estimator__learning_rate': [0.8, 1.0]},
     'SVR': [
-        # {'model__estimator__kernel': ['linear'], 'model__estimator__C': [10]},
-        {'model__estimator__kernel': ['rbf'], 'model__estimator__C': [10], 'model__estimator__gamma': [0.001]},
+        {'model__estimator__kernel': ['linear'], 'model__estimator__C': [1, 10]},
+        {'model__estimator__kernel': ['rbf'], 'model__estimator__C': [1, 10], 'model__estimator__gamma': [0.001, 0.0001]},
     ],
-    'MLPRegressor': {"model__estimator__hidden_layer_sizes": [(1,), (50,)], "model__estimator__activation": ["tanh", "relu"], "model__estimator__solver": ["adam"], "model__estimator__alpha": [0.0005]},
-    'KNeighborsRegressor': {'model__estimator__n_neighbors': [20]},
+    'MLPRegressor': {"model__estimator__hidden_layer_sizes": [(1,), (50,)], "model__estimator__activation": ["tanh", "relu"], "model__estimator__solver": ["adam"], "model__estimator__alpha": [0.00005, 0.0005]},
+    'KNeighborsRegressor': {'model__estimator__n_neighbors': [5, 20, 50]},
 }
+
+# params = {
+#     'LinearRegression': {},
+#     'Lasso': {},
+#     'Ridge': {},
+#     'ElasticNet': {},
+#     'llars': {},
+#     'ExtraTreesRegressor': {'model__estimator__n_estimators': [32]},
+#     'RandomForestRegressor': {'model__estimator__n_estimators': [32]},
+#     'AdaBoostRegressor':  {'model__estimator__n_estimators': [32]},
+#     'GradientBoostingRegressor': {'model__estimator__n_estimators': [32], 'model__estimator__learning_rate': [0.8]},
+#     'SVR': [
+#         # {'model__estimator__kernel': ['linear'], 'model__estimator__C': [10]},
+#         {'model__estimator__kernel': ['rbf'], 'model__estimator__C': [10], 'model__estimator__gamma': [0.001]},
+#     ],
+#     'MLPRegressor': {"model__estimator__hidden_layer_sizes": [(1,), (50,)], "model__estimator__activation": ["tanh", "relu"], "model__estimator__solver": ["adam"], "model__estimator__alpha": [0.0005]},
+#     'KNeighborsRegressor': {'model__estimator__n_neighbors': [20]},
+# }
 
 
 if __name__ == "__main__":
 
     # "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-    demand = pd.read_csv('{}/../data/capacity/demand.csv'.format(ROOT_DIR))
+    demand = pd.read_csv('{}/../../data/capacity/demand.csv'.format(ROOT_DIR))
     # solar = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/solar.csv'.format(ROOT_DIR))
     # offshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/offshore.csv'.format(ROOT_DIR))
     # onshore = pd.read_csv('{}/../run/market_forecasting_comparison/data/capacity/onshore.csv'.format(ROOT_DIR))
@@ -115,7 +115,13 @@ if __name__ == "__main__":
 
     helper1 = EstimatorSelectionHelper(models, params, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'])
     # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
-    helper1.fit_parallel(X, y, scoring=['neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'], n_jobs=-1, cv=5, refit=False, verbose=1)
+    scoring_params = ['explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error', 'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance']
+
+    helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=20, refit=False, verbose=1)
+
+
+
+
 
     res = helper1.score_summary()
 
