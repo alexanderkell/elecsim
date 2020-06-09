@@ -277,4 +277,4 @@ if __name__ == "__main__":
 
     timezone = pytz.timezone("Europe/London")
 
-    res.to_csv('{}/../data/results/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)))
+    res.to_csv('{}/demand_initial_exploration-{}.csv'.format(ROOT_DIR, datetime.now(tz=timezone)))
