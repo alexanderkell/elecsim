@@ -329,7 +329,7 @@ models = {
     'LinearRegression': linear_model.LinearRegression(),
     'BoxCoxRegressor': meta.BoxCoxRegressor(regressor=linear_model.LinearRegression(intercept_lr=0.2)),
 #     'KNeighborsRegressor': neighbors.KNeighborsRegressor(),
-    'SoftmaxRegression': linear_model.SoftmaxRegression(),
+#     'SoftmaxRegression': linear_model.SoftmaxRegression(),
     'MLPRegressor': compat.convert_sklearn_to_creme(neural_network.MLPRegressor()),
 }
 
