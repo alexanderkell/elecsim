@@ -351,7 +351,7 @@ params = {
     'LinearRegression': {},
     'BoxCoxRegressor': {'power': [0.1]},
 #     'KNeighborsRegressor': {},
-    'SoftmaxRegression': {},
+#     'SoftmaxRegression': {},
     'MLPRegressor': {
         "solver": ['adam'],
         'learning_rate': ['adaptive'],
