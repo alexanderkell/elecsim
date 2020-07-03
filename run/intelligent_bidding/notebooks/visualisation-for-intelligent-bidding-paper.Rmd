@@ -1,0 +1,105 @@
+---
+title: "intelligent-bidding-visualisation"
+output: html_document
+---
+
+```{r packages}
+library("ggplot2")
+library("tidyverse")
+library("scales")
+library(wesanderson)
+```
+
+
+
+
+```{r}
+unbounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df.csv")
+bounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df_150.csv")
+
+```
+
+
+```{r}
+unbounded_results
+```
+
+```{r}
+unbounded_results = rename(unbounded_results, c("Capacity"="capacity"))
+
+p = ggplot(data=unbounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") + scale_color_viridis()
+# + geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE)))#+ scale_colour_continuous(formatter = comma)
+
+print(p)
+
+ggsave("figures/unbounded_results.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+```
+
+```{r}
+
+unbounded_results = rename(unbounded_results, c("Number \nof Steps"="Step"))
+
+p = ggplot(filter(unbounded_results, `Number \nof Steps` > max(unbounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,250) + scale_x_continuous(labels = comma) 
+
+print(p)
+
+ggsave("figures/unbounded_results_scatter.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+
+```{r}
+bounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df_150.csv")
+
+bounded_results
+
+```
+
+```{r}
+bounded_results = rename(bounded_results, c("Capacity"="capacity"))
+
+p = ggplot(data=bounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") + scale_color_viridis()
+
+print(p)
+
+ggsave("figures/bounded_results.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+bounded_results = rename(bounded_results, c("Number \nof Steps"="Step"))
+
+p = ggplot(filter(bounded_results, `Number \nof Steps` > max(bounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + scale_x_continuous(labels = comma) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,85)
+
+print(p)
+
+ggsave("figures/bounded_results_scatter.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+# bounded_results_max = list.files(pattern="/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/*.csv")
+# bounded_results_max = lapply(bounded_results_max, read.delim)
+
+
+setwd("~/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/")
+bounded_results_max <-
+    list.files(pattern = "*.csv") %>% map_df(~read_csv(.))
+
+```
+
+```{r}
+# bounded_results_max = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/")
+
+bounded_results_max = rename(bounded_results_max, c("Capacity"="capacity"))
+
+p = ggplot(data=bounded_results_max, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Number of Steps") #+ geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE))) #+ scale_colour_continuous(formatter = comma)
+
+print(p)
+
+ggsave("figures/bounded_results_max", p, dpi=1000, width = 30, height = 20, units = "cm")
+```
+
