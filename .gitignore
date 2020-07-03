@@ -3,7 +3,7 @@
 
 # Large Files
 elecsim/data/external/electricity_demand/*
-
+run/intelligent_bidding/data/bids_data/*
 
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
