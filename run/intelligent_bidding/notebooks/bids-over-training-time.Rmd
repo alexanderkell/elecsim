@@ -1,0 +1,41 @@
+---
+title: "actual_bids_visualised"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+
+
+```{r}
+small_bid_data = read_csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/small_company_df.csv")
+head(small_bid_data)
+
+big_bid_data = read_csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/big_company_df.csv")
+
+head(big_bid_data)
+```
+
+```{r}
+ggplot(small_bid_data, aes(x=timestamp, y=`0`)) + geom_point()
+```
+```{r}
+p = ggplot(small_bid_data, aes(x=factor(timestamp), y=`0`)) + geom_violin() + xlab("Time of training") + ylab("Price of bids (£/MWh)") + ggtitle("Smallest GenCo group")
+
+ggsave("figures/small_data_violin.png", p)
+```
+
+
+
+```{r}
+ggplot(big_bid_data, aes(x=timestamp, y=`0`)) + geom_point()
+```
+
+```{r}
+p = ggplot(big_bid_data, aes(x=factor(timestamp), y=`0`)) + geom_violin() + xlab("Time of training") + ylab("Price of bids (£/MWh)") + ggtitle("Biggest GenCo group")
+
+ggsave("figures/big_data_violin.png", p)
+```
+
