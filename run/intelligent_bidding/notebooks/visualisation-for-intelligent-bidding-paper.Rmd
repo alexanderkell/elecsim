@@ -7,7 +7,6 @@ output: html_document
 library("ggplot2")
 library("tidyverse")
 library("scales")
-library(wesanderson)
 ```
 
 
@@ -27,7 +26,7 @@ unbounded_results
 ```{r}
 unbounded_results = rename(unbounded_results, c("Capacity"="capacity"))
 
-p = ggplot(data=unbounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") + scale_color_viridis()
+p = ggplot(data=unbounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") 
 # + geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE)))#+ scale_colour_continuous(formatter = comma)
 
 print(p)
@@ -39,7 +38,7 @@ ggsave("figures/unbounded_results.pdf", p, dpi=1000, width = 30, height = 20, un
 
 unbounded_results = rename(unbounded_results, c("Number \nof Steps"="Step"))
 
-p = ggplot(filter(unbounded_results, `Number \nof Steps` > max(unbounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,250) + scale_x_continuous(labels = comma) 
+p = ggplot(filter(unbounded_results, `Number \nof Steps` > max(unbounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,250) + scale_x_continuous(labels = comma)
 
 print(p)
 
@@ -59,7 +58,7 @@ bounded_results
 ```{r}
 bounded_results = rename(bounded_results, c("Capacity"="capacity"))
 
-p = ggplot(data=bounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") + scale_color_viridis()
+p = ggplot(data=bounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") #+ geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE))) #+ scale_colour_continuous(formatter = comma)
 
 print(p)
 
