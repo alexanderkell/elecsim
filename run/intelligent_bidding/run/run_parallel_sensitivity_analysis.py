@@ -244,7 +244,8 @@ if __name__ == "__main__":
     #              ['Scottish power'], ['Drax Power Ltd'], ["Magnox Ltd"]]
 
     # max_bid = 150
-    max_bids = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
+    # max_bids = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
+    max_bids = [120, 140, 160, 180, 190]
     # max_bid = 600
 
     # for genco_group in gencos_rl_bidding:

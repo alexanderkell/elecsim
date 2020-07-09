@@ -93,7 +93,7 @@ bounded_results_max <-
 ```{r}
 # bounded_results_max = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/")
 
-bounded_results_max = rename(bounded_results_max, c("Capacity"="capacity"))
+# bounded_results_max = rename(bounded_results_max, c("Capacity"="capacity"))
 
 p = ggplot(data=bounded_results_max, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Number of Steps") #+ geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE))) #+ scale_colour_continuous(formatter = comma)
 
@@ -102,3 +102,83 @@ print(p)
 ggsave("figures/bounded_results_max", p, dpi=1000, width = 30, height = 20, units = "cm")
 ```
 
+```{r}
+sens_analysis = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/sensitivity_analysis/sensitivity_analysis_results.csv")
+
+p = ggplot(filter(sens_analysis, Step > 20000, Step < 30000), aes(x=max_bid, y=Value, color=Step)) + geom_point() + geom_smooth() + xlab("Capped bid level (£/MWh)") + ylab("Average accepted bid (£/MWh)")+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + stat_summary(geom = "errorbar", fun.data = mean_se)
+
+print(p)
+
+ggsave("figures/sensitivity_analysis.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+
+```{r}
+
+large_150 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/large_company_150.csv")
+
+large_600 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_large_company_600.csv")
+
+small_150 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_small_company_150.csv")
+
+small_600 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_small_company_600.csv")
+
+```
+
+```{r}
+
+p = ggplot(large_150, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=1,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/large_company_capped_150_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+```{r}
+
+
+p = ggplot(large_600, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=10,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/large_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+p = ggplot(small_150, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=0.5,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/small_company_capped_150_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+
+```{r}
+p = ggplot(small_600, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=10,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/small_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+  ```
