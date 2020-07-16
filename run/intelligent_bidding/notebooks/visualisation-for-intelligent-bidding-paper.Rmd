@@ -131,7 +131,7 @@ small_600 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run
 
 p = ggplot(large_150, aes(X0)) + 
     geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
-                   binwidth=1,
+                   binwidth=4,
                    colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
 
 print(p)
@@ -146,7 +146,7 @@ ggsave("figures/large_company_capped_150_bids.png", p, dpi=1000, width = 30, hei
 
 p = ggplot(large_600, aes(X0)) + 
     geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
-                   binwidth=10,
+                   binwidth=4,
                    colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
 
 print(p)
@@ -181,4 +181,4 @@ print(p)
 ggsave("figures/small_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
 
 
-  ```
+```
