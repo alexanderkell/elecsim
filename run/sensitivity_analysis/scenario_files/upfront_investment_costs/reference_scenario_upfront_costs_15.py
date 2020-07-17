@@ -103,7 +103,7 @@ fuel_prices['value'] = fuel_prices.groupby("Fuel")['value'].transform(lambda x: 
 
 # Weighted Cost of Capital
 nuclear_wacc = 0.1  # https://www.imperial.ac.uk/media/imperial-college/research-centres-and-groups/icept/Cost-estimates-for-nuclear-power-in-the-UK.pdf (page 20). # Post tax
-non_nuclear_wacc = 0.079  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
+non_nuclear_wacc = 0.039  # https://assets.kpmg/content/dam/kpmg/ch/pdf/cost-of-capital-study-2017-en.pdf # post tax
 
 # Availability
 non_fuel_plant_availability = 0.97
