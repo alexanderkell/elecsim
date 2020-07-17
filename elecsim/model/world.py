@@ -77,6 +77,7 @@ class World(Model):
 
         self.set_log_level(log_level)
 
+        self.scenario_file = scenario_file
         self.overwrite_scenario_file(scenario_file)
 
         self.override_highest_demand(highest_demand)
@@ -540,14 +541,16 @@ class World(Model):
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
-            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}.csv".format(
+            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}-scenario_{}.csv".format(
                                                                                                self.demand_change_name,
                                                                                                self.carbon_scenario_name,
                                                                                                dt.datetime.now().strftime(
                                                                                                    '%Y-%m-%d_%H-%M-%S'),
                                                                                                # elecsim.scenario.scenario_data.segment_demand_diff[-1],
                                                                                                 1,
-                                                                                                self.distribution_name)
+                                                                                                self.distribution_name,
+                                                                                                self.scenario_file.split("/")[-1].split(".")[0]
+            )
 
             directory_filename = "{}/{}.csv".format(directory, filename)
 
