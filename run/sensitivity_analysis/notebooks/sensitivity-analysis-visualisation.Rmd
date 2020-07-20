@@ -1,0 +1,60 @@
+---
+title: "1.0-R-ajmk-sensitivity-visulisation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("tidyverse")
+```
+
+
+
+```{r}
+wacc_results = read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/sensitivity_analysis/data/processed/wacc_sensitivity_data.csv')
+
+head(wacc_results)
+
+wacc_results$wacc = wacc_results$wacc/10
+```
+
+```{r}
+p = ggplot(filter(wacc_results, year==2034, fuel_type!="biomass", fuel_type!="carbon", fuel_type!="recip_gas"), aes(x=as.factor(wacc), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type), ncol=2) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Electricity mix (%)") + xlab("Weighted average cost of capital (%)")
+
+print(p)
+
+ggsave("figures/wacc_sensitivity_analysis.pdf", p, dpi=1000, width = 30, height = 40, units = "cm")
+
+```
+
+
+```{r}
+p = ggplot(filter(wacc_results, year==2034, fuel_type=="carbon"), aes(x=as.factor(wacc), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type)) + scale_y_continuous()+  theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm"))+ ylab("Relative carbon emissions") + xlab("Weighted average cost of capital (%)")
+
+print(p)
+
+ggsave("figures/wacc_carbon_sensitivity_analysis.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+downpayment_results = read_csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/sensitivity_analysis/data/processed/downpayment_sensitivity_data.csv")
+head(downpayment_results)
+```
+```{r}
+p = ggplot(filter(downpayment_results, year==2034, fuel_type!="biomass", fuel_type!="carbon", fuel_type!="recip_gas"), aes(x=as.factor(downpayment), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type), ncol=2) +  theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm"))+ ylab("Electricity mix (%)") + xlab("Downpayment required for investments (%)")
+
+print(p)
+
+ggsave("figures/downpayment_sensitivity_analysis.pdf", p, dpi=1000, width = 30, height = 40, units = "cm")
+```
+
+```{r}
+p = ggplot(filter(downpayment_results, year==2034, fuel_type=="carbon"), aes(x=as.factor(downpayment), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type)) + scale_y_continuous()+  theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm"))+ ylab("Relative carbon emissions") + xlab("Weighted average cost of capital (WACC)")
+
+print(p)
+
+ggsave("figures/downpayment_carbon_sensitivity_analysis.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
