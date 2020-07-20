@@ -5,6 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 library("tidyverse")
+require(scales)
 ```
 
 
@@ -50,7 +51,7 @@ ggsave("figures/downpayment_sensitivity_analysis.pdf", p, dpi=1000, width = 30, 
 ```
 
 ```{r}
-p = ggplot(filter(downpayment_results, year==2034, fuel_type=="carbon"), aes(x=as.factor(downpayment), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type)) + scale_y_continuous()+  theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm"))+ ylab("Relative carbon emissions") + xlab("Weighted average cost of capital (WACC)")
+p = ggplot(filter(downpayment_results, year==2034, fuel_type=="carbon"), aes(x=as.factor(downpayment), y=simulated_perc))  + geom_violin(position="dodge")+ facet_wrap(vars(fuel_type)) + scale_y_continuous()+  theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm"))+ ylab("Relative carbon emissions") + xlab("Downpayment required for investments (%)")
 
 print(p)
 
