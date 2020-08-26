@@ -144,6 +144,18 @@ ggsave("figures/large_company_capped_150_bids.png", p, dpi=1000, width = 30, hei
 ```{r}
 
 
+p = ggplot(large_150, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+```
+
+
+
+```{r}
+
+
 p = ggplot(large_600, aes(X0)) + 
     geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
                    binwidth=4,
@@ -154,6 +166,17 @@ print(p)
 ggsave("figures/large_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
 
 ```
+
+```{r}
+
+
+p = ggplot(large_600, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+```
+
 
 
 ```{r}
@@ -166,6 +189,16 @@ print(p)
 
 ggsave("figures/small_company_capped_150_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
 
+
+```
+
+```{r}
+
+
+p = ggplot(small_150, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
 
 ```
 
@@ -182,3 +215,46 @@ ggsave("figures/small_company_capped_600_bids.png", p, dpi=1000, width = 30, hei
 
 
 ```
+
+```{r}
+
+
+p = ggplot(small_600, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density") +  scale_x_continuous(trans='log10')
+
+print(p)
+
+```
+
+```{r all-together}
+
+small_600$Item = "Smallest company - £600"
+small_150$Item = "Smallest company - £150"
+large_600$Item = "Largest GenCo group - £600"
+large_150$Item = "Largest GenCo group - £150"
+
+small_600$Size = "Smallest"
+small_150$Size = "Smallest"
+large_600$Size = "Largest"
+large_150$Size = "Largest"
+
+small_600$Cap = "£600"
+small_150$Cap = "£150"
+large_600$Cap = "£600"
+large_150$Cap = "£150"
+
+
+
+
+all_df = rbind(small_600, small_150, large_600, large_150)
+
+p = ggplot(all_df, aes(X0, color=Cap, lty=Size)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid log10(£/MWh)") + ylab("Density") +  scale_x_continuous(trans='log10', labels = comma) # + theme(legend.position="bottom")
+
+print(p)
+
+ggsave("figures/ecdf_all.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+

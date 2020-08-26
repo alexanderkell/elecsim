@@ -267,7 +267,8 @@ if __name__ == "__main__":
     helper1 = EstimatorSelectionHelper(models, params, scoring=scoring_params)
     # helper1.fit(X, y, n_jobs=-1, cv=5, refit=False)
 
-    helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=10, refit=False, verbose=1)
+    # helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=10, refit=False, verbose=1)
+    helper1.fit_parallel(X, y, scoring=scoring_params, n_jobs=-1, cv=2, refit=False, verbose=1)
 
 
 
