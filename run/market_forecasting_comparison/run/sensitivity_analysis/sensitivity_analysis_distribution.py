@@ -132,7 +132,7 @@ if __name__ == '__main__':
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = []
-    for scale_val in range(3,20):
+    for scale_val in range(4,20):
         print("Value iterating through: {}".format(scale_val))
         # dist_object = norm(*list(norm.rvs(loc=0, scale=scale_val, size=50000).tolist()
         dist_object = norm.rvs(loc=0, scale=scale_val*1000, size=50000).tolist()
@@ -151,7 +151,7 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        returned_result = Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in tqdm(range(0, 100)))
+        returned_result = Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ inrange(0, 100))
 
 
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
