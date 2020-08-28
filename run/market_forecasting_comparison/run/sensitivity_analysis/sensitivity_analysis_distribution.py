@@ -69,8 +69,8 @@ number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
 # scenario_file = "{}/../run/beis_case_study/scenario/reference_scenario_2018.py".format(ROOT_DIR)
 
-# @ray.remote
 
+@ray.remote(num_return_vals=1)
 def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribution=None):
     beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0, -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668, 39.791132970522796, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.9117317131295195, 0.00240696026847, -5.0144941135222, 0.00021183142492999999, -1.29658413335784, 0.00039441444392000004, -11.41659250225168, 0.00039441444392000004, -11.41659250225168, 120.21276910611674, 0.0, 0.00059945111227]
     # beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0, -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668, 39.791132970522796, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.9117317131295195, 0.00240696026847, -5.0144941135222, 0.00021183142492999999, -1.29658413335784, 0.00039441444392000004, -11.41659250225168, 0.0021988838824299997, 12.633572943294599, 120.21276910611674, 0.0, 0.00059945111227]
@@ -79,6 +79,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
 
     MARKET_TIME_SPLICES = 8
     YEARS_TO_RUN = 17
+    # YEARS_TO_RUN = 1
 
     number_of_steps = YEARS_TO_RUN * MARKET_TIME_SPLICES
 
@@ -92,7 +93,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
     # print(individual)
 
 
-    world = World(demand_distribution=demand_distribution, distribution_name = distribution_name, carbon_price_scenario=optimal_carbon_tax, initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1], dropbox=True, log_level="info")
+    world = World(demand_distribution=demand_distribution, distribution_name = distribution_name, carbon_price_scenario=optimal_carbon_tax, initialization_year=2018, scenario_file=scenario_2018, market_time_splices=MARKET_TIME_SPLICES, data_folder="compare_ml_accuracy", number_of_steps=number_of_steps, long_term_fitting_params=prices_individual, highest_demand=63910, nuclear_subsidy=beis_params[-3], future_price_uncertainty_m=beis_params[-2], future_price_uncertainty_c=beis_params[-1], dropbox=False, log_level="info")
     for j in range(YEARS_TO_RUN):
         # print("Years to run: {}, j: {}".format(YEARS_TO_RUN, j))
         for i in range(MARKET_TIME_SPLICES):
@@ -102,7 +103,7 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
                 print('end of year')
                 # pass
             world.step()
-    # return 1
+    return 1
 
 
 # @ray.remote
@@ -114,7 +115,8 @@ def run_world(optimal_carbon_tax=None, distribution_name = None, demand_distribu
 
 # results = []
 if __name__ == '__main__':
-    # ray.init(num_cpus=7)
+    # ray.init(num_cpus=multiprocessing.cpu_count()-1)
+    ray.init(num_cpus=4)
 
     beis_params = [0.00121256259168, 46.850377392563864, 0.0029982421515, 28.9229765616468, 0.00106156336814, 18.370337670063762, 0.00228312539654, 0.0, 0.0024046471141100003, 34.43480109190594, 0.0, -20.88014916953091, 0.0, 8.15032953348701, 0.00200271495761, -12.546185375581802, 0.00155518243668, 39.791132970522796, 0.00027449937576, 8.42878689508516, 0.00111989525697, 19.81640207212787, 0.00224091998324, 5.26288570922149, 0.00209189353332, -5.9117317131295195, 0.00240696026847, -5.0144941135222, 0.00021183142492999999, -1.29658413335784, 0.00039441444392000004, -11.41659250225168, 0.00039441444392000004, -11.41659250225168, 120.21276910611674, 0.0, 0.00059945111227]
 
@@ -132,7 +134,7 @@ if __name__ == '__main__':
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = []
-    for scale_val in range(5,20):
+    for scale_val in range(6,20):
         print("Value iterating through: {}".format(scale_val))
         # dist_object = norm(*list(norm.rvs(loc=0, scale=scale_val, size=50000).tolist()
         dist_object = norm.rvs(loc=0, scale=scale_val*1000, size=50000).tolist()
@@ -151,11 +153,15 @@ if __name__ == '__main__':
         # print(dist_object))
         # run_world(carbon_list, resultant_dists, dist_object)
         # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in range(0, 100))
-
+        # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for _ in range(0, 100))
 
         # Parallel(n_jobs=7)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-        # pool.map(run_world(number_of_steps, dist_object, prices_individual, carbon_list), list(range(0, 150)))
+
+        for _ in range(100):
+            output = run_world.remote(carbon_list, resultant_dists, dist_object)
+
+        output1 = ray.get(output)
+
 
         # time.sleep(30)
 
