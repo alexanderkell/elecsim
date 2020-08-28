@@ -156,12 +156,12 @@ if __name__ == '__main__':
 
     # os.execv(sys.executable, [sys.executable] + sys.argv)
 
-    resultant_dists = None
+    # resultant_dists = None
     # print(dist_object))
     # run_world(carbon_list, resultant_dists, dist_object)
     # Parallel(n_jobs=multiprocessing.cpu_count()-1)(delayed(run_world)(carbon_list, resultant_dists, dist_object) for i in tqdm(range(0, 100)))
-    returned_result = Parallel(n_jobs=multiprocessing.cpu_count() - 1, verbose=51, backend='multiprocessing')(
-        delayed(run_world)(carbon_list, resultant_dists, None) for _ in range(0, 100))
+    # returned_result = Parallel(n_jobs=multiprocessing.cpu_count() - 1, verbose=51, backend='multiprocessing')(
+    #     delayed(run_world)(carbon_list, resultant_dists, None) for _ in range(0, 100))
 
 
 
