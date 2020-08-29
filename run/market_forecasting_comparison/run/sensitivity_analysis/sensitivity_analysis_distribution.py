@@ -16,7 +16,8 @@ import pickle
 import ray
 from elecsim.model.world import World
 from scipy.stats import norm
-
+import psutil
+import gc
 
 from tqdm import tqdm
 import multiprocessing
@@ -162,6 +163,8 @@ if __name__ == '__main__':
 
         output1 = ray.get(output)
 
+        if psutil.virtual_memory().percent >= 80:
+            gc.collect()
 
         # time.sleep(30)
 
