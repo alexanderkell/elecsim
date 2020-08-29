@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
         output1 = ray.get(output)
 
-        if psutil.virtual_memory().percent >= 80:
+        if psutil.virtual_memory().percent >= 70:
             gc.collect()
 
         # time.sleep(30)
