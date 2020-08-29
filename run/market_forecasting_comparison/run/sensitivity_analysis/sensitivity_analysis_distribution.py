@@ -135,7 +135,7 @@ if __name__ == '__main__':
     carbon_list = carbon_df.x.tolist()
 
     result_distributions_object = []
-    for scale_val in range(7,20):
+    for scale_val in range(11,20):
         print("Value iterating through: {}".format(scale_val))
         # dist_object = norm(*list(norm.rvs(loc=0, scale=scale_val, size=50000).tolist()
         dist_object = norm.rvs(loc=0, scale=scale_val*1000, size=50000).tolist()
