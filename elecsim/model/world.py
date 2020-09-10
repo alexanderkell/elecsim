@@ -5,6 +5,7 @@ from random import uniform, randint, sample
 from time import perf_counter
 import importlib.util
 import time
+import dropbox
 
 import numpy as np
 import pandas as pd
@@ -45,7 +46,7 @@ class World(Model):
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl = None):
+    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None, gencos_rl=[], write_data_to_file=True, rl_port_number=9920):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -69,16 +70,22 @@ class World(Model):
         self.max_number_of_steps = number_of_steps
         self.average_electricity_price = 0
         self.market_time_splices = market_time_splices
-
         self.nuclear_subsidy = nuclear_subsidy
+        self.dropbox = dropbox
+        self.gencos_rl = gencos_rl
+        self.write_data_to_file = write_data_to_file
 
         self.set_log_level(log_level)
 
+        self.scenario_file = scenario_file
         self.overwrite_scenario_file(scenario_file)
 
         self.override_highest_demand(highest_demand)
         self.override_carbon_scenario(carbon_price_scenario)
         self.override_demand_change(demand_change)
+
+        self.demand_distribution_uncertainty = demand_distribution
+        self.distribution_name = distribution_name
 
         self.override_total_demand(total_demand, number_of_agents)
 
@@ -88,22 +95,27 @@ class World(Model):
         plant_data = elecsim.scenario.scenario_data.power_plants
         financial_data = elecsim.scenario.scenario_data.company_financials
 
+        if self.gencos_rl:
+            self.bidding_client = PolicyClient("http://127.0.0.1:{}".format(rl_port_number))
+
         # Initialize generation companies using financial and plant data
-        self.initialize_gencos(financial_data, plant_data)
+        self.initialize_gencos(financial_data, plant_data, gencos_rl)
 
         self.last_added_plant = None
         self.last_added_plant_bids = None
 
         # Create PowerExchange
+
         if self.market_time_splices == 1:
-            self.PowerExchange = PowerExchange(self)
+            self.PowerExchange = PowerExchange(self, demand_distribution)
             self.demand = Demand(self, self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff)
         elif self.market_time_splices > 1:
-            self.PowerExchange = PowerExchange(self)
+            self.PowerExchange = PowerExchange(self, demand_distribution)
             # self.PowerExchange = HighTemporalExchange(self)
             self.demand = MultiDayDemand(self, self.unique_id_generator, elecsim.scenario.scenario_data.multi_year_data)
         else:
             raise ValueError("market_time_splices must be equal to or larger than 1.")
+
 
         self.running = True
         self.beginning_of_year = False
@@ -131,6 +143,8 @@ class World(Model):
                 self.fitting_params = None
             else:
                 raise ValueError("If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World")
+
+
 
 
     def step(self, carbon_price=None):
@@ -178,7 +192,8 @@ class World(Model):
         self.step_number += 1
         print(".", end='', flush=True)
 
-        self.write_scenario_data()
+        if self.write_data_to_file:
+            self.write_scenario_data()
 
         if isinstance(self.average_electricity_price, np.ndarray):
             self.average_electricity_price = self.average_electricity_price[0]
@@ -197,7 +212,7 @@ class World(Model):
         return abs(self.average_electricity_price), abs(carbon_emitted)
         # return self.datacollector.get_model_vars_dataframe(), self.over_invested
 
-    def initialize_gencos(self, financial_data, plant_data):
+    def initialize_gencos(self, financial_data, plant_data, gencos_rl):
         """
         Creates generation company agents based on financial data and power plants owned. Estimates cost parameters
          of each power plant if data not for power plant not available.
@@ -218,18 +233,22 @@ class World(Model):
 
         # Initialize generation companies with their respective power plants
         for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
+            rl_bidding = False
             if financials.Company.iloc[0] != name:
                 raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
+            elif financials.Company.iloc[0] in gencos_rl:
+                rl_bidding = True
 
-            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0])
+            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0], rl_bidding=rl_bidding)
             self.unique_id_generator += 1
             # Add power plants to generation company portfolio
             # parent_directory = os.path.dirname(os.getcwd())
             pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(ROOT_DIR)
+
             for plant in data.itertuples():
                 try:
                     power_plant = pickle.load(open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "rb"))
-                except (OSError, IOError, FileNotFoundError) as e:
+                except (OSError, IOError, FileNotFoundError, EOFError) as e:
                     logger.info("plant: {}".format(plant))
                     power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
                     pickle.dump(power_plant, open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "wb"))
@@ -521,12 +540,48 @@ class World(Model):
             directory = "{}/{}/".format(parent_directory, self.data_folder)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            self.datacollector.get_model_vars_dataframe().to_csv(
-                "{}/demand_{}-carbon_{}-datetime_{}-capacity_{}.csv".format(directory, self.demand_change_name,
-                                                                            self.carbon_scenario_name,
-                                                                            dt.datetime.now().strftime(
-                                                                                '%Y-%m-%d_%H-%M-%S'),
-                                                                            elecsim.scenario.scenario_data.segment_demand_diff[-1]))
+
+            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}-scenario_{}.csv".format(
+                                                                                               self.demand_change_name,
+                                                                                               self.carbon_scenario_name,
+                                                                                               dt.datetime.now().strftime(
+                                                                                                   '%Y-%m-%d_%H-%M-%S'),
+                                                                                               # elecsim.scenario.scenario_data.segment_demand_diff[-1],
+                                                                                                1,
+                                                                                                self.distribution_name,
+                                                                                                self.scenario_file.split("/")[-1].split(".")[0]
+            )
+
+            directory_filename = "{}/{}.csv".format(directory, filename)
+
+            results_df = self.datacollector.get_model_vars_dataframe()
+            results_df.to_csv(directory_filename)
+
+            class TransferData:
+                def __init__(self, access_token):
+                    self.access_token = access_token
+
+                def upload_file(self, file_from, file_to):
+                    """upload a file to Dropbox using API v2
+                    """
+                    dbx = dropbox.Dropbox(self.access_token)
+
+                    with open(file_from, 'rb') as f:
+                        dbx.files_upload(f.read(), file_to)
+            if self.dropbox:
+                access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
+                transferData = TransferData(access_token)
+
+                file_from = "/{}".format(directory_filename)
+                file_to = "/{}".format(filename)
+
+                # API v2
+                transferData.upload_file(file_from, file_to)
+
+
+
+
+
 
         if self.step_number == self.max_number_of_steps:
             end = perf_counter()

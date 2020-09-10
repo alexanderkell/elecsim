@@ -54,8 +54,9 @@ class MarketServing(ExternalMultiAgentEnv):
         
         ExternalMultiAgentEnv.__init__(
             self,
-            MultiDiscrete([16, 10]),
-            # Discrete(29, shape=(1, 2)),
+            # MultiDiscrete([16, 10]),
+            # Discrete(159),
+            Discrete(47),
             # Box(low=-1, high=1000, shape=(31,), dtype=np.float)
             Box(np.array(lower_bounds), np.array(upper_bounds))
         )
@@ -107,7 +108,8 @@ if __name__ == "__main__":
 
     tune.run_experiments({
         "my_experiment": {
-            "run": "PG",
+            # "run": "PG",
+            "run": "DQN",
             "env": "srv",
             'checkpoint_at_end': True,
             'checkpoint_freq': 5,
@@ -121,6 +123,20 @@ if __name__ == "__main__":
                 "sample_batch_size": 25,
                 "train_batch_size": 25,
                 # "horizon": 25,
+                "exploration_config": {
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 1.0,
+                    "final_epsilon": 0.1,
+                    # "epsilon_timesteps": 10000,  # Timesteps over which to anneal epsilon.
+
+                    # For soft_q, use:
+                    # "exploration_config" = {
+                    #   "type": "SoftQ"
+                    #   "temperature": [float, e.g. 1.0]
+                    # }
+                },
             }
         }
     })

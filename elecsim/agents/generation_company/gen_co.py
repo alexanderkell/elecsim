@@ -31,7 +31,7 @@ __email__ = "Alexander@Kell.es"
 
 class GenCo(Agent):
     def __init__(self, unique_id, model, name, difference_in_discount_rate, look_back_period, plants=None,
-                 money=5000000):
+                 money=5000000, rl_bidding=False):
         """
         Agent which defines a generating company
         :param unique_id: Unique ID for the generating company
@@ -53,6 +53,8 @@ class GenCo(Agent):
 
         self.gas_price_modifier = 0
         self.coal_price_modifier = 0
+
+        self.rl_bidding = rl_bidding
 
 
     def step(self):
@@ -81,7 +83,7 @@ class GenCo(Agent):
     #         bids.append(Bid(self, plant, segment_hour, plant.capacity_mw, marked_up_price))
     #     return bids
 
-    def calculate_bids(self, segment_hour, predict=False):
+    def calculate_bids(self, segment_hour, predict=False, actions=None):
         """
         Function to generate the bids for each of the power plants owned by the generating company.
         The bids submitted are the fixed costs divided by lifetime of plant plus yearly variable costs plus a 10% margin
@@ -91,15 +93,19 @@ class GenCo(Agent):
         """
 
         bids = []
-
+        counter = 0
         for plant in self.plants:
-            bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
+            if actions is not None:
+                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number, rl_price=actions[counter])
+                counter += 1
+            else:
+                bid = self.create_bid(plant, predict, segment_hour, self.model.step_number)
             if bid:
                 bids.append(bid)
         return bids
 
     @lru_cache(100000)
-    def create_bid(self, plant, predict, segment_hour, step_number):
+    def create_bid(self, plant, predict, segment_hour, step_number, rl_price=None):
         future_plant_operating = False
         if predict is True:
             YEARS_IN_FUTURE_TO_PREDICT_SUPPLY = elecsim.scenario.scenario_data.years_for_agents_to_predict_forward
@@ -113,6 +119,9 @@ class GenCo(Agent):
                     return None
             else:
                 price = plant.short_run_marginal_cost(self.model, self)
+        elif self.rl_bidding is True:
+            return Bid(self, plant, segment_hour, elecsim.scenario.scenario_data.non_fuel_plant_availability * plant.capacity_mw,
+                       rl_price, self.model.year_number, rl_bid=True)
         else:
             price = plant.short_run_marginal_cost(self.model, self)
         marked_up_price = price * elecsim.scenario.scenario_data.bid_mark_up
@@ -205,11 +214,33 @@ class GenCo(Agent):
 
     def invest_RL(self, action):
         plant_list = elecsim.scenario.scenario_data.potential_plants_to_invest
+        print("action: {}".format(action))
+        # plant_string_to_invest = plant_list[action.item(0)]
+        multiplier_of_100mw = 1
+        # action = action - 1
+        if action >= len(plant_list):
+            multiplier_of_100mw = action//len(plant_list)
+            action = action % len(plant_list)
 
-        plant_string_to_invest = plant_list[action.item(0)]
+
+
+        # print("len(plant_list): {}".format(len(plant_list)))
+        # print("number_of_plants: {}".format(number_of_plants))
+        # print("action: {}".format(action))
+
+        plant_string_to_invest = plant_list[action]
         plant = elecsim.scenario.scenario_data.modern_plant_costs[elecsim.scenario.scenario_data.modern_plant_costs.Plant_Type.str.contains(plant_string_to_invest)]
 
-        plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], action.item(1))
+        number_of_plants_needed = (multiplier_of_100mw*100)/(plant.Plant_Size.values[0])
+
+        print("number_of_plants_needed: {}".format(number_of_plants_needed))
+        print("MW required: {}".format(multiplier_of_100mw*100))
+        print("plant.Plant_Size.values[0]: {}".format(plant.Plant_Size.values[0]))
+
+        # For multi discrete action type
+        # plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], action.item(1))
+        # For discrete action type
+        plant_group = create_power_plant_group("plant_RL_invested", self.model.year_number, plant.Type.values[0], plant.Plant_Size.values[0], number_of_plants_needed)
 
         self.plants.append(plant_group)
 

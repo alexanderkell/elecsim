@@ -1,0 +1,491 @@
+﻿Company Name,Station Name,Fuel,Installed,Year,Location
+A7 Energy (2),Greendykeside,wind,4,2007,Scotland
+,Lochhead,wind,6,2009,Scotland
+,,,,,
+AES,Kilroot,coal/oil,520,1981,Northern Ireland
+,Kilroot OCGT,gas oil,142,1981,Northern Ireland
+,Ballylumford B,gas,540,1968,Northern Ireland
+,Ballylumford B OCGT,gas oil,116,1968,Northern Ireland
+,Ballylumford C,CCGT,616,2003,Northern Ireland
+,,,,,
+Baglan Generation Ltd,Baglan Bay,CCGT,510,2002,Wales
+,,,,,
+Barking Power (3),Barking,CCGT,1000,1994,London
+,,,,,
+Beaufort Wind Ltd (4),Bears Down,wind  ,10,2001,South West
+,Bein Ghlas,wind,8,1999,Scotland
+,Bryn Titli,wind,10,1994,Wales
+,Carno,wind,34,1996,Wales
+,Causeymire,wind   ,48,2004,Scotland
+,Kirkby Moor,wind,5,1993,North West
+,Lambrigg,wind,7,2000,North West
+,Llyn Alaw,wind,20,1997,Wales
+,Mynydd Gorddu,wind,10,1996,Wales
+,Novar,wind,17,1997,Scotland
+,Taff Ely,wind,9,1993,Wales
+,Tow Law,wind,2,2001,North East
+,Trysglwyn,wind,6,1996,Wales
+,Windy Standard,wind  ,22,1996,Scotland
+,North Hoyle,wind (offshore),60,2003,Wales
+,Farr,wind  ,92,2006,Scotland
+,Ffynnon Oer,wind  ,32,2006,Wales
+,,,,,
+BNP Paribas Clean Energy Partners GP Limited (5),Gruig,wind,25,2009,Northern Ireland
+,,,,,
+Braes of Doune Windfarm (6),Braes of Doune,wind,72,2007,Scotland
+,,,,,
+British Energy (7),Dungeness B,nuclear,1040,1983,South East
+,Hartlepool,nuclear,1180,1984,North East
+,Heysham1,nuclear,1155,1984,North West
+,Heysham 2,nuclear,1220,1988,North West
+,Hinkley Point B,nuclear,880,1976,South West
+,Sizewell B,nuclear,1198,1995,East
+,Hunterston B,nuclear,890,1976,Scotland
+,Torness,nuclear,1185,1988,Scotland
+,,,,,
+Cemmaes Windfarm Ltd (8),Cemmaes,wind,15,2002 (9),Wales
+,,,,,
+Centrica,Barry (10),CCGT,140,1998,Wales
+,Glanford Brigg (10),CCGT,140,1993,Yorkshire and the Humber
+,Killingholme,CCGT,665,1994,Yorkshire and the Humber
+,Peterborough (10),CCGT,240,1993,East
+,South Humber Bank ,CCGT,1285,1996,Yorkshire and the Humber
+,Langage,CCGT,905,2010,South West
+,Glens of Foudland,wind,26,2005,Scotland
+,Lynn,wind (offshore),97,2009,East Midlands
+,Inner Dowsing,wind (offshore),97,2009,East Midlands
+,,,,,
+Cold Northcott Windfarm Ltd (8),Cold Northcott,wind,7,1993,South West
+Coolkeeragh ESB Ltd,Coolkeeragh,CCGT,408,2005,Northern Ireland
+,Coolkeeragh OCGT,gas oil,72,2005,Northern Ireland
+,,,,,
+Corby Power Ltd,Corby,CCGT,401,1993,East Midlands
+,,,,,
+Dong Energy,Burbo Bank,wind (offshore),90,2009,North West
+,Gunfleet Sands 1,wind (offshore),108,2010,South East
+,Gunfleet Sands 2,wind (offshore),65,2010,South East
+,Walney 1 (3),wind (offshore),184,2011,North West
+,Walney 2 (3),wind (offshore),184,2011,North West
+,Barrow (11),wind (offshore),90,2006,North West
+,Severn,CCGT,848,2010,Wales
+,Lincs (11),wind (offshore),270,2012,East
+,,,,,
+Drax Power Ltd,Drax,coal/biomass,3870,1974,Yorkshire and the Humber
+,Drax GT,gas oil,75,1971,Yorkshire and the Humber
+,,,,,
+EDF Energy,Cottam,coal,2008,1969,East Midlands
+,West Burton,coal,2012,1967,East Midlands
+,West Burton GT,gas oil,40,1967,East Midlands
+,Thames Valley Power,gas/gas oil CHP,15,1995,London
+,London Heat & Power Company ,gas CHP,9,2000,London
+,  (Imperial College),,,,
+,Barkantine Heat & Power Company ,gas CHP,1,2000,London
+,Aberdare District Energy,gas,10,2002,Wales
+,Bridgewater District Energy,gas,10,2000,South West
+,Sevington District Energy,gas,10,2000,South East
+,Solutia District Energy,gas,10,2000,Wales
+,West Burton CCGT,CCGT,1410,2012,East Midlands
+,,,,,
+EDF Energy Renewables,Bicker Fen,wind,26,2008,East Midlands
+,Walkway,wind,14,2008,North East
+,Longpark,wind,38,2009,Scotland
+,Burnfoot Hill,wind,26,2010,Scotland
+,Rusholme,wind,24,2010,Yorkshire and the Humber
+,Fairfield,wind,7,2011,North West
+,Green Rigg ,wind,36,2012,North East
+,Fallago,wind,144,2013,Scotland
+,Glass Moor II,wind,12,2013,East Midlands
+,Boundary Lane,wind,6,2013,North East
+,,,,,
+Eggborough Power Ltd,Eggborough,coal,1960,1967,Yorkshire and the Humber
+,,,,,
+EPR Ely Limited,Elean,straw/gas,38,2001,East
+EPR Eye Ltd,"Eye, Suffolk",AWDF (10),13,1992,East
+EPR Glanford Ltd,Glanford,meat & bone meal,13,1993,East
+EPR Thetford Ltd,Thetford,poultry litter,39,1998,East
+EPR Scotland Ltd,Westfield,poultry litter,12,2000,Scotland
+,,,,,
+E.On UK,Ironbridge,biomass,900,1970,West Midlands
+,Ratcliffe,coal,2000,1968,East Midlands
+,Grain GT,gas oil,55,1978,South East
+,Ratcliffe GT,gas oil,34,1966,East Midlands
+,Taylor's Lane GT,gas oil,132,1979,London
+,Connahs Quay,CCGT,1380,1996,Wales
+,Cottam Development Centre,CCGT,390,1999,East Midlands
+,Enfield,CCGT,408,1999,London
+,Killingholme,CCGT,900,1993,Yorkshire and the Humber
+,Sandbach,CCGT,50,1999,North West
+,Castleford,CCGT,56,2002,Yorkshire and the Humber
+,Thornhill,CCGT,50,1998,Yorkshire and the Humber
+,Grain,CCGT,1365,2010,South East
+,Steven's Croft,biomass,50,2007,Scotland
+,,,,,
+,Askam,wind,5,1999,North West
+,Bowbeat,wind,31,2002,Scotland
+,Deucheran Hill,wind,16,2001,Scotland
+,Hare Hill,wind,6,2004,North East
+,High Volts,wind,8,2004,North East
+,Holmside,wind,6,2004,North East
+,Lowca,wind,5,2000,North West
+,Oldside,wind,5,1996,North West
+,Out Newton,wind,9,2002,Yorkshire and the Humber
+,Scroby Sands,wind (offshore),60,2004,East
+,Siddick,wind,4,1996,North West
+,Stags Holt ,wind,20,2007,East
+,Rhyd-y-Groes,wind,7,1992,Wales
+,Blyth,wind (offshore),4,2000,North East
+,Robin Rigg ,wind (offshore),180,2010,Scotland
+,Great Eppleton ,wind,8,2010,North East
+,Butterwick Moor,wind,21,2011,North East
+,Haswell Moor,wind,10,2010,North East
+,Rosehall,wind,25,2012,Scotland
+,Tween Bridge,wind,44,2012,North East
+,Camster,wind,10,2012,Scotland
+,,,,,
+Falck Renewables Wind Ltd,Ben Aketil,wind,28,2007,Scotland
+,Boyndie,wind,16,2006,Scotland
+,Cefn Croes,wind,59,2006,Wales
+,Earlsburn,wind,38,2007,Scotland
+,Kilbraur,wind,68,2008,Scotland
+,Millennium,wind,65,2008,Scotland
+,,,,,
+Fenland Windfarms Ltd (8),Deeping,wind,16,2006,East Midlands
+,Glass Moor,wind,16,2006,East Midlands
+,Red House,wind,12,2006,East Midlands
+,Red Tile,wind,24,2007,East Midlands
+,,,,,
+Fred Olsen,Crystal Rig Windfarm,wind,63,2003,Scotland
+,Paul's Hill,wind,64,2005,Scotland
+,Rothes,wind,51,2004,Scotland
+,Crystal Rig II,wind,138,2010,Scotland
+,Rothes II,wind,41,2013,Scotland
+,,,,,
+GDF Suez ,Teesside (13),OCGT,45,1992,North East
+,Scotia,wind,20,2010,Scotland
+,,,,,
+Great Orton Windfarm Ltd (8),Great Orton,wind,4,1999 (7),North West
+,,,,,
+HG Capital,Tyr Mostyn & Foel Goch,wind,21,2005,Wales
+,Bagmoor ,wind,16,2009,East Midlands
+,Solutia,wind,5,2009,Wales
+,Workington (Eastman),wind,4,2005,North West
+,Dewley Cheese,wind,2,2010,North West
+,,,,,
+High Hedley Hope Wind Ltd (8),High Hedley 1,wind,2,2001,North East
+,High Hedley 2,wind,5,2008,North East
+,Trimdon Grange,wind,5,2008,North East
+,Langley Park,wind,8,2008,North East
+,Broomhill,wind,8,2008,North East
+,,,,,
+Immingham CHP LLP,Immingham CHP,gas CHP,1240,2004,Yorkshire and the Humber
+Infinis,Ardrossan,wind,24,2004,Scotland
+,Ardrossan Extension,wind,6,2008,Scotland
+,Dalswinton,wind,30,2008,Scotland
+,Minsca,wind,37,2008,Scotland
+,Slieve Divena,wind,30,2009,N Ireland
+,Rheidol,wind,2,1997,Wales
+,Lissett,wind,30,2007,Yorkshire and the Humber
+,Mynydd Clogau,wind,14,2004,Wales
+,Hill of Fiddes,wind,7,2010,Scotland
+,Low Spinney,wind,8,2011,East Midlands
+,Blackstone Edge,wind,6,2013,Yorkshire and the Humber
+,Gordonstown,wind,6,2013,Scotland
+,Seamer,wind,10,2012,North East
+,Westfield,wind,10,2013,Scotland
+,Wingates,wind,15,2013,North East
+,Glenkerie,wind,20,2012,Scotland
+Intergen,Coryton ,CCGT,800,2001,East
+,Rocksavage,CCGT,810,1998,North West
+,Spalding,CCGT,880,2004,East Midlands
+,,,,,
+International Power Ltd,Indian Queens,gas oil/kerosene,140,1996,South West
+,Dinorwig,pumped storage,1728,1983,Wales
+,Ffestiniog,pumped storage,360,1961,Wales
+,Rugeley ,coal,1006,1972,West Midlands
+,Rugeley GT,gas oil,50,1972,West Midlands
+,Deeside ,CCGT,515,1994,Wales
+,Saltend ,CCGT,1200,2000,Yorkshire and the Humber
+,,,,,
+Kirkheaton Wind Ltd (8),Kirkheaton,wind,2,2000,North East
+,,,,,
+K/S Winscales (8),Winscales 1,wind,2,1999,North West
+,Winscales 2,wind,7,2005,North West
+,,,,,
+Llangwyryfon Windfarm Ltd (8),Llangwyryfon,wind,9,2003,Wales
+,,,,,
+London Array Ltd (14),London Array,wind (offshore),630,2012,South East
+,,,,,
+Londonwaste Limited,Belvedere,waste,60,2012,South East
+,,,,,
+Lynemouth Power Ltd (15),Lynemouth,coal,420,1972,North East
+,,,,,
+Magnox Ltd (16),Wylfa,nuclear,490,1971,Wales
+,Maentwrog,hydro,28,1928,Wales
+,,,,,
+Marchwood Power Limited (17),Marchwood,CCGT,842,2009,South West
+,,,,,
+MEAG,Scout Moor (3),Wind,65,2009,North West
+,,,,,
+Peel Energy Ltd,Seaforth,Wind,4,1999,North West
+,Port of Liverpool,Wind,10,2008,North West
+,,,,,
+Px Limited (18),Fellside CHP,gas CHP,180,1995,North West
+,,,,,
+RES-Gen Ltd,Dyffryn Brodyn,wind,5,1994,Wales
+,Four Burrows,wind,5,1995,South West
+,Forss,wind,2,2003,Scotland
+,Forss2,wind,5,2007,Scotland
+,Lendrum's Bridge,wind,13,2000,Northern Ireland
+,Altahullion,wind,26,2003,Northern Ireland
+,Altahullion2,wind,12,2007,Northern Ireland
+,Black Hill,wind,29,2006,Scotland
+,Lough Hill,wind,8,2007,Northern Ireland
+,Kelburn ,wind,28,2011,Scotland
+,Hill of Towie,wind,48,2012,Scotland
+,Meikle Carewe,wind,10,2013,Scotland
+,Tallentire,wind,12,2013,England
+,Grange,wind,14,2013,England
+,Roos ,wind,17,2012,England
+,Wadlow,wind,26,2012,England
+RGS Energy Ltd,Knapton,gas,40,1994,Yorkshire and the Humber
+,,,,,
+Riverside Resource Recovery Limited,Edmonton,waste,80,2011,South East
+,,,,,
+RWE Npower Plc,Aberthaw B,coal,1586,1971,Wales
+,Tilbury B ,biomass,750,1968,East
+,Aberthaw GT,gas oil,51,1971,Wales
+,Cowes ,gas oil,140,1982,South East
+,Didcot GT,gas oil,100,1972,South East
+,Fawley GT,gas oil,68,1969,South East
+,Littlebrook GT,gas oil,105,1982,South East
+,Tilbury GT,rapeseed oil,68,1968,East
+,Little Barford GT,gas oil,17,2006,East
+,Littlebrook D ,oil,1370,1982,South East
+,Didcot B,CCGT,1430,1998,South East
+,Great Yarmouth,CCGT,420,2001,East
+,Little Barford,CCGT,720,1995,East
+,Staythorpe C,CCGT,1724,2010,East Midlands
+,Pembroke,CCGT,2180,2012,Wales
+,,,,,
+    RWE Npower Renewables Ltd,Black Rock,hydro,2,2012,Scotland
+    (Part of RWE Npower),Braevallich,hydro,2,2005,Scotland
+,Cwm Dyli,hydro,10,  2002 (9),Wales
+,Dolgarrog High Head,hydro,17,  2002 (9),Wales
+,Dolgarrog Low Head,hydro,15,1926/2002,Wales
+,Garrogie,hydro,2,2005,Scotland
+,Inverbain,hydro,1,2006,Scotland
+,Kielder,hydro,6,2006 (9),North East
+,River E,hydro,3,2008,Scotland
+,Douglas Water,hydro,3,2008,Scotland
+,Inverlael,hydro,3,2009,Scotland
+,Carnoch,hydro,1,2009,Scotland
+,Burgar Hill,wind,5,2007,Scotland
+,Hameldon Hill,wind,5,2007,North West
+,Bilbster,wind,4,2008,Scotland
+,Hollies,wind,3,2008,East
+,Knabs Ridge,wind,16,2008,North East
+,Little Cheyne,wind,60,2008,South East
+,Rhyl Flats,wind (offshore),90,2009,Wales
+,Lindhurst,wind,9,2010,East Midlands
+,Novar 2,wind,37,2012,Scotland
+,Hellrigg,wind,9,2012,North West
+,Bradwell,wind,21,2013,North East
+,Kiln Pit Hill,wind,14,2012,North East
+Scottish and Southern,,,,,
+   Hydro Schemes:,,,,,
+     Affric/Beauly,Mullardoch Tunnel,hydro,2,1955,Scotland
+,Fasnakyle,hydro,69,1951,Scotland
+,Fasnakyle Compensation Set,hydro,8,2006,Scotland
+,Deanie,hydro,38,1963,Scotland
+,Culligran,hydro,17,1962,Scotland
+,Culligran Compensation  Set,hydro,2,1962,Scotland
+,Aigas,hydro,20,1962,Scotland
+,Kilmorack,hydro,20,1962,Scotland
+,,,,,
+     Breadalbane,Lubreoch,hydro,4,1958,Scotland
+,Cashlie,hydro,11,1959,Scotland
+,Lochay,hydro,46,1958,Scotland
+,Lochay Compensation Set,hydro,2,1959,Scotland
+,Finlarig,hydro,17,1955,Scotland
+,Lednock,hydro,3,1961,Scotland
+,St. Fillans,hydro,17,1957,Scotland
+,Dalchonzie,hydro,4,1958,Scotland
+,,,,,
+     Conon,Achanalt,hydro,3,1956,Scotland
+,Cuileg,hydro,3,2002,Scotland
+,Grudie Bridge,hydro,19,1950,Scotland
+,Mossford,hydro,19,1957,Scotland
+,Luichart,hydro,34,1954,Scotland
+,Orrin,hydro,18,1959,Scotland
+,Torr Achilty,hydro,15,1954,Scotland
+     Foyers,Foyers,hydro/,300,1974,Scotland
+,,pumped storage,,,
+     Great Glen,Foyers Falls,hydro,5,1968,Scotland
+,Mucomir,hydro,2,1962,Scotland
+,Ceannacroc,hydro,20,1956,Scotland
+,Livishie,hydro,17,1962,Scotland
+,Glenmoriston,hydro,37,1957,Scotland
+,Glendoe,hydro,100,2008,Scotland
+,Quoich,hydro,18,1955,Scotland
+,Invergarry,hydro,20,1956,Scotland
+,Kingairloch,hydro,4,2005,Scotland
+,,,,,
+     Shin,Cassley,hydro,10,1959,Scotland
+,Lairg,hydro,4,1959,Scotland
+,Shin,hydro,18,1958,Scotland
+,,,,,
+     Sloy/Awe,Sloy,hydro,153,1950,Scotland
+,Sron Mor,hydro,4,1957,Scotland
+,Clachan,hydro,40,1955,Scotland
+,Allt-na-Lairige,hydro,7,1956,Scotland
+,Nant,hydro,15,1963,Scotland
+,Inverawe,hydro,25,1963,Scotland
+,Kilmelfort,hydro,2,1956,Scotland
+,Loch Gair,hydro,6,1961,Scotland
+,Lussa,hydro,2,1952,Scotland
+,Striven,hydro,8,1951,Scotland
+     Tummel,Gaur,hydro,8,1953,Scotland
+,Cuaich,hydro,3,1959,Scotland
+,Loch Ericht,hydro,2,1962,Scotland
+,Rannoch,hydro,45,1930,Scotland
+,Clunie,hydro,61,1950,Scotland
+,Tummel,hydro,34,1933,Scotland
+,Errochty,hydro,75,1955,Scotland
+,Pitlochry,hydro,15,1950,Scotland
+,,,,,
+   Wind,Artfield Fell,wind,20,2005,Scotland
+,Balmurrie Fell,wind,9,2012,Scotland
+,Bu,wind,3,2002,Scotland
+,Hadyard Hill,wind,120,2005,Scotland
+,Spurness Extension (19),wind,10,2012,Scotland
+,Tangy,wind,19,2002,Scotland
+,Drumderg,wind,37,2008,Scotland
+,,,,,
+,Bessy Bell 1,wind,5,1995,Northern Ireland
+,Bessy Bell 2,wind,9,2008,Northern Ireland
+,Bin Mountain (20),wind,9,2007,Northern Ireland
+,Tappaghan (20),wind,29,2005,Northern Ireland
+,Slieve Kirk,wind,28,2011,Northern Ireland
+,Carcant (20),wind,7,2010,Scotland
+,Toddleburn,wind,28,2010,Scotland
+,Griffin,wind,156,2011,Scotland
+,Greater Gabbard (21),wind (offshore),504,2011,East
+,Achany,wind,38,2010,Scotland
+,Fairburn,wind,40,2009,Scotland
+,Clyde South,wind,129,2011,Scotland
+,Clyde Central,wind,113,2011,Scotland
+,Clyde North,wind,108,2012,Scotland
+,Gordonbush,wind,70,2011,Scotland
+,,,,,
+   Small Hydros:,Chliostair,hydro,1,1960,Scotland
+,Cuileig,hydro,3,2002,Scotland
+,Kerry Falls,hydro,1,1951,Scotland
+,Nostie Bridge,hydro,1,1950,Scotland
+,Storr Lochs,hydro,2,1952,Scotland
+,,,,,
+   Thermal:,Peterhead (22),CCGT,1180,1980,Scotland
+   Thermal (continued),Keadby,CCGT,710,1994,Yorkshire and the Humber
+,Keadby GT,gas oil,25,1994,Yorkshire and the Humber
+,Medway,CCGT,700,1995,South East
+,Ferrybridge C,coal/biomass ,1960,1966,Yorkshire and the Humber
+,Fiddler’s Ferry,coal/biomass ,1961,1971,North West
+,Ferrybridge GT,gas oil,34,1966,Yorkshire and the Humber
+,Fiddler’s Ferry GT,gas oil,34,1969,North West
+,Uskmouth,coal/biomass,240,2000,Wales
+,Slough,coal/biomass/,61,1918,South East
+,,gas/waste derived fuel,,,
+,Chickerell,gas/oil,45,1998,South West
+,Burghfield,gas/oil,45,1998,South East
+,Thatcham,light oil,9,1994,South East
+,Five Oaks,light oil,9,1995,South East
+,Chippenham,gas,10,2002,South West
+,Wheldale,mines gas,8,2002,Yorkshire and the Humber
+,,,,,
+    Island Generation,Arnish,diesel,10,2001,Scotland
+,Barra,diesel,3,1990,Scotland
+,Bowmore,diesel,6,1946,Scotland
+,Kirkwall,diesel,16,1953,Scotland
+,Lerwick,diesel,67,1953,Scotland
+,"Loch Carnan, South Uist",diesel,10,1971,Scotland
+,Stornoway,diesel,19,1950,Scotland
+,Tiree,diesel,3,1945,Scotland
+Scottish Power,,,,,
+Hydro schemes:,,,,,
+    Galloway,Carsfad,hydro,12,1936,Scotland
+,Drumjohn,hydro,2,1985,Scotland
+,Earlstoun,hydro,14,1936,Scotland
+,Glenlee,hydro,24,1935,Scotland
+,Kendoon,hydro,24,1936,Scotland
+,Tongland,hydro,33,1935,Scotland
+,,,,,
+    Lanark,Bonnington,hydro,11,1927,Scotland
+,Stonebyres,hydro,6,1927,Scotland
+,,,,,
+    Cruachan,Cruachan,pumped storage,440,1966,Scotland
+,,,,,
+  Thermal:,Longannet,coal,2304,1970,Scotland
+,Damhead Creek,CCGT,800,2000,South East
+,Pilkington - Greengate,gas CHP,10,1998,North West
+,Rye House,CCGT,715,1993,East
+,Shoreham,CCGT,400,2000,South East
+,,,,,
+   Wind:,Arecleoch,wind,120,2010,Scotland
+,Beinn an Tuirc I,wind,30,2001,Scotland
+,Beinn an Tuirc II,wind,7,2012,Scotland
+,Beinn Tharsuinn,wind,30,2007,Scotland
+,Black Law,wind,124,2005,Scotland
+,Callagheen,wind,17,2006,Northern Ireland
+,Carland Cross RP,wind,10,2013,South West
+,Clachan Flats,wind,15,2009,Scotland
+,Coal Clough,wind,10,1992,North West
+,Coldham,wind,16,2006,East
+,Corkey,wind,5,1994,Northern Ireland
+,Cruach Mhor,wind,30,2004,Scotland
+,Dun Law I,wind,17,2000,Scotland
+,Dun Law II,wind,30,2009,Scotland
+,Elliots Hill,wind,5,1995,Northern Ireland
+,Greenknowes,wind,27,2008,Scotland
+,Hagshaw Hill I,wind,16,1995,Scotland
+,Hagshaw Hill II,wind,26,2009,Scotland
+,Hare Hill,wind,13,2000,Scotland
+,Lynemouth,wind,26,2012,Scotland
+,Mark Hill,wind,56,2011,Scotland
+,Middleton,wind,12,2013,Scotland
+,Penryddian & Llidiartywaun,wind,31,1992,Wales
+,Rigged Hill,wind,5,1994,Northern Ireland
+,Wether Hill,wind,18,2007,Scotland
+,Whitelee,wind,322,2007,Scotland
+,Whitelee II,wind,217,2012,Scotland
+,Wolf Bog,wind,10,2008,Northern Ireland
+,,,,,
+Seabank Power Limited (24),Seabank 1,CCGT,812,1998,South West
+,Seabank 2,CCGT,410,2000,South West
+,,,,,
+Sembcorp Utilities (UK) Ltd,Wilton Power Station,gas/coal/oil,238,1952,North East
+,Wilton GT2,gas,42,2005,North East
+,Wilton 10,biomass,38,2007,North East
+,,,,,
+South East London,,,,,
+Combined Heat & Power Ltd,SELCHP ERF,waste,32,1994,London
+,,,,,
+Statkraft Energy Ltd,Rheidol,hydro,49,1961,Wales
+Statkraft Wind UK Ltd,Alltwalis,wind,23,2009,Wales
+,Scira (Sheringham Shoal),wind (offshore),316,2012,East
+,Baillie,wind,53,2013,Scotland
+,,,,,
+Sutton Bridge Power Generation,Sutton Bridge,CCGT,819,1999,East
+,,,,,
+Talisman Energy,Beatrice (3),wind (offshore),10,2007,Scotland
+,,,,,
+Triodos,FMC (2),wind,2,2011,Scotland
+,,,,,
+Vattenfall Wind Power,Kentish Flats,wind (offshore),90,2005,South East
+,Thanet,wind (offshore),300,2010,South East
+,Edinbane,wind,41,2010,Scotland
+,Ormonde,wind (offshore),150,2011,North West
+,Swinford,wind,22,2012,Midlands
+,,,,,
+Windcluster,Haverigg III (2),wind,3,2005,North West
+,,,,,
+Yorkshire Windpower Ltd  (25),Ovenden Moor,wind,9,1993,Yorkshire and the Humber
+,Royd Moor,wind,7,1993,Yorkshire and the Humber

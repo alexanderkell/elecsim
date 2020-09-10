@@ -53,7 +53,10 @@ class EstimatorSelectionHelper:
 
     def fit_parallel(self, X, y, cv=3, n_jobs=3, verbose=1, refit=True, scoring=None):
 
-        ray.init()
+        ray.init(
+            # address="auto",  # or "<hostname>:<port>" if not using the default port
+            # driver_object_store_memory=2 * 100000 * 1024 * 1024
+        )
         list_of_keys = []
         output = []
         for key in self.keys:
