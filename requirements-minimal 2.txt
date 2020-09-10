@@ -103,7 +103,7 @@ sklearn==0.0
 ssh-import-id==5.7
 systemd-python==234
 tensorboard==1.14.0
-tensorflow==1.14.0
+tensorflow==1.15.2
 tensorflow-estimator==1.14.0
 termcolor==1.1.0
 tornado==6.0.3
