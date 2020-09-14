@@ -1,0 +1,167 @@
+---
+title: "carbon-optimiser-paper"
+author: "Alexander Kell"
+date: "03/02/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(hdrcde)
+library(gghighlight)
+library(gridExtra)
+```
+
+## R Markdown
+
+
+```{r cars}
+# linear = read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/ga_linear.csv')
+
+linear = read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/ga_linear_no_bug.csv')
+
+each_point = read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/each_year_optimisation.csv')
+
+```
+
+```{r}
+each_point$run_number = as.factor(each_point$run_number)
+```
+
+```{r}
+
+library(RColorBrewer)
+my_blue = brewer.pal(n = 9, "Blues")[c(TRUE, FALSE)]
+my_blue_nth = my_blue[-1]
+
+each_point_pointplot = dplyr::rename(each_point, `Generation\nNumber:` = run_number)
+
+ggplot(data=each_point_pointplot, aes(y=carbon_emitted, x=average_electricity_price, color=`Generation\nNumber:`))+geom_point(size=3) + ylab("Relative Carbon Density") + xlab("Average Electricity Price (£/MWh)") + theme_classic() + scale_colour_manual(values=my_blue_nth)+ theme(text = element_text(size=25), legend.position="bottom",aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm"))
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/free_points_ga_development.pdf', dpi=1000)
+
+```
+
+```{r}
+
+linear_pointplot = dplyr::rename(linear, `Generation Number` = run_number)
+linear_pointplot$`Generation Number` = as.factor(linear_pointplot$`Generation Number`)
+# my_blue_6 = brewer.pal(n = 8, "Blues")[5:8]
+
+
+ggplot(data=linear_pointplot, aes(y=carbon_emitted, x=average_electricity_price, color=`Generation Number`))+geom_point(size=3) + ylab("Relative Carbon Density") + xlab("Average Electricity Price (£/MWh)") + theme_classic() +theme(text = element_text(size=18))  + scale_colour_manual(values=my_blue_nth) + theme(legend.position="bottom",plot.margin=grid::unit(c(0,0,0,0), "mm"))
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_ga_development.pdf', dpi=1000)
+
+```
+```{r}
+my_blue_6 = brewer.pal(n = 9, "Blues")[3:9]
+ggplot(data=linear_pointplot, aes(x=average_electricity_price, color=`Generation Number`))+geom_density(alpha=0.1, size=1) + ylab("Density") + xlab("Average Electricity Price (log2(£/MWh))") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_fill_brewer(palette="Blues") + scale_colour_manual(values=my_blue_6)+ scale_x_continuous(trans='log2')#+xlim(3.2, 8)
+```
+
+
+
+
+```{r}
+
+my_blue_6 = brewer.pal(n = 9, "Blues")[3:9]
+
+ggplot(data=linear_pointplot, aes(x=average_electricity_price, color=`Generation Number`))+geom_density(alpha=0.1, size=1) + ylab("Density") + xlab("Average Electricity Price (log2(£/MWh))") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_fill_brewer(palette="Blues") + scale_colour_manual(values=my_blue_6)+ scale_x_continuous(trans='log2')#+xlim(3.2, 8)
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_ga_development_distribution_avg_elec_price.pdf', dpi=1000)
+```
+
+```{r}
+ggplot(data=linear_pointplot, aes(x=carbon_emitted, color=`Generation Number`))+geom_density(alpha=0.1, size=1) + ylab("Density") + xlab("Relative Carbon Density") + theme_classic() +theme(text = element_text(size=18)) + theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) + scale_fill_brewer(palette="Blues") + scale_colour_manual(values=my_blue_6)+ scale_x_continuous(trans='log10')#+xlim(3.2, 8)
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_ga_development_distribution_.pdf', dpi=1000)
+
+```
+
+
+```{r}
+linear_data_exploded = read_csv('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/data/optimisation_data/linear_data_big_exploded_no_bug.csv')
+
+linear_data_exploded$x = linear_data_exploded$x + 2018
+linear_data_exploded = dplyr::rename(linear_data_exploded, `Average\nElectricity\nPrice\n£/MWh` = average_electricity_price)
+
+
+actual_linear_plot = ggplot(data=filter(linear_data_exploded, `Average\nElectricity\nPrice\n£/MWh`<4.5)) + geom_line(aes(x=x,y=y,color=`Average\nElectricity\nPrice\n£/MWh`, group=`Average\nElectricity\nPrice\n£/MWh`))+ theme_classic()  + xlab("Year") + ylab("Carbon Tax £/t CO2")+ theme(aspect.ratio = 1, legend.position = "left", text = element_text(size=25), plot.margin=grid::unit(c(0,0,0,0), "mm"))
+
+print(actual_linear_plot)
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_actual_lines.pdf', dpi=1000)
+```
+
+```{r}
+actual_linear_plot_editted = ggplot(data=filter(linear_data_exploded, `Average\nElectricity\nPrice\n£/MWh`<4.5)) + geom_line(aes(x=x,y=y,color=`Average\nElectricity Price\n£/MWh`, group=`Average\nElectricity Price\n£/MWh`))+ theme_classic() +theme(text = element_text(size=18),legend.position="bottom")  + xlab("Year") + ylab("Carbon Tax £/t CO2")+ theme(aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm"))
+
+legend_b <- get_legend(
+  actual_linear_plot_editted + 
+    guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom")
+)
+```
+
+```{r}
+
+linear_data_exploded$whether_highlighted = linear_data_exploded$id
+linear_data_exploded = linear_data_exploded %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`, 4.4252347946167), "Highest", whether_highlighted)) %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`, 3.84739232063294), "Flat", whether_highlighted)) %>% mutate(whether_highlighted = ifelse(near(`Average\nElectricity Price\n£/MWh`,  4.41116809844971
+ ), "Lowest", whether_highlighted))
+
+
+
+best_lines = filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5)
+
+ggplot(data=best_lines, aes(x=x,y=y,color=`Average\nElectricity Price\n£/MWh`,group=whether_highlighted))+geom_line(size=1)+ theme_classic() +theme(text = element_text(size=18))  + xlab("Year") + ylab("") +  gghighlight(near(`Average\nElectricity Price\n£/MWh`, 4.4252347946167) | near(`Average\nElectricity Price\n£/MWh`,  
+3.84739232063294) | near(`Average\nElectricity Price\n£/MWh`,  
+ 4.41116809844971), keep_scales = TRUE, use_group_by=TRUE, label_key = whether_highlighted, label_params = list(size=10)) +theme(text = element_text(size=30), aspect.ratio = 1, plot.margin=grid::unit(c(0,0,0,0), "mm")) 
+
+
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/highlighted_linear_actual_lines.pdf', dpi=1000)
+
+```
+
+
+```{r}
+arrange(filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5), attr_c)
+
+```
+```{r}
+arrange(filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5), attr_m)
+
+```
+
+```{r}
+arrange(filter(linear_data_exploded, `Average\nElectricity Price\n£/MWh`<4.5), desc(y))
+```
+
+```{r}
+
+linear$run_number = as.factor(linear$run_number)
+linear$method = "Linear policy"
+each_point$run_number = as.factor(each_point$run_number)
+
+each_point$method = "Non-parametric policy"
+
+both_together = rbind(select(linear, average_electricity_price, run_number, method), select(each_point, average_electricity_price, run_number, method))
+
+both_together = rename(both_together, `Generation Number:`=run_number)
+
+ggplot(data=both_together) + facet_wrap(.~method) + geom_density(aes(x=average_electricity_price, color=`Generation Number:`),alpha=0.1, size=1) + ylab("Density") + xlab("Average Electricity Price (log10(£/MWh))") + theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))+ scale_x_continuous(trans='log10') + scale_fill_brewer(palette="Blues") +scale_colour_manual(values=my_blue_nth) + theme_light()+theme(text = element_text(size=25))+ scale_fill_continuous(guide = guide_legend()) + theme(legend.position="bottom")
+
+ggsave('/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/carbon_tax_optimiser/figures/results/linear_and_free_ga_development_distribution_avg_elec_price.pdf', dpi=1000, height =5, width =9.5)
+
+```
+
+```{r}
+hdr.den(linear$average_electricity_price,prob=95)
+```
+```{r}
+hdr.den(each_point$average_electricity_price,prob=95)
+```

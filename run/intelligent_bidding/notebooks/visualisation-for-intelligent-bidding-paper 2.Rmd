@@ -1,0 +1,260 @@
+---
+title: "intelligent-bidding-visualisation"
+output: html_document
+---
+
+```{r packages}
+library("ggplot2")
+library("tidyverse")
+library("scales")
+```
+
+
+
+
+```{r}
+unbounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df.csv")
+bounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df_150.csv")
+
+```
+
+
+```{r}
+unbounded_results
+```
+
+```{r}
+unbounded_results = rename(unbounded_results, c("Capacity"="capacity"))
+
+p = ggplot(data=unbounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") 
+# + geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE)))#+ scale_colour_continuous(formatter = comma)
+
+print(p)
+
+ggsave("figures/unbounded_results.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+```
+
+```{r}
+
+unbounded_results = rename(unbounded_results, c("Number \nof Steps"="Step"))
+
+p = ggplot(filter(unbounded_results, `Number \nof Steps` > max(unbounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,250) + scale_x_continuous(labels = comma)
+
+print(p)
+
+ggsave("figures/unbounded_results_scatter.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+
+```{r}
+bounded_results = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/results/reward_df_150.csv")
+
+bounded_results
+
+```
+
+```{r}
+bounded_results = rename(bounded_results, c("Capacity"="capacity"))
+
+p = ggplot(data=bounded_results, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + scale_x_continuous(labels = comma) + xlab("Number of Steps") #+ geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE))) #+ scale_colour_continuous(formatter = comma)
+
+print(p)
+
+ggsave("figures/bounded_results.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+bounded_results = rename(bounded_results, c("Number \nof Steps"="Step"))
+
+p = ggplot(filter(bounded_results, `Number \nof Steps` > max(bounded_results$`Number \nof Steps`)-40000), aes(x=Capacity, y=Value, color=`Number \nof Steps`)) + geom_point(size=3) + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(5,0,0,0), "mm")) + scale_x_continuous(labels = comma) + ylab("Average £/MWh Accepted") + xlab("Capacity of Agents using RL") + ylim(0,85)
+
+print(p)
+
+ggsave("figures/bounded_results_scatter.pdf", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+
+```{r}
+# bounded_results_max = list.files(pattern="/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/*.csv")
+# bounded_results_max = lapply(bounded_results_max, read.delim)
+
+
+setwd("~/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/")
+bounded_results_max <-
+    list.files(pattern = "*.csv") %>% map_df(~read_csv(.))
+
+```
+
+```{r}
+# bounded_results_max = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/rl_rewards/max/unbounded/")
+
+# bounded_results_max = rename(bounded_results_max, c("Capacity"="capacity"))
+
+p = ggplot(data=bounded_results_max, aes(Step, y=Value, colour=Capacity, group=Capacity)) + geom_line(alpha=0.8)+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + ylab("Average £/MWh Accepted") + xlab("Number of Steps") #+ geom_line(aes(y=rollmean(Value, 50, na.pad=TRUE))) #+ scale_colour_continuous(formatter = comma)
+
+print(p)
+
+ggsave("figures/bounded_results_max", p, dpi=1000, width = 30, height = 20, units = "cm")
+```
+
+```{r}
+sens_analysis = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/sensitivity_analysis/sensitivity_analysis_results.csv")
+
+p = ggplot(filter(sens_analysis, Step > 20000, Step < 30000), aes(x=max_bid, y=Value, color=Step)) + geom_point() + geom_smooth() + xlab("Capped bid level (£/MWh)") + ylab("Average accepted bid (£/MWh)")+ theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + stat_summary(geom = "errorbar", fun.data = mean_se)
+
+print(p)
+
+ggsave("figures/sensitivity_analysis.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+
+```{r}
+
+large_150 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/large_company_150.csv")
+
+large_600 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_large_company_600.csv")
+
+small_150 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_small_company_150.csv")
+
+small_600 = read.csv("/Users/alexanderkell/Documents/PhD/Projects/10-ELECSIM/run/intelligent_bidding/data/processed/bids/set_of_bids_df_small_company_600.csv")
+
+```
+
+```{r}
+
+p = ggplot(large_150, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=4,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/large_company_capped_150_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+```{r}
+
+
+p = ggplot(large_150, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+```
+
+
+
+```{r}
+
+
+p = ggplot(large_600, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=4,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/large_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+```
+
+```{r}
+
+
+p = ggplot(large_600, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+```
+
+
+
+```{r}
+p = ggplot(small_150, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=0.5,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/small_company_capped_150_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+```{r}
+
+
+p = ggplot(small_150, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+```
+
+
+```{r}
+p = ggplot(small_600, aes(X0)) + 
+    geom_histogram(aes(y=..density..),      # Histogram with density instead of count on y-axis
+                   binwidth=10,
+                   colour="black", fill="white") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density")
+
+print(p)
+
+ggsave("figures/small_company_capped_600_bids.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+
+```{r}
+
+
+p = ggplot(small_600, aes(X0)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid (£/MWh)") + ylab("Density") +  scale_x_continuous(trans='log10')
+
+print(p)
+
+```
+
+```{r all-together}
+
+small_600$Item = "Smallest company - £600"
+small_150$Item = "Smallest company - £150"
+large_600$Item = "Largest GenCo group - £600"
+large_150$Item = "Largest GenCo group - £150"
+
+small_600$Size = "Smallest"
+small_150$Size = "Smallest"
+large_600$Size = "Largest"
+large_150$Size = "Largest"
+
+small_600$Cap = "£600"
+small_150$Cap = "£150"
+large_600$Cap = "£600"
+large_150$Cap = "£150"
+
+
+
+
+all_df = rbind(small_600, small_150, large_600, large_150)
+
+p = ggplot(all_df, aes(X0, color=Cap, lty=Size)) + 
+    stat_ecdf(geom = "step") + theme_classic()+ theme(text = element_text(size=22.5), plot.margin=grid::unit(c(0,0,0,0), "mm")) + xlab("Prices bid log10(£/MWh)") + ylab("Density") +  scale_x_continuous(trans='log10', labels = comma) # + theme(legend.position="bottom")
+
+print(p)
+
+ggsave("figures/ecdf_all.png", p, dpi=1000, width = 30, height = 20, units = "cm")
+
+
+```
+

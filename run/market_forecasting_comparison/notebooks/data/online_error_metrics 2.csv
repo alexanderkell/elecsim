@@ -1,0 +1,8 @@
+Estimator,Mean Fit Time,Mean Score Time,Mean MSE,Mean RMSE,Mean MAE
+"(PA) C = 0.1, fit intercept = false",173.47,24.72,103015609.55,9497.47,5888.4
+"(PA) C = 0.1, fit intercept = true",168.66,24.07,63201775.28,7430.63,4605.94
+"(PA) C = 2, fit intercept = false",165.23,23.75,7451087.49,2723.25,1927.33
+"(PA) C = 2, fit intercept = true",174.91,24.65,7223163.14,2681.2,1907.59
+MLP (all parameter variations),71.36,6.58,9612351.37,3076.77,2221.48
+(Box Cox) power = 0.1,38.61,4.88,2921934.52,1703.79,1214.95
+Linear Regression,38.61,4.85,5629651.14,2368.3,1785.02
