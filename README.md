@@ -37,13 +37,14 @@ Once ElecSim is installed, create a python file and fill it with the following c
 from elecsim.model.world import World 
 
 if __name__ == "__main__":
-    world = World(initialization_year = 2018, log_level="info")
-    for i in range(20):
-        world.step()
+    world = World(initialization_year = 2018, log_level="warning")
+    for years in range(20):
+        for time_steps in range(8):
+            world.step()
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
-We instantiate the model to start in the year 2018. The for loop steps the model 20 times, which is equivalent to 20 years in the model.
+We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days.
 
 ## Custom Scenario
 
