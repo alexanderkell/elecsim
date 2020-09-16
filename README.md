@@ -6,6 +6,8 @@ Through the manipulation of a scenario file, one can build a custom environment 
 
 ElecSim allows practitioners to explore the effect of different policy options and starting conditions on electricity markets. 
 
+For the full papers which detail ElecSim, see publication [[1]](https://dl.acm.org/doi/10.1145/3307772.3335321) and [[2]](https://dl.acm.org/doi/10.1145/3396851.3397682)
+
 
 # Features
 
