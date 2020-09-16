@@ -68,11 +68,12 @@ from elecsim.model.world import World
 
 if __name__ == "__main__":
     world = World(initialization_year = 2018, scenario_file='/path/to/scenario.py', log_level="warning")
-    for i in range(20):
-        world.step()
+    for years in range(20):
+        for time_steps in range(8):
+            world.step()
 ```
 
-This will now run the Scottish scenario for 20 years.
+This will now run the Scottish scenario for 20 years, with 8 representative days per year.
 
 
 ## Docker
