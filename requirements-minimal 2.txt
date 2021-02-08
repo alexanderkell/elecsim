@@ -31,7 +31,7 @@ google-pasta==0.1.7
 grpcio==1.22.0
 gym==0.13.1
 h5py==2.9.0
-httplib2==0.9.2
+httplib2==0.19.0
 hyperlink==17.3.1
 idna==2.8
 importlib-metadata==0.18
