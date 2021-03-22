@@ -6,6 +6,8 @@ Through the manipulation of a scenario file, one can build a custom environment 
 
 ElecSim allows practitioners to explore the effect of different policy options and starting conditions on electricity markets. 
 
+For the full papers which detail ElecSim, see publications [[1]](https://dl.acm.org/doi/10.1145/3307772.3335321) and [[2]](https://dl.acm.org/doi/10.1145/3396851.3397682).
+
 
 # Features
 
@@ -35,13 +37,14 @@ Once ElecSim is installed, create a python file and fill it with the following c
 from elecsim.model.world import World 
 
 if __name__ == "__main__":
-    world = World(initialization_year = 2018, log_level="info")
-    for i in range(20):
-        world.step()
+    world = World(initialization_year = 2018, log_level="warning")
+    for years in range(20):
+        for time_steps in range(8):
+            world.step()
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
-We instantiate the model to start in the year 2018. The for loop steps the model 20 times, which is equivalent to 20 years in the model.
+We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days.
 
 ## Custom Scenario
 
@@ -68,11 +71,12 @@ from elecsim.model.world import World
 
 if __name__ == "__main__":
     world = World(initialization_year = 2018, scenario_file='/path/to/scenario.py', log_level="warning")
-    for i in range(20):
-        world.step()
+    for years in range(20):
+        for time_steps in range(8):
+            world.step()
 ```
 
-This will now run the Scottish scenario for 20 years.
+This will now run the Scottish scenario for 20 years, with 8 representative days per year.
 
 
 ## Docker
