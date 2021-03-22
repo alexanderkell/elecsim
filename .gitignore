@@ -220,3 +220,5 @@ tmp/**
 # environment
 cluster_env/
 
+.texpadtmp/
+
