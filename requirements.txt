@@ -156,7 +156,7 @@ requests==2.21.0
 requests-oauthlib==1.3.0
 requests-toolbelt==0.9.1
 rope==0.12.0
-rsa==4.0
+rsa==4.1
 scikit-learn==0.20.3
 scipy==1.4.1
 scoop==0.7.1.1
