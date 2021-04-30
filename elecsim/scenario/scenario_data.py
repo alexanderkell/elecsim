@@ -167,3 +167,5 @@ max_pv_capacity = 85000  # 10W/m^2 (David McKay), cover 5% of the UK
 
 # Predict lost load through exponential and linear regression
 lost_load_price_predictor = True
+
+known_plant_retirements = []
