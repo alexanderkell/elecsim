@@ -11,4 +11,5 @@ import logging
 if __name__ == "__main__":
     world = World(2018, log_level="info", market_time_splices=8)
     for i in range(20):
-        world.step()
+        for i in range(8):
+            world.step()
