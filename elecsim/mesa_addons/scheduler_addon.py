@@ -27,7 +27,7 @@ class OrderedActivation(BaseScheduler):
 
         demand_agents = [agent for agent in self.agents if isinstance(agent, Demand)]
 
-        if elecsim.scenario.scenario_data.investment_mechanism == "RL" and self.model.step_number % self.model.market_time_splices == 0:
+        if elecsim.scenario.scenario_data.investment_mechanism == "RL" and self.model.step_number % self.model.market_time_splices == 0 and self.model.client is not None:
             obs = LatestMarketData(self.model).get_RL_investment_observations()
             actions = self.model.client.get_action(self.model.eid, obs)
             # logger.info("actions: {}".format(actions))
@@ -47,7 +47,7 @@ class OrderedActivation(BaseScheduler):
         for genco in self.model.get_gencos():
             reward[genco.name] = genco.money
 
-        if elecsim.scenario.scenario_data.investment_mechanism == "RL":
+        if elecsim.scenario.scenario_data.investment_mechanism == "RL" and self.model.client is not None:
             self.model.client.log_returns(self.model.eid, reward=reward)
 
         self.steps += 1
