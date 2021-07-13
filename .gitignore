@@ -218,7 +218,7 @@ tmp/**
 
 
 # environment
-cluster_env/
+cluster-env/
 
 .texpadtmp/
 __pycache__/
