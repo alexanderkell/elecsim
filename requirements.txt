@@ -126,7 +126,7 @@ protobuf==3.15.8
 psutil==5.5.0
 ptyprocess==0.6.0
 PuLP==1.6.9
-py==1.7.0
+py==1.10.0
 py-spy==0.3.5
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
