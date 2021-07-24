@@ -77,4 +77,4 @@ if __name__ == "__main__":
     gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE'] # 25
     # gencos_rl_bidding = ['EDF Energy', 'RWE Generation SE', 'Uniper UK Limited', 'Drax Power Ltd', 'SSE', 'Scottish power']
     # gencos_rl_bidding = ['AES'] # 5 Generators
-    run_scenario(gencos_rl_bidding)
+    run_scenario(gencos_rl_bidding, 500)

@@ -35,7 +35,7 @@ dill==0.3.3
 dm-tree==0.1.4
 docutils==0.14
 dropbox==10.1.1
-ElecSIM==0.1.84
+elecsim==0.1.84
 entrypoints==0.3
 filelock==3.0.10
 fitter==1.2.1
