@@ -91,8 +91,6 @@ Once you have an ElecSim container run a particular file using the following com
 docker run elecsim <path/to/file>
 ```
 
-## Contributing back to ElecSim
+## Questions
 
-If you run into an issue, please submit a ticket [here](https://github.com/alexanderkell/elecsim/issues).
-
-To add a feature, submit a ticket [here](https://github.com/alexanderkell/elecsim/issues).
+If you run into an issue, please submit a ticket [here](https://github.com/alexanderkell/elecsim/issues) and we'll be happy to help you get started.
