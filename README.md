@@ -94,6 +94,6 @@ docker run elecsim <path/to/file>
 
 ## Contributing back to ElecSim
 
-If you run into an issue, please submit a ticket [here](https://github.com/alexanderkell/elecsim/issues). If possible, please follow up with a pull request.
+If you run into an issue, please submit a ticket [here](https://github.com/alexanderkell/elecsim/issues).
 
 To add a feature, submit a ticket [here](https://github.com/alexanderkell/elecsim/issues).
