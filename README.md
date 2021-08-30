@@ -1,6 +1,6 @@
 # ElecSim
 
-ElecSim is an agent-based model of an electricity market written in python. ElecSim can be generalised to any country, with the starting parameters set in a scenario file.
+ElecSim is an agent-based model of an electricity market written in python. ElecSim can be generalised to any country, with the starting parameters set in a scenario file. However, ElecSim comes setup with data for the UK electricity market.
 
 Through the manipulation of a scenario file, one can build a custom environment of electricity producers with their respective power plants, and an electricity market which matches demand with supply.
 
@@ -11,9 +11,8 @@ For the full papers which detail ElecSim, see publications [[1]](https://dl.acm.
 
 # Features
 
-* Generalisable to any country
 * Integration of major power plant types
-* Default parameter data included
+* Default parameter data included for the UK
 * Example model library
 
 
