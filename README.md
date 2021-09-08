@@ -15,18 +15,49 @@ For the full papers which detail ElecSim, see publications [[1]](https://dl.acm.
 * Default parameter data included for the UK
 * Example model library
 
+## Anaconda Environment
+
+It is recommended that the user uses a (conda environment)[https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html] to isolate the packages when running ElecSim.
+
+Create a conda environment on the command line, with the following command:
+
+```
+conda create -n elecsim python=3.7
+```
+
+Activate the environment with:
+
+```bash
+> conda activate elecsim
+```
+
+Later, to recover the system-wide "normal" python, deactivate the environment with:
+
+```bash
+> conda elecsim
+```
 
 ## Installation
 
-Install ElecSim through the python repository pip with the following command
+It is recommended to install elecsim by first downloading the latest repository from github:
 ```
-pip install elecsim
+git clone https://github.com/alexanderkell/elecsim.git
 ```
 
-Or for the latest release:
+Then, you can install elecsim as a python package with the following command from the directory where the `elecsim` folder has been saved:
+
 ```
-pip install -e git+https://github.com/alexanderkell/elecsim
+python -m pip install -e "elecsim[dev]"
 ```
+
+This allows you to make changes to the elecsim code, and for the changes to be immediately updated in your environment for the elecsim package.
+
+Next, install the requirement packages for elecsim to run:
+
+```
+python -m pip install -r requirements.txt
+```
+
 
 ## Getting started
 
@@ -43,7 +74,7 @@ if __name__ == "__main__":
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
-We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days.
+We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days. If you would like to run the model for a single year, just remove the `for years in range(20):` line.
 
 ## Custom Scenario
 
@@ -78,18 +109,6 @@ if __name__ == "__main__":
 This will now run the Scottish scenario for 20 years, with 8 representative days per year.
 
 
-## Docker
-
-ElecSim is hosted on docker hub, so that anybody on any machine can quickly get running. 
-
-Run the following command to pull ElecSim from docker hub
-```
-docker pull alexkell/elecsim:latest
-```
-Once you have an ElecSim container run a particular file using the following command
-```
-docker run elecsim <path/to/file>
-```
 
 ## Questions
 
