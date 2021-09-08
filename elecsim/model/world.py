@@ -5,16 +5,16 @@ from random import uniform, randint, sample
 from time import perf_counter
 import importlib.util
 import time
-import dropbox
 
 import numpy as np
 import pandas as pd
 from mesa import Model
 from mesa.datacollection import DataCollector
 import pickle
-from ray.rllib.utils.policy_client import PolicyClient
 
-from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import get_capacity_factor
+from elecsim.plants.fuel.capacity_factor.capacity_factor_calculations import (
+    get_capacity_factor,
+)
 
 from elecsim.agents.demand.demand import Demand
 from elecsim.agents.demand.multi_day_demand import MultiDayDemand
@@ -41,12 +41,39 @@ __copyright__ = "Copyright 2018, Alexander Kell"
 __license__ = "MIT"
 __email__ = "Alexander@Kell.es"
 
+
 class World(Model):
     """
     Model for the electricity landscape world
     """
 
-    def __init__(self, initialization_year, scenario_file=None, fitting_params=None, long_term_fitting_params=None, future_price_uncertainty_m = None, future_price_uncertainty_c = None, carbon_price_scenario=None, demand_change=None, demand_distribution=None, number_of_steps=32, total_demand=None, number_of_agents=None, market_time_splices=1, data_folder=None, time_run=False, nuclear_subsidy=None, highest_demand=None, log_level="warning", client_rl=None, distribution_name = None, dropbox=None, gencos_rl=[], write_data_to_file=True, rl_port_number=9920):
+    def __init__(
+        self,
+        initialization_year,
+        scenario_file=None,
+        fitting_params=None,
+        long_term_fitting_params=None,
+        future_price_uncertainty_m=None,
+        future_price_uncertainty_c=None,
+        carbon_price_scenario=None,
+        demand_change=None,
+        demand_distribution=None,
+        number_of_steps=32,
+        total_demand=None,
+        number_of_agents=None,
+        market_time_splices=1,
+        data_folder=None,
+        time_run=False,
+        nuclear_subsidy=None,
+        highest_demand=None,
+        log_level="warning",
+        client_rl=None,
+        distribution_name=None,
+        dropbox=None,
+        gencos_rl=[],
+        write_data_to_file=True,
+        rl_port_number=9920,
+    ):
         """
         Initialize an electricity market in a particular country. Provides the ability to change scenarios from this constructor.
         :param int initialization_year: Year to begin simulation.
@@ -96,7 +123,9 @@ class World(Model):
         financial_data = elecsim.scenario.scenario_data.company_financials
 
         if self.gencos_rl:
-            self.bidding_client = PolicyClient("http://127.0.0.1:{}".format(rl_port_number))
+            self.bidding_client = PolicyClient(
+                "http://127.0.0.1:{}".format(rl_port_number)
+            )
 
         # Initialize generation companies using financial and plant data
         self.initialize_gencos(financial_data, plant_data, gencos_rl)
@@ -108,14 +137,22 @@ class World(Model):
 
         if self.market_time_splices == 1:
             self.PowerExchange = PowerExchange(self, demand_distribution)
-            self.demand = Demand(self, self.unique_id_generator, elecsim.scenario.scenario_data.segment_time, elecsim.scenario.scenario_data.segment_demand_diff)
+            self.demand = Demand(
+                self,
+                self.unique_id_generator,
+                elecsim.scenario.scenario_data.segment_time,
+                elecsim.scenario.scenario_data.segment_demand_diff,
+            )
         elif self.market_time_splices > 1:
             self.PowerExchange = PowerExchange(self, demand_distribution)
             # self.PowerExchange = HighTemporalExchange(self)
-            self.demand = MultiDayDemand(self, self.unique_id_generator, elecsim.scenario.scenario_data.multi_year_data)
+            self.demand = MultiDayDemand(
+                self,
+                self.unique_id_generator,
+                elecsim.scenario.scenario_data.multi_year_data,
+            )
         else:
             raise ValueError("market_time_splices must be equal to or larger than 1.")
-
 
         self.running = True
         self.beginning_of_year = False
@@ -128,9 +165,12 @@ class World(Model):
         self.create_data_loggers(data_folder)
 
         self.client = client_rl
-        if elecsim.scenario.scenario_data.investment_mechanism == "RL" and self.client is not None:
+        if (
+            elecsim.scenario.scenario_data.investment_mechanism == "RL"
+            and self.client is not None
+        ):
             # self.client = PolicyClient("http://rllibserver:9900")
-            
+
             self.eid = self.client.start_episode(training_enabled=True)
             self.intial_obs = LatestMarketData(self).get_RL_investment_observations()
             # logger.info("self.intial_obs: {}".format(self.intial_obs))
@@ -143,13 +183,12 @@ class World(Model):
                 self.long_term_fitting_params = long_term_fitting_params
                 self.fitting_params = None
             else:
-                raise ValueError("If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World")
-
-
-
+                raise ValueError(
+                    "If using future_price_fit you must enter a value for long_term_fitting_params or fitting_params in the constructor of World"
+                )
 
     def step(self, carbon_price=None):
-        '''Advance model by one step'''
+        """Advance model by one step"""
         self.beginning_of_year = False
 
         if self.step_number % self.market_time_splices == 0:
@@ -161,9 +200,9 @@ class World(Model):
                 # self.operate_constructed_plants()
                 self.beginning_of_year = True
                 # logger.info("year: {}".format(self.year_number))
-                print("{}:".format(self.year_number), end='', flush=True)
+                print("{}:".format(self.year_number), end="", flush=True)
             else:
-                print("{}:".format(self.year_number), end='', flush=True)
+                print("{}:".format(self.year_number), end="", flush=True)
 
         obs = self.schedule.step()
         self.operate_constructed_plants()
@@ -173,15 +212,21 @@ class World(Model):
 
         self.continue_investing = 0
         if carbon_price is not None:
-            elecsim.scenario.scenario_data.carbon_price_scenario[self.year_number + 1] = carbon_price
+            elecsim.scenario.scenario_data.carbon_price_scenario[
+                self.year_number + 1
+            ] = carbon_price
         else:
-            elecsim.scenario.scenario_data.carbon_price_scenario = elecsim.scenario.scenario_data.carbon_price_scenario
+            elecsim.scenario.scenario_data.carbon_price_scenario = (
+                elecsim.scenario.scenario_data.carbon_price_scenario
+            )
 
         if self.beginning_of_year:
             self.dismantle_old_plants()
             self.dismantle_unprofitable_plants()
 
-        self.average_electricity_price = self.PowerExchange.tender_bids(self.demand.segment_hours, self.demand.segment_consumption).accepted_price.mean()
+        self.average_electricity_price = self.PowerExchange.tender_bids(
+            self.demand.segment_hours, self.demand.segment_consumption
+        ).accepted_price.mean()
         self.PowerExchange.price_duration_curve = []
 
         carbon_emitted = self.get_carbon_emitted(self)
@@ -191,7 +236,7 @@ class World(Model):
         self.delete_old_bids()
 
         self.step_number += 1
-        print(".", end='', flush=True)
+        print(".", end="", flush=True)
 
         if self.write_data_to_file:
             self.write_scenario_data()
@@ -201,10 +246,13 @@ class World(Model):
 
         if self.step_number % self.market_time_splices == 0:
             end = time.perf_counter()
-            print("time taken: {}".format(end-self.start))
+            print("time taken: {}".format(end - self.start))
             # get_capacity_factor.cache_clear()
 
-        if self.step_number == self.max_number_of_steps and elecsim.scenario.scenario_data.investment_mechanism == "RL":
+        if (
+            self.step_number == self.max_number_of_steps
+            and elecsim.scenario.scenario_data.investment_mechanism == "RL"
+        ):
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
             del self.client
@@ -222,62 +270,125 @@ class World(Model):
         """
 
         financial_data = pd.merge(financial_data, plant_data, on="Company", how="inner")
-        financial_data = financial_data[['Company', 'cash_in_bank']]
+        financial_data = financial_data[["Company", "cash_in_bank"]]
 
         # Initialising generator company data
         financial_data.cash_in_bank = financial_data.cash_in_bank.replace("nan", np.nan)
         financial_data.cash_in_bank = financial_data.cash_in_bank.fillna(0)
-        companies_groups = plant_data.groupby('Company')
-        company_financials = financial_data.groupby('Company')
+        companies_groups = plant_data.groupby("Company")
+        company_financials = financial_data.groupby("Company")
 
         logger.info("Initialising generation companies with their power plants.")
 
         # Initialize generation companies with their respective power plants
-        for gen_id, ((name, data), (_, financials)) in enumerate(zip(companies_groups, company_financials), 0):
+        for gen_id, ((name, data), (_, financials)) in enumerate(
+            zip(companies_groups, company_financials), 0
+        ):
             rl_bidding = False
             if financials.Company.iloc[0] != name:
-                raise ValueError("Company financials name ({}) and agent name ({}) do not match.".format(financials.Company.iloc[0], name))
+                raise ValueError(
+                    "Company financials name ({}) and agent name ({}) do not match.".format(
+                        financials.Company.iloc[0], name
+                    )
+                )
             elif financials.Company.iloc[0] in gencos_rl:
                 rl_bidding = True
 
-            gen_co = GenCo(unique_id=gen_id, model=self, difference_in_discount_rate=round(uniform(-0.03, 0.03), 3), look_back_period=randint(3, 7), name=name, money=financials.cash_in_bank.iloc[0], rl_bidding=rl_bidding)
+            gen_co = GenCo(
+                unique_id=gen_id,
+                model=self,
+                difference_in_discount_rate=round(uniform(-0.03, 0.03), 3),
+                look_back_period=randint(3, 7),
+                name=name,
+                money=financials.cash_in_bank.iloc[0],
+                rl_bidding=rl_bidding,
+            )
             self.unique_id_generator += 1
             # Add power plants to generation company portfolio
             # parent_directory = os.path.dirname(os.getcwd())
-            pickle_directory = "{}/../elecsim/data/processed/pickled_data/power_plants/".format(ROOT_DIR)
+            pickle_directory = (
+                "{}/../elecsim/data/processed/pickled_data/power_plants/".format(
+                    ROOT_DIR
+                )
+            )
 
             for plant in data.itertuples():
                 try:
-                    power_plant = pickle.load(open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "rb"))
+                    power_plant = pickle.load(
+                        open(
+                            "{}{}-{}.pickle".format(
+                                pickle_directory, plant.Name, plant.Start_date
+                            ),
+                            "rb",
+                        )
+                    )
                 except (OSError, IOError, FileNotFoundError, EOFError) as e:
                     logger.info("plant: {}".format(plant))
-                    power_plant = create_power_plant(plant.Name, plant.Start_date, plant.Simplified_Type, plant.Capacity)
-                    pickle.dump(power_plant, open("{}{}-{}.pickle".format(pickle_directory, plant.Name, plant.Start_date), "wb"))
+                    power_plant = create_power_plant(
+                        plant.Name,
+                        plant.Start_date,
+                        plant.Simplified_Type,
+                        plant.Capacity,
+                    )
+                    pickle.dump(
+                        power_plant,
+                        open(
+                            "{}{}-{}.pickle".format(
+                                pickle_directory, plant.Name, plant.Start_date
+                            ),
+                            "wb",
+                        ),
+                    )
                 gen_co.plants.append(power_plant)
-            logger.debug('Adding generation company: {}'.format(gen_co.name))
+            logger.debug("Adding generation company: {}".format(gen_co.name))
             self.schedule.add(gen_co)
         logger.info("Added generation companies.")
-
 
     def get_running_plants(self, plants):
         for plant in plants:
             # if plant.name in elecsim.scenario.scenario_data.known_plant_retirements:
 
-            if plant.construction_year <= 1990 and plant.name != "invested_plant" and plant.name not in elecsim.scenario.scenario_data.known_plant_retirements:
+            if (
+                plant.construction_year <= 1990
+                and plant.name != "invested_plant"
+                and plant.name
+                not in elecsim.scenario.scenario_data.known_plant_retirements
+            ):
                 # Reset old plants that have been modernised with new construction year
-                plant.construction_year = randint(self.year_number-15, self.year_number)
+                plant.construction_year = randint(
+                    self.year_number - 15, self.year_number
+                )
                 # yield plant
             elif plant.name in elecsim.scenario.scenario_data.known_plant_retirements:
-                plant.construction_year = elecsim.scenario.scenario_data.known_plant_retirements[plant.name] - (plant.operating_period + plant.construction_period + plant.pre_dev_period) - 1
-                logger.info("plant.name: {}, plant.construction_year: {}".format(plant.name, plant.construction_year))
+                plant.construction_year = (
+                    elecsim.scenario.scenario_data.known_plant_retirements[plant.name]
+                    - (
+                        plant.operating_period
+                        + plant.construction_period
+                        + plant.pre_dev_period
+                    )
+                    - 1
+                )
+                logger.info(
+                    "plant.name: {}, plant.construction_year: {}".format(
+                        plant.name, plant.construction_year
+                    )
+                )
 
-            if plant.construction_year + plant.operating_period + plant.construction_period + plant.pre_dev_period >= self.year_number:
+            if (
+                plant.construction_year
+                + plant.operating_period
+                + plant.construction_period
+                + plant.pre_dev_period
+                >= self.year_number
+            ):
                 yield plant
             else:
-                logger.debug("Taking the plant '{}' out of service, year of construction: {}".format(plant.name,
-                                                                        plant.construction_year))
-
-
+                logger.debug(
+                    "Taking the plant '{}' out of service, year of construction: {}".format(
+                        plant.name, plant.construction_year
+                    )
+                )
 
     def dismantle_old_plants(self):
         """
@@ -299,39 +410,54 @@ class World(Model):
             genco.plants = profitable_plants
 
     def filter_plants_with_no_income(self, plants):
-            for plant in plants:
-                if (self.year_number > 7) and (plant.get_year_of_operation() + 7 < self.year_number):
-                    historic_bids = plant.historical_bids
-                    # logger.info("historic_bids {}".format(historic_bids))
-                    # years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
+        for plant in plants:
+            if (self.year_number > 7) and (
+                plant.get_year_of_operation() + 7 < self.year_number
+            ):
+                historic_bids = plant.historical_bids
+                # logger.info("historic_bids {}".format(historic_bids))
+                # years_to_look_into = list(range(self.year_number,self.year_number-7,-1))
 
-                    seven_years_previous = self.year_number-7
-                    if historic_bids:
-                        if historic_bids[-1].year_of_bid > seven_years_previous:
-                            yield plant
-                        else:
-                            logger.debug("Plant {}, type {} is unprofitable. Last accepted bid: {}".format(plant.name, plant.plant_type, historic_bids[-1].year_of_bid))
-                            for bid in plant.accepted_bids:
-                                del bid
+                seven_years_previous = self.year_number - 7
+                if historic_bids:
+                    if historic_bids[-1].year_of_bid > seven_years_previous:
+                        yield plant
                     else:
-                        logger.debug("Plant {}, type {} is unprofitable.".format(plant.name, plant.plant_type))
+                        logger.debug(
+                            "Plant {}, type {} is unprofitable. Last accepted bid: {}".format(
+                                plant.name,
+                                plant.plant_type,
+                                historic_bids[-1].year_of_bid,
+                            )
+                        )
                         for bid in plant.accepted_bids:
                             del bid
-                    # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
-                    # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
-                    # for bids in reversed(historic_bids):
-                    #     logger.info("bids.year_of_bid: {}".format(bids.year_of_bid))
-
-                    # if total_income_in_previous_years > 0:
-                    #     yield plant
-                    # else:
-                    #     logger.debug("Taking plant: {} out of service.".format(plant.name))
                 else:
-                    yield plant
+                    logger.debug(
+                        "Plant {}, type {} is unprofitable.".format(
+                            plant.name, plant.plant_type
+                        )
+                    )
+                    for bid in plant.accepted_bids:
+                        del bid
+                # bids_to_check = list(filter(lambda x: x.year_of_bid in years_to_look_into, historic_bids))
+                # total_income_in_previous_years = sum(bid.price_per_mwh for bid in bids_to_check)
+                # for bids in reversed(historic_bids):
+                #     logger.info("bids.year_of_bid: {}".format(bids.year_of_bid))
+
+                # if total_income_in_previous_years > 0:
+                #     yield plant
+                # else:
+                #     logger.debug("Taking plant: {} out of service.".format(plant.name))
+            else:
+                yield plant
 
     def get_profitable_plants(self, plants):
         for plant in plants:
-            if self.step_number > 7 and plant.get_year_of_operation() + 7 > self.year_number:
+            if (
+                self.step_number > 7
+                and plant.get_year_of_operation() + 7 > self.year_number
+            ):
                 historic_bids = plant.historical_bids
                 pass
 
@@ -344,7 +470,12 @@ class World(Model):
                 # logger.debug("plant: {}, year_number: {}, construction year+constructioon_period+predev: {}".format(plant, self.year_number, plant.construction_year + plant.construction_period + plant.pre_dev_period))
                 if plant.construction_year <= minimum_operation_year:
                     plant.is_operating = True
-                elif (plant.is_operating is False) and (self.year_number >= plant.construction_year + plant.construction_period + plant.pre_dev_period):
+                elif (plant.is_operating is False) and (
+                    self.year_number
+                    >= plant.construction_year
+                    + plant.construction_period
+                    + plant.pre_dev_period
+                ):
                     plant.is_operating = True
 
     def overwrite_scenario_file(self, scenario_file):
@@ -379,11 +510,15 @@ class World(Model):
     @staticmethod
     def get_capacity_of_plants(model, plant_type):
         gencos = model.get_gencos()
-        plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
+        plants = [
+            plant
+            for genco in gencos
+            for plant in genco.plants
+            if plant.plant_type == plant_type and plant.is_operating
+        ]
         total_capacity = sum(plant.capacity_mw for plant in plants)
 
         return total_capacity
-
 
     @staticmethod
     def get_all_plants(model):
@@ -391,10 +526,11 @@ class World(Model):
         plants = [plant for genco in gencos for plant in genco.plants]
         return plants
 
-
     @staticmethod
     def get_current_carbon_tax(model):
-        carbon_tax = elecsim.scenario.scenario_data.carbon_price_scenario[model.years_from_start]
+        carbon_tax = elecsim.scenario.scenario_data.carbon_price_scenario[
+            model.years_from_start
+        ]
         return carbon_tax
 
     @staticmethod
@@ -413,47 +549,68 @@ class World(Model):
     def get_carbon_emitted(model):
         gencos = model.get_gencos()
         bids = World.get_accepted_bids(gencos, FuelPlant)
-        
-        carbon_emitted = sum(bid.capacity_bid * bid.plant.fuel.co2_density for bid in bids if isinstance(bid.plant, FuelPlant))
+
+        carbon_emitted = sum(
+            bid.capacity_bid * bid.plant.fuel.co2_density
+            for bid in bids
+            if isinstance(bid.plant, FuelPlant)
+        )
         return carbon_emitted
 
     @staticmethod
     def get_accepted_bid_capacity(model, plant_type):
         gencos = model.get_gencos()
-        plants = [plant for genco in gencos for plant in genco.plants if plant.plant_type == plant_type and plant.is_operating]
-        capacity_contributed = sum(bid.capacity_bid for plant in plants for bid in plant.accepted_bids)
+        plants = [
+            plant
+            for genco in gencos
+            for plant in genco.plants
+            if plant.plant_type == plant_type and plant.is_operating
+        ]
+        capacity_contributed = sum(
+            bid.capacity_bid for plant in plants for bid in plant.accepted_bids
+        )
         return capacity_contributed
 
     @staticmethod
     def get_accepted_bid_capacity_per_segment_hour(model):
         gencos = model.get_gencos()
-        plants = [plant for genco in gencos for plant in genco.plants if plant.is_operating]
+        plants = [
+            plant for genco in gencos for plant in genco.plants if plant.is_operating
+        ]
         # capacity_contributed = [ if bid.segment_hours==]
-        bids_dataframe = [bid.to_dict() for plant in plants for bid in plant.accepted_bids]
+        bids_dataframe = [
+            bid.to_dict() for plant in plants for bid in plant.accepted_bids
+        ]
         return bids_dataframe
-
 
     @staticmethod
     def get_accepted_bids(gencos, plant_type=None):
         if plant_type:
             bids = list(
-                accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids if
-                isinstance(plants, plant_type))
+                accepted_bids
+                for genco in gencos
+                for plants in genco.plants
+                for accepted_bids in plants.accepted_bids
+                if isinstance(plants, plant_type)
+            )
         else:
             bids = list(
-                accepted_bids for genco in gencos for plants in genco.plants for accepted_bids in plants.accepted_bids)
+                accepted_bids
+                for genco in gencos
+                for plants in genco.plants
+                for accepted_bids in plants.accepted_bids
+            )
 
         return bids
 
     def stratify_data(self, demand):
         power_plants = elecsim.scenario.scenario_data.power_plants
-        frac_to_scale = demand/power_plants.Capacity.sum()
+        frac_to_scale = demand / power_plants.Capacity.sum()
 
-        stratified_sample = power_plants.groupby(['Fuel'], as_index=False).apply(lambda x: x.sample(frac=frac_to_scale, replace=True))
+        stratified_sample = power_plants.groupby(["Fuel"], as_index=False).apply(
+            lambda x: x.sample(frac=frac_to_scale, replace=True)
+        )
         return stratified_sample
-
-
-
 
     def set_log_level(self, log_level):
         if log_level.lower() == "warning":
@@ -463,58 +620,91 @@ class World(Model):
         elif log_level.lower() == "debug":
             logging.basicConfig(level=logging.DEBUG)
         else:
-            raise ValueError("log_level must be warning, info or debug and not {}".format(log_level))
+            raise ValueError(
+                "log_level must be warning, info or debug and not {}".format(log_level)
+            )
 
     def create_data_loggers(self, data_folder):
         self.data_folder = data_folder
         self.datacollector = DataCollector(
-            model_reporters={"contributed_CCGT": lambda m: self.get_accepted_bid_capacity(m, "CCGT"),
-                             "contributed_Coal": lambda m: self.get_accepted_bid_capacity(m, "Coal"),
-                             "contributed_Onshore": lambda m: self.get_accepted_bid_capacity(m, "Onshore"),
-                             "contributed_Offshore": lambda m: self.get_accepted_bid_capacity(m, "Offshore"),
-                             "contributed_PV": lambda m: self.get_accepted_bid_capacity(m, "PV"),
-                             "contributed_Nuclear": lambda m: self.get_accepted_bid_capacity(m, "Nuclear"),
-                             "contributed_Recip_gas": lambda m: self.get_accepted_bid_capacity(m, "Recip_gas"),
-                             "contributed_Biomass": lambda m: self.get_accepted_bid_capacity(m, "Biomass"),
-
-                             # "hourly_accepted_bids": lambda m: self.get_accepted_bid_capacity_per_segment_hour(m),
-
-                             "total_CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
-                             "total_Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
-                             "total_Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
-                             "total_Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
-                             "total_PV": lambda m: self.get_capacity_of_plants(m, "PV"),
-                             "total_Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
-                             "total_Recip_gas": lambda m: self.get_capacity_of_plants(m, "Recip_gas"),
-                             "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
-                             "total_genco_wealth": lambda m: self.get_genco_wealth(m),
-                             "Electricity_cost": lambda m: self.get_electricity_cost(m),
-                             "Carbon_emitted": lambda m: self.get_carbon_emitted(m)
-                             }
-
+            model_reporters={
+                "contributed_CCGT": lambda m: self.get_accepted_bid_capacity(m, "CCGT"),
+                "contributed_Coal": lambda m: self.get_accepted_bid_capacity(m, "Coal"),
+                "contributed_Onshore": lambda m: self.get_accepted_bid_capacity(
+                    m, "Onshore"
+                ),
+                "contributed_Offshore": lambda m: self.get_accepted_bid_capacity(
+                    m, "Offshore"
+                ),
+                "contributed_PV": lambda m: self.get_accepted_bid_capacity(m, "PV"),
+                "contributed_Nuclear": lambda m: self.get_accepted_bid_capacity(
+                    m, "Nuclear"
+                ),
+                "contributed_Recip_gas": lambda m: self.get_accepted_bid_capacity(
+                    m, "Recip_gas"
+                ),
+                "contributed_Biomass": lambda m: self.get_accepted_bid_capacity(
+                    m, "Biomass"
+                ),
+                # "hourly_accepted_bids": lambda m: self.get_accepted_bid_capacity_per_segment_hour(m),
+                "total_CCGT": lambda m: self.get_capacity_of_plants(m, "CCGT"),
+                "total_Coal": lambda m: self.get_capacity_of_plants(m, "Coal"),
+                "total_Onshore": lambda m: self.get_capacity_of_plants(m, "Onshore"),
+                "total_Offshore": lambda m: self.get_capacity_of_plants(m, "Offshore"),
+                "total_PV": lambda m: self.get_capacity_of_plants(m, "PV"),
+                "total_Nuclear": lambda m: self.get_capacity_of_plants(m, "Nuclear"),
+                "total_Recip_gas": lambda m: self.get_capacity_of_plants(
+                    m, "Recip_gas"
+                ),
+                "Carbon_tax": lambda m: self.get_current_carbon_tax(m),
+                "total_genco_wealth": lambda m: self.get_genco_wealth(m),
+                "Electricity_cost": lambda m: self.get_electricity_cost(m),
+                "Carbon_emitted": lambda m: self.get_carbon_emitted(m),
+            }
         )
 
     def override_total_demand(self, total_demand, number_of_agents=None):
         self.total_demand = total_demand
         if total_demand is not None:
-            elecsim.scenario.scenario_data.power_plants = self.stratify_data(total_demand)
-            demand_modifier = (elecsim.scenario.scenario_data.power_plants.Capacity.sum() /
-                               elecsim.scenario.scenario_data.segment_demand_diff[-1]) / 1.6
+            elecsim.scenario.scenario_data.power_plants = self.stratify_data(
+                total_demand
+            )
+            demand_modifier = (
+                elecsim.scenario.scenario_data.power_plants.Capacity.sum()
+                / elecsim.scenario.scenario_data.segment_demand_diff[-1]
+            ) / 1.6
             logger.info("demand_modifier: {}".format(demand_modifier))
             logger.info(
-                "total available capacity: {}".format(elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
-            elecsim.scenario.scenario_data.segment_demand_diff = [demand_modifier * demand for demand in
-                                                                    elecsim.scenario.scenario_data.segment_demand_diff]
+                "total available capacity: {}".format(
+                    elecsim.scenario.scenario_data.power_plants.Capacity.sum()
+                )
+            )
+            elecsim.scenario.scenario_data.segment_demand_diff = [
+                demand_modifier * demand
+                for demand in elecsim.scenario.scenario_data.segment_demand_diff
+            ]
 
             if number_of_agents is not None:
                 total_plants = len(elecsim.scenario.scenario_data.power_plants)
-                fraction_to_replace = total_plants/number_of_agents
-                company_names = sample(list(elecsim.scenario.scenario_data.power_plants.Company.unique()), number_of_agents)
+                fraction_to_replace = total_plants / number_of_agents
+                company_names = sample(
+                    list(elecsim.scenario.scenario_data.power_plants.Company.unique()),
+                    number_of_agents,
+                )
 
-                company_name_repeated = np.repeat(company_names, int(fraction_to_replace))
-                company_name_repeated = np.append(company_name_repeated, np.array(["company_{}".format(number_of_agents-1) for i in range(100)]))
+                company_name_repeated = np.repeat(
+                    company_names, int(fraction_to_replace)
+                )
+                company_name_repeated = np.append(
+                    company_name_repeated,
+                    np.array(
+                        ["company_{}".format(number_of_agents - 1) for i in range(100)]
+                    ),
+                )
 
-                elecsim.scenario.scenario_data.power_plants.Company = company_name_repeated[:total_plants]
+                elecsim.scenario.scenario_data.power_plants.Company = (
+                    company_name_repeated[:total_plants]
+                )
 
     def override_highest_demand(self, highest_demand):
         if highest_demand:
@@ -523,14 +713,16 @@ class World(Model):
     def override_demand_change(self, demand_change):
         if demand_change:
             elecsim.scenario.scenario_data.yearly_demand_change = demand_change[1:]
-            self.demand_change_name = str(demand_change[0]).replace(".", '')
+            self.demand_change_name = str(demand_change[0]).replace(".", "")
         else:
             self.demand_change_name = "none"
 
     def override_carbon_scenario(self, carbon_price_scenario):
         if carbon_price_scenario:
-            elecsim.scenario.scenario_data.carbon_price_scenario = carbon_price_scenario[1:]
-            self.carbon_scenario_name = str(carbon_price_scenario[0]).replace(".", '')
+            elecsim.scenario.scenario_data.carbon_price_scenario = (
+                carbon_price_scenario[1:]
+            )
+            self.carbon_scenario_name = str(carbon_price_scenario[0]).replace(".", "")
         else:
             self.carbon_scenario_name = "none"
 
@@ -543,14 +735,13 @@ class World(Model):
                 os.makedirs(directory)
 
             filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}-scenario_{}.csv".format(
-                                                                                               self.demand_change_name,
-                                                                                               self.carbon_scenario_name,
-                                                                                               dt.datetime.now().strftime(
-                                                                                                   '%Y-%m-%d_%H-%M-%S'),
-                                                                                               # elecsim.scenario.scenario_data.segment_demand_diff[-1],
-                                                                                                1,
-                                                                                                self.distribution_name,
-                                                                                                self.scenario_file.split("/")[-1].split(".")[0]
+                self.demand_change_name,
+                self.carbon_scenario_name,
+                dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
+                # elecsim.scenario.scenario_data.segment_demand_diff[-1],
+                1,
+                self.distribution_name,
+                self.scenario_file.split("/")[-1].split(".")[0],
             )
 
             directory_filename = "{}/{}.csv".format(directory, filename)
@@ -563,14 +754,13 @@ class World(Model):
                     self.access_token = access_token
 
                 def upload_file(self, file_from, file_to):
-                    """upload a file to Dropbox using API v2
-                    """
+                    """upload a file to Dropbox using API v2"""
                     dbx = dropbox.Dropbox(self.access_token)
 
-                    with open(file_from, 'rb') as f:
+                    with open(file_from, "rb") as f:
                         dbx.files_upload(f.read(), file_to)
+
             if self.dropbox:
-                access_token = 'J0BrnIaGJ78AAAAAAABLJDq-4OlP6jtTd-d0bvpruo7ju2fY6zOu7_1DYtuEghZG'
                 transferData = TransferData(access_token)
 
                 file_from = "/{}".format(directory_filename)
@@ -578,11 +768,6 @@ class World(Model):
 
                 # API v2
                 transferData.upload_file(file_from, file_to)
-
-
-
-
-
 
         if self.step_number == self.max_number_of_steps:
             end = perf_counter()
@@ -593,17 +778,25 @@ class World(Model):
     def write_timing_results(self, end, time_elapased):
         if self.time_run:
             timings_data = pd.DataFrame(
-                {"time": [time_elapased], "carbon": [elecsim.scenario.scenario_data.carbon_price_scenario[0]],
-                 'installed_capacity': [elecsim.scenario.scenario_data.power_plants.Capacity.sum()],
-                 'datetime': [dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')]})
+                {
+                    "time": [time_elapased],
+                    "carbon": [elecsim.scenario.scenario_data.carbon_price_scenario[0]],
+                    "installed_capacity": [
+                        elecsim.scenario.scenario_data.power_plants.Capacity.sum()
+                    ],
+                    "datetime": [dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")],
+                }
+            )
 
             parent_directory = os.path.dirname(os.getcwd())
 
-            with open("{}/{}/timing.csv".format(ROOT_DIR, self.data_folder), 'a') as f:
+            with open("{}/{}/timing.csv".format(ROOT_DIR, self.data_folder), "a") as f:
                 timings_data.to_csv(f, header=False)
             logger.info("end: {}".format(end))
-            logger.info("time_elapsed: {}, carbon: {}, size: {}".format(time_elapased,
-                                                                    elecsim.scenario.scenario_data.carbon_price_scenario[
-                                                                        0],
-                                                                    elecsim.scenario.scenario_data.power_plants.Capacity.sum()))
-
+            logger.info(
+                "time_elapsed: {}, carbon: {}, size: {}".format(
+                    time_elapased,
+                    elecsim.scenario.scenario_data.carbon_price_scenario[0],
+                    elecsim.scenario.scenario_data.power_plants.Capacity.sum(),
+                )
+            )
