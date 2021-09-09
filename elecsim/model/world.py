@@ -58,10 +58,10 @@ class World(Model):
         carbon_price_scenario=None,
         demand_change=None,
         demand_distribution=None,
-        number_of_steps=32,
+        number_of_steps=8,
         total_demand=None,
         number_of_agents=None,
-        market_time_splices=1,
+        market_time_splices=8,
         data_folder=None,
         time_run=False,
         nuclear_subsidy=None,
@@ -168,6 +168,7 @@ class World(Model):
         if (
             elecsim.scenario.scenario_data.investment_mechanism == "RL"
             and self.client is not None
+            and self.gencos_rl
         ):
             # self.client = PolicyClient("http://rllibserver:9900")
 
@@ -734,14 +735,13 @@ class World(Model):
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
-            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}-scenario_{}.csv".format(
+            filename = "demand_{}-carbon_{}-datetime_{}-capacity_{}-demand_distribution_{}.csv".format(
                 self.demand_change_name,
                 self.carbon_scenario_name,
                 dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
-                # elecsim.scenario.scenario_data.segment_demand_diff[-1],
                 1,
                 self.distribution_name,
-                self.scenario_file.split("/")[-1].split(".")[0],
+                # self.scenario_file.split("/")[-1].split(".")[0],
             )
 
             directory_filename = "{}/{}.csv".format(directory, filename)
