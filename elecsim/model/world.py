@@ -253,6 +253,7 @@ class World(Model):
         if (
             self.step_number == self.max_number_of_steps
             and elecsim.scenario.scenario_data.investment_mechanism == "RL"
+            and self.gencos_rl
         ):
             obs = LatestMarketData(self).get_RL_investment_observations()
             self.client.end_episode(self.eid, observation=obs)
