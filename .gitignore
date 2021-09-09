@@ -8,6 +8,7 @@ run/intelligent_bidding/data/RL_data/*
 run/intelligent_bidding/compare_ml_accuracy/*
 run/sensitivity_analysis/data/processed/*
 run/market_forecasting_comparison/data/market_comparison_results/*
+run/market_forecasting_comparison/data/results/*
 
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
