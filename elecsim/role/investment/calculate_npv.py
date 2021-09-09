@@ -4,7 +4,8 @@ from itertools import zip_longest
 from logging import getLogger
 
 import pandas as pd
-from numpy import npv, pmt, divide
+from numpy import divide
+from numpy_financial import npv, pmt
 
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
