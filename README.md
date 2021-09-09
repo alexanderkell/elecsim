@@ -77,7 +77,7 @@ if __name__ == "__main__":
 ```
 This code imports the `World` class. We use logging to display useful information of the run. This can be turned to 'warning' or changed to 'debug' for further information.
 
-We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days. If you would like to run the model for a single year, just remove the `for years in range(20):` line and the `number_of_years` variable from the World instantiation.
+We instantiate the model to start in the year 2018. The first for loop steps the model 20 times, which is equivalent to 20 years in the model. The second for loop iterates through the 8 representative days. If you would like to run the model for a single year, just edit the `number_of_years` variable.
 
 To see the output data check the directory where you ran the code, which should contain a folder called `ElecSim_Output` with CSVs. You can visualise this data in a visualisation proram of your choice. For instance `seaborn`, `excel` or `ggplot`.
 
