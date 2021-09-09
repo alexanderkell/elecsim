@@ -62,7 +62,7 @@ class World(Model):
         total_demand=None,
         number_of_agents=None,
         market_time_splices=8,
-        data_folder=None,
+        data_folder="ElecSim_Output",
         time_run=False,
         nuclear_subsidy=None,
         highest_demand=None,
