@@ -143,10 +143,8 @@
 141,141,Drax Power Ltd,Drax - biomass units,Biomass_wood,1980.0,1974.00,Biomass_wood
 142,142,Drax Power Ltd,Drax - coal units,Coal,1980.0,1974.00,Coal
 143,143,Drax Power Ltd,Drax GT,Gas oil,75.0,1971.00,Recip_diesel
-144,144,E.On UK,Blackburn meadows *,Biomass_wood,33.0,2015.00,Biomass_wood
 145,145,E.On UK,Castleford,CCGT,56.0,2002.00,CCGT
 146,146,E.On UK,Sandbach,CCGT,56.0,1999.00,CCGT
-147,147,E.On UK,Steven's Croft *,Biomass_wood,50.0,2007.00,Biomass_wood
 148,148,E.On UK,Thornhill,CCGT,50.0,1998.00,CCGT
 149,149,E.On UK,Blyth T1,Wind (offshore),2.0,2001.00,Offshore
 150,150,E.On UK,Blyth T2,Wind (offshore),2.3,2001.00,Offshore
@@ -213,8 +211,6 @@
 211,211,EDF Energy,Cottam,Coal,2008.0,1969.00,Coal
 212,212,EDF Energy,West Burton,Coal,2012.0,1967.00,Coal
 213,213,EDF Energy,West Burton CCGT,CCGT,1332.0,2012.00,CCGT
-214,214,EDF Energy,Barkantine Heat & Power Company *,Gas,1.0,2000.00,Recip_gas
-215,215,EDF Energy,London Heat & Power Company *,Gas,9.0,2000.00,Recip_gas
 216,216,EDF Energy,West Burton GT,Gas oil,40.0,1967.00,Recip_diesel
 217,217,EDF renewables,Barmoor,Wind,12.0,2014.00,Onshore
 218,218,EDF renewables,Beckburn,Wind,31.1,2017.00,Onshore
@@ -804,10 +800,8 @@
 809,809,RWE Generation SE,Great Yarmouth,CCGT,420.0,2001.00,CCGT
 810,810,RWE Generation SE,Little Barford,CCGT,740.0,1995.00,CCGT
 811,811,RWE Generation SE,Little Barford GT,Gas oil,17.0,2006.00,Recip_diesel
-812,812,RWE Generation SE,Markinch CHP *,Biomass_wood,65.0,2014.00,Biomass_wood
 813,813,RWE Generation SE,Pembroke,CCGT,2199.0,2012.00,CCGT
 814,814,RWE Generation SE,Staythorpe C,CCGT,1772.0,2010.00,CCGT
-815,815,Saltend Cogeneration Company Ltd,Saltend *,CCGT,1200.0,2000.00,CCGT
 816,816,Scira Offshore Energy Ltd,Dudgeon BMU 1,Wind (offshore),108.0,2017.00,Offshore
 817,817,Scira Offshore Energy Ltd,Dudgeon BMU 2,Wind (offshore),90.0,2017.00,Offshore
 818,818,Scira Offshore Energy Ltd,Dudgeon BMU 3,Wind (offshore),102.0,2017.00,Offshore
@@ -874,11 +868,7 @@
 879,879,Scottish power,Stonebyres,Hydro,6.0,1927.00,Hydro
 880,880,Scottish power,Cruachan,Pumped storage,440.0,1966.00,Hydro_Store
 881,881,Seabank Power Limited,Seabank,CCGT,1234.0,1998.00,CCGT
-882,882,Sellafield Ltd,Fellside CHP *,CCGT,180.0,1995.00,CCGT
-883,883,Sembcorp Utilities (UK) Ltd,Wilton GT *,Gas,120.0,1952.00,Recip_gas
-884,884,Sembcorp Utilities (UK) Ltd,Wilton 10 *,Biomass_wood,38.0,2007.00,Biomass_wood
 885,885,SIMEC,Uskmouth power,Coal,363.0,1966.00,Coal
-886,886,South East London Combined Heat & Power Ltd,SELCHP ERF *,Waste,35.0,1994.00,EfW
 887,887,SSE,Aigas,Hydro,20.0,1962.00,Hydro
 888,888,SSE,Culligran,Hydro,17.0,1962.00,Hydro
 889,889,SSE,Culligran Compensation Set,Hydro,2.1,1962.00,Hydro
@@ -977,10 +967,8 @@
 983,983,SSE,Medway,CCGT,755.0,1995.00,CCGT
 984,984,SSE,Fiddler’s Ferry GT,Gas oil,35.0,1969.00,Recip_diesel
 985,985,SSE,Fiddler’s Ferry,Coal,1961.0,1971.00,Coal
-986,986,SSE,Slough *,Biomass_wood,35.0,1918.00,Biomass_wood
 987,987,SSE,Chippenham,Gas,10.0,2002.00,Recip_gas
 988,988,SSE,Keadby GT,Gas oil,25.0,1994.00,Recip_diesel
-989,989,SSE,Pilkington - Greengate *,Gas,10.0,1998.00,Recip_gas
 990,990,SSE,Achany Windfarm,Wind,38.0,2010.00,Onshore
 991,991,SSE,"Artfield Fell Windfarm - A,C",Wind,28.6,2005.00,Onshore
 992,992,SSE,Bessy Bell Windfarm,Wind,5.0,1995.00,Onshore
@@ -1019,7 +1007,6 @@
 1025,1025,Uniper UK Limited,Cottam Development Centre,CCGT,445.0,1999.00,CCGT
 1026,1026,Uniper UK Limited,Connahs Quay,CCGT,1380.0,1996.00,CCGT
 1027,1027,Uniper UK Limited,Enfield,CCGT,408.0,1999.00,CCGT
-1028,1028,Uniper UK Limited,Grain CHP *,CCGT,1517.0,2010.00,CCGT
 1029,1029,Uniper UK Limited,Killingholme,OCGT,600.0,1994.00,OCGT
 1030,1030,Uniper UK Limited,Ratcliffe,Coal,2021.0,1968.00,Coal
 1031,1031,Uniper UK Limited,Taylor's Lane GT,Gas oil,144.0,1979.00,Recip_diesel
@@ -1044,7 +1031,6 @@
 1050,1050,Viridor Waste Management,Exeter EfW,Waste,3.5,2014.00,EfW
 1051,1051,Viridor Waste Management,Lakeside EfW,Waste,37.0,2010.00,EfW
 1052,1052,Viridor Waste Management,Peterborough EfW,Waste,7.3,2016.00,EfW
-1053,1053,VPI Immingham LLP,VPI Immingham *,CCGT,1240.0,2004.00,CCGT
 1054,1054,WPO,Airfield Poddington,Wind,8.6,2017.00,Onshore
 1055,1055,WPO,Airies,Wind,39.9,2017.00,Onshore
 1056,1056,WPO,Altaveedan,Wind,18.0,2017.00,Onshore
