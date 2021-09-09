@@ -52,7 +52,7 @@ python -m pip install -e "elecsim[dev]"
 
 This allows you to make changes to the elecsim code, and for the changes to be immediately updated in your environment for the elecsim package.
 
-Next, install the requirement packages for elecsim to run:
+Next, install the requirement packages for elecsim to run, from inside the `elecsim` folder:
 
 ```
 python -m pip install -r requirements.txt
