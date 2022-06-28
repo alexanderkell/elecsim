@@ -3,7 +3,7 @@ aiohttp==3.6.2
 alabaster==0.7.12
 appdirs==1.4.3
 appnope==0.1.0
-arrow==0.13.1
+arrow==0.15.1
 astor==0.7.1
 astroid==2.2.0
 async-timeout==3.0.1
