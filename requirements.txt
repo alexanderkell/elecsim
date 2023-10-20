@@ -61,7 +61,7 @@ isort==4.3.9
 jedi==0.13.2
 Jinja2==2.10
 jinja2-time==0.2.0
-joblib==0.14.1
+joblib==1.2.0
 jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.2.4
