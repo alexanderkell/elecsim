@@ -23,7 +23,7 @@ Click==7.0
 cloudpickle==1.2.1
 codetimer==0.1
 colorama==0.4.1
-cookiecutter==1.6.0
+cookiecutter==2.1.1
 coverage==4.0.3
 cycler==0.10.0
 deap==1.2.2
